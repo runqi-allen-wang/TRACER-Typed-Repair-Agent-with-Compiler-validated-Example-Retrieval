@@ -89,3 +89,15 @@ python -m leancapsule feedback `
 - history 和 prompt 长度严格有界，疑似 Bearer/API key 不出现在输出或 state。
 - 单元测试证明核心和 CLI 不调用 Lean 或任何模型。
 - Ax 接线后的 trace 中，每轮只有原 Builder 的一次编译；CapsuleFeedback 处理耗时单独记录。
+
+## GitHub Actions 验证
+
+`.github/workflows/part2.yml` 是 Part 2 的独立验证入口，不读取 API Key，也不调用 DeepSeek：
+
+- 推送 Part 2 相关文件到 `leiteng` 时自动触发；
+- Pull Request 修改 Part 2 相关文件时自动触发；
+- workflow 进入默认分支后可从 Actions 页面手动触发；
+- Ubuntu 和 Windows 并行执行 CapsuleFeedback、文档和 workflow 契约测试；
+- 专项测试通过后，Ubuntu 执行 `lake build` 和完整 Python 回归。
+
+由于 GitHub 只为默认分支上的 `workflow_dispatch` 显示手动运行入口，在该 workflow 尚未合并到默认分支时，应通过推送到 `leiteng` 或创建 Pull Request 触发。

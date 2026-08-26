@@ -88,6 +88,8 @@ feedback = capsule.observe_ax((build_success, message), round_no=1)
 
 Part 1/2/3 中 AxProverBase 涉及的模型调用统一冻结为 DeepSeek Flash：Ax/LangChain 模型名 `openai:deepseek-v4-flash`，官方模型 ID `deepseek-v4-flash`，`base_url=https://api.deepseek.com`。具体接入步骤、JSON CLI 和验收标准见 [`docs/part2_capsule_feedback.md`](docs/part2_capsule_feedback.md)。
 
+Part 2 有独立的 GitHub Actions workflow：`.github/workflows/part2.yml`。它在 `leiteng` 分支相关文件发生变化时自动运行跨平台专项测试，再执行 Lean build 和完整 Python 回归；整个 workflow 不需要模型 API Key。
+
 ## 直接输入 API 配置
 
 单次运行可以在命令行输入接口地址、模型，并通过安全提示输入密钥。输入时终端不会显示密钥；读取完成后只确认成功，不显示长度、末四位或任何密钥字符。完整密钥只存在于当前进程内，不写入日志和缓存：

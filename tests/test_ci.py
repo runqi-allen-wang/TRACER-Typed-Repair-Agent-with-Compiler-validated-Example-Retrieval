@@ -83,6 +83,18 @@ class ContinuousIntegrationTest(unittest.TestCase):
         self.assertIn("windows-latest", workflow)
         self.assertIn("Parser]::ParseFile", workflow)
 
+    def test_part2_workflow_contract(self):
+        workflow = (ROOT / ".github" / "workflows" / "part2.yml").read_text(encoding="utf-8")
+        self.assertIn("workflow_dispatch:", workflow)
+        self.assertIn("- leiteng", workflow)
+        self.assertIn("ubuntu-latest", workflow)
+        self.assertIn("windows-latest", workflow)
+        self.assertIn("tests.test_feedback", workflow)
+        self.assertIn("python scripts/run_ci_tests.py", workflow)
+        self.assertIn("run: lake build", workflow)
+        self.assertIn("contents: read", workflow)
+        self.assertNotIn("secrets.", workflow)
+
     def test_pilot_validator_rejects_cache_hits_in_strict_mode(self):
         with tempfile.TemporaryDirectory() as temp:
             base = Path(temp)

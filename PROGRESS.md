@@ -38,13 +38,14 @@
 - 条件 C 在调用 provider 前检查检索语料与目标声明重合；示例库中的 8 项直接答案重合已替换为相关但不同的证明示例。
 - 新增 Part 2 `CapsuleFeedback` 核心接口：直接消费 AxProverBase 已有编译结果，不重复编译、不调用 LLM，并输出稳定指纹、重复次数、诊断漂移和有界历史。
 - 新增 `leancapsule feedback` JSON CLI、逐题状态恢复、Ax 框线诊断兼容和敏感 token 脱敏；冻结 AxProverBase commit 与 DeepSeek Flash 跨 Part 1/2/3 模型契约。
+- 新增 Part 2 独立 GitHub Actions workflow：支持 `leiteng` push、Pull Request 和默认分支手动触发，跨 Ubuntu/Windows 跑专项测试，再执行 Lean build 与完整 Python 回归；不读取模型密钥。
 
 ## 当前验证状态
 
 - `leancapsule verify capsules`：24/24 通过（Std 14、Mathlib 4、project-local 6）。
 - `leancapsule gallery capsules --out capsules/index.json`：通过；四类 taxonomy 均不少于 3 个，三类来源均不少于 4 个。
 - `leancapsule audit capsules`：24/24 通过，无发布审计错误。
-- 完整 Python 测试 102/102 通过，包含 Part 2 指纹稳定性、重复/漂移、状态恢复、Ax 诊断格式、零重复编译、CLI、模型契约文档和脱敏回归，以及既有 Agent、provider、gallery、正式报告与复核账本检查；`lake build` 通过。
+- 完整 Python 测试 103/103 通过，包含 Part 2 指纹稳定性、重复/漂移、状态恢复、Ax 诊断格式、零重复编译、CLI、模型契约文档、workflow 契约和脱敏回归，以及既有 Agent、provider、gallery、正式报告与复核账本检查；`lake build` 通过。
 - Mathlib 回放在准备 `mathlib_project` 依赖缓存后通过；缓存目录不提交到仓库。
 
 ## 明确边界
