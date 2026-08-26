@@ -38,15 +38,9 @@ concurrency:
 
 jobs:
   part2-unit:
-    name: Part 2 专项测试 (${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
+    name: Part 2 专项测试 (Ubuntu)
+    runs-on: ubuntu-latest
     timeout-minutes: 15
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4

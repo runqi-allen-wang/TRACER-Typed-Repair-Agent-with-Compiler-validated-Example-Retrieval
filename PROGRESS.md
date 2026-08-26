@@ -38,7 +38,7 @@
 - 条件 C 在调用 provider 前检查检索语料与目标声明重合；示例库中的 8 项直接答案重合已替换为相关但不同的证明示例。
 - 新增 Part 2 `CapsuleFeedback` 核心接口：直接消费 AxProverBase 已有编译结果，不重复编译、不调用 LLM，并输出稳定指纹、重复次数、诊断漂移和有界历史。
 - 新增 `leancapsule feedback` JSON CLI、逐题状态恢复、Ax 框线诊断兼容和敏感 token 脱敏；冻结 AxProverBase commit 与 DeepSeek Flash 跨 Part 1/2/3 模型契约。
-- 新增 Part 2 独立 GitHub Actions workflow：支持 `leiteng` push、Pull Request 和默认分支手动触发，跨 Ubuntu/Windows 跑专项测试，再执行 Lean build 与完整 Python 回归；不读取模型密钥。
+- 新增 Part 2 独立 GitHub Actions workflow：支持 `leiteng` push、Pull Request 和默认分支手动触发，在 Ubuntu 跑专项测试，再执行 Lean build 与完整 Python 回归；不读取模型密钥。
 
 ## 当前验证状态
 

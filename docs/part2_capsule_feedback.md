@@ -97,7 +97,7 @@ python -m leancapsule feedback `
 - 推送 Part 2 相关文件到 `leiteng` 时自动触发；
 - Pull Request 修改 Part 2 相关文件时自动触发；
 - workflow 进入默认分支后可从 Actions 页面手动触发；
-- Ubuntu 和 Windows 并行执行 CapsuleFeedback、文档和 workflow 契约测试；
+- Ubuntu 执行 CapsuleFeedback、文档和 workflow 契约测试；
 - 专项测试通过后，Ubuntu 执行 `lake build` 和完整 Python 回归。
 
 由于 GitHub 只为默认分支上的 `workflow_dispatch` 显示手动运行入口，在该 workflow 尚未合并到默认分支时，应通过推送到 `leiteng` 或创建 Pull Request 触发。
