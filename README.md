@@ -74,6 +74,20 @@ python src/agent.py solve `
   --mock-candidate "by intro h; exact And.intro h.right h.left"
 ```
 
+## AxProverBase CapsuleFeedback（Part 2）
+
+`leancapsule.feedback.CapsuleFeedback` 可以直接消费 AxProverBase 已有的 Builder 返回值，生成错误类别、稳定指纹、重复次数、诊断漂移和有界历史。该步骤不会再次运行 Lean，也不会调用 LLM。
+
+```python
+from leancapsule.feedback import CapsuleFeedback
+
+capsule = CapsuleFeedback()
+build_success, message = await check_lean_file(...)
+feedback = capsule.observe_ax((build_success, message), round_no=1)
+```
+
+Part 1/2/3 中 AxProverBase 涉及的模型调用统一冻结为 DeepSeek Flash：Ax/LangChain 模型名 `openai:deepseek-v4-flash`，官方模型 ID `deepseek-v4-flash`，`base_url=https://api.deepseek.com`。具体接入步骤、JSON CLI 和验收标准见 [`docs/part2_capsule_feedback.md`](docs/part2_capsule_feedback.md)。
+
 ## 直接输入 API 配置
 
 单次运行可以在命令行输入接口地址、模型，并通过安全提示输入密钥。输入时终端不会显示密钥；读取完成后只确认成功，不显示长度、末四位或任何密钥字符。完整密钥只存在于当前进程内，不写入日志和缓存：

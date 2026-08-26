@@ -21,6 +21,15 @@ class DocumentationConsistencyTest(unittest.TestCase):
         self.assertIn("provider_error", readme)
         self.assertIn("compile_ok: false` 本身不代表 API 损坏", readme)
 
+    def test_part2_freezes_deepseek_flash_and_reuses_ax_build_result(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        part2 = (ROOT / "docs" / "part2_capsule_feedback.md").read_text(encoding="utf-8")
+        for document in (readme, part2):
+            self.assertIn("openai:deepseek-v4-flash", document)
+            self.assertIn("https://api.deepseek.com", document)
+        self.assertIn("不运行 Lean、不调用模型", part2)
+        self.assertIn("(build_success, message)", part2)
+
     def test_methodology_documents_candidate_normalization(self):
         methodology = (ROOT / "docs" / "methodology.md").read_text(encoding="utf-8")
         schema = (ROOT / "docs" / "jsonl_schema.md").read_text(encoding="utf-8")

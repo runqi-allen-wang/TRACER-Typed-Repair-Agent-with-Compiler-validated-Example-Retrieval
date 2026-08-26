@@ -10,6 +10,7 @@ from pathlib import Path
 from .issue import render_issue
 from .gallery import build_gallery_index, write_gallery_reports
 from .audit import audit_directory
+from .feedback import CapsuleFeedback
 from .pack import pack_capsule
 from .replay import replay_capsule
 from .verify import verify_directory
@@ -48,7 +49,27 @@ def build_parser() -> argparse.ArgumentParser:
     gallery.add_argument("--markdown", dest="markdown_out", type=Path)
     audit = sub.add_parser("audit", help="执行公开 capsule 的发布前静态审计")
     audit.add_argument("directory", type=Path)
+    feedback = sub.add_parser("feedback", help="从已有的 Ax/Lean 编译结果生成紧凑反馈，不重新编译")
+    feedback.add_argument("--input", default="-", help="编译结果 JSON；默认从标准输入读取")
+    feedback.add_argument("--state", type=Path, help="可选的逐题状态文件；读取后原子更新")
+    feedback.add_argument("--history-limit", type=int, default=4)
+    feedback.add_argument("--max-feedback-chars", type=int, default=1600)
     return parser
+
+
+def _read_feedback_input(value: str) -> dict:
+    text = sys.stdin.read() if value == "-" else Path(value).read_text(encoding="utf-8")
+    payload = json.loads(text)
+    if not isinstance(payload, dict):
+        raise ValueError("feedback 输入必须是 JSON object")
+    return payload
+
+
+def _write_feedback_state(path: Path, state: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temporary.replace(path)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -80,6 +101,24 @@ def main(argv: list[str] | None = None) -> int:
             result = audit_directory(args.directory)
             print(json.dumps(result, ensure_ascii=False))
             return 0 if result.get("ok") else 1
+        if args.command == "feedback":
+            payload = _read_feedback_input(args.input)
+            state = {}
+            if args.state and args.state.exists():
+                loaded = json.loads(args.state.read_text(encoding="utf-8"))
+                if not isinstance(loaded, dict):
+                    raise ValueError("feedback state 必须是 JSON object")
+                state = loaded
+            formatter = CapsuleFeedback(
+                history_limit=args.history_limit,
+                max_feedback_chars=args.max_feedback_chars,
+                state=state,
+            )
+            result = formatter.observe_ax(payload, round_no=payload.get("round"))
+            if args.state:
+                _write_feedback_state(args.state, formatter.export_state())
+            print(json.dumps(result, ensure_ascii=False))
+            return 0
     except Exception as exc:
         print(json.dumps({"ok": False, "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
         return 2

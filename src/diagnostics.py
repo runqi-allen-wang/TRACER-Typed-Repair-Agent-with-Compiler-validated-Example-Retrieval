@@ -26,6 +26,22 @@ def _classify_message(message: str) -> str:
     return "compile_error"
 
 
+def classify_diagnostic_text(text: str) -> str:
+    """Classify plain or AxProverBase-formatted Lean diagnostics.
+
+    AxProverBase wraps compiler messages in a box-drawing error excerpt, so the
+    original ``path:line:column: error: ...`` line may no longer be present.
+    Scanning the complete text keeps the category useful without compiling the
+    candidate again.
+    """
+
+    for line in text.splitlines():
+        category = _classify_message(line)
+        if category != "compile_error":
+            return category
+    return _classify_message(text)
+
+
 def normalize_diagnostics(
     text: str,
     *,
@@ -74,7 +90,7 @@ def normalize_diagnostics(
             loose_lines.append(line[:400])
 
     errors = errors[:max_errors]
-    category = errors[0]["category"] if errors else ("compile_error" if returncode else "ok")
+    category = errors[0]["category"] if errors else (classify_diagnostic_text(text) if returncode else "ok")
     if errors:
         summary = "; ".join(f"{item['category']}: {item['message']}" for item in errors[:2])
     elif loose_lines:

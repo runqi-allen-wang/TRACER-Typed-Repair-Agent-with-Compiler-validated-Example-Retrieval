@@ -13,5 +13,6 @@ if str(IMPLEMENTATION) not in __path__:
     __path__.append(str(IMPLEMENTATION))
 
 from .diagnostics_key import diagnostic_key
+from .feedback import CapsuleFeedback, stable_feedback_fingerprint
 
-__all__ = ["diagnostic_key"]
+__all__ = ["CapsuleFeedback", "diagnostic_key", "stable_feedback_fingerprint"]
