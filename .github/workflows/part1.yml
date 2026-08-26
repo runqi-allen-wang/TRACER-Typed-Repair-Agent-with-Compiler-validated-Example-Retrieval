@@ -1,0 +1,44 @@
+name: Part 1 验证
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  baseline-part1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install validation deps
+        run: python -m pip install pyyaml
+
+      - name: Validate frozen config
+        run: |
+          python - <<'PY'
+          import yaml
+          d = yaml.safe_load(open('baseline/config.yaml', encoding='utf-8'))
+          p = d['prover']
+          assert p['prover_llm']['model'].startswith('anthropic:'), 'model'
+          assert p['prover_llm']['thinking']['budget_tokens'] == 32000, 'think budget'
+          assert p['max_iterations'] == 50, 'iterations'
+          assert p['memory']['mode'] == 'self_managed', 'memory mode'
+          assert p['tools']['lean_search'] is True, 'lean_search'
+          print('config OK:', p['prover_llm']['model'])
+          PY
+
+      - name: Metrics logger syntax
+        run: python -m py_compile baseline/metrics_logger.py
+
+      - name: Metrics mock run + summary
+        run: |
+          python baseline/metrics_logger.py mock --tasks 5 --jsonl "$RUNNER_TEMP/m.jsonl"
+          python baseline/metrics_logger.py summary --jsonl "$RUNNER_TEMP/m.jsonl"
+
+      - name: Check pinned ax-prover commit exists
+        run: |
+          git ls-remote https://github.com/Axiomatic-AI/ax-prover-base.git \
+            | grep -q '06dfadc9ab439755af5efcfe0add95bfef2733c7'
