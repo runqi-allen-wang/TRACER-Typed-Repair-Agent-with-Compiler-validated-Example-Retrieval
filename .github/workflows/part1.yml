@@ -16,19 +16,8 @@ jobs:
       - name: Install validation deps
         run: python -m pip install pyyaml
 
-      - name: Validate frozen config
-        run: |
-          python - <<'PY'
-          import yaml
-          d = yaml.safe_load(open('baseline/config.yaml', encoding='utf-8'))
-          p = d['prover']
-          assert p['prover_llm']['model'].startswith('anthropic:'), 'model'
-          assert p['prover_llm']['thinking']['budget_tokens'] == 32000, 'think budget'
-          assert p['max_iterations'] == 50, 'iterations'
-          assert p['memory']['mode'] == 'self_managed', 'memory mode'
-          assert p['tools']['lean_search'] is True, 'lean_search'
-          print('config OK:', p['prover_llm']['model'])
-          PY
+      - name: Validate frozen config (contract）
+        run: python baseline/config_check.py
 
       - name: Metrics logger syntax
         run: python -m py_compile baseline/metrics_logger.py
@@ -42,3 +31,23 @@ jobs:
         run: |
           git ls-remote https://github.com/Axiomatic-AI/ax-prover-base.git \
             | grep -q '06dfadc9ab439755af5efcfe0add95bfef2733c7'
+
+  axprover-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ax-prover
+        run: python -m pip install ax-prover
+
+      - name: Import ax_prover
+        run: python -c "import ax_prover; print('ax_prover import OK')"
+
+      - name: Config contract check against ax-prover
+        run: python baseline/config_check.py
+
+      - name: ax-prover CLI present
+        run: ax-prover --help >/dev/null && echo "ax-prover CLI OK"
