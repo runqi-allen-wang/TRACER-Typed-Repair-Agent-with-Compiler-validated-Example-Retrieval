@@ -1,0 +1,24 @@
+# Part 1 冻结配置（对齐《一些细化idea.md》Part 1）
+# 冻结项：模型、温度、thinking budget、迭代预算、工具、记忆模式、Lean/Mathlib 环境、预算上限。
+
+prover:
+  max_iterations: 50                # 迭代预算
+  prover_llm:
+    model: "anthropic:claude-opus-4-20250514"   # 论文最优；按预算可换
+    temperature: 0.5
+    thinking:
+      type: enabled
+      budget_tokens: 32000          # 32k 优于 10k
+  tools:
+    lean_search: true               # 检索 Mathlib 引理
+    web_search: false               # 竞赛场景几乎没有帮助
+  memory:
+    mode: self_managed              # self_managed（最优）| history | none
+  reviewer:
+    statement_check: true           # 防止定理被篡改
+    no_sorry_admit: true            # 禁止占位证明
+    unclosed_goal_check: true       # 防止残留未闭合 goal
+  budgets:
+    max_llm_calls: 50
+    max_usd_per_task: null          # 设实数则截断（如 2.0）
+    lean_build_timeout_s: 300
