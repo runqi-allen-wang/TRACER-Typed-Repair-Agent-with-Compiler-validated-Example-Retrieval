@@ -12,3 +12,5 @@ results/solutions/
 results/archive/
 results/handoff/
 results/work/
+baseline/.baseline_cache.json
+baseline/runs/
