@@ -8,7 +8,7 @@ agent，固定环境/模型/预算，逐环节记录指标，并缓存每题首�
 
 | idea 要求 | 现状（文件） |
 |---|---|
-| 固定抽取 20~30 题 | `manifest.json`（20 条；18 条 seed 可跑 + 2 条 challenge 待填；正式题集替换为公开 benchmark） |
+| 固定抽取 20~30 题 | `manifest.json`（**25 题，全部来自公开 benchmark FATE-M**，15 core + 10 challenge） |
 | 冻结 AxProverBase commit | 锁定 `06dfadc9...`（见 `config.yaml environment` / README 说明） |
 | 冻结 Lean/Mathlib 环境 | `config.yaml environment.*` + `Dockerfile`（lean4:v4.32.0） |
 | 冻结模型、工具、预算 | `config.yaml prover.*` |
@@ -21,17 +21,16 @@ agent，固定环境/模型/预算，逐环节记录指标，并缓存每题首�
 
 **1. 准备 API 与 Lean 环境**
 ```bash
-export ANTHROPIC_API_KEY=sk-ant-...        # 或 OPENAI_API_KEY / GOOGLE_API_KEY
-# Lean 环境：用 Docker 最省事（绕开本机装 Lean）
+export OPENAI_API_KEY=sk-...        # DeepSeek key（OpenAI 兼容端点）
+# Lean 环境：用 Docker 最省事（绕开本机装 Lean，见 baseline/Dockerfile）
 docker build -t axprover-baseline -f baseline/Dockerfile .
 # 或本机已有 Lean 4.32 + 安装 ax-prover
 pip install ax-prover
 ```
 > Docker 运行：
-> `docker run --rm -it -v "$PWD:/workspace" -e ANTHROPIC_API_KEY=sk-ant-... axprover-baseline python baseline/run_baseline.py --out runs`
+> `docker run --rm -it -v "$PWD:/workspace" -e OPENAI_API_KEY=sk-... axprover-baseline python baseline/run_baseline.py --out runs`
 
-**2. 填题集**（`manifest.json`）——`t19`/`t20` 是 challenge 占位，把 `module/theorem/file` 填成公开
-benchmark（PutnamBench / FATE-X / LeanCat）的题目即可；也可整体替换。
+**2. 题集** —— `manifest.json` 已从公开 benchmark **FATE-M** 抽 25 题（15 core / 10 challenge），无需再填。
 
 **3. 运行**
 ```bash
@@ -53,6 +52,24 @@ python baseline/run_baseline.py --out runs
 - 逐环节调用数在真实模式按"每轮各视为一次"近似（ax-prover 若不逐环节上报）；精确值需解析其详细日志。
 - 本框架保证**可复现、可记录、配置与依赖对齐**；**"结果是否正确/作弊与否"仍需真实模型 +
   人工 Reviewer 把关**。
+
+## 题库与来源（重要）
+- **题集**：`manifest.json` 的 25 题全部取自 **FATE-M**（Formal Algebra Theorem Evaluation-Medium，
+  https://github.com/frenzymath/FATE-M ），选取其前 25 个定理，15 core / 10 challenge。
+- **依赖**：FATE-M 依赖 **mathlib4 @ v4.28.0**（见其 lakefile），构建较重。
+- **模型**：DeepSeek `deepseek-v4-flash`（`openai:` 前缀 + `base_url=https://api.deepseek.com/v1`，
+  key 用 `OPENAI_API_KEY` 环境变量，**不写进仓库**）。
+- **基线**：AxProverBase，锁定 commit `06dfadc9ab439755af5efcfe0add95bfef2733c7`。
+- **记录**：`runs/metrics.jsonl` 每题×记忆模式的逐环节指标；`.baseline_cache.json` 首轮候选缓存。
+
+## 在 GitHub 上跑（真实数据）
+`.github/workflows/part1_run.yml`（手动触发）会在 runner 上：安装 ax-prover → lean toolchain →
+clone FATE-M → `lake build`（构建 mathlib v4.28.0，**耗时/易超时**）→ 临时把 config 切到
+`openai:deepseek-v4-flash` + FATE-M → `run_baseline.py --limit 3` → 上传 `runs/metrics.jsonl` 为 artifact。
+
+**前提**：在仓库 **Settings → Secrets and variables → Actions** 添加 secret **`OPENAI_API_KEY`**
+= 你的 DeepSeek key；然后在 Actions 里手动 **Run workflow**。
+> 现在跑的是 **3 题 smoke**（验证全流程）；把 `--limit 3` 去掉即可跑全部 25 题。
 
 ## 验证
 ```powershell

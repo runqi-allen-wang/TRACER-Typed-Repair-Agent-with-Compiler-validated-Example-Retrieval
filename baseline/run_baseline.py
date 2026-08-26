@@ -88,7 +88,11 @@ def _parse_axp_output(json_path: Path) -> dict:
     }
 
 
-def run_task_axprover(cfg: dict, item: dict, memory_mode: str, workdir: Path) -> dict:
+def run_task_axprover(cfg: dict, item: dict, memory_mode: str) -> dict:
+    workdir = Path(cfg["run"].get("project_dir", ".."))
+    if not workdir.is_absolute():
+        workdir = (HERE.parent / workdir).resolve()
+    workdir.mkdir(parents=True, exist_ok=True)
     axp_cfg = _write_axp_config(cfg, workdir)
     out_json = workdir / f"_res_{uuid.uuid4().hex[:8]}.json"
     cmd = [cfg["run"]["axprover_command"], "--config", str(axp_cfg), "prove",
@@ -216,7 +220,7 @@ def main() -> int:
             if args.mock:
                 res = run_task_mock(item, mem, cfg)
             else:
-                res = run_task_axprover(cfg, item, mem, HERE.parent)  # Lean 工程在仓库根
+                res = run_task_axprover(cfg, item, mem)
             record = make_record(item, mem, model, res)
             append_jsonl(jsonl, record)
             first = record["first_round_candidate"]

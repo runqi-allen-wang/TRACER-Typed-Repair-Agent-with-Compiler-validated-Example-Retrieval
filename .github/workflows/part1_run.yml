@@ -1,0 +1,54 @@
+name: Part 1 运行（FATE-M 真实数据）
+
+# 手动触发：避免每次 push 都构建 mathlib（极重）
+on:
+  workflow_dispatch:
+
+jobs:
+  part1-run:
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}   # 你的 DeepSeek key（在 repo Secrets 配置）
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ax-prover + deps
+        run: python -m pip install ax-prover pyyaml
+
+      - name: Install Lean toolchain
+        uses: leanprover/lean-action@v1
+
+      - name: Clone FATE-M
+        run: git clone --depth 1 https://github.com/frenzymath/FATE-M.git /tmp/FATE-M
+
+      # 构建 FATE-M 会拉取并构建 mathlib v4.28.0（几 GB，最耗时/最易超时）
+      - name: Build FATE-M (mathlib v4.28.0)
+        run: cd /tmp/FATE-M && lake build
+
+      - name: Point config at FATE-M + DeepSeek (ephemeral)
+        run: |
+          python - <<'PY'
+          import yaml
+          p = 'baseline/config.yaml'
+          c = yaml.safe_load(open(p, encoding='utf-8'))
+          c['run']['project_dir'] = '/tmp/FATE-M'
+          c['run']['cache_file'] = '/tmp/baseline_cache.json'
+          llm = c['prover']['prover_llm']
+          llm['model'] = 'openai:deepseek-v4-flash'
+          llm.pop('thinking', None)
+          llm.setdefault('provider_config', {})['base_url'] = 'https://api.deepseek.com/v1'
+          yaml.safe_dump(c, open(p, 'w', encoding='utf-8'), allow_unicode=True)
+          print('config -> openai:deepseek-v4-flash @ FATE-M')
+          PY
+
+      - name: Run baseline on FATE-M (limit 3 smoke)
+        run: python baseline/run_baseline.py --limit 3 --out runs
+
+      - name: Upload metrics artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: part1-metrics
+          path: runs/metrics.jsonl
