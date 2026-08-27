@@ -32,7 +32,7 @@
 - 同一次求解不会把失败候选从缓存中重复用于后续轮次；候选及成功工件同时拒绝 `sorry`、`sorryAx` 和 `admit`。
 - 定理定位拒绝不带命名空间的重名目标，限定名不再回退到同名定理；隔离编译保留有效本地 helper，并识别 `lakefile.lean` 项目。
 - 交接导出要求匹配当前实验的正式报告和每个成功证明工件，使用临时目录原子生成，并扫描常见认证 token。
-- CI 增加 Windows PowerShell 5.1 语法检查和脚本/文档静态回归。
+- CI 统一使用 Ubuntu runner，并通过 `pwsh` 保留 PowerShell 入口语法检查和脚本/文档静态回归。
 - 远程 provider 强制 HTTPS，只允许同源认证重定向，并限制成功响应和错误正文大小；非 JSON 错误正文不会写入日志。
 - 模型候选使用最小化子进程环境，阻止 `run_tac`、`run_term_elab`、`#eval` 等编译期执行入口，并把候选策略写入实验记录与正式报告。
 - 新增独立 D 类安全对抗回归；D01 覆盖 `unsafe inductive` 绕过 positivity 检查并构造 `False`，候选策略升级为 `tracer-candidate-v2`，原 Agent、AxProverBase 缓存/生成 ProposalMessage 与 Capsule pack/replay/audit 均在编译前拒绝不安全声明。

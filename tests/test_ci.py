@@ -78,9 +78,11 @@ class ContinuousIntegrationTest(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
-    def test_ci_has_a_windows_powershell_static_job(self):
+    def test_ci_uses_ubuntu_only_and_keeps_powershell_static_checks(self):
         workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
-        self.assertIn("windows-latest", workflow)
+        self.assertNotIn("windows-latest", workflow)
+        self.assertIn("powershell-script-checks:", workflow)
+        self.assertIn("shell: pwsh", workflow)
         self.assertIn("Parser]::ParseFile", workflow)
 
     def test_part2_workflow_contract(self):

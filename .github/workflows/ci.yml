@@ -36,15 +36,16 @@ jobs:
       - name: Replay public capsules
         run: python -m leancapsule verify capsules
 
-  windows-script-checks:
-    runs-on: windows-latest
+  powershell-script-checks:
+    name: PowerShell 脚本静态检查 (Ubuntu)
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Parse PowerShell 5.1 entrypoints
-        shell: powershell
+      - name: Parse PowerShell entrypoints
+        shell: pwsh
         run: |
           $failed = $false
           foreach ($file in @("run_all.ps1", "scripts/setup_mathlib.ps1")) {
