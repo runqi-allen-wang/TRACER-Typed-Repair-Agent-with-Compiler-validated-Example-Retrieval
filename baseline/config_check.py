@@ -22,11 +22,12 @@ def main() -> int:
         errors.append("prover_llm.model 必须以 anthropic:/openai:/google: 前缀开头")
     if not isinstance(llm.get("temperature"), (int, float)):
         errors.append("prover_llm.temperature 需为数值")
-    think = llm.get("thinking", {})
-    if think.get("type") != "enabled":
-        errors.append("prover_llm.thinking.type 应为 enabled")
-    if not isinstance(think.get("budget_tokens"), int):
-        errors.append("prover_llm.thinking.budget_tokens 需为整数")
+    if model.startswith("anthropic:"):
+        think = llm.get("thinking", {})
+        if think.get("type") != "enabled":
+            errors.append("prover_llm.thinking.type 应为 enabled")
+        if not isinstance(think.get("budget_tokens"), int):
+            errors.append("prover_llm.thinking.budget_tokens 需为整数")
     if not isinstance(p.get("max_iterations"), int):
         errors.append("prover.max_iterations 需为整数")
     mem = p.get("memory", {}).get("mode")
