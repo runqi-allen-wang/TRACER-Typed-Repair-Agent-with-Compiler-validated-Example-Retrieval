@@ -10,7 +10,7 @@ agent，固定环境/模型/预算，逐环节记录指标，并缓存每题首�
 |---|---|
 | 固定抽取 20~30 题 | `manifest.json`（**25 题，全部来自公开 benchmark FATE-M**，15 core + 10 challenge） |
 | 冻结 AxProverBase commit | 锁定 `06dfadc9...`（见 `config.yaml environment` / README 说明） |
-| 冻结 Lean/Mathlib 环境 | `config.yaml environment.*` + `Dockerfile`（lean4:v4.32.0） |
+| 冻结 Lean/Mathlib 环境 | `fate_v432/` 锁定 lean/mathlib **v4.32.0** |
 | 冻结模型、工具、预算 | `config.yaml prover.*` |
 | 先跑 Experience(memory)，补 Memoryless | `memory.matrix: [self_managed, none]`；可 `--memory` 覆盖 |
 | 关闭不参与证明的最终 summary | `enable_summary: false` |
@@ -21,14 +21,9 @@ agent，固定环境/模型/预算，逐环节记录指标，并缓存每题首�
 
 **1. 准备 API 与 Lean 环境**
 ```bash
-export OPENAI_API_KEY=sk-...        # DeepSeek key（OpenAI 兼容端点）
-# Lean 环境：用 Docker 最省事（绕开本机装 Lean，见 baseline/Dockerfile）
-docker build -t axprover-baseline -f baseline/Dockerfile .
-# 或本机已有 Lean 4.32 + 安装 ax-prover
-pip install ax-prover
-```
-> Docker 运行：
-> `docker run --rm -it -v "$PWD:/workspace" -e OPENAI_API_KEY=sk-... axprover-baseline python baseline/run_baseline.py --out runs`
+export OPENAI_API_KEY=sk-...        # 你的 OpenAI 兼容 key（gpt-5.6-sol 走 spacetimeai）
+# 本机已有 Lean 4.32 + 安装 ax-prover
+pip install ax-prover pyyaml
 
 **2. 题集** —— `manifest.json` 已从公开 benchmark **FATE-M** 抽 25 题（15 core / 10 challenge），无需再填。
 
@@ -68,7 +63,7 @@ python baseline/run_baseline.py --out runs
 ## 在 GitHub 上跑（真实数据）
 `.github/workflows/part1_run.yml`（手动触发）会在 runner 上：安装 ax-prover → lean toolchain →
 切到锁 mathlib **v4.32.0** 的 `fate_v432/` 工程 → `lake build`（构建 mathlib v4.32.0，**耗时/易超时**）
-→ 临时把 config 切到 `openai:deepseek-v4-flash` + 该工程 → `run_baseline.py --limit 3` → 上传
+→ 临时把 config 切到 `openai:gpt-5.6-sol` + 该工程 → `run_baseline.py --limit 3` → 上传
 `runs/metrics.jsonl` 为 artifact。
 
 **前提**：在仓库 **Settings → Secrets and variables → Actions** 添加 secret **`OPENAI_API_KEY`**
@@ -109,18 +104,13 @@ lake update          # 拉取 mathlib 源码与依赖
 lake exe cache get   # 拉 mathlib 预编译 .olean（几十分钟->几十秒，Windows 上通常拉不到）
 lake build           # 编译题目（依赖已就绪则很快）
 ```
-在 **Docker（Linux）** 上构建（最稳，见 `baseline/Dockerfile`，基于 `leanprover/lean4:v4.32.0`）：
-```bash
-docker build -t axprover-baseline -f baseline/Dockerfile .
-docker run --rm -it -v "$PWD:/workspace" -e OPENAI_API_KEY=sk-... \
-  axprover-baseline bash -lc "cd fate_v432 && lake exe cache get && lake build"
-```
+（本机构建即可，无需 Docker。）
 
 ### 运行与产物
 ```bash
 # 自测（无模型）
 python baseline/run_baseline.py --mock --limit 5 --out runs
-# 真实（需 Docker/Linux 已 build 的 mathlib v4.32.0 + ax-prover + DeepSeek key）
+# 真实（需本机 lean 4.32 + mathlib v4.32 已 build + ax-prover + OPENAI_API_KEY）
 python baseline/run_baseline.py --out runs          # 或 --limit 3 先 smoke
 python baseline/metrics_logger.py summary --jsonl runs/metrics.jsonl
 ```
@@ -135,7 +125,7 @@ python baseline/metrics_logger.py summary --jsonl runs/metrics.jsonl
 | Mathlib | `v4.32.0`（git `db584c6...`@manifest） |
 | 题集 | FATE-M 前 25 题，`fate_v432/FATEM/` |
 | agent | AxProverBase commit `06dfadc9ab439755af5efcfe0add95bfef2733c7` |
-| 模型 | DeepSeek `openai:deepseek-v4-flash`（`base_url=https://api.deepseek.com/v1`，key 用 `OPENAI_API_KEY`） |
+| 模型 | `openai:gpt-5.6-sol`（`base_url=https://spacetimeai.cc/v1`，key 用 `OPENAI_API_KEY`） |
 | 记忆模式 | `[self_managed, none]`（先 Experience、补 Memoryless） |
 
 ### 当前运行配置与单价（冻结说明）
