@@ -25,6 +25,7 @@ from pathlib import Path
 # 仅供 mock 的占位价格；真实实验请传入或由 provider 返回
 DEFAULT_INPUT_USD_PER_1K = 0.015
 DEFAULT_OUTPUT_USD_PER_1K = 0.075
+MOCK_MAX_ITERATIONS = 4
 
 
 def cost_usd(usage: dict, in_usd: float, out_usd: float) -> float:
@@ -36,14 +37,14 @@ def cost_usd(usage: dict, in_usd: float, out_usd: float) -> float:
 def make_run(
     task_id: str,
     *,
-    model: str = "anthropic:claude-opus-4-20250514",
+    model: str = "openai:gpt-5.6-sol",
     condition: str = "baseline",
     first_round_candidate: str | None = None,
 ) -> dict:
     """构造一条 run 记录（mock 或真实都走这个结构）。"""
     round_no = 0
     compile_ok = False
-    while round_no < 50:  # 与冻结配置 max_iterations 保持一致的上限
+    while round_no < MOCK_MAX_ITERATIONS:
         round_no += 1
         # 模拟：proposer / tool / memory / reviewer 各一次调用
         first_round_candidate = first_round_candidate if round_no == 1 else None
@@ -93,14 +94,19 @@ def summary(jsonl: Path) -> None:
             agg[k] += v
     avg_prompt = sum(r["usage"].get("prompt_tokens", 0) for r in rows) / max(1, n)
     avg_complete = sum(r["usage"].get("completion_tokens", 0) for r in rows) / max(1, n)
-    total_cost = sum(r.get("estimated_cost_usd", 0.0) for r in rows)
+    known_costs = [
+        r.get("estimated_cost_usd")
+        for r in rows
+        if isinstance(r.get("estimated_cost_usd"), (int, float))
+    ]
+    total_cost = sum(known_costs) if len(known_costs) == n else None
     print(json.dumps({
         "tasks": n,
         "passed": ok,
         "pass_rate": round(ok / max(1, n), 4),
         "avg_prompt_tokens": round(avg_prompt, 1),
         "avg_completion_tokens": round(avg_complete, 1),
-        "total_cost_usd": round(total_cost, 4),
+        "total_cost_usd": round(total_cost, 4) if total_cost is not None else None,
         "calls_total": dict(agg),
     }, ensure_ascii=False, indent=2))
 

@@ -10,8 +10,7 @@
 用法：
   # 无模型自测
   python baseline/run_baseline.py --mock --limit 5 --out runs
-  # 真实运行（需 Lean 环境 + ANTHROPIC_API_KEY + 本机/容器内安装 ax-prover 与 lean）
-  python baseline/run_baseline.py --out runs
+  # 真实运行请使用 run_api.py / run_batch.py；Ax CLI 的 JSON 不含实验所需状态。
 """
 
 from __future__ import annotations
@@ -41,7 +40,7 @@ def load_manifest(path: Path) -> list[dict]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def _write_axp_config(cfg: dict, workdir: Path) -> Path:
+def _write_axp_config(cfg: dict, workdir: Path, memory_mode: str = "self_managed") -> Path:
     """把冻结配置里 ax-prover 认可的字段抽成临时 config。"""
     con = cfg["prover"]
     llm = dict(con["prover_llm"])
@@ -49,12 +48,25 @@ def _write_axp_config(cfg: dict, workdir: Path) -> Path:
     if "temperature" in llm:
         provider_config.setdefault("temperature", llm.pop("temperature"))
     llm.pop("thinking", None)
+    if memory_mode == "self_managed":
+        memory_config = {
+            "class_name": "ExperienceProcessor",
+            "init_args": {"llm_config": "${prover.prover_llm}"},
+        }
+    elif memory_mode == "none":
+        memory_config = {"class_name": "MemorylessProcessor", "init_args": {}}
+    else:
+        raise ValueError(f"不支持的 memory 模式: {memory_mode}")
     axp = {
         "prover": {
             "max_iterations": con["max_iterations"],
             "prover_llm": {"model": llm["model"], "provider_config": provider_config},
-            "memory_config": {"class_name": "ExperienceProcessor", "init_args": {}},
+            "memory_config": memory_config,
             "proposer_tools": {"lean_search": None, "web_search": None},
+            "summarize_output": {
+                "enabled": False,
+                "llm": "${prover.prover_llm}",
+            },
         }
     }
     p = workdir / "_axp_config.yaml"
@@ -80,8 +92,10 @@ def _parse_axp_output(json_path: Path) -> dict:
             usage.get("input_tokens", 0) + usage.get("output_tokens", 0),
         ),
     }
-    status = (raw.get("status") or raw.get("result") or raw.get("ok") or "").lower()
-    ok = isinstance(status, bool) and status or (status in ("success", "passed", "true", "ok"))
+    status_value = raw.get("status") or raw.get("result") or raw.get("ok") or ""
+    ok = status_value if isinstance(status_value, bool) else str(status_value).lower() in (
+        "success", "passed", "true", "ok"
+    )
     return {
         "ok": ok,
         "rounds": raw.get("rounds", raw.get("iterations", 0)),
@@ -98,7 +112,7 @@ def run_task_axprover(cfg: dict, item: dict, memory_mode: str) -> dict:
     if not workdir.is_absolute():
         workdir = (HERE.parent / workdir).resolve()
     workdir.mkdir(parents=True, exist_ok=True)
-    axp_cfg = _write_axp_config(cfg, workdir)
+    axp_cfg = _write_axp_config(cfg, workdir, memory_mode)
     out_json = workdir / f"_res_{uuid.uuid4().hex[:8]}.json"
     cmd = [cfg["run"]["axprover_command"], "--config", str(axp_cfg), "prove",
            f"{item['module']}:{item['theorem']}", "-o", str(out_json)]
@@ -109,13 +123,15 @@ def run_task_axprover(cfg: dict, item: dict, memory_mode: str) -> dict:
     elapsed = int((time.time() - t0) * 1000)
     parsed = _parse_axp_output(out_json)
     price = (cfg["run"].get("price") or {})
-    p_in = price.get("input_usd_per_1k") or 0.0
-    p_out = price.get("output_usd_per_1k") or 0.0
+    p_in = price.get("input_usd_per_1k")
+    p_out = price.get("output_usd_per_1k")
     usage = parsed.get("usage", {"prompt_tokens": 0, "completion_tokens": 0})
     if parsed.get("cost") is not None:
         est_cost = parsed["cost"]
-    else:
+    elif isinstance(p_in, (int, float)) and isinstance(p_out, (int, float)):
         est_cost = cost_usd(usage, p_in, p_out)
+    else:
+        est_cost = None
     ok = parsed.get("ok", False)
     rounds = parsed.get("rounds", 0) or 1
     return {
@@ -147,6 +163,12 @@ def run_task_mock(item: dict, memory_mode: str, cfg: dict) -> dict:
             break
     usage = {"prompt_tokens": random.randint(400, 2000), "completion_tokens": random.randint(300, 1600)}
     price = cfg["run"].get("price") or {}
+    p_in = price.get("input_usd_per_1k")
+    p_out = price.get("output_usd_per_1k")
+    if not isinstance(p_in, (int, float)):
+        p_in = 0.06
+    if not isinstance(p_out, (int, float)):
+        p_out = 0.3
     return {
         "rounds": rounds,
         "compile_ok": ok,
@@ -155,7 +177,7 @@ def run_task_mock(item: dict, memory_mode: str, cfg: dict) -> dict:
         "first_round_candidate": f"by intro h; exact h  # {item['id']}@{memory_mode} 首轮候选",
         "calls": {"proposer_calls": rounds, "memory_calls": rounds, "reviewer_calls": rounds, "tool_calls": rounds},
         "usage": usage,
-        "estimated_cost_usd": cost_usd(usage, price.get("input_usd_per_1k", 0.06), price.get("output_usd_per_1k", 0.3)),
+        "estimated_cost_usd": cost_usd(usage, p_in, p_out),
         "raw": None,
         "returncode": 0,
     }
@@ -204,6 +226,14 @@ def main() -> int:
     ap.add_argument("--mock", action="store_true")
     args = ap.parse_args()
 
+    if not args.mock:
+        print(
+            "真实 Part 1 必须使用 baseline/run_api.py 或 baseline/run_batch.py；"
+            "Ax CLI 输出不含首轮候选、逐轮指标和配对契约。",
+            file=sys.stderr,
+        )
+        return 2
+
     cfg = load_config(args.config)
     items = load_manifest(args.manifest)
     if args.tier:
@@ -234,8 +264,10 @@ def main() -> int:
             first = record["first_round_candidate"]
             if first:
                 cache.setdefault(key, first)
+            cost = record["estimated_cost_usd"]
+            cost_text = "unknown" if cost is None else f"${cost:.4f}"
             print(f"[{'mock' if args.mock else 'run'}] {key}: ok={record['compile_ok']} "
-                  f"rounds={record['rounds']} cost=${record['estimated_cost_usd']:.4f}")
+                  f"rounds={record['rounds']} cost={cost_text}")
 
     save_cache(cache_path, cache)
     print(f"\nwritten -> {jsonl}（{sum(1 for _ in open(jsonl, encoding='utf-8'))} 条）")

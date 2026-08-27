@@ -17,8 +17,13 @@ def prepare_cache(rows: list[dict]) -> dict[str, dict]:
         condition = str(row.get("condition") or "").lower()
         if condition not in {"baseline", "experience"}:
             continue
-        module = str(row.get("module") or "").replace("/", ".").removesuffix(".lean")
         theorem = str(row.get("theorem") or "")
+        run_target = str(row.get("target") or "")
+        target_suffix = f":{theorem}"
+        if theorem and run_target.endswith(target_suffix):
+            module = run_target[: -len(target_suffix)]
+        else:
+            module = str(row.get("module") or "").replace("/", ".").removesuffix(".lean")
         candidate = str(row.get("first_round_candidate") or "")
         if not module or not theorem:
             raise ValueError(f"row {row_no}: module/theorem is required")

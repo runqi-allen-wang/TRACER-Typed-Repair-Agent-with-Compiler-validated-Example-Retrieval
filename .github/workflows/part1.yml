@@ -41,13 +41,32 @@ jobs:
           python-version: "3.11"
 
       - name: Install ax-prover
-        run: python -m pip install ax-prover
+        run: python -m pip install -r requirements-axprover-part2.txt
 
       - name: Import ax_prover
         run: python -c "import ax_prover; print('ax_prover import OK')"
 
       - name: Config contract check against ax-prover
         run: python baseline/config_check.py
+
+      - name: Parse Experience config with pinned ax-prover
+        run: |
+          python - <<'PY'
+          from ax_prover.config import Config
+          from ax_prover.utils import merge_configs
+
+          config = merge_configs([
+              Config(),
+              'default.yaml',
+              'configs/axprover_part1_experience.yaml',
+          ])
+          assert config.prover.max_iterations == 4
+          assert config.prover.memory_config.class_name == 'ExperienceProcessor'
+          assert config.prover.summarize_output.enabled is False
+          assert config.prover.prover_llm.model == 'openai:gpt-5.6-sol'
+          assert config.prover.prover_llm.provider_config['use_responses_api'] is True
+          print('Part 1 Ax config parse OK')
+          PY
 
       - name: ax-prover CLI present
         run: ax-prover --help >/dev/null && echo "ax-prover CLI OK"

@@ -2,9 +2,9 @@
   {
     "id": "fate01",
     "title": "prod_card_eq_card_pow",
-    "module": "FATEM.Problem01",
+    "module": "FATEM/1.lean",
     "theorem": "prod_card_eq_card_pow",
-    "file": "FATEM/Problem01.lean",
+    "file": "FATEM/1.lean",
     "tier": "core",
     "difficulty": "medium",
     "tags": [
@@ -16,9 +16,9 @@
   {
     "id": "fate02",
     "title": "monoidHom_eq_of_isCyclic",
-    "module": "FATEM.Problem02",
+    "module": "FATEM/2.lean",
     "theorem": "monoidHom_eq_of_isCyclic",
-    "file": "FATEM/Problem02.lean",
+    "file": "FATEM/2.lean",
     "tier": "core",
     "difficulty": "medium",
     "tags": [
@@ -30,9 +30,9 @@
   {
     "id": "fate03",
     "title": "comp_surjective_of_surjective",
-    "module": "FATEM.Problem03",
+    "module": "FATEM/3.lean",
     "theorem": "comp_surjective_of_surjective",
-    "file": "FATEM/Problem03.lean",
+    "file": "FATEM/3.lean",
     "tier": "core",
     "difficulty": "medium",
     "tags": [
@@ -44,9 +44,9 @@
   {
     "id": "fate04",
     "title": "mul_mem_ker_comm",
-    "module": "FATEM.Problem04",
+    "module": "FATEM/4.lean",
     "theorem": "mul_mem_ker_comm",
-    "file": "FATEM/Problem04.lean",
+    "file": "FATEM/4.lean",
     "tier": "core",
     "difficulty": "medium",
     "tags": [
@@ -58,9 +58,9 @@
   {
     "id": "fate05",
     "title": "has_inverse_iff_isomorphism",
-    "module": "FATEM.Problem05",
+    "module": "FATEM/5.lean",
     "theorem": "has_inverse_iff_isomorphism",
-    "file": "FATEM/Problem05.lean",
+    "file": "FATEM/5.lean",
     "tier": "core",
     "difficulty": "medium",
     "tags": [
@@ -72,9 +72,9 @@
   {
     "id": "fate06",
     "title": "MonoidHom.eq_id_of_card_gcd_eq_one",
-    "module": "FATEM.Problem06",
+    "module": "FATEM/6.lean",
     "theorem": "MonoidHom.eq_id_of_card_gcd_eq_one",
-    "file": "FATEM/Problem06.lean",
+    "file": "FATEM/6.lean",
     "tier": "core",
     "difficulty": "medium",
     "tags": [
@@ -86,9 +86,9 @@
   {
     "id": "fate07",
     "title": "commutative_iff_commutator_mem_ker",
-    "module": "FATEM.Problem07",
+    "module": "FATEM/7.lean",
     "theorem": "commutative_iff_commutator_mem_ker",
-    "file": "FATEM/Problem07.lean",
+    "file": "FATEM/7.lean",
     "tier": "core",
     "difficulty": "medium",
     "tags": [
@@ -100,9 +100,9 @@
   {
     "id": "fate08",
     "title": "conj_ker_eq_center",
-    "module": "FATEM.Problem08",
+    "module": "FATEM/8.lean",
     "theorem": "conj_ker_eq_center",
-    "file": "FATEM/Problem08.lean",
+    "file": "FATEM/8.lean",
     "tier": "core",
     "difficulty": "medium",
     "tags": [
@@ -114,9 +114,9 @@
   {
     "id": "fate09",
     "title": "orderOf_eq_zero_of_monoidHom",
-    "module": "FATEM.Problem09",
+    "module": "FATEM/9.lean",
     "theorem": "orderOf_eq_zero_of_monoidHom",
-    "file": "FATEM/Problem09.lean",
+    "file": "FATEM/9.lean",
     "tier": "core",
     "difficulty": "medium",
     "tags": [
@@ -128,9 +128,9 @@
   {
     "id": "fate10",
     "title": "pow_mem_ker_of_card_eq",
-    "module": "FATEM.Problem10",
+    "module": "FATEM/10.lean",
     "theorem": "pow_mem_ker_of_card_eq",
-    "file": "FATEM/Problem10.lean",
+    "file": "FATEM/10.lean",
     "tier": "core",
     "difficulty": "medium",
     "tags": [
@@ -142,9 +142,9 @@
   {
     "id": "fate11",
     "title": "mul_sub_and_sub_mul",
-    "module": "FATEM.Problem11",
+    "module": "FATEM/11.lean",
     "theorem": "mul_sub_and_sub_mul",
-    "file": "FATEM/Problem11.lean",
+    "file": "FATEM/11.lean",
     "tier": "core",
     "difficulty": "medium",
     "tags": [
@@ -156,9 +156,9 @@
   {
     "id": "fate12",
     "title": "existUnique_ringHom_int",
-    "module": "FATEM.Problem12",
+    "module": "FATEM/12.lean",
     "theorem": "existUnique_ringHom_int",
-    "file": "FATEM/Problem12.lean",
+    "file": "FATEM/12.lean",
     "tier": "core",
     "difficulty": "medium",
     "tags": [
@@ -170,9 +170,9 @@
   {
     "id": "fate13",
     "title": "commutative_of_relations",
-    "module": "FATEM.Problem13",
+    "module": "FATEM/13.lean",
     "theorem": "commutative_of_relations",
-    "file": "FATEM/Problem13.lean",
+    "file": "FATEM/13.lean",
     "tier": "core",
     "difficulty": "medium",
     "tags": [
@@ -184,9 +184,9 @@
   {
     "id": "fate14",
     "title": "zero_of_pow_eq_zero",
-    "module": "FATEM.Problem14",
+    "module": "FATEM/14.lean",
     "theorem": "zero_of_pow_eq_zero",
-    "file": "FATEM/Problem14.lean",
+    "file": "FATEM/14.lean",
     "tier": "core",
     "difficulty": "medium",
     "tags": [
@@ -198,9 +198,9 @@
   {
     "id": "fate15",
     "title": "left_right_inverse_eq",
-    "module": "FATEM.Problem15",
+    "module": "FATEM/15.lean",
     "theorem": "left_right_inverse_eq",
-    "file": "FATEM/Problem15.lean",
+    "file": "FATEM/15.lean",
     "tier": "core",
     "difficulty": "medium",
     "tags": [
@@ -212,9 +212,9 @@
   {
     "id": "fate16",
     "title": "Ideal.span_eq_iff_associated",
-    "module": "FATEM.Problem16",
+    "module": "FATEM/16.lean",
     "theorem": "Ideal.span_eq_iff_associated",
-    "file": "FATEM/Problem16.lean",
+    "file": "FATEM/16.lean",
     "tier": "challenge",
     "difficulty": "medium",
     "tags": [
@@ -226,9 +226,9 @@
   {
     "id": "fate17",
     "title": "ideal_span_eq_diagonal_map_sum",
-    "module": "FATEM.Problem17",
+    "module": "FATEM/17.lean",
     "theorem": "ideal_span_eq_diagonal_map_sum",
-    "file": "FATEM/Problem17.lean",
+    "file": "FATEM/17.lean",
     "tier": "challenge",
     "difficulty": "medium",
     "tags": [
@@ -240,9 +240,9 @@
   {
     "id": "fate18",
     "title": "Ideal.add_le_of_le",
-    "module": "FATEM.Problem18",
+    "module": "FATEM/18.lean",
     "theorem": "Ideal.add_le_of_le",
-    "file": "FATEM/Problem18.lean",
+    "file": "FATEM/18.lean",
     "tier": "challenge",
     "difficulty": "medium",
     "tags": [
@@ -254,9 +254,9 @@
   {
     "id": "fate19",
     "title": "ZMod.isField_iff_prime",
-    "module": "FATEM.Problem19",
+    "module": "FATEM/19.lean",
     "theorem": "ZMod.isField_iff_prime",
-    "file": "FATEM/Problem19.lean",
+    "file": "FATEM/19.lean",
     "tier": "challenge",
     "difficulty": "medium",
     "tags": [
@@ -268,9 +268,9 @@
   {
     "id": "fate20",
     "title": "Field.ideal_eq_bot_or_top",
-    "module": "FATEM.Problem20",
+    "module": "FATEM/20.lean",
     "theorem": "Field.ideal_eq_bot_or_top",
-    "file": "FATEM/Problem20.lean",
+    "file": "FATEM/20.lean",
     "tier": "challenge",
     "difficulty": "medium",
     "tags": [
@@ -282,9 +282,9 @@
   {
     "id": "fate21",
     "title": "existUnique_linear_solution",
-    "module": "FATEM.Problem21",
+    "module": "FATEM/21.lean",
     "theorem": "existUnique_linear_solution",
-    "file": "FATEM/Problem21.lean",
+    "file": "FATEM/21.lean",
     "tier": "challenge",
     "difficulty": "medium",
     "tags": [
@@ -296,9 +296,9 @@
   {
     "id": "fate22",
     "title": "infinite_of_isAlgClosed",
-    "module": "FATEM.Problem22",
+    "module": "FATEM/22.lean",
     "theorem": "infinite_of_isAlgClosed",
-    "file": "FATEM/Problem22.lean",
+    "file": "FATEM/22.lean",
     "tier": "challenge",
     "difficulty": "medium",
     "tags": [
@@ -310,9 +310,9 @@
   {
     "id": "fate23",
     "title": "isMaximal_of_isPrime_of_fintype",
-    "module": "FATEM.Problem23",
+    "module": "FATEM/23.lean",
     "theorem": "isMaximal_of_isPrime_of_fintype",
-    "file": "FATEM/Problem23.lean",
+    "file": "FATEM/23.lean",
     "tier": "challenge",
     "difficulty": "medium",
     "tags": [
@@ -324,9 +324,9 @@
   {
     "id": "fate24",
     "title": "isPrime_singleton",
-    "module": "FATEM.Problem24",
+    "module": "FATEM/24.lean",
     "theorem": "isPrime_singleton",
-    "file": "FATEM/Problem24.lean",
+    "file": "FATEM/24.lean",
     "tier": "challenge",
     "difficulty": "medium",
     "tags": [
@@ -338,9 +338,9 @@
   {
     "id": "fate25",
     "title": "primeAvoidance",
-    "module": "FATEM.Problem25",
+    "module": "FATEM/25.lean",
     "theorem": "primeAvoidance",
-    "file": "FATEM/Problem25.lean",
+    "file": "FATEM/25.lean",
     "tier": "challenge",
     "difficulty": "medium",
     "tags": [

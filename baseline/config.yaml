@@ -6,19 +6,25 @@
 #   - 冻结 Lean/Mathlib 环境：environment.*
 #   - 缓存每题首轮候选 / 记录编排：run.*
 # 说明：真实单价请按你的 API 账单填写 price；或依赖 provider 返回 cost。
-# 版本对齐：本基线锁定 Lean/Mathlib v4.32.0，与仓库 capsule(mathlib_project) 一致；
-#   题集工程用 fate_v432/（把 FATE-M 25 题锁到 mathlib v4.32.0），见 README。
+# 题集环境锁定到 FATE-M 官方 v4.28.0 tag；Part 1 与 Part 2 必须使用同一工程。
 
 prover:
   max_iterations: 4                     # 迭代预算（降；FATE import Mathlib ~38s/轮）
   prover_llm:
-    model: "openai:gpt-5.6-sol"   # gpt-5.6-sol（spacetimeai 中转，OpenAI 兼容）
-    temperature: 0
+    model: "openai:gpt-5.6-sol"
     provider_config:
-      base_url: "https://spacetimeai.cc/v1"
+      base_url: "https://yxai.chat/v1"
+      use_responses_api: true
+      store: false
+      reasoning:
+        effort: "high"
+      output_version: "responses/v1"
+      max_tokens: null
+      profile:
+        max_input_tokens: 65536
   tools:
-    lean_search: true                   # 检索 Mathlib 引理
-    web_search: false                   # 竞赛场景几乎没有帮助
+    lean_search: false                  # 配对实验关闭外部检索，减少不可控漂移
+    web_search: false
   memory:
     mode: self_managed                  # 默认 = Experience memory
     matrix: [self_managed, none]        # 消融：self_managed(Experience) / none(Memoryless)
@@ -28,21 +34,22 @@ prover:
     unclosed_goal_check: true           # 防止残留未闭合 goal
   enable_summary: false                 # 关闭不参与证明的最终 LLM summary
   budgets:
-    max_llm_calls: 50
+    max_llm_calls: 12                   # 4 轮下 proposer/memory/reviewer 的理论上界
     max_usd_per_task: null              # 设实数则截断（如 2.0）
     lean_build_timeout_s: 300
 
 run:
   axprover_command: "ax-prover"
-  project_dir: "fate_v432"              # v4.32.0 题集工程（含 lakefile + FATEM/*.lean）
+  project_dir: "FATE-M"                 # 官方 v4.28.0 tag 的本地 checkout
   skip_build: true                      # 若工程已 build 可跳过
   cache_file: ".baseline_cache.json"    # 首轮候选缓存
   out_dir: "runs"                       # JSONL 输出目录
   price:
-    input_usd_per_1k: 0.00104           # $4/1M * 0.26
-    output_usd_per_1k: 0.0052           # $20/1M * 0.26
+    input_usd_per_1k: null              # 中转站未提供正式单价时保持未知
+    output_usd_per_1k: null
 
 environment:
-  lean_toolchain: "leanprover/lean4:v4.32.0"   # 锁定 Lean 版本
-  mathlib_toolchain: "v4.32.0"                 # 锁定 Mathlib 版本
-  use_docker: true                             # 有 Docker 则用镜像跑，绕开本机装 Lean
+  benchmark_ref: "v4.28.0"
+  lean_toolchain: "leanprover/lean4:v4.28.0"
+  mathlib_toolchain: "v4.28.0"
+  use_docker: false                            # 当前版本已移除 Dockerfile，使用本地冻结工具链

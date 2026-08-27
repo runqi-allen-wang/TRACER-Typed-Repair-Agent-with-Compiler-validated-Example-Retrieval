@@ -21,7 +21,7 @@ Check "baseline 文件齐全" {
   if (-not (Test-Path "baseline/config.yaml") -or -not (Test-Path "baseline/metrics_logger.py") -or -not (Test-Path "baseline/README.md")) { throw "missing file" }
 }
 Check "config 为合法 YAML 且含关键字段" {
-  python -c "import yaml; d=yaml.safe_load(open('baseline/config.yaml',encoding='utf-8')); p=d['prover']; assert p['prover_llm']['model'].startswith('anthropic:'),'model'; assert p['max_iterations']==50,'iter'; assert p['prover_llm']['thinking']['budget_tokens']==32000,'think'; assert p['memory']['mode']=='self_managed','memory'"
+  python baseline/config_check.py
   if ($LASTEXITCODE -ne 0) { throw "config invalid" }
 }
 Check "metrics_logger 语法" {
@@ -35,7 +35,7 @@ Check "metrics mock + summary" {
   python baseline/metrics_logger.py summary --jsonl $tmp
 }
 Check "ax-prover 锁定 commit 存在于远程" {
-  git ls-remote "https://ghfast.top/https://github.com/Axiomatic-AI/ax-prover-base.git" 2>$null | Select-String "06dfadc9ab439755af5efcfe0add95bfef2733c7" | Out-Null
+  git ls-remote "https://github.com/Axiomatic-AI/ax-prover-base.git" 2>$null | Select-String "06dfadc9ab439755af5efcfe0add95bfef2733c7" | Out-Null
   if ($LASTEXITCODE -ne 0) { throw "commit not found" }
 }
 
