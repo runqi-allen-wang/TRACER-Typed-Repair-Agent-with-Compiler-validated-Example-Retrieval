@@ -26,15 +26,18 @@ except ModuleNotFoundError as exc:
 
 from .feedback import (
     AXPROVERBASE_COMMIT,
-    AXPROVER_DEEPSEEK_FLASH_MODEL,
-    DEEPSEEK_BASE_URL,
+    AXPROVER_YXAI_MODEL,
+    YXAI_BASE_URL,
+    YXAI_REASONING_EFFORT,
+    YXAI_STORE_RESPONSES,
+    YXAI_WIRE_API,
     CapsuleFeedback,
 )
 
 
 AX_INTEGRATION_VERSION = "ax-capsule-feedback.v0.2"
 DEFAULT_MAX_THEOREM_SESSIONS = 128
-DEEPSEEK_MAX_INPUT_TOKENS = 65536
+YXAI_MAX_INPUT_TOKENS = 65536
 _PATCH_MARKER = "__leancapsule_part2_installed__"
 
 
@@ -112,17 +115,22 @@ def enforce_ax_part2_config(config: object) -> object:
     llm = _read(config, "prover_llm")
     if llm is None:
         raise ValueError("Ax Part 2 requires prover.prover_llm configuration")
-    _write(llm, "model", AXPROVER_DEEPSEEK_FLASH_MODEL)
+    _write(llm, "model", AXPROVER_YXAI_MODEL)
     provider_config = _read(llm, "provider_config")
     if provider_config is None:
         provider_config = {}
         _write(llm, "provider_config", provider_config)
-    _write(provider_config, "base_url", DEEPSEEK_BASE_URL)
+    _write(provider_config, "base_url", YXAI_BASE_URL)
+    _write(provider_config, "use_responses_api", True)
+    _write(provider_config, "store", YXAI_STORE_RESPONSES)
+    _write(provider_config, "reasoning", {"effort": YXAI_REASONING_EFFORT})
+    _write(provider_config, "output_version", "responses/v1")
+    _write(provider_config, "max_tokens", None)
     profile = _read(provider_config, "profile")
     if profile is None:
         profile = {}
         _write(provider_config, "profile", profile)
-    _write(profile, "max_input_tokens", DEEPSEEK_MAX_INPUT_TOKENS)
+    _write(profile, "max_input_tokens", YXAI_MAX_INPUT_TOKENS)
 
     memory = _read(config, "memory_config")
     if memory is None:
@@ -319,8 +327,12 @@ def _capsule_event(
         "integration_schema_version": AX_INTEGRATION_VERSION,
         "capsule_schema_version": payload["schema_version"],
         "axproverbase_commit": AXPROVERBASE_COMMIT,
-        "model": AXPROVER_DEEPSEEK_FLASH_MODEL,
-        "base_url": DEEPSEEK_BASE_URL,
+        "model": AXPROVER_YXAI_MODEL,
+        "base_url": YXAI_BASE_URL,
+        "wire_api": YXAI_WIRE_API,
+        "use_responses_api": True,
+        "store": YXAI_STORE_RESPONSES,
+        "reasoning_effort": YXAI_REASONING_EFFORT,
         "candidate_policy": dict(CANDIDATE_POLICY),
         "theorem_key_sha256": hashlib.sha256(theorem_key.encode("utf-8")).hexdigest(),
         "theorem_name": theorem_key.rsplit(":", 1)[-1][:160],
@@ -570,7 +582,12 @@ def install_axproverbase_capsule_feedback(
                 "integration_schema_version": AX_INTEGRATION_VERSION,
                 "event": "run_summary",
                 "axproverbase_commit": AXPROVERBASE_COMMIT,
-                "model": AXPROVER_DEEPSEEK_FLASH_MODEL,
+                "model": AXPROVER_YXAI_MODEL,
+                "base_url": YXAI_BASE_URL,
+                "wire_api": YXAI_WIRE_API,
+                "use_responses_api": True,
+                "store": YXAI_STORE_RESPONSES,
+                "reasoning_effort": YXAI_REASONING_EFFORT,
                 "memory_processor": "MemorylessProcessor",
                 "memory_llm_calls": 0,
                 "capsule_llm_calls": 0,
@@ -608,7 +625,7 @@ def install_axproverbase_capsule_feedback(
 __all__ = [
     "AX_INTEGRATION_VERSION",
     "CapsuleFeedbackSessions",
-    "DEEPSEEK_MAX_INPUT_TOKENS",
+    "YXAI_MAX_INPUT_TOKENS",
     "FirstRoundCandidateCache",
     "JsonlTelemetry",
     "enforce_ax_part2_config",

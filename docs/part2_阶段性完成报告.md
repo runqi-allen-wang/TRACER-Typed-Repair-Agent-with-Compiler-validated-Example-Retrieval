@@ -4,7 +4,7 @@
 
 Part 2 的代码实现与验证基础设施已经完成。当前版本能够把 AxProverBase 已有的 Builder 结果转换为确定性的紧凑反馈，并将其作为真实 Ax `BuildFailedFeedback` 交给下一轮 Proposer；整个转换过程不会额外运行 Lean，也不会调用 LLM。
 
-本阶段还完成了逐 theorem 状态隔离、状态大小控制、DeepSeek Flash/Memoryless 配置冻结、共享首轮候选注入、配对实验门禁、调用与 token 遥测，以及固定 AxProverBase commit 的真实类型验证。
+本阶段还完成了逐 theorem 状态隔离、状态大小控制、AI4Math `yxai`/`gpt-5.6-sol`/Memoryless 配置冻结、共享首轮候选注入、配对实验门禁、调用与 token 遥测，以及固定 AxProverBase commit 的真实类型验证。
 
 尚未产生的内容是依赖 Part 1 输出和模型 API 的真实配对实验数据。这属于后续实验执行，而不是 Part 2 实现缺口。
 
@@ -13,8 +13,11 @@ Part 2 的代码实现与验证基础设施已经完成。当前版本能够把 
 | 项目 | 固定值 |
 |---|---|
 | AxProverBase commit | `06dfadc9ab439755af5efcfe0add95bfef2733c7` |
-| Ax/LangChain 模型名 | `openai:deepseek-v4-flash` |
-| Provider endpoint | `https://api.deepseek.com` |
+| Ax/LangChain 模型名 | `openai:gpt-5.6-sol` |
+| Provider endpoint | `https://yxai.chat/v1` |
+| Wire API | `responses` |
+| 推理强度 | `high` |
+| 响应存储 | 关闭（`store=false`） |
 | 显式输入窗口 | `65536` tokens |
 | Part 1 Memory | `ExperienceProcessor` |
 | Part 2 Memory | `MemorylessProcessor` |
@@ -22,7 +25,7 @@ Part 2 的代码实现与验证基础设施已经完成。当前版本能够把 
 | CapsuleFeedback 编译调用 | `0` |
 | CapsuleFeedback LLM 调用 | `0` |
 
-共享模型配置位于 `configs/axprover_deepseek_flash.yaml`；Part 1 和 Part 2 分别通过 `configs/axprover_part1_experience.yaml` 与 `configs/axprover_part2_capsule.yaml` 固定 Memory 条件。
+共享模型配置位于 `configs/axprover_yxai_gpt56_sol.yaml`；Part 1 和 Part 2 分别通过 `configs/axprover_part1_experience.yaml` 与 `configs/axprover_part2_capsule.yaml` 固定 Memory 条件。Codex CLI 的 `personality=pragmatic` 不属于 Ax/LangChain API 参数，因此不向模型请求透传。
 
 ## 3. 已解决问题
 
@@ -81,7 +84,8 @@ Part 2 runner 会在 Agent 初始化前强制：
 - `memory_config.class_name = MemorylessProcessor`；
 - `memory_config.init_args = {}`；
 - `summarize_output.enabled = false`；
-- Proposer/Reviewer 模型统一为 DeepSeek Flash；
+- Proposer/Reviewer 模型统一为 `gpt-5.6-sol`；
+- endpoint 固定为 `yxai` Responses API，推理强度为 `high`，响应存储关闭；
 - endpoint 和模型 profile 使用冻结值。
 
 即使外部配置尝试覆盖上述字段，初始化前仍会再次执行约束。
@@ -106,8 +110,9 @@ Part 2 runner 会在 Agent 初始化前强制：
 - baseline 与 Capsule 题集完全一致；
 - 首轮候选逐字符相同；
 - 候选 SHA-256 可追溯；
-- 两组模型均为 DeepSeek Flash；
+- 两组模型均为 `openai:gpt-5.6-sol`；
 - endpoint 相同且为冻结 endpoint；
+- wire API 均为 Responses、响应存储均关闭、推理强度均为 `high`；
 - 总预算字段相同；
 - Capsule `memory_calls == 0`；
 - CapsuleFeedback 的额外 LLM/编译调用均为 0。
@@ -146,7 +151,7 @@ Part 2 直接包裹实际 `LLMClient.ainvoke`，不再用节点次数冒充模�
 
 - 仓库 YAML 能被固定 Ax 版本解析；
 - 真实 `BuildFailedFeedback` 能被 CapsuleFeedback 消费；
-- 真实 `LLMClient` 接受 DeepSeek endpoint 和显式 profile；
+- 真实 `LLMClient` 接受 `yxai` Responses endpoint、隐私参数、推理参数和显式 profile；
 - 补丁能够安装到真实 `ProverAgent`；
 - `python -m leancapsule.ax_runner --help` 正常启动。
 
@@ -210,7 +215,7 @@ CapsuleFeedback.observe_ax（0 次额外编译，0 次 LLM）
 | `src/leancapsule/ax_integration.py` | 真实 Ax 消息桥接、session、首轮候选和遥测 |
 | `src/leancapsule/ax_runner.py` | 安装集成后启动 Ax CLI |
 | `src/leancapsule/pairing.py` | 严格配对结果校验 |
-| `configs/axprover_deepseek_flash.yaml` | Part 1/2/3 共享模型条件 |
+| `configs/axprover_yxai_gpt56_sol.yaml` | Part 1/2/3 共享模型条件 |
 | `configs/axprover_part1_experience.yaml` | Part 1 Experience 配置 |
 | `configs/axprover_part2_capsule.yaml` | Part 2 Memoryless 配置 |
 | `requirements-axprover-part2.txt` | 固定 AxProverBase commit |
@@ -224,7 +229,7 @@ CapsuleFeedback.observe_ax（0 次额外编译，0 次 LLM）
 
 | 验证项 | 结果 |
 |---|---|
-| 完整 Python 回归 | `123/123` 通过 |
+| 完整 Python 回归 | `126/126` 通过 |
 | `lake build` | 通过 |
 | Evaluation18 | 只有已有 `sorry` 警告 |
 | Capsule 有界状态 | 通过 |
@@ -232,7 +237,9 @@ CapsuleFeedback.observe_ax（0 次额外编译，0 次 LLM）
 | Ax 消息桥接 | 通过 |
 | 共享首轮候选注入 | 通过 |
 | 缓存缺失 fail-closed | 通过 |
-| DeepSeek/Memoryless/summary 契约 | 通过 |
+| `yxai` Responses/Memoryless/summary 契约 | 通过 |
+| 真实 `yxai` 直接 Agent → Lean smoke | 通过（输入 4511、输出 20、总计 4531 tokens） |
+| 真实 `yxai` AxProverBase/LangChain smoke | 通过（输入 4391、输出 5、总计 4396 tokens） |
 | LLM/token/tool 遥测 | 通过 |
 | 固定 Ax 源码契约 | 通过 |
 | 真实 Ax Python 类型 smoke | 通过 |
@@ -263,7 +270,7 @@ python .\scripts\prepare_part2_first_round_cache.py `
 安全设置 Key 并运行一个 theorem：
 
 ```powershell
-$secureKey = Read-Host "请输入 DeepSeek API Key（输入不会显示）" -AsSecureString
+$secureKey = Read-Host "请输入 yxai API Key（输入不会显示）" -AsSecureString
 $env:OPENAI_API_KEY = [System.Net.NetworkCredential]::new("", $secureKey).Password
 $env:CAPSULE_FIRST_ROUND_CACHE = (Join-Path $PWD "results\part2-first-round.json")
 $env:CAPSULE_FEEDBACK_STATE_DIR = (Join-Path $PWD "results\part2-state")
@@ -295,7 +302,7 @@ Part 2 实现本身已经完成，仍需外部输入：
 - Part 1 runner 必须输出完整的首轮 theorem，而不是只有 proof body；
 - Part 1 需要采用 `configs/axprover_part1_experience.yaml`；
 - Part 1 与 Part 2 结果需要包含配对门禁要求的 provider、预算和 calls 字段；
-- 真实 DeepSeek 调用需要用户配置 `OPENAI_API_KEY`；
+- 真实 `yxai` 调用需要用户在进程环境中配置 `OPENAI_API_KEY`；`auth.json` 不得进入仓库；
 - 真实配对数据产生后，才能进入 Part 3 的通过率、修复率、成本和重复错误比例分析。
 
 当前开发发生在 `leiteng` 分支，报告生成时相关修改尚未 commit 或 push。

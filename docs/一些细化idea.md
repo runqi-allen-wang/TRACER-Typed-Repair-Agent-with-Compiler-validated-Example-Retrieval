@@ -46,7 +46,7 @@ Memory 把失败经验压缩成“实验笔记”
 
 待 Capsule 保真度和案例集优化完成后，将其封装为轻量 `CapsuleFeedback`：直接消费 Ax 已有的编译结果，不重复编译，只输出错误类别、稳定指纹、重复次数、诊断漂移和紧凑历史，供下一轮 Proposer 使用。
 
-当前状态：核心、CLI、真实 Ax 包裹入口、逐 theorem 状态、Memoryless/DeepSeek 配置、遥测、固定版本契约测试及配对门禁均已实现。真实模型配对数据需要等待 Part 1 首轮候选产出；详见 [`part2_capsule_feedback.md`](part2_capsule_feedback.md)。
+当前状态：核心、CLI、真实 Ax 包裹入口、逐 theorem 状态、Memoryless/`yxai` Responses 配置、遥测、固定版本契约测试及配对门禁均已实现。真实模型配对数据需要等待 Part 1 首轮候选产出；详见 [`part2_capsule_feedback.md`](part2_capsule_feedback.md)。
 
 ### Part 3：修改后 Agent 测试
 

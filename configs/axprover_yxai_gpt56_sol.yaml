@@ -1,0 +1,16 @@
+prover:
+  prover_llm:
+    model: "openai:gpt-5.6-sol"
+    provider_config:
+      base_url: "https://yxai.chat/v1"
+      use_responses_api: true
+      store: false
+      reasoning:
+        effort: "high"
+      output_version: "responses/v1"
+      max_tokens: null
+      profile:
+        max_input_tokens: 65536
+  summarize_output:
+    enabled: false
+    llm: ${prover.prover_llm}

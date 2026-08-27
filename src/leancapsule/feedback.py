@@ -24,9 +24,12 @@ except ModuleNotFoundError as exc:
 SCHEMA_VERSION = "capsule-feedback.v0.1"
 SUPPORTED_STATE_SCHEMA_VERSIONS = frozenset({SCHEMA_VERSION})
 AXPROVERBASE_COMMIT = "06dfadc9ab439755af5efcfe0add95bfef2733c7"
-DEEPSEEK_FLASH_MODEL = "deepseek-v4-flash"
-AXPROVER_DEEPSEEK_FLASH_MODEL = f"openai:{DEEPSEEK_FLASH_MODEL}"
-DEEPSEEK_BASE_URL = "https://api.deepseek.com"
+YXAI_MODEL_ID = "gpt-5.6-sol"
+AXPROVER_YXAI_MODEL = f"openai:{YXAI_MODEL_ID}"
+YXAI_BASE_URL = "https://yxai.chat/v1"
+YXAI_WIRE_API = "responses"
+YXAI_REASONING_EFFORT = "high"
+YXAI_STORE_RESPONSES = False
 
 _ANSI_RE = re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]")
 _WINDOWS_LOCATION_PATH_RE = re.compile(r"(?i)[A-Z]:[\\/][^\r\n]*?\.lean(?=:\d+:\d+)")

@@ -42,6 +42,23 @@ class ContinuousIntegrationTest(unittest.TestCase):
             self.assertIn("$LASTEXITCODE", text, relative)
             self.assertIn("Invoke-NativeCommand", text, relative)
 
+    def test_yxai_probe_is_ascii_and_does_not_persist_the_key(self):
+        probe = (ROOT / "scripts" / "probe_yxai_api.ps1").read_bytes()
+        live = (ROOT / "scripts" / "run_live_yxai_smoke.ps1").read_bytes()
+        self.assertTrue(probe.isascii(), "scripts/probe_yxai_api.ps1")
+        self.assertTrue(live.isascii(), "scripts/run_live_yxai_smoke.ps1")
+        probe_text = probe.decode("ascii")
+        live_text = live.decode("ascii")
+        self.assertIn('Read-Host "Enter yxai API Key (input is hidden)" -AsSecureString', probe_text)
+        self.assertIn("ZeroFreeBSTR", probe_text)
+        self.assertIn("-MaximumRedirection 0", probe_text)
+        self.assertNotIn("$env:OPENAI_API_KEY", probe_text)
+        self.assertNotIn("$env:LEAN_PROOF_API_KEY", probe_text)
+        self.assertIn('Read-Host "Enter yxai API Key once (input is hidden)"', live_text)
+        self.assertIn("ZeroFreeBSTR", live_text)
+        self.assertIn("ReadAllText", live_text)
+        self.assertIn("Get-Content -LiteralPath $directLog -Encoding UTF8", live_text)
+
     def test_mathlib_setup_defines_a_stable_cache_directory(self):
         powershell = (ROOT / "scripts" / "setup_mathlib.ps1").read_text(encoding="ascii")
         shell = (ROOT / "scripts" / "setup_mathlib.sh").read_text(encoding="utf-8")
@@ -60,7 +77,7 @@ class ContinuousIntegrationTest(unittest.TestCase):
     def test_powershell_entrypoints_parse_with_windows_powershell(self):
         command = (
             "$failed = $false; "
-            "foreach ($file in @('run_all.ps1','scripts/setup_mathlib.ps1')) { "
+            "foreach ($file in @('run_all.ps1','scripts/setup_mathlib.ps1','scripts/probe_yxai_api.ps1','scripts/run_live_yxai_smoke.ps1')) { "
             "$tokens = $null; $errors = $null; "
             "[System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $file), "
             "[ref]$tokens, [ref]$errors) | Out-Null; "

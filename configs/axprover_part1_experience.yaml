@@ -1,5 +1,5 @@
 import:
-  - axprover_deepseek_flash.yaml
+  - axprover_yxai_gpt56_sol.yaml
 
 prover:
   memory_config:

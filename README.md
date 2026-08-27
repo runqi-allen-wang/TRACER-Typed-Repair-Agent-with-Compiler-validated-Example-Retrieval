@@ -86,7 +86,7 @@ build_success, message = await check_lean_file(...)
 feedback = capsule.observe_ax((build_success, message), round_no=1)
 ```
 
-Part 1/2/3 中 AxProverBase 涉及的模型调用统一冻结为 DeepSeek Flash：Ax/LangChain 模型名 `openai:deepseek-v4-flash`，官方模型 ID `deepseek-v4-flash`，`base_url=https://api.deepseek.com`。具体接入步骤、JSON CLI 和验收标准见 [`docs/part2_capsule_feedback.md`](docs/part2_capsule_feedback.md)。
+Part 1/2/3 中 AxProverBase 涉及的模型调用统一冻结为 AI4Math `yxai` 中转站：Ax/LangChain 模型名 `openai:gpt-5.6-sol`，模型 ID `gpt-5.6-sol`，`base_url=https://yxai.chat/v1`，并强制使用 Responses API、`reasoning.effort=high` 和 `store=false`。具体接入步骤、JSON CLI 和验收标准见 [`docs/part2_capsule_feedback.md`](docs/part2_capsule_feedback.md)。
 
 Part 2 有独立的 GitHub Actions workflow：`.github/workflows/part2.yml`。它在 `leiteng` 分支相关文件发生变化时自动运行 Ubuntu 专项测试，再执行 Lean build 和完整 Python 回归；整个 workflow 不需要模型 API Key。
 
@@ -107,7 +107,24 @@ python src/agent.py solve `
   --api-key-prompt
 ```
 
-DeepSeek 等提供 OpenAI 兼容聊天接口的服务也可以直接使用。例如：
+AI4Math `yxai` 中转站使用 Responses API。例如：
+
+只检查 Key、模型名和 Responses 接口是否可用，可运行一次最小探测；Key 会在独立提示中隐藏输入，不保存原始响应：
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\probe_yxai_api.ps1
+```
+
+要用两次请求同时验证“直接 Agent → Lean”和“固定 AxProverBase → LangChain”两条真实路径，可先在当前 Python 环境安装 `requirements-axprover-part2.txt`，再运行：
+
+```powershell
+python -m pip install -r .\requirements-axprover-part2.txt
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\run_live_yxai_smoke.ps1
+```
+
+该入口只输出脱敏状态与 token 数；临时缓存、候选和原始响应会在结束时清理。正式 54 项 A/B/C 实验仍应使用 `run_all.ps1`。
+
+执行单题证明修复：
 
 ```powershell
 python src/agent.py solve `
@@ -115,10 +132,12 @@ python src/agent.py solve `
   --theorem Eval18.and_swap_eval `
   --condition B `
   --provider openai_compatible `
-  --api-url "https://api.deepseek.com/chat/completions" `
-  --model "your-deepseek-model" `
-  --temperature 0 `
-  --max-tokens 2000 `
+  --api-url "https://yxai.chat/v1" `
+  --model "gpt-5.6-sol" `
+  --wire-api responses `
+  --reasoning-effort high `
+  --disable-response-storage `
+  --max-tokens 20000 `
   --api-key-prompt `
   --max-rounds 3
 ```
@@ -137,13 +156,16 @@ python src/agent.py solve `
 
 ## 正式 A/B/C 实验
 
-完整实验运行冻结的 `18` 道题和 `A/B/C` 三个条件，共 `54` 个任务。请在专用 PowerShell 会话中固定以下配置；URL 必须是接口实际接受的完整 Chat Completions 地址：
+完整实验运行冻结的 `18` 道题和 `A/B/C` 三个条件，共 `54` 个任务。请在专用 PowerShell 会话中固定以下配置；`run_all.ps1` 会把 Responses base URL 规范化为 `/responses` 请求地址：
 
 D 类是独立的安全对抗回归类别，不是第四种 Agent 条件。当前 D01 覆盖 `unsafe inductive` 绕过 positivity 检查并构造 `False` 的候选，要求原 TRACER 与 AxProverBase 的缓存/生成候选都在 Lean 编译前拒绝；详见 [`docs/security_type_d.md`](docs/security_type_d.md)。
 
 ```powershell
-$env:LEAN_PROOF_API_URL = "https://example.invalid/v1/chat/completions"
-$env:LEAN_PROOF_MODEL = "your-model"
+$env:LEAN_PROOF_API_URL = "https://yxai.chat/v1"
+$env:LEAN_PROOF_MODEL = "gpt-5.6-sol"
+$env:LEAN_PROOF_WIRE_API = "responses"
+$env:LEAN_PROOF_REASONING_EFFORT = "high"
+$env:LEAN_PROOF_DISABLE_RESPONSE_STORAGE = "true"
 $env:LEAN_PROOF_TEMPERATURE = "0"
 $env:LEAN_PROOF_MAX_TOKENS = "800"
 
@@ -160,6 +182,8 @@ try {
   powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\run_all.ps1 `
     -ApiUrl $env:LEAN_PROOF_API_URL `
     -Model $env:LEAN_PROOF_MODEL `
+    -WireApi responses `
+    -ReasoningEffort high `
     -Temperature 0 `
     -MaxTokens 800
 }
@@ -170,6 +194,8 @@ finally {
 ```
 
 `run_all.ps1` 先执行 `lake build` 和 Python 测试，再让 `evaluate.py --fresh` 归档旧实验状态并使用空请求缓存运行。运行条件 C 前会检查检索示例与 18 个冻结声明是否相同（允许变量改名）；发现重合会在归档旧实验或调用 provider 前终止。默认严格模式不允许新实验出现缓存命中；`-ReuseCache` 仅用于调试或成本受限的复跑，不得称为严格 fresh pilot。实验执行完成后会校验 54 个任务、轮次、单一 provider 配置、候选安全策略、provider/任务错误和缓存状态，然后生成明确标为未复核的草稿报告。
+
+真实 Key 只应通过安全提示或进程环境变量提供。不要把邮件附件 `auth.json` 复制进仓库、提交到 Git，或在命令行参数和日志中粘贴 Key；仓库已显式忽略所有 `auth.json`。
 
 人工逐项填写 `results/manual_review.csv` 后，执行最终门禁和报告：
 

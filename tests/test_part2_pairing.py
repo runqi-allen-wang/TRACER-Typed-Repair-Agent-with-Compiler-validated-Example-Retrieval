@@ -22,8 +22,14 @@ def record(
         "condition": condition,
         "task_id": task_id,
         "first_round_candidate": candidate,
-        "model": "openai:deepseek-v4-flash",
-        "provider_config": {"base_url": "https://api.deepseek.com"},
+        "model": "openai:gpt-5.6-sol",
+        "provider_config": {
+            "base_url": "https://yxai.chat/v1",
+            "wire_api": "responses",
+            "use_responses_api": True,
+            "store": False,
+            "reasoning": {"effort": "high"},
+        },
         "budget": {"max_llm_calls": 50, "max_iterations": 50},
         "candidate_policy": {
             "version": "tracer-candidate-v2",
@@ -68,6 +74,9 @@ class Part2PairingTest(unittest.TestCase):
         capsule["model"] = "openai:other"
         capsule["budget"] = {"max_llm_calls": 51}
         capsule["candidate_policy"] = {"version": "tracer-candidate-v1"}
+        capsule["provider_config"]["wire_api"] = "chat_completions"
+        capsule["provider_config"]["store"] = True
+        capsule["provider_config"]["reasoning"] = {"effort": "low"}
         capsule["calls"]["memory_calls"] = 1
         report = validate_paired_runs([baseline], [capsule])
         self.assertFalse(report["ok"])
@@ -76,6 +85,9 @@ class Part2PairingTest(unittest.TestCase):
         self.assertIn("model mismatch", joined)
         self.assertIn("paired budgets do not match", joined)
         self.assertIn("candidate security policies do not match", joined)
+        self.assertIn("must use the Responses API", joined)
+        self.assertIn("disable response storage", joined)
+        self.assertIn("reasoning effort high", joined)
         self.assertIn("memory_calls must be 0", joined)
 
     def test_pairing_cli_writes_a_machine_readable_report(self):

@@ -4,8 +4,12 @@ param(
   [ValidateSet("command", "openai_compatible")]
   [string]$Provider = "openai_compatible",
   [string]$ProviderCommand = "",
-  [string]$ApiUrl = "",
-  [string]$Model = "",
+  [string]$ApiUrl = "https://yxai.chat/v1",
+  [string]$Model = "gpt-5.6-sol",
+  [ValidateSet("chat_completions", "responses")]
+  [string]$WireApi = "responses",
+  [ValidateSet("minimal", "low", "medium", "high")]
+  [string]$ReasoningEffort = "high",
   [ValidateRange(0.0, 2.0)]
   [double]$Temperature = 0.0,
   [ValidateRange(1, 1000000)]
@@ -60,6 +64,9 @@ if ($Provider -eq "openai_compatible") {
   if ([string]::IsNullOrWhiteSpace($env:LEAN_PROOF_API_KEY)) { throw "LEAN_PROOF_API_KEY is required" }
   $env:LEAN_PROOF_API_URL = $ApiUrl
   $env:LEAN_PROOF_MODEL = $Model
+  $env:LEAN_PROOF_WIRE_API = $WireApi
+  $env:LEAN_PROOF_REASONING_EFFORT = $ReasoningEffort
+  $env:LEAN_PROOF_DISABLE_RESPONSE_STORAGE = "true"
   $env:LEAN_PROOF_TEMPERATURE = [string]::Format([Globalization.CultureInfo]::InvariantCulture, "{0}", $Temperature)
   $env:LEAN_PROOF_MAX_TOKENS = $MaxTokens.ToString([Globalization.CultureInfo]::InvariantCulture)
 }

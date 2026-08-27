@@ -66,6 +66,9 @@ def main() -> int:
     checks = {
         "model": config.prover_llm.model,
         "base_url": config.prover_llm.provider_config["base_url"],
+        "use_responses_api": config.prover_llm.provider_config["use_responses_api"],
+        "store": config.prover_llm.provider_config["store"],
+        "reasoning_effort": config.prover_llm.provider_config["reasoning"]["effort"],
         "max_input_tokens": config.prover_llm.provider_config["profile"]["max_input_tokens"],
         "llm_profile_max_input_tokens": llm_client.profile.get("max_input_tokens"),
         "memory": config.memory_config.class_name,
@@ -77,8 +80,11 @@ def main() -> int:
         "changed_statement_rejected": bool(changed_statement),
     }
     ok = checks == {
-        "model": "openai:deepseek-v4-flash",
-        "base_url": "https://api.deepseek.com",
+        "model": "openai:gpt-5.6-sol",
+        "base_url": "https://yxai.chat/v1",
+        "use_responses_api": True,
+        "store": False,
+        "reasoning_effort": "high",
         "max_input_tokens": 65536,
         "llm_profile_max_input_tokens": 65536,
         "memory": "MemorylessProcessor",

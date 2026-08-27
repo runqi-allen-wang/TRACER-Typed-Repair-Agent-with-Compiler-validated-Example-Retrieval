@@ -13,7 +13,13 @@ except ModuleNotFoundError as exc:
         raise
     from src.compiler import CANDIDATE_POLICY
 
-from .feedback import AXPROVER_DEEPSEEK_FLASH_MODEL, DEEPSEEK_BASE_URL
+from .feedback import (
+    AXPROVER_YXAI_MODEL,
+    YXAI_BASE_URL,
+    YXAI_REASONING_EFFORT,
+    YXAI_STORE_RESPONSES,
+    YXAI_WIRE_API,
+)
 
 
 def candidate_digest(candidate: object) -> str:
@@ -31,6 +37,20 @@ def _base_url(row: Mapping[str, Any]) -> str:
         if value:
             return str(value).rstrip("/")
     return str(row.get("base_url") or "").rstrip("/")
+
+
+def _provider_value(row: Mapping[str, Any], name: str, default: object = None) -> object:
+    provider = row.get("provider_config")
+    if isinstance(provider, Mapping) and name in provider:
+        return provider[name]
+    return row.get(name, default)
+
+
+def _reasoning_effort(row: Mapping[str, Any]) -> str:
+    reasoning = _provider_value(row, "reasoning", {})
+    if isinstance(reasoning, Mapping) and reasoning.get("effort"):
+        return str(reasoning["effort"])
+    return str(_provider_value(row, "reasoning_effort", ""))
 
 
 def _index(rows: Iterable[Mapping[str, Any]], label: str, errors: list[str]) -> dict[str, Mapping[str, Any]]:
@@ -77,16 +97,40 @@ def validate_paired_runs(
 
         left_model = str(left.get("model") or "")
         right_model = str(right.get("model") or "")
-        if left_model != AXPROVER_DEEPSEEK_FLASH_MODEL or right_model != left_model:
+        if left_model != AXPROVER_YXAI_MODEL or right_model != left_model:
             errors.append(
-                f"{task_id}: model mismatch; both conditions must use {AXPROVER_DEEPSEEK_FLASH_MODEL}"
+                f"{task_id}: model mismatch; both conditions must use {AXPROVER_YXAI_MODEL}"
             )
 
         left_url = _base_url(left)
         right_url = _base_url(right)
-        expected_url = DEEPSEEK_BASE_URL.rstrip("/")
+        expected_url = YXAI_BASE_URL.rstrip("/")
         if left_url != expected_url or right_url != left_url:
             errors.append(f"{task_id}: base_url mismatch; both conditions must use {expected_url}")
+
+        left_wire_api = str(_provider_value(left, "wire_api", ""))
+        right_wire_api = str(_provider_value(right, "wire_api", ""))
+        left_responses = _provider_value(left, "use_responses_api")
+        right_responses = _provider_value(right, "use_responses_api")
+        if (
+            left_wire_api != YXAI_WIRE_API
+            or right_wire_api != left_wire_api
+            or left_responses is not True
+            or right_responses is not True
+        ):
+            errors.append(f"{task_id}: both conditions must use the Responses API")
+
+        left_store = _provider_value(left, "store")
+        right_store = _provider_value(right, "store")
+        if left_store is not YXAI_STORE_RESPONSES or right_store is not left_store:
+            errors.append(f"{task_id}: both conditions must disable response storage")
+
+        left_effort = _reasoning_effort(left)
+        right_effort = _reasoning_effort(right)
+        if left_effort != YXAI_REASONING_EFFORT or right_effort != left_effort:
+            errors.append(
+                f"{task_id}: both conditions must use reasoning effort {YXAI_REASONING_EFFORT}"
+            )
 
         left_budget = left.get("budget")
         right_budget = right.get("budget")
@@ -119,6 +163,9 @@ def validate_paired_runs(
                 "candidate_sha256": digest,
                 "model": left_model,
                 "base_url": left_url,
+                "wire_api": left_wire_api,
+                "store": left_store,
+                "reasoning_effort": left_effort,
                 "budget": dict(left_budget) if isinstance(left_budget, Mapping) else None,
                 "candidate_policy": (
                     dict(left_policy) if isinstance(left_policy, Mapping) else None
@@ -129,8 +176,11 @@ def validate_paired_runs(
     return {
         "ok": not errors,
         "pair_count": len(pairs),
-        "expected_model": AXPROVER_DEEPSEEK_FLASH_MODEL,
-        "expected_base_url": DEEPSEEK_BASE_URL,
+        "expected_model": AXPROVER_YXAI_MODEL,
+        "expected_base_url": YXAI_BASE_URL,
+        "expected_wire_api": YXAI_WIRE_API,
+        "expected_store": YXAI_STORE_RESPONSES,
+        "expected_reasoning_effort": YXAI_REASONING_EFFORT,
         "expected_candidate_policy": dict(CANDIDATE_POLICY),
         "pairs": pairs,
         "errors": errors,

@@ -22,9 +22,11 @@ class DocumentationConsistencyTest(unittest.TestCase):
         self.assertTrue(manifest)
         self.assertTrue(all(case["type"] == "D" for case in manifest))
 
-    def test_readme_documents_deepseek_and_safe_key_prompt(self):
+    def test_readme_documents_yxai_responses_and_safe_key_prompt(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("https://api.deepseek.com/chat/completions", readme)
+        self.assertIn("https://yxai.chat/v1", readme)
+        self.assertIn("--wire-api responses", readme)
+        self.assertIn("--disable-response-storage", readme)
         self.assertIn("--api-key-prompt", readme)
         self.assertIn("不显示长度、末四位或任何密钥字符", readme)
         self.assertIn("同源重定向", readme)
@@ -35,22 +37,26 @@ class DocumentationConsistencyTest(unittest.TestCase):
         self.assertIn("provider_error", readme)
         self.assertIn("compile_ok: false` 本身不代表 API 损坏", readme)
 
-    def test_part2_freezes_deepseek_flash_and_reuses_ax_build_result(self):
+    def test_part2_freezes_yxai_responses_and_reuses_ax_build_result(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         part2 = (ROOT / "docs" / "part2_capsule_feedback.md").read_text(encoding="utf-8")
         for document in (readme, part2):
-            self.assertIn("openai:deepseek-v4-flash", document)
-            self.assertIn("https://api.deepseek.com", document)
+            self.assertIn("openai:gpt-5.6-sol", document)
+            self.assertIn("https://yxai.chat/v1", document)
+            self.assertIn("store=false", document)
         self.assertIn("不运行 Lean、不调用模型", part2)
         self.assertIn("(build_success, message)", part2)
 
     def test_part2_runtime_configs_freeze_model_and_memory_modes(self):
-        shared = (ROOT / "configs" / "axprover_deepseek_flash.yaml").read_text(encoding="utf-8")
+        shared = (ROOT / "configs" / "axprover_yxai_gpt56_sol.yaml").read_text(encoding="utf-8")
         baseline = (ROOT / "configs" / "axprover_part1_experience.yaml").read_text(encoding="utf-8")
         capsule = (ROOT / "configs" / "axprover_part2_capsule.yaml").read_text(encoding="utf-8")
         dependency = (ROOT / "requirements-axprover-part2.txt").read_text(encoding="utf-8")
-        self.assertIn('model: "openai:deepseek-v4-flash"', shared)
-        self.assertIn('base_url: "https://api.deepseek.com"', shared)
+        self.assertIn('model: "openai:gpt-5.6-sol"', shared)
+        self.assertIn('base_url: "https://yxai.chat/v1"', shared)
+        self.assertIn("use_responses_api: true", shared)
+        self.assertIn("store: false", shared)
+        self.assertIn('effort: "high"', shared)
         self.assertIn("max_input_tokens: 65536", shared)
         self.assertIn("enabled: false", shared)
         self.assertIn("ExperienceProcessor", baseline)
@@ -81,6 +87,9 @@ class DocumentationConsistencyTest(unittest.TestCase):
             "LEAN_PROOF_API_URL",
             "LEAN_PROOF_API_KEY",
             "LEAN_PROOF_MODEL",
+            "LEAN_PROOF_WIRE_API",
+            "LEAN_PROOF_REASONING_EFFORT",
+            "LEAN_PROOF_DISABLE_RESPONSE_STORAGE",
             "LEAN_PROOF_TEMPERATURE",
             "LEAN_PROOF_MAX_TOKENS",
         ):
@@ -88,6 +97,7 @@ class DocumentationConsistencyTest(unittest.TestCase):
         self.assertIn("--require-manual-review", readme)
         self.assertIn("export_pilot.py", results)
         self.assertIn("git add -f", results)
+        self.assertIn("auth.json", (ROOT / ".gitignore").read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

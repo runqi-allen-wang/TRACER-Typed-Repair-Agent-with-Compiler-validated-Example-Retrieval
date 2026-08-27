@@ -215,24 +215,70 @@ class CommandProvider(Provider):
 class OpenAICompatibleProvider(Provider):
     name = "openai_compatible"
 
-    def __init__(self, url: str, api_key: str, model: str, temperature: float, max_tokens: int) -> None:
-        validate_provider_url(url)
-        self.url = url
+    def __init__(
+        self,
+        url: str,
+        api_key: str,
+        model: str,
+        temperature: float,
+        max_tokens: int,
+        *,
+        wire_api: str | None = None,
+        reasoning_effort: str | None = None,
+        disable_response_storage: bool = False,
+    ) -> None:
+        parsed = validate_provider_url(url)
+        inferred_wire_api = "responses" if parsed.path.rstrip("/").endswith("/responses") else "chat_completions"
+        self.wire_api = (wire_api or inferred_wire_api).strip().lower()
+        if self.wire_api not in {"chat_completions", "responses"}:
+            raise ValueError("wire_api must be chat_completions or responses")
+        suffix = "/responses" if self.wire_api == "responses" else "/chat/completions"
+        normalized_url = url.rstrip("/")
+        if wire_api and not parsed.path.rstrip("/").endswith(suffix):
+            normalized_url = urllib.parse.urlunsplit(
+                (
+                    parsed.scheme,
+                    parsed.netloc,
+                    parsed.path.rstrip("/") + suffix,
+                    parsed.query,
+                    "",
+                )
+            )
+        validate_provider_url(normalized_url)
+        if reasoning_effort is not None and reasoning_effort not in {"minimal", "low", "medium", "high"}:
+            raise ValueError("reasoning_effort must be minimal, low, medium, or high")
+        self.url = normalized_url
         self.api_key = api_key
         self.model = model
         self.temperature = temperature
         self.max_tokens = max_tokens
+        self.reasoning_effort = reasoning_effort
+        self.disable_response_storage = bool(disable_response_storage)
 
-    def generate(self, prompt: str) -> Generation:
-        payload = {
+    def _payload(self, prompt: str) -> dict[str, object]:
+        messages = [
+            {"role": "system", "content": "You repair Lean 4 proofs. Output only a local proof term."},
+            {"role": "user", "content": prompt},
+        ]
+        if self.wire_api == "responses":
+            payload: dict[str, object] = {
+                "model": self.model,
+                "input": messages,
+                "max_output_tokens": self.max_tokens,
+                "store": not self.disable_response_storage,
+            }
+            if self.reasoning_effort:
+                payload["reasoning"] = {"effort": self.reasoning_effort}
+            return payload
+        return {
             "model": self.model,
-            "messages": [
-                {"role": "system", "content": "You repair Lean 4 proofs. Output only a local proof term."},
-                {"role": "user", "content": prompt},
-            ],
+            "messages": messages,
             "temperature": self.temperature,
             "max_tokens": self.max_tokens,
         }
+
+    def generate(self, prompt: str) -> Generation:
+        payload = self._payload(prompt)
         request = urllib.request.Request(
             self.url,
             data=json.dumps(payload).encode("utf-8"),
@@ -258,8 +304,13 @@ class OpenAICompatibleProvider(Provider):
             "provider": self.name,
             "url": redact_url(self.url),
             "model": self.model,
-            "temperature": self.temperature,
+            "wire_api": self.wire_api,
+            "use_responses_api": self.wire_api == "responses",
+            "temperature": self.temperature if self.wire_api == "chat_completions" else None,
             "max_tokens": self.max_tokens,
+            "reasoning_effort": self.reasoning_effort,
+            "disable_response_storage": self.disable_response_storage,
+            "store": not self.disable_response_storage,
             "redirect_policy": "same_origin_only",
             "max_response_bytes": MAX_PROVIDER_RESPONSE_BYTES,
             **configured_pricing(),
@@ -301,7 +352,16 @@ def parse_generation(text: str, provider_name: str) -> Generation:
         return Generation(clean_candidate(str(content)), body.get("usage", {}), provider_name, body)
     if "output_text" in body:
         return Generation(clean_candidate(str(body["output_text"])), body.get("usage", {}), provider_name, body)
-    raise ValueError("provider 输出缺少 candidate/choices/output_text")
+    output_text = "\n".join(
+        str(content.get("text", ""))
+        for item in body.get("output", [])
+        if isinstance(item, dict) and item.get("type") == "message"
+        for content in item.get("content", [])
+        if isinstance(content, dict) and content.get("type") == "output_text"
+    ).strip()
+    if output_text:
+        return Generation(clean_candidate(output_text), body.get("usage", {}), provider_name, body)
+    raise ValueError("provider 输出缺少 candidate/choices/output_text/output[].content[].text")
 
 
 def build_provider(
@@ -314,6 +374,9 @@ def build_provider(
     model: str | None = None,
     temperature: float | None = None,
     max_tokens: int | None = None,
+    wire_api: str | None = None,
+    reasoning_effort: str | None = None,
+    disable_response_storage: bool | None = None,
 ) -> Provider:
     if name == "command":
         return CommandProvider(command or os.environ.get("LEAN_PROOF_PROVIDER_COMMAND", ""))
@@ -325,7 +388,22 @@ def build_provider(
             raise ValueError("openai_compatible 需要 LEAN_PROOF_API_URL 和 LEAN_PROOF_API_KEY")
         temperature_value = temperature if temperature is not None else float(os.environ.get("LEAN_PROOF_TEMPERATURE", "0"))
         max_tokens_value = max_tokens if max_tokens is not None else int(os.environ.get("LEAN_PROOF_MAX_TOKENS", "800"))
-        return OpenAICompatibleProvider(url, key, model_name, temperature_value, max_tokens_value)
+        wire_api_value = wire_api or os.environ.get("LEAN_PROOF_WIRE_API") or None
+        reasoning_effort_value = reasoning_effort or os.environ.get("LEAN_PROOF_REASONING_EFFORT") or None
+        if disable_response_storage is None:
+            disable_response_storage = os.environ.get(
+                "LEAN_PROOF_DISABLE_RESPONSE_STORAGE", "false"
+            ).strip().lower() in {"1", "true", "yes", "on"}
+        return OpenAICompatibleProvider(
+            url,
+            key,
+            model_name,
+            temperature_value,
+            max_tokens_value,
+            wire_api=wire_api_value,
+            reasoning_effort=reasoning_effort_value,
+            disable_response_storage=disable_response_storage,
+        )
     if name == "mock":
         if mock_candidate is None:
             raise ValueError("mock provider 需要 --mock-candidate，仅用于测试")

@@ -38,10 +38,10 @@
 - 新增独立 D 类安全对抗回归；D01 覆盖 `unsafe inductive` 绕过 positivity 检查并构造 `False`，候选策略升级为 `tracer-candidate-v2`，原 Agent、AxProverBase 缓存/生成 ProposalMessage 与 Capsule pack/replay/audit 均在编译前拒绝不安全声明。
 - 条件 C 在调用 provider 前检查检索语料与目标声明重合；示例库中的 8 项直接答案重合已替换为相关但不同的证明示例。
 - 新增 Part 2 `CapsuleFeedback` 核心接口：直接消费 AxProverBase 已有编译结果，不重复编译、不调用 LLM，并输出稳定指纹、重复次数、诊断漂移和有界历史。
-- 新增 `leancapsule feedback` JSON CLI、逐题状态恢复、Ax 框线诊断兼容和敏感 token 脱敏；冻结 AxProverBase commit 与 DeepSeek Flash 跨 Part 1/2/3 模型契约。
+- 新增 `leancapsule feedback` JSON CLI、逐题状态恢复、Ax 框线诊断兼容和敏感 token 脱敏；冻结 AxProverBase commit 与 AI4Math `yxai`/`gpt-5.6-sol` 跨 Part 1/2/3 模型契约。
 - 新增 Part 2 独立 GitHub Actions workflow：支持 `leiteng` push、Pull Request 和默认分支手动触发，在 Ubuntu 跑专项测试，再执行 Lean build 与完整 Python 回归；不读取模型密钥。
 - Part 2 已增加真实 AxProverBase 包裹入口：复用原 Builder 返回值并转换成 Ax `BuildFailedFeedback`，按 theorem 隔离状态，强制 Memoryless、关闭 summary，并记录有界 JSONL 遥测。
-- Part 1 Experience 与 Part 2 Capsule 均提供提交内 DeepSeek Flash 配置；新增严格配对门禁，检查共享首轮候选、模型、endpoint、预算及 Capsule 零额外调用。
+- Part 1 Experience 与 Part 2 Capsule 均提供提交内 `yxai` Responses 配置；新增严格配对门禁，检查共享首轮候选、模型、endpoint、wire API、响应存储、推理强度、预算及 Capsule 零额外调用。
 - 固定 AxProverBase commit 现在由独立 Ubuntu job 拉取、静态校验、安装并执行真实消息类型 smoke；本地普通测试仍不需要安装 Ax。
 
 ## 当前验证状态
@@ -49,8 +49,9 @@
 - `leancapsule verify capsules`：24/24 通过（Std 14、Mathlib 4、project-local 6）。
 - `leancapsule gallery capsules --out capsules/index.json`：通过；四类 taxonomy 均不少于 3 个，三类来源均不少于 4 个。
 - `leancapsule audit capsules`：24/24 通过，无发布审计错误。
-- 完整 Python 测试 123/123 通过，包含 Part 2 有界状态、状态版本、逐 theorem 隔离、真实 Ax 消息桥接、首轮候选注入、零重复编译、Memoryless/DeepSeek 配置、D 类危险证明门禁、遥测、配对门禁、workflow 契约和脱敏回归，以及既有 Agent、provider、gallery、正式报告与复核账本检查；`lake build` 通过。
-- 固定 AxProverBase commit 已在隔离环境完成真实 Python 类型 smoke：仓库 YAML 可解析，真实 `LLMClient` 接受 DeepSeek endpoint/profile，补丁可安装到 `ProverAgent`；全过程未调用模型或 Lean。
+- 完整 Python 测试通过，包含 Part 2 有界状态、状态版本、逐 theorem 隔离、真实 Ax 消息桥接、首轮候选注入、零重复编译、Memoryless/`yxai` Responses 配置、D 类危险证明门禁、遥测、配对门禁、workflow 契约和脱敏回归，以及既有 Agent、provider、gallery、正式报告与复核账本检查；`lake build` 通过。
+- 固定 AxProverBase commit 已在隔离环境完成真实 Python 类型 smoke：仓库 YAML 可解析，真实 `LLMClient` 接受 `yxai` Responses endpoint/profile，补丁可安装到 `ProverAgent`；全过程未调用模型或 Lean。
+- `gpt-5.6-sol` 已完成真实在线 smoke：直接 provider/Agent 生成的单题证明通过 Lean，固定 AxProverBase/LangChain 路径成功返回；两条请求均使用 Responses、`store=false` 和 high reasoning。
 - Mathlib 回放在准备 `mathlib_project` 依赖缓存后通过；缓存目录不提交到仓库。
 
 ## 明确边界

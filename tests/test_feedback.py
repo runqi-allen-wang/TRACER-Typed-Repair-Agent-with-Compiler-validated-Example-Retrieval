@@ -12,9 +12,12 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from leancapsule.feedback import (  # noqa: E402
     AXPROVERBASE_COMMIT,
-    AXPROVER_DEEPSEEK_FLASH_MODEL,
+    AXPROVER_YXAI_MODEL,
     CapsuleFeedback,
-    DEEPSEEK_BASE_URL,
+    YXAI_BASE_URL,
+    YXAI_REASONING_EFFORT,
+    YXAI_STORE_RESPONSES,
+    YXAI_WIRE_API,
     stable_feedback_fingerprint,
 )
 
@@ -107,8 +110,11 @@ class CapsuleFeedbackTest(unittest.TestCase):
 
     def test_ax_and_model_contract_is_frozen(self):
         self.assertEqual(AXPROVERBASE_COMMIT, "06dfadc9ab439755af5efcfe0add95bfef2733c7")
-        self.assertEqual(AXPROVER_DEEPSEEK_FLASH_MODEL, "openai:deepseek-v4-flash")
-        self.assertEqual(DEEPSEEK_BASE_URL, "https://api.deepseek.com")
+        self.assertEqual(AXPROVER_YXAI_MODEL, "openai:gpt-5.6-sol")
+        self.assertEqual(YXAI_BASE_URL, "https://yxai.chat/v1")
+        self.assertEqual(YXAI_WIRE_API, "responses")
+        self.assertEqual(YXAI_REASONING_EFFORT, "high")
+        self.assertFalse(YXAI_STORE_RESPONSES)
 
     def test_cli_updates_state_without_lean(self):
         with tempfile.TemporaryDirectory() as temp:

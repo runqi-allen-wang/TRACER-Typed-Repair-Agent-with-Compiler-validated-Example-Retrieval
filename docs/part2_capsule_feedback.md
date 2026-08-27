@@ -7,7 +7,8 @@
 Part 2 把 AxProverBase 已经产生的 Builder 结果转换成下一轮 Proposer 可直接消费的紧凑反馈。它不运行 Lean、不调用模型，也不替代 Reviewer。
 
 - AxProverBase 固定 commit：`06dfadc9ab439755af5efcfe0add95bfef2733c7`。
-- Part 1/2/3 涉及 AxProverBase 的模型调用统一使用 DeepSeek Flash：Ax/LangChain 模型名 `openai:deepseek-v4-flash`，官方模型 ID `deepseek-v4-flash`，`base_url=https://api.deepseek.com`。
+- Part 1/2/3 涉及 AxProverBase 的模型调用统一使用 AI4Math `yxai` 中转站：Ax/LangChain 模型名 `openai:gpt-5.6-sol`，模型 ID `gpt-5.6-sol`，`base_url=https://yxai.chat/v1`，wire API 为 `responses`。
+- 响应存储关闭（`store=false`），推理强度固定为 `high`；Codex CLI 的 `personality=pragmatic` 不属于 Ax/LangChain API 参数，不向模型请求透传。
 - Experience baseline 的 Proposer、Memory、Reviewer 必须共享上述模型配置；最终 summary 关闭。
 - CapsuleFeedback 条件仅 Proposer、Reviewer 使用该模型；CapsuleFeedback 本身是确定性代码，LLM 调用数为 0。
 
@@ -38,7 +39,7 @@ next Proposer
 1. **核心接口（已实现）**：`leancapsule.feedback.CapsuleFeedback` 负责指纹、重复次数、漂移和历史；支持状态 JSON 往返。
 2. **命令行边界（已实现）**：`python -m leancapsule feedback` 从 JSON 读取已有编译结果，并可原子更新逐题 state 文件。
 3. **Ax 接线（已实现）**：`leancapsule.ax_integration` 包裹固定 commit 的原 `_builder_node`，转换其返回的 `BuildFailedFeedback`/`SorriesGoalStateFeedback`，不再次调用 `check_lean_file`；每个 theorem 使用独立且有界的 session。
-4. **配对 smoke 门禁（已实现）**：`scripts/validate_part2_pairing.py` 严格检查两组首轮候选、模型、endpoint、预算和题集一致，并要求 Capsule 的 Memory/额外编译/额外 LLM 调用为零。真实模型结果仍需在 Part 1 产出后运行该门禁。
+4. **配对 smoke 门禁（已实现）**：`scripts/validate_part2_pairing.py` 严格检查两组首轮候选、模型、endpoint、Responses wire API、响应存储、推理强度、预算和题集一致，并要求 Capsule 的 Memory/额外编译/额外 LLM 调用为零。真实模型结果仍需在 Part 1 产出后运行该门禁。
 5. **正式 Part 3 准备（已实现）**：JSONL 遥测包含 fingerprint、repeat count、drift kind、feedback chars、Builder/CapsuleFeedback 耗时、固定模型、Proposer/Reviewer 的真实 `LLMClient.ainvoke` 次数、token、tool calls 和零额外调用声明。provider 未返回价格时成本保持 `null`。
 6. **D 类候选安全门禁（已实现）**：缓存和后续 LLM 的完整 theorem 都在 Builder 前检查 `unsafe`、占位符、额外声明、目标名和声明头；Builder 入口再次校验。配对门禁要求 Part 1/Part 2 都记录 `tracer-candidate-v2`。
 
@@ -93,10 +94,10 @@ python -m leancapsule feedback `
 python -m pip install -r .\requirements-axprover-part2.txt
 ```
 
-安全设置 DeepSeek Key，并指定逐题状态和遥测目录：
+安全设置 `yxai` Key，并指定逐题状态和遥测目录：
 
 ```powershell
-$secureKey = Read-Host "请输入 DeepSeek API Key（输入不会显示）" -AsSecureString
+$secureKey = Read-Host "请输入 yxai API Key（输入不会显示）" -AsSecureString
 $env:OPENAI_API_KEY = [System.Net.NetworkCredential]::new("", $secureKey).Password
 $env:CAPSULE_FEEDBACK_STATE_DIR = (Join-Path $PWD "results\part2-state")
 $env:CAPSULE_FEEDBACK_METRICS = (Join-Path $PWD "results\part2-metrics.jsonl")
@@ -122,7 +123,7 @@ python .\scripts\prepare_part2_first_round_cache.py `
 
 设置 `CAPSULE_FIRST_ROUND_CACHE` 后，第一轮会直接构造 Ax `ProposalMessage`，不会调用 Proposer LLM；如果当前 theorem 没有精确缓存项，运行会立即失败，避免两组首轮候选失配。缓存值必须是 Ax 所需的完整更新后 theorem，而不只是 `by ...` proof body。
 
-`ax_runner` 会自动追加 `configs/axprover_part2_capsule.yaml`，并在构造 Agent 前再次强制校验 DeepSeek Flash、Memoryless 和关闭 summary，避免其他配置意外覆盖实验条件。配置还显式提供 `max_input_tokens=65536`，防止固定 Ax 版本无法识别自定义 DeepSeek 模型名时得到空 profile。
+`ax_runner` 会自动追加 `configs/axprover_part2_capsule.yaml`，并在构造 Agent 前再次强制校验 `gpt-5.6-sol`、Responses API、`store=false`、`reasoning.effort=high`、Memoryless 和关闭 summary，避免其他配置意外覆盖实验条件。配置还把实验输入预算显式固定为 `max_input_tokens=65536`，避免自定义模型别名没有 LangChain profile 时得到空值；该数字是实验预算，不宣称中转站模型的官方上下文上限。
 
 配对 smoke 完成后执行：
 
@@ -146,7 +147,7 @@ python .\scripts\validate_part2_pairing.py `
 
 ## GitHub Actions 验证
 
-`.github/workflows/part2.yml` 是 Part 2 的独立验证入口，不读取 API Key，也不调用 DeepSeek：
+`.github/workflows/part2.yml` 是 Part 2 的独立验证入口，不读取 API Key，也不调用 `yxai`：
 
 - 推送 Part 2 相关文件到 `leiteng` 时自动触发；
 - Pull Request 修改 Part 2 相关文件时自动触发；
