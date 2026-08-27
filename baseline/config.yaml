@@ -6,15 +6,16 @@
 #   - 冻结 Lean/Mathlib 环境：environment.*
 #   - 缓存每题首轮候选 / 记录编排：run.*
 # 说明：真实单价请按你的 API 账单填写 price；或依赖 provider 返回 cost。
+# 版本对齐：本基线锁定 Lean/Mathlib v4.32.0，与仓库 capsule(mathlib_project) 一致；
+#   题集工程用 fate_v432/（把 FATE-M 25 题锁到 mathlib v4.32.0），见 README。
 
 prover:
-  max_iterations: 50                    # 迭代预算
+  max_iterations: 8                     # 迭代预算（降；FATE import Mathlib ~38s/轮）
   prover_llm:
-    model: "anthropic:claude-opus-4-20250514"   # 论文最优；按预算可换
-    temperature: 0.5
-    thinking:
-      type: enabled
-      budget_tokens: 32000              # 32k 优于 10k
+    model: "openai:deepseek-v4-flash"   # DeepSeek（OpenAI 兼容，国内直连、免梯子）
+    temperature: 0
+    provider_config:
+      base_url: "https://api.deepseek.com/v1"
   tools:
     lean_search: true                   # 检索 Mathlib 引理
     web_search: false                   # 竞赛场景几乎没有帮助
@@ -33,7 +34,7 @@ prover:
 
 run:
   axprover_command: "ax-prover"
-  project_dir: ".."                     # Lean 工程目录（含 lakefile）
+  project_dir: "fate_v432"              # v4.32.0 题集工程（含 lakefile + FATEM/*.lean）
   skip_build: true                      # 若工程已 build 可跳过
   cache_file: ".baseline_cache.json"    # 首轮候选缓存
   out_dir: "runs"                       # JSONL 输出目录

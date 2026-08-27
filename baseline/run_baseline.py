@@ -44,12 +44,17 @@ def load_manifest(path: Path) -> list[dict]:
 def _write_axp_config(cfg: dict, workdir: Path) -> Path:
     """把冻结配置里 ax-prover 认可的字段抽成临时 config。"""
     con = cfg["prover"]
+    llm = dict(con["prover_llm"])
+    provider_config = dict(llm.pop("provider_config", {}) or {})
+    if "temperature" in llm:
+        provider_config.setdefault("temperature", llm.pop("temperature"))
+    llm.pop("thinking", None)
     axp = {
         "prover": {
             "max_iterations": con["max_iterations"],
-            "prover_llm": con["prover_llm"],
-            "memory": con["memory"],
-            "reviewer": con["reviewer"],
+            "prover_llm": {"model": llm["model"], "provider_config": provider_config},
+            "memory_config": {"class_name": "ExperienceProcessor", "init_args": {}},
+            "proposer_tools": {"lean_search": None, "web_search": None},
         }
     }
     p = workdir / "_axp_config.yaml"
@@ -100,7 +105,7 @@ def run_task_axprover(cfg: dict, item: dict, memory_mode: str) -> dict:
     if cfg["run"].get("skip_build"):
         cmd.append("--skip-build")
     t0 = time.time()
-    proc = subprocess.run(cmd, cwd=str(workdir), capture_output=True, text=True, timeout=300)
+    proc = subprocess.run(cmd, cwd=str(workdir), capture_output=True, text=True, timeout=1200)
     elapsed = int((time.time() - t0) * 1000)
     parsed = _parse_axp_output(out_json)
     price = (cfg["run"].get("price") or {})
@@ -194,15 +199,18 @@ def main() -> int:
     ap.add_argument("--config", type=Path, default=HERE / "config.yaml")
     ap.add_argument("--out", type=Path, default=None)
     ap.add_argument("--limit", type=int, default=None)
-    ap.add_argument("--memory", default=None, help="覆盖 memory 矩阵（如 self_managed / none）")
+    ap.add_argument("--tier", default=None, help="按 tier 过滤: core / challenge")
+    ap.add_argument("--memory", default=None, help="覆盖 memory 模式（如 self_managed / none）")
     ap.add_argument("--mock", action="store_true")
     args = ap.parse_args()
 
     cfg = load_config(args.config)
     items = load_manifest(args.manifest)
+    if args.tier:
+        items = [x for x in items if x.get("tier") == args.tier]
     if args.limit:
         items = items[: args.limit]
-    mems = args.memory.split(",") if args.memory else cfg["prover"]["memory"]["matrix"]
+    mems = args.memory.split(",") if args.memory else ["self_managed"]
     out_dir = args.out or (HERE / cfg["run"]["out_dir"])
     out_dir.mkdir(parents=True, exist_ok=True)
     jsonl = out_dir / "metrics.jsonl"
