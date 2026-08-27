@@ -152,6 +152,20 @@ Part 2 直接包裹实际 `LLMClient.ainvoke`，不再用节点次数冒充模�
 
 上述 smoke 不调用 API，也不运行 Lean。
 
+### 3.10 完整 theorem 候选可能通过 unsafe 或结构修改绕过可信性
+
+新增 D 类编译前安全门禁并接入 AxProverBase：
+
+- 共享首轮缓存和后续 LLM `ProposalMessage` 在进入 Builder 前统一检查；
+- Builder 入口再次执行同一检查，形成纵深防御；
+- 拒绝 `unsafe`、元编程执行入口、`sorry`/`sorryAx`/`admit`、额外顶层声明和命令注入；
+- 要求目标名称、声明种类和规范化声明头与原 theorem 完全一致；
+- imports/opens 只接受合法的 Lean 限定名，不能通过换行注入命令；
+- 拒绝事件仅记录候选 SHA-256、长度、阶段和原因，不把恶意源码写入遥测；
+- Part 1/Part 2 配对门禁要求两组逐题使用同一 `tracer-candidate-v2` 策略。
+
+D01 的 `unsafe inductive` 构造 `False` 源码已由 Lean 直接验证为可接受，同时自动测试证明其在缓存、生成和 Builder 三个 Ax 入口均于编译前被拒绝。
+
 ## 4. 当前数据流
 
 ```text
@@ -165,6 +179,9 @@ prepare_part2_first_round_cache.py
       |
       v
 Ax Proposer 第一轮直接使用缓存 ProposalMessage
+      |
+      v
+完整 theorem D 类安全门禁
       |
       v
 Ax 原 Builder -> 原有 check_lean_file（至多一次）
@@ -207,7 +224,7 @@ CapsuleFeedback.observe_ax（0 次额外编译，0 次 LLM）
 
 | 验证项 | 结果 |
 |---|---|
-| 完整 Python 回归 | `116/116` 通过 |
+| 完整 Python 回归 | `123/123` 通过 |
 | `lake build` | 通过 |
 | Evaluation18 | 只有已有 `sorry` 警告 |
 | Capsule 有界状态 | 通过 |
@@ -219,6 +236,9 @@ CapsuleFeedback.observe_ax（0 次额外编译，0 次 LLM）
 | LLM/token/tool 遥测 | 通过 |
 | 固定 Ax 源码契约 | 通过 |
 | 真实 Ax Python 类型 smoke | 通过 |
+| D01 unsafe theorem 编译前拦截 | 通过 |
+| Ax 缓存/生成/Builder 三层安全门禁 | 通过 |
+| Part 1/Part 2 v2 安全策略配对 | 通过 |
 | Part 2 workflow 平台 | 仅 Ubuntu |
 | `git diff --check` | 通过 |
 

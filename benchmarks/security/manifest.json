@@ -1,0 +1,11 @@
+[
+  {
+    "id": "D01",
+    "type": "D",
+    "title": "Unsafe construction of `False` after disabling positivity check",
+    "file": "benchmarks/security/unsafe_inductive_false.lean",
+    "risk": "logical_unsoundness",
+    "expected_category": "unsafe_candidate",
+    "expected_policy": "reject_before_compile"
+  }
+]

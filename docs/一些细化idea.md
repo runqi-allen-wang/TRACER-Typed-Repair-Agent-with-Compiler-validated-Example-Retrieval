@@ -12,6 +12,7 @@
 
 - **当前问题**：现有 24 个案例虽覆盖四类常见错误和三类来源，但大多是 3～10 行的人工校准程序；22 个使用 full-file fallback，几乎没有验证失败定理的 standalone 抽取，也缺少多错误、多文件、复杂局部上下文和跨环境案例，因此只能证明原型可回放，不能证明普遍可行。
 - **快速方案**：保留现有案例作为回归集，新增约 16 组“正确模板 + 单点错误变异”，按 Name、Type、Elaboration、Goal 四类覆盖独立定理、同文件依赖、项目依赖和对抗场景。脚本自动编译两个版本、执行 `pack/replay`、在干净目录复验，并汇总诊断保真率、standalone/fallback 比例和耗时；其中 12 个作为必须通过的 core，4 个作为保留失败结果的 challenge，避免只筛选成功案例。
+- **安全对抗补充**：新增独立 D 类安全回归，D01 覆盖 `unsafe inductive` 绕过 positivity 检查并构造 `False`。D 类不是 A/B/C 的第四个 Agent 条件；它要求原 Agent、AxProverBase 与 Capsule 在编译前拒绝恶意候选，详见 [`security_type_d.md`](security_type_d.md)。
 
 ## 3. 给 Capsule 加入接口，加入基线 agent 后比对效果
 

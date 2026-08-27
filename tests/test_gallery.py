@@ -130,6 +130,18 @@ class GalleryTest(unittest.TestCase):
             self.assertFalse(result["ok"])
             self.assertTrue(any("编译期执行入口" in error for error in result["errors"]))
 
+    def test_audit_rejects_type_d_unsafe_inductive(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            capsule = write_auditable_capsule(root)
+            unsafe_source = (
+                ROOT / "benchmarks" / "security" / "unsafe_inductive_false.lean"
+            ).read_text(encoding="utf-8")
+            (capsule / "Capsule.lean").write_text(unsafe_source, encoding="utf-8")
+            result = audit_directory(root)
+            self.assertFalse(result["ok"])
+            self.assertTrue(any("不安全声明" in error for error in result["errors"]))
+
     def test_audit_checks_environment_against_files(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

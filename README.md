@@ -139,6 +139,8 @@ python src/agent.py solve `
 
 完整实验运行冻结的 `18` 道题和 `A/B/C` 三个条件，共 `54` 个任务。请在专用 PowerShell 会话中固定以下配置；URL 必须是接口实际接受的完整 Chat Completions 地址：
 
+D 类是独立的安全对抗回归类别，不是第四种 Agent 条件。当前 D01 覆盖 `unsafe inductive` 绕过 positivity 检查并构造 `False` 的候选，要求原 TRACER 与 AxProverBase 的缓存/生成候选都在 Lean 编译前拒绝；详见 [`docs/security_type_d.md`](docs/security_type_d.md)。
+
 ```powershell
 $env:LEAN_PROOF_API_URL = "https://example.invalid/v1/chat/completions"
 $env:LEAN_PROOF_MODEL = "your-model"

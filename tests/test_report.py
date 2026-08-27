@@ -72,8 +72,9 @@ class ReportMetricTest(unittest.TestCase):
             "diagnostic": {"category": "ok" if compile_ok else "type_mismatch"},
             "provider_config": provider_config if provider_config is not None else {"provider": "mock"},
             "candidate_policy": {
-                "version": "tracer-candidate-v1",
+                "version": "tracer-candidate-v2",
                 "meta_execution": "blocked",
+                "unsafe_declarations": "blocked",
                 "environment": "minimal",
             },
             "cache_hit": False,

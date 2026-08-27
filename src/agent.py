@@ -188,7 +188,7 @@ def solve_problem(
                 diagnostic = {
                     "category": "unsafe_candidate",
                     "summary": safety_violation,
-                    "feedback": "只允许局部证明项；不能使用 run_tac、元编程入口或注入额外命令。",
+                    "feedback": "只允许局部证明项；不能使用 unsafe 声明、run_tac、元编程入口或注入额外命令。",
                     "errors": [],
                     "truncated": False,
                 }

@@ -25,6 +25,12 @@ def record(
         "model": "openai:deepseek-v4-flash",
         "provider_config": {"base_url": "https://api.deepseek.com"},
         "budget": {"max_llm_calls": 50, "max_iterations": 50},
+        "candidate_policy": {
+            "version": "tracer-candidate-v2",
+            "meta_execution": "blocked",
+            "unsafe_declarations": "blocked",
+            "environment": "minimal",
+        },
         "calls": {
             "memory_calls": 0 if condition == "capsule" else 1,
             "capsule_llm_calls": 0,
@@ -61,6 +67,7 @@ class Part2PairingTest(unittest.TestCase):
         capsule = record("capsule", candidate="by trivial")
         capsule["model"] = "openai:other"
         capsule["budget"] = {"max_llm_calls": 51}
+        capsule["candidate_policy"] = {"version": "tracer-candidate-v1"}
         capsule["calls"]["memory_calls"] = 1
         report = validate_paired_runs([baseline], [capsule])
         self.assertFalse(report["ok"])
@@ -68,6 +75,7 @@ class Part2PairingTest(unittest.TestCase):
         self.assertIn("first_round_candidate mismatch", joined)
         self.assertIn("model mismatch", joined)
         self.assertIn("paired budgets do not match", joined)
+        self.assertIn("candidate security policies do not match", joined)
         self.assertIn("memory_calls must be 0", joined)
 
     def test_pairing_cli_writes_a_machine_readable_report(self):

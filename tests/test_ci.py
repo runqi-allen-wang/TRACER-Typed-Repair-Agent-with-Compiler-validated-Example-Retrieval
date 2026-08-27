@@ -117,8 +117,9 @@ class ContinuousIntegrationTest(unittest.TestCase):
                     "cache_hit": condition == "B",
                     "provider_config": {"provider": "demo", "model": "fixed"},
                     "candidate_policy": {
-                        "version": "tracer-candidate-v1",
+                        "version": "tracer-candidate-v2",
                         "meta_execution": "blocked",
+                        "unsafe_declarations": "blocked",
                         "environment": "minimal",
                     },
                     "provider_error": None,
@@ -156,8 +157,9 @@ class ContinuousIntegrationTest(unittest.TestCase):
                 "cache_hit": False,
                 "provider_config": {"provider": "demo"},
                 "candidate_policy": {
-                    "version": "tracer-candidate-v1",
+                    "version": "tracer-candidate-v2",
                     "meta_execution": "blocked",
+                    "unsafe_declarations": "blocked",
                     "environment": "minimal",
                 },
                 "provider_error": None,
@@ -217,8 +219,9 @@ class ContinuousIntegrationTest(unittest.TestCase):
                             "status": "formal",
                             "experiment_id": "exp-1",
                             "candidate_policy": {
-                                "version": "tracer-candidate-v1",
+                                "version": "tracer-candidate-v2",
                                 "meta_execution": "blocked",
+                                "unsafe_declarations": "blocked",
                                 "environment": "minimal",
                             },
                         }),
@@ -236,8 +239,9 @@ class ContinuousIntegrationTest(unittest.TestCase):
                     "status": "draft",
                     "experiment_id": "exp-1",
                     "candidate_policy": {
-                        "version": "tracer-candidate-v1",
+                        "version": "tracer-candidate-v2",
                         "meta_execution": "blocked",
+                        "unsafe_declarations": "blocked",
                         "environment": "minimal",
                     },
                 }),

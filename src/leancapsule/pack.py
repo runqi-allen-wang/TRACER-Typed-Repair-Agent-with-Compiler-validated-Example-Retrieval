@@ -156,7 +156,7 @@ def pack_capsule(
         raise ValueError("必须且只能指定 --theorem 或 --lines")
     source = source_file.read_text(encoding="utf-8")
     if source_meta_execution_violation(source):
-        raise ValueError("源文件包含不允许进入公开 Capsule 的编译期执行入口")
+        raise ValueError("源文件包含不允许进入公开 Capsule 的不安全声明或编译期执行入口")
     if theorem:
         declaration_scope(source, theorem)
         selection_mode = "theorem"

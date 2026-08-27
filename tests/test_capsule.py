@@ -136,18 +136,26 @@ class CapsuleTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             base = Path(temp)
             source = base / "Unsafe.lean"
-            source.write_text('run_tac IO.println "unsafe"\n', encoding="utf-8")
-            with self.assertRaisesRegex(ValueError, "编译期执行入口"):
-                pack_capsule(base, source, base / "capsule", lines="1:1")
+            unsafe_inductive = (ROOT / "benchmarks" / "security" / "unsafe_inductive_false.lean").read_text(
+                encoding="utf-8"
+            )
+            for name, unsafe_source in {
+                "run-tac": 'run_tac IO.println "unsafe"\n',
+                "type-d-unsafe-inductive": unsafe_inductive,
+            }.items():
+                with self.subTest(name=name):
+                    source.write_text(unsafe_source, encoding="utf-8")
+                    with self.assertRaisesRegex(ValueError, "不安全声明|编译期执行入口"):
+                        pack_capsule(base, source, base / f"capsule-{name}", lines="1:1")
 
             capsule = base / "replay-capsule"
             capsule.mkdir()
             manifest = valid_manifest()
             (capsule / "capsule.json").write_text(json.dumps(manifest), encoding="utf-8")
-            (capsule / "Capsule.lean").write_text('run_tac IO.println "unsafe"\n', encoding="utf-8")
+            (capsule / "Capsule.lean").write_text(unsafe_inductive, encoding="utf-8")
             result = replay_capsule(capsule)
             self.assertFalse(result["ok"])
-            self.assertIn("编译期执行入口", result["error"])
+            self.assertRegex(result["error"], "不安全声明|编译期执行入口")
 
     def test_pack_rejects_timeout_and_records_lakefile_lean(self):
         with tempfile.TemporaryDirectory() as temp:

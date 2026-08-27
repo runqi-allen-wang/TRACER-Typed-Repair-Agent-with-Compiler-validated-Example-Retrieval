@@ -7,6 +7,7 @@ returned by that node and therefore never invokes Lean or an LLM itself.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import threading
@@ -16,6 +17,13 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
+try:
+    from compiler import CANDIDATE_POLICY, full_theorem_safety_violation
+except ModuleNotFoundError as exc:
+    if exc.name != "compiler":
+        raise
+    from src.compiler import CANDIDATE_POLICY, full_theorem_safety_violation
+
 from .feedback import (
     AXPROVERBASE_COMMIT,
     AXPROVER_DEEPSEEK_FLASH_MODEL,
@@ -24,7 +32,7 @@ from .feedback import (
 )
 
 
-AX_INTEGRATION_VERSION = "ax-capsule-feedback.v0.1"
+AX_INTEGRATION_VERSION = "ax-capsule-feedback.v0.2"
 DEFAULT_MAX_THEOREM_SESSIONS = 128
 DEEPSEEK_MAX_INPUT_TOKENS = 65536
 _PATCH_MARKER = "__leancapsule_part2_installed__"
@@ -66,6 +74,36 @@ def _iteration_count(state: object) -> int:
         return max(0, int(_read(state, "iteration_count", 0)))
     except (TypeError, ValueError):
         return 0
+
+
+def validate_ax_proposal_safety(
+    state: object,
+    code: object,
+    *,
+    imports: object = (),
+    opens: object = (),
+) -> str | None:
+    """Validate one full-theorem Ax proposal before it reaches Lean."""
+
+    item = _read(state, "item")
+    location = _read(item, "location")
+    theorem_name = str(_read(location, "name", _read(item, "name", "")) or "")
+    original_source = str(_read(item, "original_source", "") or "")
+    if not theorem_name:
+        return "Ax proposal safety gate cannot determine the target theorem name"
+    if not original_source.strip():
+        return "Ax proposal safety gate requires the original theorem source"
+    if isinstance(imports, str) or not isinstance(imports, (list, tuple)):
+        return "Ax proposal imports must be a list"
+    if isinstance(opens, str) or not isinstance(opens, (list, tuple)):
+        return "Ax proposal opens must be a list"
+    return full_theorem_safety_violation(
+        str(code or ""),
+        expected_name=theorem_name,
+        original_source=original_source,
+        imports=[str(value) for value in imports],
+        opens=[str(value) for value in opens],
+    )
 
 
 def enforce_ax_part2_config(config: object) -> object:
@@ -283,6 +321,7 @@ def _capsule_event(
         "axproverbase_commit": AXPROVERBASE_COMMIT,
         "model": AXPROVER_DEEPSEEK_FLASH_MODEL,
         "base_url": DEEPSEEK_BASE_URL,
+        "candidate_policy": dict(CANDIDATE_POLICY),
         "theorem_key_sha256": hashlib.sha256(theorem_key.encode("utf-8")).hexdigest(),
         "theorem_name": theorem_key.rsplit(":", 1)[-1][:160],
         "round": round_no,
@@ -346,6 +385,39 @@ def install_axproverbase_capsule_feedback(
         "CAPSULE_FIRST_ROUND_CACHE"
     )
 
+    def reject_unsafe_proposal(
+        self: object,
+        state: object,
+        proposal: object,
+        *,
+        stage: str,
+    ) -> None:
+        code = _read(proposal, "code", "")
+        violation = validate_ax_proposal_safety(
+            state,
+            code,
+            imports=_read(proposal, "imports", []),
+            opens=_read(proposal, "opens", []),
+        )
+        if violation is None:
+            return
+        theorem_key = _theorem_key(state)
+        self._capsule_feedback_telemetry.append(
+            {
+                "integration_schema_version": AX_INTEGRATION_VERSION,
+                "event": "unsafe_proposal_rejected",
+                "stage": stage,
+                "theorem_key_sha256": hashlib.sha256(theorem_key.encode("utf-8")).hexdigest(),
+                "theorem_name": theorem_key.rsplit(":", 1)[-1][:160],
+                "candidate_sha256": hashlib.sha256(str(code).encode("utf-8")).hexdigest(),
+                "candidate_chars": len(str(code)),
+                "candidate_policy": dict(CANDIDATE_POLICY),
+                "reason": violation[:500],
+                "rejected_before_builder": True,
+            }
+        )
+        raise ValueError(f"Ax proposal rejected before Lean build: {violation}")
+
     def patched_init(self: object, config: object, runtime: object) -> None:
         enforce_ax_part2_config(config)
         original_init(self, config, runtime)
@@ -387,6 +459,9 @@ def install_axproverbase_capsule_feedback(
             llm_client.ainvoke = counted_ainvoke
 
     async def patched_builder(self: object, state: object) -> dict:
+        last_proposal = _read(state, "last_proposal")
+        if last_proposal is not None:
+            reject_unsafe_proposal(self, state, last_proposal, stage="builder_defense_in_depth")
         builder_started = time.perf_counter()
         result = await original_builder(self, state)
         builder_elapsed_ms = (time.perf_counter() - builder_started) * 1000
@@ -446,8 +521,8 @@ def install_axproverbase_capsule_feedback(
                 imports=candidate["imports"],
                 opens=candidate["opens"],
             )
+            reject_unsafe_proposal(self, state, proposal, stage="shared_first_round")
             self._capsule_node_counts["shared_first_round"] += 1
-            import hashlib
 
             self._capsule_feedback_telemetry.append(
                 {
@@ -469,7 +544,13 @@ def install_axproverbase_capsule_feedback(
         previous_role = self._capsule_active_llm_role
         self._capsule_active_llm_role = "proposer"
         try:
-            return await original_proposer(self, *args, **kwargs)
+            result = await original_proposer(self, *args, **kwargs)
+            messages = _read(result, "messages", [])
+            if isinstance(messages, list):
+                for message in messages:
+                    if isinstance(message, proposal_class) or _read(message, "type") == "proposal":
+                        reject_unsafe_proposal(self, state, message, stage="generated_proposal")
+            return result
         finally:
             self._capsule_active_llm_role = previous_role
 

@@ -14,6 +14,7 @@ from leancapsule.ax_integration import (  # noqa: E402
     CapsuleFeedbackSessions,
     enforce_ax_part2_config,
     install_axproverbase_capsule_feedback,
+    validate_ax_proposal_safety,
 )
 
 
@@ -41,6 +42,8 @@ class FakeBuildSuccessFeedback:
 
 
 class FakeProposalMessage:
+    type = "proposal"
+
     def __init__(self, *, reasoning, code, location, imports, opens):
         self.reasoning = reasoning
         self.code = code
@@ -72,17 +75,142 @@ def make_config() -> SimpleNamespace:
     )
 
 
-def make_state(theorem: str, feedback: object, iteration: int = 1) -> SimpleNamespace:
+def make_state(
+    theorem: str,
+    feedback: object,
+    iteration: int = 1,
+    *,
+    original_source: str | None = None,
+    last_proposal: object = None,
+) -> SimpleNamespace:
     return SimpleNamespace(
         item=SimpleNamespace(
-            location=SimpleNamespace(path=Path("Demo.lean"), name=theorem)
+            location=SimpleNamespace(path=Path("Demo.lean"), name=theorem),
+            original_source=original_source or f"theorem {theorem} : True := by trivial",
         ),
         iteration_count=iteration,
         fake_feedback=feedback,
+        last_proposal=last_proposal,
     )
 
 
 class AxIntegrationTest(unittest.TestCase):
+    def test_full_theorem_safety_gate_rejects_unsafe_and_statement_changes(self):
+        state = make_state("A", FakeBuildSuccessFeedback())
+        self.assertIsNone(
+            validate_ax_proposal_safety(state, "theorem A : True := by trivial")
+        )
+        unsafe_source = (
+            ROOT / "benchmarks" / "security" / "unsafe_inductive_false.lean"
+        ).read_text(encoding="utf-8")
+        self.assertIn("unsafe", validate_ax_proposal_safety(state, unsafe_source) or "")
+        self.assertIn(
+            "修改了目标定理陈述",
+            validate_ax_proposal_safety(state, "theorem A : False := by trivial") or "",
+        )
+        self.assertIn(
+            "只能包含一个顶层声明",
+            validate_ax_proposal_safety(
+                state,
+                "theorem A : True := by trivial\naxiom injected : False",
+            )
+            or "",
+        )
+        self.assertIn(
+            "非法 import",
+            validate_ax_proposal_safety(
+                state,
+                "theorem A : True := by trivial",
+                imports=["Std\nunsafe inductive Bad"],
+            )
+            or "",
+        )
+
+    def test_ax_wrapper_rejects_cached_generated_and_builder_unsafe_proposals(self):
+        unsafe_source = (
+            ROOT / "benchmarks" / "security" / "unsafe_inductive_false.lean"
+        ).read_text(encoding="utf-8")
+
+        class CachedAgent:
+            def __init__(self, config, runtime):
+                self.llm_client = None
+                self.original_proposer_calls = 0
+
+            async def _builder_node(self, state):
+                raise AssertionError("unsafe cached proposal reached the builder")
+
+            async def _proposer_node(self, state, config=None):
+                self.original_proposer_calls += 1
+                return {}
+
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            cache = base / "first-round.json"
+            metrics = base / "metrics.jsonl"
+            cache.write_text(json.dumps({"Demo.lean:A": unsafe_source}), encoding="utf-8")
+            install_axproverbase_capsule_feedback(
+                agent_class=CachedAgent,
+                build_failed_class=FakeBuildFailedFeedback,
+                proposal_class=FakeProposalMessage,
+                telemetry_path=metrics,
+                first_round_cache_path=cache,
+            )
+            cached_agent = CachedAgent(make_config(), object())
+            with self.assertRaisesRegex(ValueError, "rejected before Lean build"):
+                asyncio.run(
+                    cached_agent._proposer_node(make_state("A", FakeBuildSuccessFeedback(), 0))
+                )
+            self.assertEqual(cached_agent.original_proposer_calls, 0)
+            rejection = json.loads(metrics.read_text(encoding="utf-8").splitlines()[0])
+            self.assertEqual(rejection["event"], "unsafe_proposal_rejected")
+            self.assertTrue(rejection["rejected_before_builder"])
+
+        class GeneratedAgent:
+            def __init__(self, config, runtime):
+                self.llm_client = None
+                self.builder_calls = 0
+
+            async def _builder_node(self, state):
+                self.builder_calls += 1
+                return {"messages": []}
+
+            async def _proposer_node(self, state, config=None):
+                return {
+                    "messages": [
+                        FakeProposalMessage(
+                            reasoning="unsafe",
+                            code=unsafe_source,
+                            location=state.item.location,
+                            imports=[],
+                            opens=[],
+                        )
+                    ]
+                }
+
+        install_axproverbase_capsule_feedback(
+            agent_class=GeneratedAgent,
+            build_failed_class=FakeBuildFailedFeedback,
+            proposal_class=FakeProposalMessage,
+        )
+        generated_agent = GeneratedAgent(make_config(), object())
+        state = make_state("A", FakeBuildSuccessFeedback())
+        with self.assertRaisesRegex(ValueError, "rejected before Lean build"):
+            asyncio.run(generated_agent._proposer_node(state))
+
+        malicious = FakeProposalMessage(
+            reasoning="unsafe",
+            code=unsafe_source,
+            location=state.item.location,
+            imports=[],
+            opens=[],
+        )
+        builder_state = make_state(
+            "A", FakeBuildSuccessFeedback(), last_proposal=malicious
+        )
+        with self.assertRaisesRegex(ValueError, "rejected before Lean build"):
+            asyncio.run(generated_agent._builder_node(builder_state))
+        self.assertEqual(generated_agent.builder_calls, 0)
+
     def test_config_is_frozen_to_deepseek_memoryless_and_no_summary(self):
         config = make_config()
         enforce_ax_part2_config(config)

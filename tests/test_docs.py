@@ -1,3 +1,4 @@
+import json
 import unittest
 from pathlib import Path
 
@@ -7,6 +8,19 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class DocumentationConsistencyTest(unittest.TestCase):
     """防止公开文档与当前 API 和候选处理行为再次脱节。"""
+
+    def test_security_type_d_is_a_precompile_gate_not_an_agent_condition(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        document = (ROOT / "docs" / "security_type_d.md").read_text(encoding="utf-8")
+        manifest = json.loads(
+            (ROOT / "benchmarks" / "security" / "manifest.json").read_text(encoding="utf-8")
+        )
+        self.assertIn("不是第四种 Agent 条件", readme)
+        self.assertIn("reject_before_compile", document)
+        self.assertIn("AxProverBase", document)
+        self.assertIn("tracer-candidate-v2", document)
+        self.assertTrue(manifest)
+        self.assertTrue(all(case["type"] == "D" for case in manifest))
 
     def test_readme_documents_deepseek_and_safe_key_prompt(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")

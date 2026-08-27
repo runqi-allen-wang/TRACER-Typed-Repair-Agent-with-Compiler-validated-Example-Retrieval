@@ -82,7 +82,7 @@ def replay_capsule(capsule: Path, timeout: float = 180.0) -> dict:
     if not source.is_file():
         return {"ok": False, "capsule": capsule.name, "error": f"缺少回放源文件: {source.name}"}
     if source_meta_execution_violation(source.read_text(encoding="utf-8")):
-        return {"ok": False, "capsule": capsule.name, "error": "回放源包含不允许的编译期执行入口"}
+        return {"ok": False, "capsule": capsule.name, "error": "回放源包含不允许的不安全声明或编译期执行入口"}
     if not project_root.is_dir():
         return {"ok": False, "capsule": capsule.name, "error": "依赖项目目录不存在"}
     if project_root != capsule and not ((project_root / "lakefile.toml").is_file() or (project_root / "lakefile.lean").is_file()):

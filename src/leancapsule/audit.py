@@ -133,7 +133,7 @@ def audit_directory(root: Path) -> dict:
             if not replay_source.is_file():
                 errors.append(f"{capsule.name}: 回放源文件不存在")
             elif source_meta_execution_violation(replay_source.read_text(encoding="utf-8")):
-                errors.append(f"{capsule.name}: 回放源包含不允许的编译期执行入口")
+                errors.append(f"{capsule.name}: 回放源包含不允许的不安全声明或编译期执行入口")
             elif manifest.get("expected", {}).get("compile_ok"):
                 source = replay_source.read_text(encoding="utf-8")
                 if PLACEHOLDER.search(source):

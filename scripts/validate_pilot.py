@@ -16,8 +16,9 @@ DEFAULT_REVIEW = ROOT / "results" / "manual_review.csv"
 CONDITIONS = ("A", "B", "C")
 REVIEW_FIELDS = ("kernel_pass", "inappropriate_assumption", "leakage_risk", "reviewer_note")
 EXPECTED_CANDIDATE_POLICY = {
-    "version": "tracer-candidate-v1",
+    "version": "tracer-candidate-v2",
     "meta_execution": "blocked",
+    "unsafe_declarations": "blocked",
     "environment": "minimal",
 }
 

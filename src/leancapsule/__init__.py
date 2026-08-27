@@ -7,6 +7,7 @@ from .ax_integration import (
     FirstRoundCandidateCache,
     enforce_ax_part2_config,
     install_axproverbase_capsule_feedback,
+    validate_ax_proposal_safety,
 )
 from .pairing import candidate_digest, validate_paired_runs
 
@@ -19,5 +20,6 @@ __all__ = [
     "enforce_ax_part2_config",
     "install_axproverbase_capsule_feedback",
     "stable_feedback_fingerprint",
+    "validate_ax_proposal_safety",
     "validate_paired_runs",
 ]

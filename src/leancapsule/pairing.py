@@ -6,6 +6,13 @@ import hashlib
 from collections.abc import Iterable, Mapping
 from typing import Any
 
+try:
+    from compiler import CANDIDATE_POLICY
+except ModuleNotFoundError as exc:
+    if exc.name != "compiler":
+        raise
+    from src.compiler import CANDIDATE_POLICY
+
 from .feedback import AXPROVER_DEEPSEEK_FLASH_MODEL, DEEPSEEK_BASE_URL
 
 
@@ -88,6 +95,13 @@ def validate_paired_runs(
         elif not isinstance(right_budget, Mapping) or dict(right_budget) != dict(left_budget):
             errors.append(f"{task_id}: paired budgets do not match")
 
+        left_policy = left.get("candidate_policy")
+        right_policy = right.get("candidate_policy")
+        if not isinstance(left_policy, Mapping) or dict(left_policy) != CANDIDATE_POLICY:
+            errors.append(f"{task_id}: baseline candidate_policy is not tracer-candidate-v2")
+        elif not isinstance(right_policy, Mapping) or dict(right_policy) != dict(left_policy):
+            errors.append(f"{task_id}: paired candidate security policies do not match")
+
         calls = right.get("calls")
         if not isinstance(calls, Mapping):
             errors.append(f"{task_id}: capsule call counters are missing")
@@ -106,6 +120,9 @@ def validate_paired_runs(
                 "model": left_model,
                 "base_url": left_url,
                 "budget": dict(left_budget) if isinstance(left_budget, Mapping) else None,
+                "candidate_policy": (
+                    dict(left_policy) if isinstance(left_policy, Mapping) else None
+                ),
             }
         )
 
@@ -114,6 +131,7 @@ def validate_paired_runs(
         "pair_count": len(pairs),
         "expected_model": AXPROVER_DEEPSEEK_FLASH_MODEL,
         "expected_base_url": DEEPSEEK_BASE_URL,
+        "expected_candidate_policy": dict(CANDIDATE_POLICY),
         "pairs": pairs,
         "errors": errors,
     }
