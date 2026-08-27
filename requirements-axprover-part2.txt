@@ -1,0 +1,2 @@
+-r requirements.txt
+ax-prover @ git+https://github.com/Axiomatic-AI/ax-prover-base.git@06dfadc9ab439755af5efcfe0add95bfef2733c7

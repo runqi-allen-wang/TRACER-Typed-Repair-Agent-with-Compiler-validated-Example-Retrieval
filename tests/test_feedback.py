@@ -67,22 +67,43 @@ class CapsuleFeedbackTest(unittest.TestCase):
         run.assert_not_called()
 
     def test_state_and_prompt_are_bounded(self):
-        formatter = CapsuleFeedback(history_limit=2, max_feedback_chars=400)
-        for round_no in range(1, 5):
+        formatter = CapsuleFeedback(history_limit=2, max_feedback_chars=400, fingerprint_limit=8)
+        for round_no in range(1, 101):
             formatter.observe_ax((False, f"Demo.lean:{round_no}:1: error: unknown identifier `x{round_no}`"))
         state = formatter.export_state()
         self.assertEqual(len(state["history"]), 2)
-        restored = CapsuleFeedback.from_state(state, history_limit=2, max_feedback_chars=400)
-        result = restored.observe_ax((True, "Build successful"), round_no=5)
+        self.assertLessEqual(len(state["fingerprint_counts"]), 8)
+        self.assertLess(len(json.dumps(state)), 5000)
+        restored = CapsuleFeedback.from_state(
+            state, history_limit=2, max_feedback_chars=400, fingerprint_limit=8
+        )
+        result = restored.observe_ax((True, "Build successful"), round_no=101)
         self.assertLessEqual(len(result["prompt_feedback"]), 400)
         self.assertEqual(result["drift_kind"], "resolved")
 
+    def test_unknown_state_schema_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "unsupported CapsuleFeedback state schema"):
+            CapsuleFeedback(state={"schema_version": "capsule-feedback.v999"})
+
+    def test_string_false_is_not_treated_as_success(self):
+        result = CapsuleFeedback().observe_ax(
+            {"compile_ok": "false", "diagnostics": "error: unknown identifier `x`"}
+        )
+        self.assertFalse(result["compile_ok"])
+
     def test_sensitive_tokens_are_not_returned(self):
         formatter = CapsuleFeedback()
-        result = formatter.observe_ax((False, "error: Authorization: Bearer secret-token-123 and sk-abc123456789"))
+        result = formatter.observe_ax(
+            (
+                False,
+                "error: Authorization: Bearer secret-token-123 and sk-abc123456789 "
+                "api_key=opaque-secret-value",
+            )
+        )
         serialized = json.dumps(result)
         self.assertNotIn("secret-token-123", serialized)
         self.assertNotIn("sk-abc123456789", serialized)
+        self.assertNotIn("opaque-secret-value", serialized)
 
     def test_ax_and_model_contract_is_frozen(self):
         self.assertEqual(AXPROVERBASE_COMMIT, "06dfadc9ab439755af5efcfe0add95bfef2733c7")

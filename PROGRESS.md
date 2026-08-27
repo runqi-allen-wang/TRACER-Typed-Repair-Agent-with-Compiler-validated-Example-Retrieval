@@ -39,13 +39,17 @@
 - 新增 Part 2 `CapsuleFeedback` 核心接口：直接消费 AxProverBase 已有编译结果，不重复编译、不调用 LLM，并输出稳定指纹、重复次数、诊断漂移和有界历史。
 - 新增 `leancapsule feedback` JSON CLI、逐题状态恢复、Ax 框线诊断兼容和敏感 token 脱敏；冻结 AxProverBase commit 与 DeepSeek Flash 跨 Part 1/2/3 模型契约。
 - 新增 Part 2 独立 GitHub Actions workflow：支持 `leiteng` push、Pull Request 和默认分支手动触发，在 Ubuntu 跑专项测试，再执行 Lean build 与完整 Python 回归；不读取模型密钥。
+- Part 2 已增加真实 AxProverBase 包裹入口：复用原 Builder 返回值并转换成 Ax `BuildFailedFeedback`，按 theorem 隔离状态，强制 Memoryless、关闭 summary，并记录有界 JSONL 遥测。
+- Part 1 Experience 与 Part 2 Capsule 均提供提交内 DeepSeek Flash 配置；新增严格配对门禁，检查共享首轮候选、模型、endpoint、预算及 Capsule 零额外调用。
+- 固定 AxProverBase commit 现在由独立 Ubuntu job 拉取、静态校验、安装并执行真实消息类型 smoke；本地普通测试仍不需要安装 Ax。
 
 ## 当前验证状态
 
 - `leancapsule verify capsules`：24/24 通过（Std 14、Mathlib 4、project-local 6）。
 - `leancapsule gallery capsules --out capsules/index.json`：通过；四类 taxonomy 均不少于 3 个，三类来源均不少于 4 个。
 - `leancapsule audit capsules`：24/24 通过，无发布审计错误。
-- 完整 Python 测试 103/103 通过，包含 Part 2 指纹稳定性、重复/漂移、状态恢复、Ax 诊断格式、零重复编译、CLI、模型契约文档、workflow 契约和脱敏回归，以及既有 Agent、provider、gallery、正式报告与复核账本检查；`lake build` 通过。
+- 完整 Python 测试 116/116 通过，包含 Part 2 有界状态、状态版本、逐 theorem 隔离、真实 Ax 消息桥接、首轮候选注入、零重复编译、Memoryless/DeepSeek 配置、遥测、配对门禁、workflow 契约和脱敏回归，以及既有 Agent、provider、gallery、正式报告与复核账本检查；`lake build` 通过。
+- 固定 AxProverBase commit 已在隔离环境完成真实 Python 类型 smoke：仓库 YAML 可解析，真实 `LLMClient` 接受 DeepSeek endpoint/profile，补丁可安装到 `ProverAgent`；全过程未调用模型或 Lean。
 - Mathlib 回放在准备 `mathlib_project` 依赖缓存后通过；缓存目录不提交到仓库。
 
 ## 明确边界
@@ -54,4 +58,4 @@
 - 多文件依赖目前采用完整文件 fallback 与显式本地文件清单，不承诺任意项目的程序切片。
 - 当前已覆盖 provider 的协议、重定向、响应边界和日志脱敏，也为候选编译提供静态元编程阻断与最小化环境；这仍不是通用操作系统级沙箱。项目源码、imports、依赖及自定义 tactic 必须被视为可信输入，不应在本机运行任意不受信任 Lean 项目。
 - 现有 TRACER A/B/C pilot 已完成正式复核；它与待运行的 AxProverBase Experience baseline / CapsuleFeedback 配对实验是两套实验，不能互相替代。
-- Part 2 当前完成核心接口和 CLI，尚未把代码写入外部 AxProverBase 的 `_builder_node`；应在 Part 1 分支合并后完成接线和共享首轮候选 smoke。
+- Part 2 接线基础设施已完成；尚未产生的只是依赖 Part 1 首轮候选和真实 API 的配对实验数据。拿到两组 JSONL 后必须通过 `scripts/validate_part2_pairing.py`，才能进入 Part 3 正式比较。

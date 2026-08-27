@@ -90,6 +90,8 @@ Part 1/2/3 中 AxProverBase 涉及的模型调用统一冻结为 DeepSeek Flash�
 
 Part 2 有独立的 GitHub Actions workflow：`.github/workflows/part2.yml`。它在 `leiteng` 分支相关文件发生变化时自动运行 Ubuntu 专项测试，再执行 Lean build 和完整 Python 回归；整个 workflow 不需要模型 API Key。
 
+真实 Ax 接入使用 `python -m leancapsule.ax_runner`，它包裹固定 AxProverBase 的原 Builder，不新增 Lean 编译，并强制使用 `MemorylessProcessor`、关闭最终 summary。安装、环境变量、遥测和配对检查命令见 [`docs/part2_capsule_feedback.md`](docs/part2_capsule_feedback.md)。
+
 ## 直接输入 API 配置
 
 单次运行可以在命令行输入接口地址、模型，并通过安全提示输入密钥。输入时终端不会显示密钥；读取完成后只确认成功，不显示长度、末四位或任何密钥字符。完整密钥只存在于当前进程内，不写入日志和缓存：

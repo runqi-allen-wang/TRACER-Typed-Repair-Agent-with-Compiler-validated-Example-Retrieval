@@ -1,0 +1,281 @@
+# Part 2 CapsuleFeedback 完成报告
+
+## 1. 报告结论
+
+Part 2 的代码实现与验证基础设施已经完成。当前版本能够把 AxProverBase 已有的 Builder 结果转换为确定性的紧凑反馈，并将其作为真实 Ax `BuildFailedFeedback` 交给下一轮 Proposer；整个转换过程不会额外运行 Lean，也不会调用 LLM。
+
+本阶段还完成了逐 theorem 状态隔离、状态大小控制、DeepSeek Flash/Memoryless 配置冻结、共享首轮候选注入、配对实验门禁、调用与 token 遥测，以及固定 AxProverBase commit 的真实类型验证。
+
+尚未产生的内容是依赖 Part 1 输出和模型 API 的真实配对实验数据。这属于后续实验执行，而不是 Part 2 实现缺口。
+
+## 2. 冻结实验条件
+
+| 项目 | 固定值 |
+|---|---|
+| AxProverBase commit | `06dfadc9ab439755af5efcfe0add95bfef2733c7` |
+| Ax/LangChain 模型名 | `openai:deepseek-v4-flash` |
+| Provider endpoint | `https://api.deepseek.com` |
+| 显式输入窗口 | `65536` tokens |
+| Part 1 Memory | `ExperienceProcessor` |
+| Part 2 Memory | `MemorylessProcessor` |
+| 最终 LLM summary | 关闭 |
+| CapsuleFeedback 编译调用 | `0` |
+| CapsuleFeedback LLM 调用 | `0` |
+
+共享模型配置位于 `configs/axprover_deepseek_flash.yaml`；Part 1 和 Part 2 分别通过 `configs/axprover_part1_experience.yaml` 与 `configs/axprover_part2_capsule.yaml` 固定 Memory 条件。
+
+## 3. 已解决问题
+
+### 3.1 状态可能无限增长
+
+原实现虽然限制了 prompt 和 history，但 `fingerprint_counts` 会随新错误指纹持续增长。
+
+现已完成：
+
+- 使用有界 LRU 指纹计数表，默认最多保存 64 个指纹；
+- 允许通过 `fingerprint_limit` 调整，上限为 1000；
+- 导出状态、历史、摘要和 prompt 均有明确上限；
+- 驻留的 theorem session 默认最多 128 个；
+- CLI 增加 `--fingerprint-limit` 参数。
+
+使用 100 个不同错误的回归测试验证后，导出状态中的指纹数不会超过配置上限。
+
+### 3.2 状态版本和输入边界不严格
+
+现已完成：
+
+- 状态中出现未知 `schema_version` 时立即拒绝恢复；
+- 正确解析字符串形式的 `true/false`，避免 `bool("false")` 被当成成功；
+- 扩充 Bearer、`sk-`、`key-`、`api_key`、`access_token` 和 `authorization` 的脱敏；
+- 状态恢复时重新约束历史字段、计数和字符串长度。
+
+### 3.3 缺少真实 Ax 消息桥接
+
+新增 `leancapsule.ax_integration`：
+
+- 在 Ax 构造 Agent 前包裹固定版本的 `ProverAgent`；
+- 调用原始 `_builder_node`，不复制或替代 Builder；
+- 消费原 Builder 返回的 `BuildFailedFeedback` 或 `SorriesGoalStateFeedback`；
+- 使用 CapsuleFeedback 生成紧凑反馈；
+- 将结果重新封装为真实 Ax `BuildFailedFeedback`；
+- 保留原 Builder 返回的 metrics 和其他字段。
+
+因此每次 Builder 执行至多保留 Ax 原有的一次 `check_lean_file` 调用，CapsuleFeedback 增加的编译次数恒为 0。
+
+### 3.4 不同 theorem 的历史可能互相污染
+
+新增 `CapsuleFeedbackSessions`：
+
+- 使用 Ax 的 `module_path:theorem_name` 作为精确 session key；
+- 每个 theorem 拥有独立指纹、重复次数和历史；
+- session 池使用 LRU 上限；
+- 可通过 `CAPSULE_FEEDBACK_STATE_DIR` 按 theorem 哈希文件持久化；
+- 状态写入采用临时文件替换，避免半写入文件。
+
+测试证明相同错误分别出现在 theorem A 和 B 时，两者的首次 `repeat_count` 都为 1。
+
+### 3.5 Capsule 条件仍可能调用 Memory LLM
+
+Part 2 runner 会在 Agent 初始化前强制：
+
+- `memory_config.class_name = MemorylessProcessor`；
+- `memory_config.init_args = {}`；
+- `summarize_output.enabled = false`；
+- Proposer/Reviewer 模型统一为 DeepSeek Flash；
+- endpoint 和模型 profile 使用冻结值。
+
+即使外部配置尝试覆盖上述字段，初始化前仍会再次执行约束。
+
+### 3.6 缺少共享首轮候选
+
+新增首轮候选准备与注入流程：
+
+1. `scripts/prepare_part2_first_round_cache.py` 从 Part 1 metrics 读取完整首轮 theorem；
+2. 按 Ax 精确目标 `module_path:theorem_name` 生成缓存；
+3. `CAPSULE_FIRST_ROUND_CACHE` 指向该缓存；
+4. Part 2 第一轮直接构造真实 Ax `ProposalMessage`；
+5. 第一轮不调用 Proposer LLM；
+6. 如果缓存没有当前 theorem，运行立即失败，不会退回重新生成。
+
+准备脚本还会拒绝空候选、只有 `by ...` 的 proof body、非法 imports/opens，以及同一目标的冲突候选。
+
+### 3.7 缺少配对实验门禁
+
+新增 `scripts/validate_part2_pairing.py`，逐题检查：
+
+- baseline 与 Capsule 题集完全一致；
+- 首轮候选逐字符相同；
+- 候选 SHA-256 可追溯；
+- 两组模型均为 DeepSeek Flash；
+- endpoint 相同且为冻结 endpoint；
+- 总预算字段相同；
+- Capsule `memory_calls == 0`；
+- CapsuleFeedback 的额外 LLM/编译调用均为 0。
+
+任何一项不满足时，脚本退出码为 1，结果不能进入正式 Part 3 分析。
+
+### 3.8 缺少真实调用和成本相关遥测
+
+Part 2 直接包裹实际 `LLMClient.ainvoke`，不再用节点次数冒充模型调用次数。JSONL 遥测现在包含：
+
+- Proposer LLM 请求次数；
+- Reviewer LLM 请求次数；
+- Memory LLM 请求次数；
+- tool calls；
+- input/output/total tokens；
+- fingerprint、重复次数和连续重复次数；
+- drift kind；
+- 反馈字符数；
+- Builder 总耗时；
+- CapsuleFeedback 单独处理耗时；
+- 共享首轮候选哈希；
+- 固定 Ax commit、模型和 endpoint；
+- CapsuleFeedback 零额外编译/LLM 调用声明。
+
+如果 provider 没有返回价格，`estimated_cost_usd` 保持 `null`，不会错误显示为 0。
+
+### 3.9 缺少固定 Ax 版本的真实验证
+
+新增三层验证：
+
+1. `scripts/validate_axprover_contract.py` 检查准确 git commit、Builder 中的 `check_lean_file` 调用点和所需类型；
+2. `scripts/smoke_axprover_integration.py` 使用安装后的真实 Ax 类测试配置、消息和补丁入口；
+3. `.github/workflows/part2.yml` 在独立 Ubuntu job 中拉取固定 commit、安装 Ax 并执行 smoke。
+
+本地隔离环境已经验证：
+
+- 仓库 YAML 能被固定 Ax 版本解析；
+- 真实 `BuildFailedFeedback` 能被 CapsuleFeedback 消费；
+- 真实 `LLMClient` 接受 DeepSeek endpoint 和显式 profile；
+- 补丁能够安装到真实 `ProverAgent`；
+- `python -m leancapsule.ax_runner --help` 正常启动。
+
+上述 smoke 不调用 API，也不运行 Lean。
+
+## 4. 当前数据流
+
+```text
+Part 1 metrics
+      |
+      v
+prepare_part2_first_round_cache.py
+      |
+      v
+精确 target -> 完整首轮 theorem 缓存
+      |
+      v
+Ax Proposer 第一轮直接使用缓存 ProposalMessage
+      |
+      v
+Ax 原 Builder -> 原有 check_lean_file（至多一次）
+      |
+      v
+CapsuleFeedback.observe_ax（0 次额外编译，0 次 LLM）
+      |
+      +-- category / fingerprint
+      +-- repeat / consecutive repeat
+      +-- diagnostic drift
+      +-- bounded history
+      +-- telemetry
+      |
+      v
+真实 Ax BuildFailedFeedback
+      |
+      v
+下一轮 Proposer
+```
+
+## 5. 主要文件
+
+| 文件 | 用途 |
+|---|---|
+| `src/leancapsule/feedback.py` | 有界 CapsuleFeedback 核心、指纹、漂移、脱敏和状态 |
+| `src/leancapsule/ax_integration.py` | 真实 Ax 消息桥接、session、首轮候选和遥测 |
+| `src/leancapsule/ax_runner.py` | 安装集成后启动 Ax CLI |
+| `src/leancapsule/pairing.py` | 严格配对结果校验 |
+| `configs/axprover_deepseek_flash.yaml` | Part 1/2/3 共享模型条件 |
+| `configs/axprover_part1_experience.yaml` | Part 1 Experience 配置 |
+| `configs/axprover_part2_capsule.yaml` | Part 2 Memoryless 配置 |
+| `requirements-axprover-part2.txt` | 固定 AxProverBase commit |
+| `scripts/prepare_part2_first_round_cache.py` | 生成首轮候选缓存 |
+| `scripts/validate_part2_pairing.py` | 配对实验门禁 |
+| `scripts/validate_axprover_contract.py` | 固定 Ax 源码契约检查 |
+| `scripts/smoke_axprover_integration.py` | 真实 Ax 类型 smoke |
+| `.github/workflows/part2.yml` | Ubuntu-only Part 2 CI |
+
+## 6. 测试和验证结果
+
+| 验证项 | 结果 |
+|---|---|
+| 完整 Python 回归 | `116/116` 通过 |
+| `lake build` | 通过 |
+| Evaluation18 | 只有已有 `sorry` 警告 |
+| Capsule 有界状态 | 通过 |
+| theorem 状态隔离 | 通过 |
+| Ax 消息桥接 | 通过 |
+| 共享首轮候选注入 | 通过 |
+| 缓存缺失 fail-closed | 通过 |
+| DeepSeek/Memoryless/summary 契约 | 通过 |
+| LLM/token/tool 遥测 | 通过 |
+| 固定 Ax 源码契约 | 通过 |
+| 真实 Ax Python 类型 smoke | 通过 |
+| Part 2 workflow 平台 | 仅 Ubuntu |
+| `git diff --check` | 通过 |
+
+`lake build` 的首次沙箱内执行仅因 elan 无法联网检查工具链而失败；在允许正常工具链访问的环境中重跑后构建成功。
+
+## 7. 使用流程
+
+安装固定 Ax：
+
+```powershell
+python -m pip install -r .\requirements-axprover-part2.txt
+```
+
+从 Part 1 metrics 准备首轮候选：
+
+```powershell
+python .\scripts\prepare_part2_first_round_cache.py `
+    --baseline .\runs\baseline.jsonl `
+    --out .\results\part2-first-round.json
+```
+
+安全设置 Key 并运行一个 theorem：
+
+```powershell
+$secureKey = Read-Host "请输入 DeepSeek API Key（输入不会显示）" -AsSecureString
+$env:OPENAI_API_KEY = [System.Net.NetworkCredential]::new("", $secureKey).Password
+$env:CAPSULE_FIRST_ROUND_CACHE = (Join-Path $PWD "results\part2-first-round.json")
+$env:CAPSULE_FEEDBACK_STATE_DIR = (Join-Path $PWD "results\part2-state")
+$env:CAPSULE_FEEDBACK_METRICS = (Join-Path $PWD "results\part2-metrics.jsonl")
+try {
+    python -m leancapsule.ax_runner prove "Module.Path:theorem_name" `
+        --folder "C:\path\to\lean-project" `
+        --skip-build
+}
+finally {
+    Remove-Item Env:OPENAI_API_KEY -ErrorAction SilentlyContinue
+    Remove-Variable secureKey -ErrorAction SilentlyContinue
+}
+```
+
+两组结果完成后运行门禁：
+
+```powershell
+python .\scripts\validate_part2_pairing.py `
+    --baseline .\runs\baseline.jsonl `
+    --capsule .\runs\capsule.jsonl `
+    --out .\runs\part2-pairing-report.json
+```
+
+## 8. 当前边界与后续工作
+
+Part 2 实现本身已经完成，仍需外部输入：
+
+- Part 1 runner 必须输出完整的首轮 theorem，而不是只有 proof body；
+- Part 1 需要采用 `configs/axprover_part1_experience.yaml`；
+- Part 1 与 Part 2 结果需要包含配对门禁要求的 provider、预算和 calls 字段；
+- 真实 DeepSeek 调用需要用户配置 `OPENAI_API_KEY`；
+- 真实配对数据产生后，才能进入 Part 3 的通过率、修复率、成本和重复错误比例分析。
+
+当前开发发生在 `leiteng` 分支，报告生成时相关修改尚未 commit 或 push。

@@ -1,0 +1,8 @@
+import:
+  - axprover_deepseek_flash.yaml
+
+prover:
+  memory_config:
+    class_name: ExperienceProcessor
+    init_args:
+      llm_config: ${prover.prover_llm}

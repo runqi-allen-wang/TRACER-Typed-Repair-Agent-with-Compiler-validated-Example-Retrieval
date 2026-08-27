@@ -11,9 +11,19 @@ on:
       - "src/leancapsule/**"
       - "leancapsule/**"
       - "tests/test_feedback.py"
+      - "tests/test_ax_*.py"
+      - "tests/test_part2_pairing.py"
       - "tests/test_docs.py"
       - "tests/test_ci.py"
+      - "scripts/validate_axprover_contract.py"
+      - "scripts/validate_part2_pairing.py"
+      - "scripts/prepare_part2_first_round_cache.py"
+      - "scripts/smoke_axprover_integration.py"
+      - "configs/axprover_*.yaml"
+      - "requirements-axprover-part2.txt"
       - "docs/part2_capsule_feedback.md"
+      - "docs/part2_阶段性完成报告.md"
+      - "docs/一些细化idea.md"
       - "README.md"
       - "PROGRESS.md"
   pull_request:
@@ -23,9 +33,19 @@ on:
       - "src/leancapsule/**"
       - "leancapsule/**"
       - "tests/test_feedback.py"
+      - "tests/test_ax_*.py"
+      - "tests/test_part2_pairing.py"
       - "tests/test_docs.py"
       - "tests/test_ci.py"
+      - "scripts/validate_axprover_contract.py"
+      - "scripts/validate_part2_pairing.py"
+      - "scripts/prepare_part2_first_round_cache.py"
+      - "scripts/smoke_axprover_integration.py"
+      - "configs/axprover_*.yaml"
+      - "requirements-axprover-part2.txt"
       - "docs/part2_capsule_feedback.md"
+      - "docs/part2_阶段性完成报告.md"
+      - "docs/一些细化idea.md"
       - "README.md"
       - "PROGRESS.md"
 
@@ -52,13 +72,40 @@ jobs:
       - name: Install Python dependencies
         run: python -m pip install -r requirements.txt
       - name: Run CapsuleFeedback and documentation tests
-        run: python -m unittest tests.test_feedback tests.test_docs tests.test_ci.ContinuousIntegrationTest.test_part2_workflow_contract -v
+        run: python -m unittest tests.test_feedback tests.test_ax_integration tests.test_ax_contract tests.test_part2_pairing tests.test_docs tests.test_ci.ContinuousIntegrationTest.test_part2_workflow_contract -v
       - name: Check both module entrypoints
         run: python -m unittest tests.test_capsule.CapsuleTest.test_both_module_entrypoints_are_usable -v
 
+  axprover-contract:
+    name: 固定 AxProverBase 接口验证
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Fetch pinned AxProverBase source
+        run: |
+          git init /tmp/ax-prover-base
+          git -C /tmp/ax-prover-base remote add origin https://github.com/Axiomatic-AI/ax-prover-base.git
+          git -C /tmp/ax-prover-base fetch --depth 1 origin 06dfadc9ab439755af5efcfe0add95bfef2733c7
+          git -C /tmp/ax-prover-base checkout --detach FETCH_HEAD
+      - name: Validate pinned source contract
+        run: python scripts/validate_axprover_contract.py --source /tmp/ax-prover-base
+      - name: Install pinned AxProverBase
+        run: python -m pip install /tmp/ax-prover-base
+      - name: Import the real Ax integration
+        run: python scripts/smoke_axprover_integration.py
+
   repository-regression:
     name: Lean build 与完整 Python 回归
-    needs: part2-unit
+    needs:
+      - part2-unit
+      - axprover-contract
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:

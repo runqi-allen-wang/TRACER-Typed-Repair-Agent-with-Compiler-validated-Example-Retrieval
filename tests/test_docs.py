@@ -30,6 +30,19 @@ class DocumentationConsistencyTest(unittest.TestCase):
         self.assertIn("不运行 Lean、不调用模型", part2)
         self.assertIn("(build_success, message)", part2)
 
+    def test_part2_runtime_configs_freeze_model_and_memory_modes(self):
+        shared = (ROOT / "configs" / "axprover_deepseek_flash.yaml").read_text(encoding="utf-8")
+        baseline = (ROOT / "configs" / "axprover_part1_experience.yaml").read_text(encoding="utf-8")
+        capsule = (ROOT / "configs" / "axprover_part2_capsule.yaml").read_text(encoding="utf-8")
+        dependency = (ROOT / "requirements-axprover-part2.txt").read_text(encoding="utf-8")
+        self.assertIn('model: "openai:deepseek-v4-flash"', shared)
+        self.assertIn('base_url: "https://api.deepseek.com"', shared)
+        self.assertIn("max_input_tokens: 65536", shared)
+        self.assertIn("enabled: false", shared)
+        self.assertIn("ExperienceProcessor", baseline)
+        self.assertIn("MemorylessProcessor", capsule)
+        self.assertIn("06dfadc9ab439755af5efcfe0add95bfef2733c7", dependency)
+
     def test_methodology_documents_candidate_normalization(self):
         methodology = (ROOT / "docs" / "methodology.md").read_text(encoding="utf-8")
         schema = (ROOT / "docs" / "jsonl_schema.md").read_text(encoding="utf-8")

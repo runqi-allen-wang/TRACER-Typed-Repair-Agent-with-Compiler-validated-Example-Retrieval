@@ -1,0 +1,535 @@
+"""AxProverBase integration for deterministic CapsuleFeedback.
+
+The integration wraps Ax's existing builder node.  The original builder still
+owns the only Lean invocation; this module only transforms the feedback object
+returned by that node and therefore never invokes Lean or an LLM itself.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import threading
+import time
+from collections import OrderedDict
+from collections.abc import Mapping
+from pathlib import Path
+from typing import Any
+
+from .feedback import (
+    AXPROVERBASE_COMMIT,
+    AXPROVER_DEEPSEEK_FLASH_MODEL,
+    DEEPSEEK_BASE_URL,
+    CapsuleFeedback,
+)
+
+
+AX_INTEGRATION_VERSION = "ax-capsule-feedback.v0.1"
+DEFAULT_MAX_THEOREM_SESSIONS = 128
+DEEPSEEK_MAX_INPUT_TOKENS = 65536
+_PATCH_MARKER = "__leancapsule_part2_installed__"
+
+
+def _read(value: object, name: str, default: object = None) -> object:
+    if isinstance(value, Mapping):
+        return value.get(name, default)
+    return getattr(value, name, default)
+
+
+def _write(value: object, name: str, replacement: object) -> None:
+    if isinstance(value, dict):
+        value[name] = replacement
+    else:
+        setattr(value, name, replacement)
+
+
+def _theorem_key(state: object) -> str:
+    item = _read(state, "item")
+    location = _read(item, "location")
+    formatted = _read(location, "formatted_context")
+    if formatted:
+        return str(formatted)
+    path = str(_read(location, "path", "<unknown-path>"))
+    name = str(_read(location, "name", _read(item, "name", "<unknown-theorem>")))
+    return f"{path}:{name}"
+
+
+def _round_no(state: object) -> int:
+    try:
+        return max(1, int(_read(state, "iteration_count", 1)))
+    except (TypeError, ValueError):
+        return 1
+
+
+def _iteration_count(state: object) -> int:
+    try:
+        return max(0, int(_read(state, "iteration_count", 0)))
+    except (TypeError, ValueError):
+        return 0
+
+
+def enforce_ax_part2_config(config: object) -> object:
+    """Freeze the Part 2 model, Memoryless strategy, and disabled summary."""
+
+    llm = _read(config, "prover_llm")
+    if llm is None:
+        raise ValueError("Ax Part 2 requires prover.prover_llm configuration")
+    _write(llm, "model", AXPROVER_DEEPSEEK_FLASH_MODEL)
+    provider_config = _read(llm, "provider_config")
+    if provider_config is None:
+        provider_config = {}
+        _write(llm, "provider_config", provider_config)
+    _write(provider_config, "base_url", DEEPSEEK_BASE_URL)
+    profile = _read(provider_config, "profile")
+    if profile is None:
+        profile = {}
+        _write(provider_config, "profile", profile)
+    _write(profile, "max_input_tokens", DEEPSEEK_MAX_INPUT_TOKENS)
+
+    memory = _read(config, "memory_config")
+    if memory is None:
+        raise ValueError("Ax Part 2 requires prover.memory_config configuration")
+    _write(memory, "class_name", "MemorylessProcessor")
+    _write(memory, "init_args", {})
+
+    summary = _read(config, "summarize_output")
+    if summary is None:
+        raise ValueError("Ax Part 2 requires prover.summarize_output configuration")
+    _write(summary, "enabled", False)
+    _write(summary, "llm", llm)
+    return config
+
+
+class CapsuleFeedbackSessions:
+    """Bounded, theorem-keyed CapsuleFeedback sessions with optional persistence."""
+
+    def __init__(
+        self,
+        *,
+        history_limit: int = 4,
+        max_feedback_chars: int = 1600,
+        fingerprint_limit: int = 64,
+        max_sessions: int = DEFAULT_MAX_THEOREM_SESSIONS,
+        state_dir: str | Path | None = None,
+    ) -> None:
+        self.history_limit = history_limit
+        self.max_feedback_chars = max_feedback_chars
+        self.fingerprint_limit = fingerprint_limit
+        self.max_sessions = max(1, min(int(max_sessions), 4096))
+        self.state_dir = Path(state_dir) if state_dir else None
+        self._sessions: OrderedDict[str, CapsuleFeedback] = OrderedDict()
+
+    @staticmethod
+    def _state_name(theorem_key: str) -> str:
+        import hashlib
+
+        return hashlib.sha256(theorem_key.encode("utf-8")).hexdigest()[:24] + ".json"
+
+    def _state_path(self, theorem_key: str) -> Path | None:
+        if self.state_dir is None:
+            return None
+        return self.state_dir / self._state_name(theorem_key)
+
+    def _new_session(self, theorem_key: str) -> CapsuleFeedback:
+        state: dict[str, Any] = {}
+        state_path = self._state_path(theorem_key)
+        if state_path is not None and state_path.exists():
+            loaded = json.loads(state_path.read_text(encoding="utf-8"))
+            if not isinstance(loaded, dict):
+                raise ValueError(f"CapsuleFeedback state is not an object: {state_path}")
+            state = loaded
+        return CapsuleFeedback(
+            history_limit=self.history_limit,
+            max_feedback_chars=self.max_feedback_chars,
+            fingerprint_limit=self.fingerprint_limit,
+            state=state,
+        )
+
+    def _persist(self, theorem_key: str, session: CapsuleFeedback) -> None:
+        state_path = self._state_path(theorem_key)
+        if state_path is None:
+            return
+        state_path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = state_path.with_name(state_path.name + ".tmp")
+        temporary.write_text(
+            json.dumps(session.export_state(), ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        temporary.replace(state_path)
+
+    def observe(self, theorem_key: str, feedback: object, *, round_no: int) -> dict[str, Any]:
+        session = self._sessions.get(theorem_key)
+        if session is None:
+            session = self._new_session(theorem_key)
+            self._sessions[theorem_key] = session
+        self._sessions.move_to_end(theorem_key)
+        while len(self._sessions) > self.max_sessions:
+            self._sessions.popitem(last=False)
+        result = session.observe_ax(feedback, round_no=round_no)
+        self._persist(theorem_key, session)
+        return result
+
+    @property
+    def active_session_count(self) -> int:
+        return len(self._sessions)
+
+
+class JsonlTelemetry:
+    """Append redacted Part 2 telemetry as one compact JSON object per event."""
+
+    def __init__(self, path: str | Path | None) -> None:
+        self.path = Path(path) if path else None
+        self._lock = threading.Lock()
+
+    def append(self, event: Mapping[str, Any]) -> None:
+        if self.path is None:
+            return
+        serialized = json.dumps(dict(event), ensure_ascii=False, separators=(",", ":"))
+        with self._lock:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            with self.path.open("a", encoding="utf-8", newline="\n") as stream:
+                stream.write(serialized + "\n")
+
+
+class FirstRoundCandidateCache:
+    """Strict target-to-ProposalMessage payload mapping produced by Part 1."""
+
+    def __init__(self, path: str | Path) -> None:
+        self.path = Path(path)
+        loaded = json.loads(self.path.read_text(encoding="utf-8"))
+        if not isinstance(loaded, Mapping):
+            raise ValueError("first-round candidate cache must be a JSON object")
+        self._candidates = {str(key): value for key, value in loaded.items()}
+
+    def get(self, theorem_key: str) -> dict[str, Any]:
+        if theorem_key not in self._candidates:
+            raise KeyError(
+                f"first-round candidate cache has no exact entry for {theorem_key!r}"
+            )
+        value = self._candidates[theorem_key]
+        if isinstance(value, str):
+            payload: dict[str, Any] = {"code": value}
+        elif isinstance(value, Mapping):
+            payload = dict(value)
+        else:
+            raise ValueError(f"invalid first-round candidate for {theorem_key!r}")
+        code = str(
+            payload.get("code")
+            or payload.get("candidate")
+            or payload.get("first_round_candidate")
+            or ""
+        )
+        if not code.strip():
+            raise ValueError(f"empty first-round candidate for {theorem_key!r}")
+        if len(code) > 2_000_000:
+            raise ValueError(f"first-round candidate is too large for {theorem_key!r}")
+        imports = payload.get("imports", [])
+        opens = payload.get("opens", [])
+        if isinstance(imports, str) or not isinstance(imports, list):
+            raise ValueError(f"first-round imports must be a list for {theorem_key!r}")
+        if isinstance(opens, str) or not isinstance(opens, list):
+            raise ValueError(f"first-round opens must be a list for {theorem_key!r}")
+        return {
+            "code": code,
+            "reasoning": str(payload.get("reasoning") or "Reused paired first-round candidate."),
+            "imports": [str(item) for item in imports],
+            "opens": [str(item) for item in opens],
+        }
+
+
+def _feedback_type(feedback: object) -> str:
+    return str(_read(feedback, "feedback_type", ""))
+
+
+def _response_usage(response: object) -> dict[str, int]:
+    usage = _read(response, "usage_metadata")
+    if not isinstance(usage, Mapping):
+        metadata = _read(response, "response_metadata", {})
+        usage = _read(metadata, "token_usage", {})
+    if not isinstance(usage, Mapping):
+        usage = {}
+
+    def value(*names: str) -> int:
+        for name in names:
+            candidate = usage.get(name)
+            if isinstance(candidate, int) and not isinstance(candidate, bool):
+                return max(0, candidate)
+        return 0
+
+    input_tokens = value("input_tokens", "prompt_tokens")
+    output_tokens = value("output_tokens", "completion_tokens")
+    total_tokens = value("total_tokens") or input_tokens + output_tokens
+    return {
+        "input_tokens": input_tokens,
+        "output_tokens": output_tokens,
+        "total_tokens": total_tokens,
+    }
+
+
+def _capsule_event(
+    *,
+    theorem_key: str,
+    round_no: int,
+    input_feedback_type: str,
+    payload: Mapping[str, Any],
+    builder_elapsed_ms: float,
+    capsule_elapsed_ms: float,
+) -> dict[str, Any]:
+    import hashlib
+
+    return {
+        "integration_schema_version": AX_INTEGRATION_VERSION,
+        "capsule_schema_version": payload["schema_version"],
+        "axproverbase_commit": AXPROVERBASE_COMMIT,
+        "model": AXPROVER_DEEPSEEK_FLASH_MODEL,
+        "base_url": DEEPSEEK_BASE_URL,
+        "theorem_key_sha256": hashlib.sha256(theorem_key.encode("utf-8")).hexdigest(),
+        "theorem_name": theorem_key.rsplit(":", 1)[-1][:160],
+        "round": round_no,
+        "input_feedback_type": input_feedback_type,
+        "category": payload["category"],
+        "fingerprint": payload["fingerprint"],
+        "repeat_count": payload["repeat_count"],
+        "consecutive_repeat_count": payload["consecutive_repeat_count"],
+        "drift_kind": payload["drift_kind"],
+        "diagnostic_drift": payload["diagnostic_drift"],
+        "feedback_chars": len(str(payload["prompt_feedback"])),
+        "builder_elapsed_ms": round(builder_elapsed_ms, 3),
+        "capsule_elapsed_ms": round(capsule_elapsed_ms, 3),
+        "builder_result_reused": True,
+        "capsule_compiler_calls": 0,
+        "capsule_llm_calls": 0,
+        "memory_llm_calls": 0,
+        "memory_processor": "MemorylessProcessor",
+    }
+
+
+def install_axproverbase_capsule_feedback(
+    *,
+    agent_class: type | None = None,
+    build_failed_class: type | None = None,
+    proposal_class: type | None = None,
+    telemetry_path: str | Path | None = None,
+    state_dir: str | Path | None = None,
+    first_round_cache_path: str | Path | None = None,
+) -> type:
+    """Install the Part 2 wrapper before Ax constructs ``ProverAgent``.
+
+    Optional class injection keeps the integration testable without importing
+    Ax's heavy runtime.  Production callers should omit it.
+    """
+
+    if agent_class is None or build_failed_class is None or proposal_class is None:
+        try:
+            from ax_prover.models.messages import BuildFailedFeedback, ProposalMessage
+            from ax_prover.prover.agent import ProverAgent
+        except ImportError as exc:
+            raise RuntimeError(
+                "AxProverBase is not installed; install the pinned Part 2 dependency first"
+            ) from exc
+        agent_class = agent_class or ProverAgent
+        build_failed_class = build_failed_class or BuildFailedFeedback
+        proposal_class = proposal_class or ProposalMessage
+
+    if getattr(agent_class, _PATCH_MARKER, False):
+        return agent_class
+
+    original_init = agent_class.__init__
+    original_builder = agent_class._builder_node
+    original_memory = getattr(agent_class, "_memory_processor_node", None)
+    original_proposer = getattr(agent_class, "_proposer_node", None)
+    original_reviewer = getattr(agent_class, "_reviewer_node", None)
+    original_chat = getattr(agent_class, "chat", None)
+    configured_telemetry_path = telemetry_path or os.environ.get("CAPSULE_FEEDBACK_METRICS")
+    configured_state_dir = state_dir or os.environ.get("CAPSULE_FEEDBACK_STATE_DIR")
+    configured_first_round_cache = first_round_cache_path or os.environ.get(
+        "CAPSULE_FIRST_ROUND_CACHE"
+    )
+
+    def patched_init(self: object, config: object, runtime: object) -> None:
+        enforce_ax_part2_config(config)
+        original_init(self, config, runtime)
+        self._capsule_feedback_sessions = CapsuleFeedbackSessions(state_dir=configured_state_dir)
+        self._capsule_feedback_telemetry = JsonlTelemetry(configured_telemetry_path)
+        self._capsule_first_round_cache = (
+            FirstRoundCandidateCache(configured_first_round_cache)
+            if configured_first_round_cache
+            else None
+        )
+        self._capsule_node_counts = {
+            "proposer": 0,
+            "proposer_uncached": 0,
+            "shared_first_round": 0,
+            "memory": 0,
+            "reviewer": 0,
+        }
+        self._capsule_active_llm_role = "other"
+        self._capsule_llm_calls = {"proposer": 0, "reviewer": 0, "other": 0}
+        self._capsule_tool_calls = 0
+        self._capsule_usage = {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0}
+        llm_client = getattr(self, "llm_client", None)
+        original_ainvoke = getattr(llm_client, "ainvoke", None)
+        if original_ainvoke is not None:
+            async def counted_ainvoke(*args: object, **kwargs: object) -> object:
+                role = self._capsule_active_llm_role
+                if role not in self._capsule_llm_calls:
+                    role = "other"
+                self._capsule_llm_calls[role] += 1
+                response = await original_ainvoke(*args, **kwargs)
+                usage = _response_usage(response)
+                for key, count in usage.items():
+                    self._capsule_usage[key] += count
+                tool_calls = _read(response, "tool_calls", [])
+                if isinstance(tool_calls, list):
+                    self._capsule_tool_calls += len(tool_calls)
+                return response
+
+            llm_client.ainvoke = counted_ainvoke
+
+    async def patched_builder(self: object, state: object) -> dict:
+        builder_started = time.perf_counter()
+        result = await original_builder(self, state)
+        builder_elapsed_ms = (time.perf_counter() - builder_started) * 1000
+        if not isinstance(result, dict):
+            return result
+
+        messages = result.get("messages")
+        if not isinstance(messages, list):
+            return result
+        theorem_key = _theorem_key(state)
+        current_round = _round_no(state)
+        transformed = []
+        changed = False
+        for feedback in messages:
+            feedback_type = _feedback_type(feedback)
+            if feedback_type not in {"build_failed", "sorries_goal_state"}:
+                transformed.append(feedback)
+                continue
+            capsule_started = time.perf_counter()
+            payload = self._capsule_feedback_sessions.observe(
+                theorem_key, feedback, round_no=current_round
+            )
+            capsule_elapsed_ms = (time.perf_counter() - capsule_started) * 1000
+            transformed.append(build_failed_class(error_output=payload["prompt_feedback"]))
+            self._capsule_feedback_telemetry.append(
+                _capsule_event(
+                    theorem_key=theorem_key,
+                    round_no=current_round,
+                    input_feedback_type=feedback_type,
+                    payload=payload,
+                    builder_elapsed_ms=builder_elapsed_ms,
+                    capsule_elapsed_ms=capsule_elapsed_ms,
+                )
+            )
+            changed = True
+        if not changed:
+            return result
+        transformed_result = dict(result)
+        transformed_result["messages"] = transformed
+        return transformed_result
+
+    async def counted_memory(self: object, *args: object, **kwargs: object) -> object:
+        self._capsule_node_counts["memory"] += 1
+        return await original_memory(self, *args, **kwargs)
+
+    async def counted_proposer(self: object, *args: object, **kwargs: object) -> object:
+        self._capsule_node_counts["proposer"] += 1
+        state = args[0] if args else kwargs.get("state")
+        if self._capsule_first_round_cache is not None and _iteration_count(state) == 0:
+            theorem_key = _theorem_key(state)
+            candidate = self._capsule_first_round_cache.get(theorem_key)
+            location = _read(_read(state, "item"), "location")
+            proposal = proposal_class(
+                reasoning=candidate["reasoning"],
+                code=candidate["code"],
+                location=location,
+                imports=candidate["imports"],
+                opens=candidate["opens"],
+            )
+            self._capsule_node_counts["shared_first_round"] += 1
+            import hashlib
+
+            self._capsule_feedback_telemetry.append(
+                {
+                    "integration_schema_version": AX_INTEGRATION_VERSION,
+                    "event": "shared_first_round_candidate",
+                    "theorem_key_sha256": hashlib.sha256(
+                        theorem_key.encode("utf-8")
+                    ).hexdigest(),
+                    "theorem_name": theorem_key.rsplit(":", 1)[-1][:160],
+                    "candidate_sha256": hashlib.sha256(
+                        candidate["code"].encode("utf-8")
+                    ).hexdigest(),
+                    "candidate_chars": len(candidate["code"]),
+                    "proposer_llm_calls": 0,
+                }
+            )
+            return {"messages": [proposal]}
+        self._capsule_node_counts["proposer_uncached"] += 1
+        previous_role = self._capsule_active_llm_role
+        self._capsule_active_llm_role = "proposer"
+        try:
+            return await original_proposer(self, *args, **kwargs)
+        finally:
+            self._capsule_active_llm_role = previous_role
+
+    async def counted_reviewer(self: object, *args: object, **kwargs: object) -> object:
+        self._capsule_node_counts["reviewer"] += 1
+        previous_role = self._capsule_active_llm_role
+        self._capsule_active_llm_role = "reviewer"
+        try:
+            return await original_reviewer(self, *args, **kwargs)
+        finally:
+            self._capsule_active_llm_role = previous_role
+
+    async def counted_chat(self: object, *args: object, **kwargs: object) -> object:
+        result = await original_chat(self, *args, **kwargs)
+        self._capsule_feedback_telemetry.append(
+            {
+                "integration_schema_version": AX_INTEGRATION_VERSION,
+                "event": "run_summary",
+                "axproverbase_commit": AXPROVERBASE_COMMIT,
+                "model": AXPROVER_DEEPSEEK_FLASH_MODEL,
+                "memory_processor": "MemorylessProcessor",
+                "memory_llm_calls": 0,
+                "capsule_llm_calls": 0,
+                "capsule_compiler_calls": 0,
+                "node_calls": dict(self._capsule_node_counts),
+                "calls": {
+                    "proposer_calls": self._capsule_llm_calls["proposer"],
+                    "reviewer_calls": self._capsule_llm_calls["reviewer"],
+                    "memory_calls": 0,
+                    "other_llm_calls": self._capsule_llm_calls["other"],
+                    "tool_calls": self._capsule_tool_calls,
+                    "capsule_llm_calls": 0,
+                    "capsule_compiler_calls": 0,
+                },
+                "usage": dict(self._capsule_usage),
+                "estimated_cost_usd": None,
+            }
+        )
+        return result
+
+    agent_class.__init__ = patched_init
+    agent_class._builder_node = patched_builder
+    if original_memory is not None:
+        agent_class._memory_processor_node = counted_memory
+    if original_proposer is not None:
+        agent_class._proposer_node = counted_proposer
+    if original_reviewer is not None:
+        agent_class._reviewer_node = counted_reviewer
+    if original_chat is not None:
+        agent_class.chat = counted_chat
+    setattr(agent_class, _PATCH_MARKER, True)
+    return agent_class
+
+
+__all__ = [
+    "AX_INTEGRATION_VERSION",
+    "CapsuleFeedbackSessions",
+    "DEEPSEEK_MAX_INPUT_TOKENS",
+    "FirstRoundCandidateCache",
+    "JsonlTelemetry",
+    "enforce_ax_part2_config",
+    "install_axproverbase_capsule_feedback",
+]

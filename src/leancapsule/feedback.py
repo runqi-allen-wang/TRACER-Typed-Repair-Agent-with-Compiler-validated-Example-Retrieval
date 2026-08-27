@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from collections import OrderedDict
 from collections.abc import Mapping
 from typing import Any
 
@@ -21,6 +22,7 @@ except ModuleNotFoundError as exc:
 
 
 SCHEMA_VERSION = "capsule-feedback.v0.1"
+SUPPORTED_STATE_SCHEMA_VERSIONS = frozenset({SCHEMA_VERSION})
 AXPROVERBASE_COMMIT = "06dfadc9ab439755af5efcfe0add95bfef2733c7"
 DEEPSEEK_FLASH_MODEL = "deepseek-v4-flash"
 AXPROVER_DEEPSEEK_FLASH_MODEL = f"openai:{DEEPSEEK_FLASH_MODEL}"
@@ -35,6 +37,9 @@ _MVAR_RE = re.compile(r"(?:\?m\.\d+|\bmvar\.?\d+\b|\bmetavariable\s+\d+\b)", re.
 _TEMP_FILE_RE = re.compile(r"\btmp_[A-Za-z0-9_.-]+\.lean\b")
 _BEARER_RE = re.compile(r"(?i)\bBearer\s+[A-Za-z0-9._~+/=-]+")
 _SECRET_RE = re.compile(r"(?i)\b(?:sk|key)-[A-Za-z0-9._-]{8,}\b")
+_NAMED_SECRET_RE = re.compile(
+    r"(?i)\b(api[_-]?key|access[_-]?token|authorization)\b\s*[:=]\s*[^\s,;]+"
+)
 
 
 def _bounded_int(value: object, default: int, *, minimum: int, maximum: int) -> int:
@@ -49,6 +54,7 @@ def _redact_and_normalize(text: object, *, max_chars: int = 32768) -> str:
     value = _ANSI_RE.sub("", str(text or ""))
     value = _BEARER_RE.sub("Bearer <redacted>", value)
     value = _SECRET_RE.sub("<redacted-secret>", value)
+    value = _NAMED_SECRET_RE.sub(lambda match: f"{match.group(1)}=<redacted>", value)
     value = _WINDOWS_LOCATION_PATH_RE.sub("<path>", value)
     value = _UNIX_LOCATION_PATH_RE.sub("<path>", value)
     value = _RELATIVE_LOCATION_PATH_RE.sub("<path>", value)
@@ -57,6 +63,20 @@ def _redact_and_normalize(text: object, *, max_chars: int = 32768) -> str:
     value = _TEMP_FILE_RE.sub("<temp>.lean", value)
     value = re.sub(r"\s+", " ", value).strip()
     return value[:max_chars]
+
+
+def _coerce_bool(value: object, default: bool = False) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return value != 0
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in {"true", "1", "yes", "y", "ok", "success", "passed"}:
+            return True
+        if normalized in {"false", "0", "no", "n", "failed", "failure", "error", ""}:
+            return False
+    return default
 
 
 def stable_feedback_fingerprint(category: str, diagnostic_text: str, goal_state: str = "") -> str:
@@ -85,17 +105,23 @@ class CapsuleFeedback:
         *,
         history_limit: int = 4,
         max_feedback_chars: int = 1600,
+        fingerprint_limit: int = 64,
         state: Mapping[str, Any] | None = None,
     ) -> None:
         self.history_limit = _bounded_int(history_limit, 4, minimum=1, maximum=20)
         self.max_feedback_chars = _bounded_int(max_feedback_chars, 1600, minimum=320, maximum=12000)
+        self.fingerprint_limit = _bounded_int(fingerprint_limit, 64, minimum=4, maximum=1000)
         state = state or {}
+        state_version = state.get("schema_version")
+        if state_version is not None and state_version not in SUPPORTED_STATE_SCHEMA_VERSIONS:
+            raise ValueError(f"unsupported CapsuleFeedback state schema: {state_version}")
         self._attempt_count = _bounded_int(state.get("attempt_count"), 0, minimum=0, maximum=1_000_000)
         counts = state.get("fingerprint_counts", {})
-        self._fingerprint_counts = {
-            str(key): _bounded_int(count, 0, minimum=0, maximum=1_000_000)
-            for key, count in counts.items()
-        } if isinstance(counts, Mapping) else {}
+        bounded_counts = list(counts.items())[-self.fingerprint_limit :] if isinstance(counts, Mapping) else []
+        self._fingerprint_counts: OrderedDict[str, int] = OrderedDict(
+            (str(key)[:64], _bounded_int(count, 0, minimum=0, maximum=1_000_000))
+            for key, count in bounded_counts
+        )
         history = state.get("history", [])
         self._history = [self._clean_history_entry(item) for item in history if isinstance(item, Mapping)]
         self._history = self._history[-self.history_limit :]
@@ -107,10 +133,12 @@ class CapsuleFeedback:
         *,
         history_limit: int = 4,
         max_feedback_chars: int = 1600,
+        fingerprint_limit: int = 64,
     ) -> "CapsuleFeedback":
         return cls(
             history_limit=history_limit,
             max_feedback_chars=max_feedback_chars,
+            fingerprint_limit=fingerprint_limit,
             state=state,
         )
 
@@ -118,7 +146,7 @@ class CapsuleFeedback:
     def _clean_history_entry(item: Mapping[str, Any]) -> dict[str, Any]:
         return {
             "round": _bounded_int(item.get("round"), 1, minimum=1, maximum=1_000_000),
-            "compile_ok": bool(item.get("compile_ok", False)),
+            "compile_ok": _coerce_bool(item.get("compile_ok", False)),
             "category": str(item.get("category", "compile_error"))[:80],
             "fingerprint": str(item.get("fingerprint", ""))[:64],
             "repeat_count": _bounded_int(item.get("repeat_count"), 1, minimum=1, maximum=1_000_000),
@@ -173,6 +201,9 @@ class CapsuleFeedback:
         fingerprint = stable_feedback_fingerprint(category, diagnostic_text, goal_state)
         repeat_count = self._fingerprint_counts.get(fingerprint, 0) + 1
         self._fingerprint_counts[fingerprint] = repeat_count
+        self._fingerprint_counts.move_to_end(fingerprint)
+        while len(self._fingerprint_counts) > self.fingerprint_limit:
+            self._fingerprint_counts.popitem(last=False)
         previous = self._history[-1] if self._history else None
 
         if previous is None:
@@ -225,7 +256,7 @@ class CapsuleFeedback:
         if isinstance(result, tuple) and len(result) == 2:
             compile_ok, message = result
             return self.observe(
-                compile_ok=bool(compile_ok),
+                compile_ok=_coerce_bool(compile_ok),
                 diagnostic_text=str(message or ""),
                 round_no=round_no,
             )
@@ -244,7 +275,9 @@ class CapsuleFeedback:
                 category_hint="unsolved_goals",
             )
 
-        compile_ok = bool(_read_field(result, "compile_ok", _read_field(result, "ok", False)))
+        compile_ok = _coerce_bool(
+            _read_field(result, "compile_ok", _read_field(result, "ok", False))
+        )
         message = _read_field(result, "error_output", None)
         if message is None:
             message = _read_field(result, "message", _read_field(result, "diagnostics", ""))
@@ -252,7 +285,7 @@ class CapsuleFeedback:
             compile_ok=compile_ok,
             diagnostic_text=str(message or ""),
             returncode=_read_field(result, "returncode", None),  # type: ignore[arg-type]
-            timed_out=bool(_read_field(result, "timed_out", False)),
+            timed_out=_coerce_bool(_read_field(result, "timed_out", False)),
             goal_state=str(_read_field(result, "goal_state", "") or ""),
             round_no=round_no,
         )

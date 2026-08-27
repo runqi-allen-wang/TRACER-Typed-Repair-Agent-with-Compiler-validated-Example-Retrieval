@@ -1,0 +1,7 @@
+import:
+  - axprover_deepseek_flash.yaml
+
+prover:
+  memory_config:
+    class_name: MemorylessProcessor
+    init_args: {}
