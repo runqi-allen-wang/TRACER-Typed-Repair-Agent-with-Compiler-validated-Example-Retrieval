@@ -1,0 +1,39 @@
+{
+  "format": "tracer-part3-handoff-v1",
+  "benchmark": "FATE-M",
+  "paired_problems": 25,
+  "pairing_ok": true,
+  "source_revision": "99681cabab6bdc54751f69cae1f7ac292923c833",
+  "files": [
+    {
+      "path": "raw.jsonl",
+      "bytes": 88801,
+      "sha256": "24b335b2e95701ea102b71dbf9986576669755c2e32a618f3618fb1671740d69"
+    },
+    {
+      "path": "capsule.jsonl",
+      "bytes": 95631,
+      "sha256": "0eae476468ced44114635493479abecdf9fbc439ae0653a5e53706c8d6fbf724"
+    },
+    {
+      "path": "pairing.json",
+      "bytes": 30517,
+      "sha256": "649d4791ece1a882ba8e9de3a2c9464ee2aad9c159cb907001d190cedb72a724"
+    },
+    {
+      "path": "per-task.csv",
+      "bytes": 3597,
+      "sha256": "aac41178a28bdc28d6e9bcdfec09718cf9bcd5d2d3340a89e9c998d4a6c812ba"
+    },
+    {
+      "path": "summary.json",
+      "bytes": 1770,
+      "sha256": "5fb1b390ed6ce22d07ddd8cd6e6bc7ad268c239118bfa8b7a9f70b1728daefec"
+    },
+    {
+      "path": "REPORT.md",
+      "bytes": 3573,
+      "sha256": "5bcd4009eb35ab7674e07cb5e0d04db9480e95dfe9bd94c827a41853f66ef95a"
+    }
+  ]
+}
