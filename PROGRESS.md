@@ -52,7 +52,7 @@
 - 完整 Python 测试通过，包含 Part 2 有界状态、状态版本、逐 theorem 隔离、真实 Ax 消息桥接、首轮候选注入、零重复编译、Memoryless/`yxai` Responses 配置、D 类危险证明门禁、遥测、配对门禁、workflow 契约和脱敏回归，以及既有 Agent、provider、gallery、正式报告与复核账本检查；`lake build` 通过。
 - 固定 AxProverBase commit 已在隔离环境完成真实 Python 类型 smoke：仓库 YAML 可解析，真实 `LLMClient` 接受 `yxai` Responses endpoint/profile，补丁可安装到 `ProverAgent`；全过程未调用模型或 Lean。
 - `gpt-5.6-sol` 已完成真实在线 smoke：直接 provider/Agent 生成的单题证明通过 Lean，固定 AxProverBase/LangChain 路径成功返回；两条请求均使用 Responses、`store=false` 和 high reasoning。
-- FATE-M 25 题 Part 1 Experience / Part 2 CapsuleFeedback 正式配对实验已完成：两组均 25/25 证明成功，严格配对门禁 25/25 通过；总轮次由 39 降至 34，编译错误由 14 降至 9，LLM calls 由 79 降至 34，tokens 由 656657 降至 250030。Part 2 逐题复用了相同首轮候选，且 Memory、Capsule 内部 LLM 和 Capsule 额外编译调用均为 0。原始 JSONL、首轮缓存、遥测和配对报告保存在忽略目录 `results/work/part12-live-20260828/`。
+- FATE-M 25 题 Part 1 Experience / Part 2 CapsuleFeedback 正式配对实验已完成：两组均 25/25 证明成功，严格配对门禁 25/25 通过；总轮次由 39 降至 34，编译错误由 14 降至 9，LLM calls 由 79 降至 34，tokens 由 656657 降至 250030。Part 2 逐题复用了相同首轮候选，且 Memory、Capsule 内部 LLM 和 Capsule 额外编译调用均为 0。原始产物保存在忽略目录 `results/work/part12-live-20260828/`；经凭据和本机路径检查的正式交接包位于 `results/handoff/part12-live-20260828/`。
 - Mathlib 回放在准备 `mathlib_project` 依赖缓存后通过；缓存目录不提交到仓库。
 
 ## 明确边界
@@ -61,4 +61,4 @@
 - 多文件依赖目前采用完整文件 fallback 与显式本地文件清单，不承诺任意项目的程序切片。
     - 当前已覆盖 provider 的协议、重定向、响应边界和日志脱敏，也为候选编译提供静态元编程阻断与最小化环境；这仍不是通用操作系统级沙箱。项目源码、imports、依赖及自定义 tactic 必须被视为可信输入，不应在本机运行任意不受信任 Lean 项目。
 - 现有 TRACER A/B/C pilot 已完成正式复核；它与待运行的 AxProverBase Experience baseline / CapsuleFeedback 配对实验是两套实验，不能互相替代。
-- Part 1/2 正式配对数据和严格配对报告均已产生，可进入 Part 3 的统计比较与正式报告阶段；原始实验产物位于忽略目录，发布前需按交接流程选择性脱敏导出。
+- Part 1/2 正式配对数据和严格配对报告均已产生，可进入 Part 3 的统计比较与正式报告阶段；已选择性导出 5 个正式结果文件及 SHA-256 清单到 `results/handoff/part12-live-20260828/`。

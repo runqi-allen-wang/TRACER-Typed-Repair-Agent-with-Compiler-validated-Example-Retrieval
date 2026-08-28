@@ -1,0 +1,518 @@
+{
+  "ok": true,
+  "pair_count": 25,
+  "expected_model": "openai:gpt-5.6-sol",
+  "expected_base_url": "https://yxai.chat/v1",
+  "expected_wire_api": "responses",
+  "expected_store": false,
+  "expected_reasoning_effort": "high",
+  "expected_candidate_policy": {
+    "version": "tracer-candidate-v2",
+    "meta_execution": "blocked",
+    "unsafe_declarations": "blocked",
+    "environment": "minimal"
+  },
+  "pairs": [
+    {
+      "task_id": "fate01",
+      "candidate_sha256": "c805d4dc09aefc180077683c51e2630aa40de8137c1eabae9b6ad296fc305d23",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate02",
+      "candidate_sha256": "73c425af0c5d253fcee068eace427857acaed87c426bcfba78061859dc738be3",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate03",
+      "candidate_sha256": "bb57d0135d49a613892d605b8b4ccecfe62d51b8dbc6c44fc446e2d39d9dc942",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate04",
+      "candidate_sha256": "76aad1b0ac77f857dede892a191669adf8a9459b7cd0cd480f2ce0a6913f38dd",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate05",
+      "candidate_sha256": "56a9289d20a4a7b27071aec8c7d872ff7e62e8c19e609c1126822814150c7def",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate06",
+      "candidate_sha256": "edfe3e9e056e282d481505e9cde3fdc15552ddb444f5a1461e8bb43f4fc29b98",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate07",
+      "candidate_sha256": "fba5d2520e3a9ff5e9f21c59145bb6f254a50d6771b987859288f617c8b41784",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate08",
+      "candidate_sha256": "1bb6749f37bf3b6e596b844539f25c3540f02652e4e1d63e0ca28edcad7d518f",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate09",
+      "candidate_sha256": "3f53a20136b7aac471a027b0cef0ffef1587024a572026830f5151b6ab155595",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate10",
+      "candidate_sha256": "717ab10ca1657cf4f3972ac834b963bdb18425fb3a0fdc6f593ffb03df076c31",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate11",
+      "candidate_sha256": "e13a5d39d8bc9889bfcba871bd9efd1c61bf8429edf82c93b3c9523c8971d028",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate12",
+      "candidate_sha256": "293845cb12f5cef8d83c4eaccd6a609ccd5312333d9bdc483b8a23a74f7e5be5",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate13",
+      "candidate_sha256": "01b6a5308456e01cc6fccc53ab1f3a5c43598b0985c6b57f7cc0936bddf6d144",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate14",
+      "candidate_sha256": "bf040f6e5ac26c7907fe8ae4d62c9156d06c8606732ab3a7663465bc87fda171",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate15",
+      "candidate_sha256": "73937260172f7375864deb7bd3a76ce8e1a66c1656d2a8c1fa8864377654139f",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate16",
+      "candidate_sha256": "3e9b478b12a8be9d2c8aa7796af9b503ecf427bf16def819c6218e18bfdb1311",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate17",
+      "candidate_sha256": "56e6851dd38a394ab0ab73bb9c4d6a5067232d75053c12a7e27979b1742000c9",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate18",
+      "candidate_sha256": "9673cd0a610c7a21409276c424d427be21480e9e11a07106abf876376601dfde",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate19",
+      "candidate_sha256": "32dc92fd721016acd8805c8a9c89444dc4b514be7692051fc5ea1b8874b99a5c",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate20",
+      "candidate_sha256": "b14dfec770b2a1ca63571e80b47a7b764fd530f7b415b358ef3d4e7317125c02",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate21",
+      "candidate_sha256": "f4a145dafe78e57fb9502a5c3fdecac283aeac1c0b6bd0a32f5bb1e04f379b5a",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate22",
+      "candidate_sha256": "5fed9494670bf8b1a65a3fd98b3ec74e1797d665cda5a35c53bcf1536fa7f066",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate23",
+      "candidate_sha256": "f6aa12971bd66aa731d17e39104f85614a01d56c56fcff1114262b9d5c234509",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate24",
+      "candidate_sha256": "330e24e5b1835773986f11d1c201c597e8e5f55d759adb61fd86b88577ccd8cd",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate25",
+      "candidate_sha256": "c26edc6abdd85527ed2cb9dcb5f75991170223feb3d6b01f86dacb504522e8cc",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    }
+  ],
+  "errors": []
+}
