@@ -11,6 +11,7 @@ import argparse
 import asyncio
 import json
 import os
+import re
 import sys
 import time
 import uuid
@@ -27,6 +28,7 @@ if str(SRC) not in sys.path:
 from compiler import CANDIDATE_POLICY  # noqa: E402
 from leancapsule.ax_integration import (  # noqa: E402
     AX_INTEGRATION_VERSION,
+    FEEDBACK_MODES,
     FirstRoundCandidateCache,
     enforce_ax_part2_config,
     install_axproverbase_capsule_feedback,
@@ -41,6 +43,9 @@ from leancapsule.feedback import (  # noqa: E402
 )
 
 
+_CAPSULE_STATE_FILE_RE = re.compile(r"^[0-9a-f]{24}\.json(?:\.tmp)?$")
+
+
 def _read(value: object, name: str, default: object = None) -> object:
     if isinstance(value, Mapping):
         return value.get(name, default)
@@ -50,6 +55,13 @@ def _read(value: object, name: str, default: object = None) -> object:
 def _proposal_messages(state: object) -> list[object]:
     messages = list(_read(state, "messages", []) or [])
     return [message for message in messages if _read(message, "type") == "proposal"]
+
+
+def _is_repeated_feedback_event(event: Mapping[str, Any]) -> bool:
+    try:
+        return int(event.get("repeat_count", 1) or 1) > 1
+    except (TypeError, ValueError):
+        return False
 
 
 def _contract_from_config(config: object) -> dict[str, Any]:
@@ -132,10 +144,14 @@ def extract_record(
     prover: object,
     contract: Mapping[str, Any],
     *,
+    feedback_mode: str = "capsule",
     task_metadata: Mapping[str, Any] | None = None,
     run_elapsed_ms: int = 0,
 ) -> dict[str, Any]:
-    """Extract one pairing-ready Capsule condition record."""
+    """Extract one pairing-ready Raw or Capsule condition record."""
+
+    if feedback_mode not in FEEDBACK_MODES:
+        raise ValueError(f"unsupported feedback mode: {feedback_mode}")
 
     metadata = dict(task_metadata or {})
     proposals = _proposal_messages(state)
@@ -146,7 +162,9 @@ def extract_record(
     location = _read(state_item, "location")
     theorem = str(metadata.get("theorem") or _read(location, "name", ""))
     module = str(metadata.get("module") or "")
-    is_proven = bool(_read(state_item, "is_proven", _read(state, "approved", False)))
+    # FATE-M source declarations contain reference proofs, so TargetItem.is_proven
+    # can be true even when this Agent run has not been approved.
+    is_proven = bool(_read(state, "approved", False))
     rounds = int(_read(state, "iteration_count", len(proposals)) or len(proposals))
 
     node_calls = dict(getattr(prover, "_capsule_node_counts", {}) or {})
@@ -161,6 +179,17 @@ def extract_record(
     reviewer_calls = int(llm_calls.get("reviewer", 0) or 0)
     other_llm_calls = int(llm_calls.get("other", 0) or 0)
     provider_contract = dict(contract["provider_config"])
+    feedback_events = [
+        dict(event)
+        for event in (getattr(prover, "_feedback_events", []) or [])
+        if isinstance(event, Mapping)
+    ]
+    # Each feedback event is one observed diagnostic.  Count later occurrences
+    # once; summing cumulative repeat_count values would double-count them.
+    repeated_diagnostic_count = sum(
+        _is_repeated_feedback_event(event) for event in feedback_events
+    )
+    memory_mode = "raw_feedback" if feedback_mode == "raw" else "capsule_feedback"
 
     return {
         "run_id": uuid.uuid4().hex[:12],
@@ -170,8 +199,9 @@ def extract_record(
         "module": module,
         "theorem": theorem,
         "path": str(_read(location, "path", "")),
-        "condition": "capsule",
-        "memory_mode": "capsule_feedback",
+        "condition": feedback_mode,
+        "feedback_mode": feedback_mode,
+        "memory_mode": memory_mode,
         "memory_processor": "MemorylessProcessor",
         "integration_schema_version": AX_INTEGRATION_VERSION,
         "axproverbase_commit": AXPROVERBASE_COMMIT,
@@ -216,6 +246,10 @@ def extract_record(
         "first_round_imports": list(_read(first, "imports", []) or []) if first else [],
         "first_round_opens": list(_read(first, "opens", []) or []) if first else [],
         "candidate_count": len(proposals),
+        "feedback_events": feedback_events,
+        "diagnostic_event_count": len(feedback_events),
+        "repeated_diagnostic_count": repeated_diagnostic_count,
+        "api_error_count": 0,
     }
 
 
@@ -224,6 +258,10 @@ async def run_target(
     folder: str,
     config_yaml: str,
     *,
+    feedback_mode: str = "capsule",
+    telemetry_path: str | Path | None = None,
+    state_dir: str | Path | None = None,
+    first_round_cache_path: str | Path | None = None,
     task_metadata: Mapping[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     from ax_prover.config import Config
@@ -237,7 +275,14 @@ async def run_target(
         prove_single_item,
     )
 
-    install_axproverbase_capsule_feedback()
+    if feedback_mode not in FEEDBACK_MODES:
+        raise ValueError(f"unsupported feedback mode: {feedback_mode}")
+    install_axproverbase_capsule_feedback(
+        feedback_mode=feedback_mode,
+        telemetry_path=telemetry_path,
+        state_dir=state_dir,
+        first_round_cache_path=first_round_cache_path,
+    )
     load_env_secrets(folder)
     # Do not inherit upstream default.yaml: it selects Claude, and OmegaConf's
     # deep merge otherwise leaves Claude-only ``betas``/``thinking`` keys in
@@ -250,7 +295,7 @@ async def run_target(
         items = await parse_prove_target(runtime.lean_interact_server, folder, target)
         for item in items:
             prover = await ProverAgent.create(config=config.prover, runtime=runtime)
-            thread_id = f"part2_{item.location.name}_{uuid.uuid4().hex[:6]}"
+            thread_id = f"part3_{feedback_mode}_{item.location.name}_{uuid.uuid4().hex[:6]}"
             started = time.perf_counter()
             state = await prove_single_item(prover, item, thread_id=thread_id)
             records.append(
@@ -259,6 +304,7 @@ async def run_target(
                     state,
                     prover,
                     contract,
+                    feedback_mode=feedback_mode,
                     task_metadata=task_metadata,
                     run_elapsed_ms=int((time.perf_counter() - started) * 1000),
                 )
@@ -304,6 +350,79 @@ def validate_inputs(
     return rows
 
 
+def prepare_run_artifacts(
+    output_path: Path,
+    *,
+    state_dir: Path | None,
+    metrics_path: Path | None,
+    overwrite: bool,
+    protected_paths: tuple[Path, ...] = (),
+) -> None:
+    """Require a fresh run and reset only known experiment artifacts."""
+
+    output_resolved = output_path.resolve()
+    metrics_resolved = metrics_path.resolve() if metrics_path is not None else None
+    protected = {path.resolve() for path in protected_paths}
+    if output_resolved in protected:
+        raise ValueError("Part 2 output path overlaps a protected input file")
+    if metrics_resolved is not None:
+        if metrics_resolved == output_resolved:
+            raise ValueError("CAPSULE_FEEDBACK_METRICS must differ from the Part 2 output")
+        if metrics_resolved in protected:
+            raise ValueError("CAPSULE_FEEDBACK_METRICS overlaps a protected input file")
+
+    state_entries: list[Path] = []
+    if state_dir is not None and state_dir.exists():
+        if not state_dir.is_dir():
+            raise ValueError("CAPSULE_FEEDBACK_STATE_DIR must be a directory")
+        state_entries = list(state_dir.iterdir())
+        unexpected = [
+            entry
+            for entry in state_entries
+            if entry.is_symlink()
+            or not entry.is_file()
+            or _CAPSULE_STATE_FILE_RE.fullmatch(entry.name) is None
+        ]
+        if unexpected:
+            names = ", ".join(sorted(entry.name for entry in unexpected)[:5])
+            raise ValueError(
+                "CAPSULE_FEEDBACK_STATE_DIR must be a dedicated state directory; "
+                f"unexpected entries: {names}"
+            )
+
+    existing: list[str] = []
+    if output_path.exists() and output_path.stat().st_size:
+        existing.append(str(output_path))
+    if metrics_path is not None and metrics_path.exists() and metrics_path.stat().st_size:
+        existing.append(str(metrics_path))
+    if state_entries:
+        existing.append(f"{state_dir} ({len(state_entries)} state files)")
+    if existing and not overwrite:
+        raise ValueError(
+            "existing Part 2 artifacts would contaminate a fresh run: "
+            + "; ".join(existing)
+            + "; choose fresh paths or pass --overwrite"
+        )
+
+    if overwrite:
+        if output_path.exists() and output_path.is_file():
+            output_path.write_text("", encoding="utf-8")
+        if metrics_path is not None and metrics_path.exists() and metrics_path.is_file():
+            metrics_path.write_text("", encoding="utf-8")
+        for state_path in state_entries:
+            state_path.unlink()
+
+    if output_path.exists() and not output_path.is_file():
+        raise ValueError("Part 2 output path must be a file")
+    if metrics_path is not None and metrics_path.exists() and not metrics_path.is_file():
+        raise ValueError("CAPSULE_FEEDBACK_METRICS must be a file")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    if metrics_path is not None:
+        metrics_path.parent.mkdir(parents=True, exist_ok=True)
+    if state_dir is not None:
+        state_dir.mkdir(parents=True, exist_ok=True)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--baseline", type=Path, required=True)
@@ -311,6 +430,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--config", required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--limit", type=int)
+    parser.add_argument(
+        "--feedback",
+        choices=sorted(FEEDBACK_MODES),
+        default="capsule",
+        help="Feedback condition to run (default: capsule)",
+    )
     parser.add_argument(
         "--overwrite",
         action="store_true",
@@ -332,17 +457,27 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Part 2 preflight failed: {exc}", file=sys.stderr)
         return 2
 
-    if args.out.exists() and args.out.stat().st_size:
-        if not args.overwrite:
-            print(
-                f"Part 2 preflight failed: output is not empty: {args.out}; "
-                "choose a new path or pass --overwrite",
-                file=sys.stderr,
-            )
-            return 2
-        args.out.write_text("", encoding="utf-8")
+    state_value = os.environ.get(
+        "AX_FEEDBACK_STATE_DIR", os.environ.get("CAPSULE_FEEDBACK_STATE_DIR", "")
+    )
+    metrics_value = os.environ.get(
+        "AX_FEEDBACK_METRICS", os.environ.get("CAPSULE_FEEDBACK_METRICS", "")
+    )
+    if args.feedback == "raw" and state_value:
+        print("Part 3 preflight failed: Raw condition must not use Capsule state", file=sys.stderr)
+        return 2
+    try:
+        prepare_run_artifacts(
+            args.out,
+            state_dir=Path(state_value) if state_value else None,
+            metrics_path=Path(metrics_value) if metrics_value else None,
+            overwrite=args.overwrite,
+            protected_paths=(args.baseline, Path(cache_value)),
+        )
+    except (OSError, ValueError) as exc:
+        print(f"Part 2 preflight failed: {exc}", file=sys.stderr)
+        return 2
 
-    args.out.parent.mkdir(parents=True, exist_ok=True)
     failures = 0
     with args.out.open("a", encoding="utf-8", newline="\n") as stream:
         for index, row in enumerate(rows, start=1):
@@ -354,7 +489,16 @@ def main(argv: list[str] | None = None) -> int:
             }
             try:
                 records = asyncio.run(
-                    run_target(target, args.folder, args.config, task_metadata=metadata)
+                    run_target(
+                        target,
+                        args.folder,
+                        args.config,
+                        feedback_mode=args.feedback,
+                        telemetry_path=metrics_value or None,
+                        state_dir=state_value or None,
+                        first_round_cache_path=cache_value,
+                        task_metadata=metadata,
+                    )
                 )
             except Exception as exc:  # noqa: BLE001
                 print(f"[{index}/{len(rows)}] {target}: ERROR {exc}")

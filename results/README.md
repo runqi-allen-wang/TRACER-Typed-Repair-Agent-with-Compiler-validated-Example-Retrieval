@@ -24,3 +24,15 @@ python scripts/export_pilot.py --out results/handoff/pilot-reviewed
 ```powershell
 git add -f results/handoff/pilot-reviewed
 ```
+
+### Part 3 Raw/Capsule 交接包
+
+`results/handoff/part3-minimal/` 是 Part 3 的选择性正式交接包，包含 Raw/Capsule 两组逐题 JSONL、严格配对报告、逐题 CSV、汇总报告和 SHA-256 清单。它们使用同一批首轮候选；Raw 与 Capsule 都是 `MemorylessProcessor`，区别仅为失败反馈是否经过确定性 `CapsuleFeedback`。本次 25 题 pilot 的结果和限制见 [`docs/part3_raw_capsule_experiment.md`](../docs/part3_raw_capsule_experiment.md)。
+
+该目录也默认被忽略；确认内容不含凭据和本机路径后，若需要提交实验原始结果，必须显式执行：
+
+```powershell
+git add -f results/handoff/part3-minimal
+```
+
+不要提交 `results/work/part3-minimal/` 中的 metrics、Capsule state 或请求缓存。

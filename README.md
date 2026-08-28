@@ -92,6 +92,10 @@ Part 2 有独立的 GitHub Actions workflow：`.github/workflows/part2.yml`。�
 
 真实 Ax 接入使用 `python -m leancapsule.ax_runner`，它包裹固定 AxProverBase 的原 Builder，不新增 Lean 编译，并强制使用 `MemorylessProcessor`、关闭最终 summary。安装、环境变量、遥测和配对检查命令见 [`docs/part2_capsule_feedback.md`](docs/part2_capsule_feedback.md)。
 
+## Part 3 Raw/Capsule 对比
+
+Part 3 在同一批 FATE-M 25 题上固定 `MemorylessProcessor`，交错运行 Raw（原始 Ax `BuildFailedFeedback`）和 Capsule（确定性 `CapsuleFeedback`），并复用完全相同的首轮候选。完整协议、复现命令、严格门禁和结果解释见 [`docs/part3_raw_capsule_experiment.md`](docs/part3_raw_capsule_experiment.md)。本次 pilot 的 Raw/Capsule 最终成功数分别为 `21/25` 和 `19/25`；这是一次性描述性比较，不应解释为通用结论。正式交接文件位于 `results/handoff/part3-minimal/`。
+
 ## 直接输入 API 配置
 
 单次运行可以在命令行输入接口地址、模型，并通过安全提示输入密钥。输入时终端不会显示密钥；读取完成后只确认成功，不显示长度、末四位或任何密钥字符。完整密钥只存在于当前进程内，不写入日志和缓存：

@@ -105,6 +105,10 @@ python .\scripts\prepare_part2_first_round_cache.py `
 两组真实结果完成后，必须运行 `scripts/validate_part2_pairing.py`；门禁失败的数据不能进入
 Part 3 结论。
 
+Part 3 的 Raw/Capsule 最小严格对比已经使用同一批 25 题完成。运行器、交错顺序、共享首轮候选和结果门禁见
+[`docs/part3_raw_capsule_experiment.md`](../docs/part3_raw_capsule_experiment.md)。不要把 `ExperienceProcessor` 的旧结果与 Raw/Capsule
+直接合并分析；它只作为资源参考。
+
 ## CI
 
 - `.github/workflows/part1.yml`：Ubuntu-only，无 API 的配置、mock 与固定 Ax smoke。

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 from collections.abc import Iterable, Mapping
 from typing import Any
 
@@ -24,6 +25,21 @@ from .feedback import (
 
 def candidate_digest(candidate: object) -> str:
     return hashlib.sha256(str(candidate or "").encode("utf-8")).hexdigest()
+
+
+def proposal_digest(row: Mapping[str, Any]) -> str:
+    """Hash the complete cached first-round ProposalMessage payload."""
+
+    payload = {
+        "code": row.get("first_round_candidate"),
+        "reasoning": row.get("first_round_reasoning"),
+        "imports": row.get("first_round_imports"),
+        "opens": row.get("first_round_opens"),
+    }
+    serialized = json.dumps(
+        payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    )
+    return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
 
 
 def _task_id(row: Mapping[str, Any]) -> str:
@@ -187,4 +203,4 @@ def validate_paired_runs(
     }
 
 
-__all__ = ["candidate_digest", "validate_paired_runs"]
+__all__ = ["candidate_digest", "proposal_digest", "validate_paired_runs"]

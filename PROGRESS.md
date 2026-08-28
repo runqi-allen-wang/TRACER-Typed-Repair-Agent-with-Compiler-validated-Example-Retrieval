@@ -1,6 +1,6 @@
 # 当前工作进度
 
-更新时间：2026-08-27
+更新时间：2026-08-29
 
 ## 已完成
 
@@ -43,16 +43,19 @@
 - Part 2 已增加真实 AxProverBase 包裹入口：复用原 Builder 返回值并转换成 Ax `BuildFailedFeedback`，按 theorem 隔离状态，强制 Memoryless、关闭 summary，并记录有界 JSONL 遥测。
 - Part 1 Experience 与 Part 2 Capsule 均提供提交内 `yxai` Responses 配置；新增严格配对门禁，检查共享首轮候选、模型、endpoint、wire API、响应存储、推理强度、预算及 Capsule 零额外调用。
 - 固定 AxProverBase commit 现在由独立 Ubuntu job 拉取、静态校验、安装并执行真实消息类型 smoke；本地普通测试仍不需要安装 Ax。
+- 新增 Part 3 Raw/Capsule 最小严格对比 runner：两组均使用 `MemorylessProcessor`，Raw 原样透传 Ax `BuildFailedFeedback`，Capsule 使用确定性 `CapsuleFeedback`，按题交错运行并共享完整首轮候选。
+- 新增 Part 3 严格配对、逐题差值、汇总报告和脱敏交接导出；FATE-M 源文件运行前恢复到固定 pristine commit，运行后恢复外部工作区。
 
 ## 当前验证状态
 
 - `leancapsule verify capsules`：24/24 通过（Std 14、Mathlib 4、project-local 6）。
 - `leancapsule gallery capsules --out capsules/index.json`：通过；四类 taxonomy 均不少于 3 个，三类来源均不少于 4 个。
 - `leancapsule audit capsules`：24/24 通过，无发布审计错误。
-- 完整 Python 测试通过，包含 Part 2 有界状态、状态版本、逐 theorem 隔离、真实 Ax 消息桥接、首轮候选注入、零重复编译、Memoryless/`yxai` Responses 配置、D 类危险证明门禁、遥测、配对门禁、workflow 契约和脱敏回归，以及既有 Agent、provider、gallery、正式报告与复核账本检查；`lake build` 通过。
+- 完整 Python 测试通过（150 项），包含 Part 2 有界状态、状态版本、逐 theorem 隔离、真实 Ax 消息桥接、首轮候选注入、零重复编译、Memoryless/`yxai` Responses 配置、D 类危险证明门禁、遥测、Part 3 Raw/Capsule 配对门禁、workflow 契约和脱敏回归，以及既有 Agent、provider、gallery、正式报告与复核账本检查；`lake build` 通过。
 - 固定 AxProverBase commit 已在隔离环境完成真实 Python 类型 smoke：仓库 YAML 可解析，真实 `LLMClient` 接受 `yxai` Responses endpoint/profile，补丁可安装到 `ProverAgent`；全过程未调用模型或 Lean。
 - `gpt-5.6-sol` 已完成真实在线 smoke：直接 provider/Agent 生成的单题证明通过 Lean，固定 AxProverBase/LangChain 路径成功返回；两条请求均使用 Responses、`store=false` 和 high reasoning。
 - FATE-M 25 题 Part 1 Experience / Part 2 CapsuleFeedback 正式配对实验已完成：两组均 25/25 证明成功，严格配对门禁 25/25 通过；总轮次由 39 降至 34，编译错误由 14 降至 9，LLM calls 由 79 降至 34，tokens 由 656657 降至 250030。Part 2 逐题复用了相同首轮候选，且 Memory、Capsule 内部 LLM 和 Capsule 额外编译调用均为 0。原始产物保存在忽略目录 `results/work/part12-live-20260828/`；经凭据和本机路径检查的正式交接包位于 `results/handoff/part12-live-20260828/`。
+- FATE-M 25 题 Part 3 Raw/Capsule 正式交错实验已完成：两组均 25/25 有记录，严格配对门禁通过，`errors.jsonl` 为空；共享首轮候选中 16 题首轮成功、9 题首轮失败。Raw 最终成功 21/25、首轮失败后最终修复 5/9、44 总轮数、23 次编译错误、40 次 LLM 调用、378486 token；Capsule 最终成功 19/25、首轮失败后最终修复 3/9、46 总轮数、27 次编译错误、40 次 LLM 调用、429786 token。正式交接包位于 `results/handoff/part3-minimal/`，运行期 metrics/state 仍在忽略目录。
 - Mathlib 回放在准备 `mathlib_project` 依赖缓存后通过；缓存目录不提交到仓库。
 
 ## 明确边界
@@ -60,5 +63,6 @@
 - capsule gallery 验收的是失败复现协议，不等同于真实模型 A/B/C 实验；模型实验需另行配置 provider、冻结模型参数并记录 token、延迟和编译次数。
 - 多文件依赖目前采用完整文件 fallback 与显式本地文件清单，不承诺任意项目的程序切片。
     - 当前已覆盖 provider 的协议、重定向、响应边界和日志脱敏，也为候选编译提供静态元编程阻断与最小化环境；这仍不是通用操作系统级沙箱。项目源码、imports、依赖及自定义 tactic 必须被视为可信输入，不应在本机运行任意不受信任 Lean 项目。
-- 现有 TRACER A/B/C pilot 已完成正式复核；它与待运行的 AxProverBase Experience baseline / CapsuleFeedback 配对实验是两套实验，不能互相替代。
-- Part 1/2 正式配对数据和严格配对报告均已产生，可进入 Part 3 的统计比较与正式报告阶段；已选择性导出 5 个正式结果文件及 SHA-256 清单到 `results/handoff/part12-live-20260828/`。
+- 现有 TRACER A/B/C pilot 已完成正式复核；它与 AxProverBase Experience、Raw、Capsule 三套结果属于不同实验，不能直接合并为通用能力结论。
+- Part 3 只有一次单模型、单批次运行，9 个首轮失败题才是主要比较子集；结果是描述性 pilot，不做显著性检验。Experience 结果只作资源参考，Raw/Capsule 的首轮候选生成成本也未计入后续修复成本。
+- Part 1/2/3 正式配对数据和严格配对报告均已产生；Part 1/2 交接包位于 `results/handoff/part12-live-20260828/`，Part 3 交接包位于 `results/handoff/part3-minimal/`，均需显式 force-add 才会进入 Git。

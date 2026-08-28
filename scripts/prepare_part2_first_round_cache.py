@@ -46,18 +46,25 @@ def prepare_cache(rows: list[dict]) -> dict[str, dict]:
             raise ValueError(
                 f"row {row_no}: first_round_candidate must contain the complete declaration"
             )
-        imports = row.get("first_round_imports") or []
-        opens = row.get("first_round_opens") or []
+        reasoning = row.get("first_round_reasoning", "")
+        imports = row.get("first_round_imports", [])
+        opens = row.get("first_round_opens", [])
+        if not isinstance(reasoning, str):
+            raise ValueError(f"row {row_no}: first_round_reasoning must be a string")
         if isinstance(imports, str) or not isinstance(imports, list):
             raise ValueError(f"row {row_no}: first_round_imports must be a list")
         if isinstance(opens, str) or not isinstance(opens, list):
             raise ValueError(f"row {row_no}: first_round_opens must be a list")
+        if not all(isinstance(item, str) for item in imports):
+            raise ValueError(f"row {row_no}: first_round_imports entries must be strings")
+        if not all(isinstance(item, str) for item in opens):
+            raise ValueError(f"row {row_no}: first_round_opens entries must be strings")
         target = _canonical_target(module, theorem)
         payload = {
             "code": candidate,
-            "reasoning": str(row.get("first_round_reasoning") or "Reused Part 1 candidate."),
-            "imports": imports,
-            "opens": opens,
+            "reasoning": reasoning,
+            "imports": list(imports),
+            "opens": list(opens),
         }
         previous = cache.get(target)
         if previous is not None and previous != payload:

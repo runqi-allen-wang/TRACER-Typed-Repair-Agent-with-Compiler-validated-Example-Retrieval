@@ -63,6 +63,21 @@ class DocumentationConsistencyTest(unittest.TestCase):
         self.assertIn("MemorylessProcessor", capsule)
         self.assertIn("06dfadc9ab439755af5efcfe0add95bfef2733c7", dependency)
 
+    def test_part3_documents_record_the_strict_raw_capsule_pilot(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        document = (ROOT / "docs" / "part3_raw_capsule_experiment.md").read_text(
+            encoding="utf-8"
+        )
+        results = (ROOT / "results" / "README.md").read_text(encoding="utf-8")
+        self.assertIn("docs/part3_raw_capsule_experiment.md", readme)
+        self.assertIn("MemorylessProcessor", document)
+        self.assertIn("BuildFailedFeedback", document)
+        self.assertIn("CapsuleFeedback", document)
+        self.assertIn("4eb33c8ccd0ff058b461cd763cc406509129743f", document)
+        self.assertIn("378486", document)
+        self.assertIn("429786", document)
+        self.assertIn("results/handoff/part3-minimal", results)
+
     def test_methodology_documents_candidate_normalization(self):
         methodology = (ROOT / "docs" / "methodology.md").read_text(encoding="utf-8")
         schema = (ROOT / "docs" / "jsonl_schema.md").read_text(encoding="utf-8")

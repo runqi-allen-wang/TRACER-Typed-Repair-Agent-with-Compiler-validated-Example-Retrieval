@@ -25,10 +25,12 @@ except ModuleNotFoundError:
 
 try:
     from compiler import CANDIDATE_POLICY, full_theorem_safety_violation
+    from diagnostics import classify_diagnostic_text
 except ModuleNotFoundError as exc:
     if exc.name != "compiler":
         raise
     from src.compiler import CANDIDATE_POLICY, full_theorem_safety_violation
+    from src.diagnostics import classify_diagnostic_text
 
 from .feedback import (
     AXPROVERBASE_COMMIT,
@@ -38,6 +40,7 @@ from .feedback import (
     YXAI_STORE_RESPONSES,
     YXAI_WIRE_API,
     CapsuleFeedback,
+    stable_feedback_fingerprint,
 )
 
 
@@ -45,6 +48,9 @@ AX_INTEGRATION_VERSION = "ax-capsule-feedback.v0.2"
 DEFAULT_MAX_THEOREM_SESSIONS = 128
 YXAI_MAX_INPUT_TOKENS = 65536
 _PATCH_MARKER = "__leancapsule_part2_installed__"
+_PATCH_MODE_ATTR = "__leancapsule_feedback_mode__"
+_PATCH_OPTIONS_ATTR = "__leancapsule_feedback_options__"
+FEEDBACK_MODES = frozenset({"raw", "capsule"})
 
 
 def _read(value: object, name: str, default: object = None) -> object:
@@ -171,6 +177,14 @@ def enforce_ax_part2_config(config: object) -> object:
     return config
 
 
+def _validate_feedback_mode(feedback_mode: str) -> str:
+    mode = str(feedback_mode or "").strip().lower()
+    if mode not in FEEDBACK_MODES:
+        choices = ", ".join(sorted(FEEDBACK_MODES))
+        raise ValueError(f"unsupported Ax feedback mode {feedback_mode!r}; choose {choices}")
+    return mode
+
+
 class CapsuleFeedbackSessions:
     """Bounded, theorem-keyed CapsuleFeedback sessions with optional persistence."""
 
@@ -245,6 +259,52 @@ class CapsuleFeedbackSessions:
         return len(self._sessions)
 
 
+class RawFeedbackTracker:
+    """Track Raw diagnostics for telemetry without changing Ax feedback."""
+
+    def __init__(self) -> None:
+        self._counts: dict[str, dict[str, int]] = {}
+        self._last: dict[str, str] = {}
+        self._consecutive: dict[str, int] = {}
+
+    def observe(self, theorem_key: str, feedback: object, *, round_no: int) -> dict[str, Any]:
+        feedback_type = _feedback_type(feedback)
+        goal_state = str(_read(feedback, "goal_state_at_sorries", "") or "")
+        if feedback_type == "sorries_goal_state":
+            diagnostic = goal_state
+            category = "unsolved_goals"
+        else:
+            diagnostic = str(_read(feedback, "error_output", "") or "")
+            category = classify_diagnostic_text(diagnostic)
+        fingerprint = stable_feedback_fingerprint(category, diagnostic, goal_state)
+        counts = self._counts.setdefault(theorem_key, {})
+        repeat_count = counts.get(fingerprint, 0) + 1
+        counts[fingerprint] = repeat_count
+        previous = self._last.get(theorem_key)
+        if previous is None:
+            drift_kind = "initial"
+        elif previous == fingerprint:
+            drift_kind = "none"
+        else:
+            drift_kind = "changed"
+        consecutive = 1
+        if previous == fingerprint:
+            previous_consecutive = self._consecutive.get(theorem_key, 0)
+            consecutive = previous_consecutive + 1
+        self._consecutive[theorem_key] = consecutive
+        self._last[theorem_key] = fingerprint
+        return {
+            "input_feedback_type": feedback_type,
+            "category": category,
+            "fingerprint": fingerprint,
+            "repeat_count": repeat_count,
+            "consecutive_repeat_count": consecutive,
+            "drift_kind": drift_kind,
+            "diagnostic_drift": drift_kind == "changed",
+            "diagnostic_chars": min(len(diagnostic), 32768),
+        }
+
+
 class JsonlTelemetry:
     """Append redacted Part 2 telemetry as one compact JSON object per event."""
 
@@ -303,17 +363,24 @@ class FirstRoundCandidateCache:
             raise ValueError(f"empty first-round candidate for {theorem_key!r}")
         if len(code) > 2_000_000:
             raise ValueError(f"first-round candidate is too large for {theorem_key!r}")
+        reasoning = payload.get("reasoning", "Reused paired first-round candidate.")
         imports = payload.get("imports", [])
         opens = payload.get("opens", [])
+        if not isinstance(reasoning, str):
+            raise ValueError(f"first-round reasoning must be a string for {theorem_key!r}")
         if isinstance(imports, str) or not isinstance(imports, list):
             raise ValueError(f"first-round imports must be a list for {theorem_key!r}")
         if isinstance(opens, str) or not isinstance(opens, list):
             raise ValueError(f"first-round opens must be a list for {theorem_key!r}")
+        if not all(isinstance(item, str) for item in imports):
+            raise ValueError(f"first-round imports entries must be strings for {theorem_key!r}")
+        if not all(isinstance(item, str) for item in opens):
+            raise ValueError(f"first-round opens entries must be strings for {theorem_key!r}")
         return {
             "code": code,
-            "reasoning": str(payload.get("reasoning") or "Reused paired first-round candidate."),
-            "imports": [str(item) for item in imports],
-            "opens": [str(item) for item in opens],
+            "reasoning": reasoning,
+            "imports": list(imports),
+            "opens": list(opens),
         }
 
 
@@ -359,6 +426,7 @@ def _capsule_event(
 
     return {
         "integration_schema_version": AX_INTEGRATION_VERSION,
+        "feedback_mode": "capsule",
         "capsule_schema_version": payload["schema_version"],
         "axproverbase_commit": AXPROVERBASE_COMMIT,
         "model": AXPROVER_YXAI_MODEL,
@@ -389,20 +457,65 @@ def _capsule_event(
     }
 
 
+def _raw_event(
+    *,
+    theorem_key: str,
+    round_no: int,
+    payload: Mapping[str, Any],
+    builder_elapsed_ms: float,
+) -> dict[str, Any]:
+    """Record Raw feedback without changing the Ax feedback object."""
+
+    import hashlib
+
+    return {
+        "integration_schema_version": AX_INTEGRATION_VERSION,
+        "feedback_mode": "raw",
+        "axproverbase_commit": AXPROVERBASE_COMMIT,
+        "model": AXPROVER_YXAI_MODEL,
+        "base_url": YXAI_BASE_URL,
+        "wire_api": YXAI_WIRE_API,
+        "use_responses_api": True,
+        "store": YXAI_STORE_RESPONSES,
+        "reasoning_effort": YXAI_REASONING_EFFORT,
+        "candidate_policy": dict(CANDIDATE_POLICY),
+        "theorem_key_sha256": hashlib.sha256(theorem_key.encode("utf-8")).hexdigest(),
+        "theorem_name": theorem_key.rsplit(":", 1)[-1][:160],
+        "round": round_no,
+        "input_feedback_type": payload["input_feedback_type"],
+        "category": payload["category"],
+        "fingerprint": payload["fingerprint"],
+        "repeat_count": payload["repeat_count"],
+        "consecutive_repeat_count": payload["consecutive_repeat_count"],
+        "drift_kind": payload["drift_kind"],
+        "diagnostic_drift": payload["diagnostic_drift"],
+        "diagnostic_chars": payload["diagnostic_chars"],
+        "builder_elapsed_ms": round(builder_elapsed_ms, 3),
+        "builder_result_reused": False,
+        "capsule_compiler_calls": 0,
+        "capsule_llm_calls": 0,
+        "memory_llm_calls": 0,
+        "memory_processor": "MemorylessProcessor",
+    }
+
+
 def install_axproverbase_capsule_feedback(
     *,
     agent_class: type | None = None,
     build_failed_class: type | None = None,
     proposal_class: type | None = None,
+    feedback_mode: str = "capsule",
     telemetry_path: str | Path | None = None,
     state_dir: str | Path | None = None,
     first_round_cache_path: str | Path | None = None,
 ) -> type:
-    """Install the Part 2 wrapper before Ax constructs ``ProverAgent``.
+    """Install the Raw/Capsule wrapper before Ax constructs ``ProverAgent``.
 
     Optional class injection keeps the integration testable without importing
     Ax's heavy runtime.  Production callers should omit it.
     """
+
+    feedback_mode = _validate_feedback_mode(feedback_mode)
 
     if agent_class is None or build_failed_class is None or proposal_class is None:
         try:
@@ -416,6 +529,14 @@ def install_axproverbase_capsule_feedback(
         build_failed_class = build_failed_class or BuildFailedFeedback
         proposal_class = proposal_class or ProposalMessage
 
+    options = {
+        "feedback_mode": feedback_mode,
+        "telemetry_path": telemetry_path,
+        "state_dir": state_dir,
+        "first_round_cache_path": first_round_cache_path,
+    }
+    setattr(agent_class, _PATCH_OPTIONS_ATTR, options)
+    setattr(agent_class, _PATCH_MODE_ATTR, feedback_mode)
     if getattr(agent_class, _PATCH_MARKER, False):
         return agent_class
 
@@ -425,12 +546,6 @@ def install_axproverbase_capsule_feedback(
     original_proposer = getattr(agent_class, "_proposer_node", None)
     original_reviewer = getattr(agent_class, "_reviewer_node", None)
     original_chat = getattr(agent_class, "chat", None)
-    configured_telemetry_path = telemetry_path or os.environ.get("CAPSULE_FEEDBACK_METRICS")
-    configured_state_dir = state_dir or os.environ.get("CAPSULE_FEEDBACK_STATE_DIR")
-    configured_first_round_cache = first_round_cache_path or os.environ.get(
-        "CAPSULE_FIRST_ROUND_CACHE"
-    )
-
     def reject_unsafe_proposal(
         self: object,
         state: object,
@@ -467,11 +582,29 @@ def install_axproverbase_capsule_feedback(
     def patched_init(self: object, config: object, runtime: object) -> None:
         enforce_ax_part2_config(config)
         original_init(self, config, runtime)
-        self._capsule_feedback_sessions = CapsuleFeedbackSessions(state_dir=configured_state_dir)
-        self._capsule_feedback_telemetry = JsonlTelemetry(configured_telemetry_path)
+        active_options = getattr(type(self), _PATCH_OPTIONS_ATTR, {})
+        active_mode = _validate_feedback_mode(active_options.get("feedback_mode", "capsule"))
+        telemetry_value = active_options.get("telemetry_path") or os.environ.get(
+            "AX_FEEDBACK_METRICS", os.environ.get("CAPSULE_FEEDBACK_METRICS")
+        )
+        state_value = active_options.get("state_dir") or os.environ.get(
+            "AX_FEEDBACK_STATE_DIR", os.environ.get("CAPSULE_FEEDBACK_STATE_DIR")
+        )
+        cache_value = active_options.get("first_round_cache_path") or os.environ.get(
+            "CAPSULE_FIRST_ROUND_CACHE"
+        )
+        self._capsule_feedback_mode = active_mode
+        self._capsule_feedback_sessions = (
+            CapsuleFeedbackSessions(state_dir=state_value)
+            if active_mode == "capsule"
+            else None
+        )
+        self._raw_feedback_tracker = RawFeedbackTracker()
+        self._feedback_events: list[dict[str, Any]] = []
+        self._capsule_feedback_telemetry = JsonlTelemetry(telemetry_value)
         self._capsule_first_round_cache = (
-            FirstRoundCandidateCache(configured_first_round_cache)
-            if configured_first_round_cache
+            FirstRoundCandidateCache(cache_value)
+            if cache_value
             else None
         )
         self._capsule_node_counts = {
@@ -533,6 +666,25 @@ def install_axproverbase_capsule_feedback(
             return result
         theorem_key = _theorem_key(state)
         current_round = _round_no(state)
+
+        if getattr(self, "_capsule_feedback_mode", "capsule") == "raw":
+            for feedback in messages:
+                feedback_type = _feedback_type(feedback)
+                if feedback_type not in {"build_failed", "sorries_goal_state"}:
+                    continue
+                payload = self._raw_feedback_tracker.observe(
+                    theorem_key, feedback, round_no=current_round
+                )
+                event = _raw_event(
+                    theorem_key=theorem_key,
+                    round_no=current_round,
+                    payload=payload,
+                    builder_elapsed_ms=builder_elapsed_ms,
+                )
+                self._feedback_events.append(dict(event))
+                self._capsule_feedback_telemetry.append(event)
+            return result
+
         transformed = []
         changed = False
         for feedback in messages:
@@ -546,16 +698,16 @@ def install_axproverbase_capsule_feedback(
             )
             capsule_elapsed_ms = (time.perf_counter() - capsule_started) * 1000
             transformed.append(build_failed_class(error_output=payload["prompt_feedback"]))
-            self._capsule_feedback_telemetry.append(
-                _capsule_event(
-                    theorem_key=theorem_key,
-                    round_no=current_round,
-                    input_feedback_type=feedback_type,
-                    payload=payload,
-                    builder_elapsed_ms=builder_elapsed_ms,
-                    capsule_elapsed_ms=capsule_elapsed_ms,
-                )
+            event = _capsule_event(
+                theorem_key=theorem_key,
+                round_no=current_round,
+                input_feedback_type=feedback_type,
+                payload=payload,
+                builder_elapsed_ms=builder_elapsed_ms,
+                capsule_elapsed_ms=capsule_elapsed_ms,
             )
+            self._feedback_events.append(dict(event))
+            self._capsule_feedback_telemetry.append(event)
             changed = True
         if not changed:
             return result
@@ -588,6 +740,7 @@ def install_axproverbase_capsule_feedback(
                 {
                     "integration_schema_version": AX_INTEGRATION_VERSION,
                     "event": "shared_first_round_candidate",
+                    "feedback_mode": getattr(self, "_capsule_feedback_mode", "capsule"),
                     "theorem_key_sha256": hashlib.sha256(
                         theorem_key.encode("utf-8")
                     ).hexdigest(),
@@ -626,6 +779,7 @@ def install_axproverbase_capsule_feedback(
             {
                 "integration_schema_version": AX_INTEGRATION_VERSION,
                 "event": "run_summary",
+                "feedback_mode": getattr(self, "_capsule_feedback_mode", "capsule"),
                 "axproverbase_commit": AXPROVERBASE_COMMIT,
                 "model": AXPROVER_YXAI_MODEL,
                 "base_url": YXAI_BASE_URL,
@@ -670,9 +824,11 @@ def install_axproverbase_capsule_feedback(
 __all__ = [
     "AX_INTEGRATION_VERSION",
     "CapsuleFeedbackSessions",
+    "FEEDBACK_MODES",
     "YXAI_MAX_INPUT_TOKENS",
     "FirstRoundCandidateCache",
     "JsonlTelemetry",
+    "RawFeedbackTracker",
     "enforce_ax_part2_config",
     "install_axproverbase_capsule_feedback",
 ]
