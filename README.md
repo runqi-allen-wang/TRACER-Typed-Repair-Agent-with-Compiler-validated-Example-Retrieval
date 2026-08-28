@@ -334,7 +334,7 @@ Keep these checks distinct:
 | Understand condition controls and validity constraints | [Methodology](docs/methodology.md) |
 | Look up per-round record fields | [JSONL format](docs/jsonl_schema.md) |
 | Create publicly shareable failure artifacts | [Artifact format](docs/CAPSULE_FORMAT.md) and [case contribution guide](docs/CONTRIBUTING_CAPSULES.md) |
-| Run or inspect the AxProverBase Part 1 + Part 2 experiment | [Part 1 guide](baseline/README.md), [Part 2 design](docs/part2_capsule_feedback.md), and [result handoff](results/handoff/part12-live-20260828-corrected/README.md) |
+| Run or inspect the AxProverBase Part 1 + Part 2 experiment | [Part 1 guide](baseline/README.md), [Part 2 design](docs/part2_capsule_feedback.md), [Part 3 handoff checklist](docs/part3_experiment_handoff.md), and [result handoff](results/handoff/part12-live-20260828-corrected/README.md) |
 | Inspect the D01 pre-compilation security gate | [Type D security regression](docs/security_type_d.md) |
 | Inspect the 12-core / 4-challenge clean-replay experiment | [Capsule feasibility report](docs/CAPSULE_FEASIBILITY.md) |
 | Inspect published experiments and proofs | [Pilot release](published/pilot-20260826T122354Z-d628742d) |

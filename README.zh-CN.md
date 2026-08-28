@@ -332,7 +332,7 @@ python -m leancapsule gallery capsules --out capsules/index.json
 | 理解条件控制和有效性约束 | [方法设计](docs/methodology.md) |
 | 查阅逐轮记录字段 | [JSONL 格式](docs/jsonl_schema.md) |
 | 创建可公开分享的失败工件 | [工件格式](docs/CAPSULE_FORMAT.md)与[案例贡献指南](docs/CONTRIBUTING_CAPSULES.md) |
-| 运行或检查 AxProverBase Part 1 + Part 2 实验 | [Part 1 指南](baseline/README.md)、[Part 2 设计](docs/part2_capsule_feedback.md)与[结果交接包](results/handoff/part12-live-20260828-corrected/README.md) |
+| 运行或检查 AxProverBase Part 1 + Part 2 实验 | [Part 1 指南](baseline/README.md)、[Part 2 设计](docs/part2_capsule_feedback.md)、[Part 3 交接清单](docs/part3_experiment_handoff.md)与[结果交接包](results/handoff/part12-live-20260828-corrected/README.md) |
 | 查看 D01 编译前安全门禁 | [D 类安全回归](docs/security_type_d.md) |
 | 查看 12 core + 4 challenge 干净回放实验 | [Capsule 可行性报告](docs/CAPSULE_FEASIBILITY.md) |
 | 查看已发布实验与证明 | [Pilot 交付目录](published/pilot-20260826T122354Z-d628742d) |
