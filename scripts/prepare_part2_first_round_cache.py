@@ -11,6 +11,19 @@ from pathlib import Path
 _DECLARATION_RE = re.compile(r"\b(?:theorem|lemma|def|instance|example|opaque|abbrev)\b")
 
 
+def _canonical_target(module: str, theorem: str) -> str:
+    module = module.strip().replace("\\", "/")
+    while module.startswith("./"):
+        module = module[2:]
+    if module.endswith(".lean"):
+        module = module[: -len(".lean")]
+    module = module.replace("/", ".").strip(".")
+    theorem = theorem.strip()
+    if not module or not theorem:
+        raise ValueError("module/theorem is required")
+    return f"{module}:{theorem}"
+
+
 def prepare_cache(rows: list[dict]) -> dict[str, dict]:
     cache: dict[str, dict] = {}
     for row_no, row in enumerate(rows, start=1):
@@ -39,7 +52,7 @@ def prepare_cache(rows: list[dict]) -> dict[str, dict]:
             raise ValueError(f"row {row_no}: first_round_imports must be a list")
         if isinstance(opens, str) or not isinstance(opens, list):
             raise ValueError(f"row {row_no}: first_round_opens must be a list")
-        target = f"{module}:{theorem}"
+        target = _canonical_target(module, theorem)
         payload = {
             "code": candidate,
             "reasoning": str(row.get("first_round_reasoning") or "Reused Part 1 candidate."),

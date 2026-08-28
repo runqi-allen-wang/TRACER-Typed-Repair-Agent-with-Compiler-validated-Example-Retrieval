@@ -22,6 +22,38 @@ def load_manifest(p: Path) -> list[dict]:
     return json.loads(p.read_text(encoding="utf-8"))
 
 
+def completed_task_ids(path: Path) -> set[str]:
+    """Read and validate task IDs already flushed by an interrupted batch."""
+
+    if not path.exists() or path.stat().st_size == 0:
+        return set()
+    completed: set[str] = set()
+    for line_number, raw_line in enumerate(
+        path.read_text(encoding="utf-8").splitlines(), 1
+    ):
+        if not raw_line.strip():
+            continue
+        try:
+            record = json.loads(raw_line)
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                f"existing output is not valid JSONL at line {line_number}: {exc.msg}"
+            ) from exc
+        if not isinstance(record, dict):
+            raise ValueError(
+                f"existing output line {line_number} must be a JSON object"
+            )
+        task_id = str(record.get("task_id", "")).strip()
+        if not task_id:
+            raise ValueError(
+                f"existing output line {line_number} has no non-empty task_id"
+            )
+        if task_id in completed:
+            raise ValueError(f"existing output contains duplicate task_id {task_id!r}")
+        completed.add(task_id)
+    return completed
+
+
 def main() -> int:
     if len(sys.argv) < 5:
         print("usage: run_batch.py <manifest> <folder> <config> <out.jsonl> [limit] [tier]")
@@ -33,10 +65,17 @@ def main() -> int:
     limit = int(sys.argv[5]) if len(sys.argv) > 5 else 5
     tier = sys.argv[6] if len(sys.argv) > 6 else "core"
 
-    items = [x for x in load_manifest(manifest) if x.get("tier") == tier][:limit]
+    selected = [x for x in load_manifest(manifest) if x.get("tier") == tier][:limit]
+    try:
+        completed = completed_task_ids(out)
+    except ValueError as exc:
+        print(f"refusing to resume: {exc}")
+        return 2
+    items = [x for x in selected if str(x.get("id", "")) not in completed]
     price = {"input_usd_per_1k": PRICE_IN, "output_usd_per_1k": PRICE_OUT}
     n = len(items)
-    print(f"batch: tier={tier} count={n}")
+    skipped = len(selected) - n
+    print(f"batch: tier={tier} count={n} skipped={skipped}")
     out.parent.mkdir(parents=True, exist_ok=True)
     failures = 0
 

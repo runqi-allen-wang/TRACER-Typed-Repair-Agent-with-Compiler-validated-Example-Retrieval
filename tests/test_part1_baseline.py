@@ -8,7 +8,12 @@ from types import SimpleNamespace
 import yaml
 
 from baseline.run_baseline import _parse_axp_output, _write_axp_config, load_config
-from baseline.run_api import _install_safety_gate, extract_record
+from baseline.run_batch import completed_task_ids
+from baseline.run_api import (
+    _contract_from_config,
+    _install_safety_gate,
+    extract_record,
+)
 from scripts.prepare_part2_first_round_cache import prepare_cache
 
 
@@ -36,10 +41,40 @@ class Part1BaselineIntegrationTest(unittest.TestCase):
         shared = load_config(ROOT / "configs" / "axprover_yxai_gpt56_sol.yaml")
         self.assertEqual(shared["prover"]["max_iterations"], 4)
         self.assertEqual(
+            shared["prover"]["prover_llm"]["retry_config"]["stop_after_attempt"],
+            3,
+        )
+        self.assertEqual(
             shared["prover"]["proposer_tools"],
             {"search_lean": None, "search_web": None},
         )
         self.assertEqual(shared["runtime"]["max_tool_calling_iterations"], 1)
+
+    def test_part1_rejects_inherited_provider_specific_keys(self):
+        provider = {
+            "base_url": "https://yxai.chat/v1",
+            "use_responses_api": True,
+            "store": False,
+            "reasoning": {"effort": "high"},
+            "output_version": "responses/v1",
+            "max_tokens": None,
+            "profile": {"max_input_tokens": 65536},
+            "betas": ["claude-only"],
+            "thinking": {"type": "enabled"},
+        }
+        config = SimpleNamespace(
+            prover=SimpleNamespace(
+                prover_llm=SimpleNamespace(
+                    model="openai:gpt-5.6-sol", provider_config=provider
+                ),
+                memory_config=SimpleNamespace(class_name="ExperienceProcessor"),
+                summarize_output=SimpleNamespace(enabled=False),
+                max_iterations=4,
+            ),
+            runtime=SimpleNamespace(max_tool_calling_iterations=1),
+        )
+        with self.assertRaisesRegex(ValueError, "unsupported keys: betas, thinking"):
+            _contract_from_config(config)
 
     def test_generated_ax_configs_freeze_memory_and_summary_modes(self):
         config = load_config(BASELINE / "config.yaml")
@@ -160,9 +195,15 @@ class Part1BaselineIntegrationTest(unittest.TestCase):
         self.assertEqual(record["candidate_policy"]["version"], "tracer-candidate-v2")
         self.assertIsNone(record["estimated_cost_usd"])
         cache = prepare_cache([record])
-        self.assertEqual(cache["FATEM/1.lean:target"]["code"], proposal.code)
+        self.assertEqual(cache["FATEM.1:target"]["code"], proposal.code)
 
     def test_part1_safety_gate_rejects_d01_before_builder(self):
+        class FakeBuildFailedFeedback:
+            feedback_type = "build_failed"
+
+            def __init__(self, error_output):
+                self.error_output = error_output
+
         class FakeAgent:
             builder_calls = 0
 
@@ -170,7 +211,7 @@ class Part1BaselineIntegrationTest(unittest.TestCase):
                 self.builder_calls += 1
                 return {"messages": []}
 
-        _install_safety_gate(FakeAgent)
+        _install_safety_gate(FakeAgent, FakeBuildFailedFeedback)
         proposal = SimpleNamespace(
             code=(
                 "unsafe inductive Bad\n"
@@ -188,9 +229,32 @@ class Part1BaselineIntegrationTest(unittest.TestCase):
             last_proposal=proposal,
         )
         agent = FakeAgent()
-        with self.assertRaisesRegex(ValueError, "rejected before Lean build"):
-            asyncio.run(agent._builder_node(state))
+        result = asyncio.run(agent._builder_node(state))
         self.assertEqual(agent.builder_calls, 0)
+        self.assertEqual(result["messages"][0].feedback_type, "build_failed")
+        self.assertIn("rejected before Lean build", result["messages"][0].error_output)
+
+    def test_batch_resume_validates_and_skips_completed_task_ids(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "part1.jsonl"
+            output.write_text(
+                json.dumps({"task_id": "fate01"})
+                + "\n"
+                + json.dumps({"task_id": "fate02"})
+                + "\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(completed_task_ids(output), {"fate01", "fate02"})
+
+            output.write_text(
+                json.dumps({"task_id": "fate01"})
+                + "\n"
+                + json.dumps({"task_id": "fate01"})
+                + "\n",
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "duplicate task_id"):
+                completed_task_ids(output)
 
 
 if __name__ == "__main__":

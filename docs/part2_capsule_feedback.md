@@ -94,7 +94,15 @@ python -m leancapsule feedback `
 python -m pip install -r .\requirements-axprover-part2.txt
 ```
 
-安全设置 `yxai` Key，并指定逐题状态和遥测目录：
+首轮缓存由 Part 1 的逐题 JSONL 生成：
+
+```powershell
+python .\scripts\prepare_part2_first_round_cache.py `
+    --baseline .\runs\baseline.jsonl `
+    --out .\results\part2-first-round.json
+```
+
+安全设置 `yxai` Key，并指定逐题状态、遥测目录和配对结果输出：
 
 ```powershell
 $secureKey = Read-Host "请输入 yxai API Key（输入不会显示）" -AsSecureString
@@ -103,9 +111,11 @@ $env:CAPSULE_FEEDBACK_STATE_DIR = (Join-Path $PWD "results\part2-state")
 $env:CAPSULE_FEEDBACK_METRICS = (Join-Path $PWD "results\part2-metrics.jsonl")
 $env:CAPSULE_FIRST_ROUND_CACHE = (Join-Path $PWD "results\part2-first-round.json")
 try {
-    python -m leancapsule.ax_runner prove "Module.Path:theorem_name" `
+    python .\baseline\run_part2.py `
+        --baseline .\runs\baseline.jsonl `
         --folder "C:\path\to\lean-project" `
-        --skip-build
+        --config .\configs\axprover_part2_capsule.yaml `
+        --out .\runs\capsule.jsonl
 }
 finally {
     Remove-Item Env:OPENAI_API_KEY -ErrorAction SilentlyContinue
@@ -113,17 +123,11 @@ finally {
 }
 ```
 
-首轮缓存由 Part 1 的 metrics 生成：
-
-```powershell
-python .\scripts\prepare_part2_first_round_cache.py `
-    --baseline .\runs\baseline.jsonl `
-    --out .\results\part2-first-round.json
-```
-
 设置 `CAPSULE_FIRST_ROUND_CACHE` 后，第一轮会直接构造 Ax `ProposalMessage`，不会调用 Proposer LLM；如果当前 theorem 没有精确缓存项，运行会立即失败，避免两组首轮候选失配。缓存值必须是 Ax 所需的完整更新后 theorem，而不只是 `by ...` proof body。
 
-`ax_runner` 会自动追加 `configs/axprover_part2_capsule.yaml`，并在构造 Agent 前再次强制校验 `gpt-5.6-sol`、Responses API、`store=false`、`reasoning.effort=high`、Memoryless 和关闭 summary，避免其他配置意外覆盖实验条件。配置还把实验输入预算显式固定为 `max_input_tokens=65536`，避免自定义模型别名没有 LangChain profile 时得到空值；该数字是实验预算，不宣称中转站模型的官方上下文上限。
+`baseline/run_part2.py` 在任何 Lean 或 API 调用前检查全部 task ID、target、首轮候选和缓存的一致性，然后保留完整 Ax 状态并输出配对门禁所需的逐题 JSONL。冒烟测试可附加 `--limit 1`；正式实验不要加该参数。
+
+该 runner 会安装 CapsuleFeedback 接入，并在构造 Agent 前再次强制校验 `gpt-5.6-sol`、Responses API、`store=false`、`reasoning.effort=high`、Memoryless 和关闭 summary，避免其他配置意外覆盖实验条件。配置还把实验输入预算显式固定为 `max_input_tokens=65536`，避免自定义模型别名没有 LangChain profile 时得到空值；该数字是实验预算，不宣称中转站模型的官方上下文上限。`python -m leancapsule.ax_runner` 仍可用于交互式单题调试，但它的上游 `-o` 只包含 `success/error/summary`，不能代替正式配对 JSONL。
 
 配对 smoke 完成后执行：
 

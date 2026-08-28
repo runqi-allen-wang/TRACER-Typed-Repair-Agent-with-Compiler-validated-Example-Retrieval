@@ -267,7 +267,7 @@ python .\scripts\prepare_part2_first_round_cache.py `
     --out .\results\part2-first-round.json
 ```
 
-安全设置 Key 并运行一个 theorem：
+安全设置 Key 并运行配对 Part 2（冒烟时可在命令末尾增加 `--limit 1`）：
 
 ```powershell
 $secureKey = Read-Host "请输入 yxai API Key（输入不会显示）" -AsSecureString
@@ -276,9 +276,11 @@ $env:CAPSULE_FIRST_ROUND_CACHE = (Join-Path $PWD "results\part2-first-round.json
 $env:CAPSULE_FEEDBACK_STATE_DIR = (Join-Path $PWD "results\part2-state")
 $env:CAPSULE_FEEDBACK_METRICS = (Join-Path $PWD "results\part2-metrics.jsonl")
 try {
-    python -m leancapsule.ax_runner prove "Module.Path:theorem_name" `
+    python .\baseline\run_part2.py `
+        --baseline .\runs\baseline.jsonl `
         --folder "C:\path\to\lean-project" `
-        --skip-build
+        --config .\configs\axprover_part2_capsule.yaml `
+        --out .\runs\capsule.jsonl
 }
 finally {
     Remove-Item Env:OPENAI_API_KEY -ErrorAction SilentlyContinue
@@ -301,7 +303,7 @@ Part 2 实现本身已经完成，仍需外部输入：
 
 - Part 1 runner 必须输出完整的首轮 theorem，而不是只有 proof body；
 - Part 1 需要采用 `configs/axprover_part1_experience.yaml`；
-- Part 1 与 Part 2 结果需要包含配对门禁要求的 provider、预算和 calls 字段；
+- Part 1 与 Part 2 结果需要包含配对门禁要求的 provider、预算和 calls 字段；`baseline/run_part2.py` 已负责导出 Part 2 逐题记录；
 - 真实 `yxai` 调用需要用户在进程环境中配置 `OPENAI_API_KEY`；`auth.json` 不得进入仓库；
 - 真实配对数据产生后，才能进入 Part 3 的通过率、修复率、成本和重复错误比例分析。
 

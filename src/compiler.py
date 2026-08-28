@@ -45,7 +45,8 @@ FULL_DECLARATION_RE = re.compile(
     r"(?m)^(?P<indent>[ \t]*)(?:(?:private|protected|noncomputable|local|scoped)[ \t]+)*"
     r"(?P<kind>theorem|lemma|def|abbrev|instance|structure|class|inductive|coinductive|"
     r"axiom|opaque|example|namespace|section|end|variable|include|omit|open|attribute|"
-    r"set_option)\b(?:[ \t]+(?P<name>[A-Za-z_][A-Za-z0-9_']*))?",
+    r"set_option)\b(?:[ \t]+(?P<name>[A-Za-z_][A-Za-z0-9_']*"
+    r"(?:\.[A-Za-z_][A-Za-z0-9_']*)*))?",
     re.IGNORECASE,
 )
 LEAN_QUALIFIED_NAME_RE = re.compile(
@@ -234,8 +235,9 @@ def full_theorem_safety_violation(
         return "完整 theorem 候选必须且只能包含一个顶层声明"
     if first.group("kind").lower() not in {"theorem", "lemma"}:
         return "完整 theorem 候选必须保持 theorem 或 lemma 声明"
-    expected_short_name = str(expected_name).rsplit(".", 1)[-1]
-    if first.group("name") != expected_short_name:
+    expected_full_name = str(expected_name)
+    expected_short_name = expected_full_name.rsplit(".", 1)[-1]
+    if first.group("name") not in {expected_full_name, expected_short_name}:
         return "完整 theorem 候选修改了目标声明名称"
 
     original_header = _declaration_header(original_source)

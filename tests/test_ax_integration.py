@@ -12,6 +12,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from leancapsule.ax_integration import (  # noqa: E402
     CapsuleFeedbackSessions,
+    FirstRoundCandidateCache,
     enforce_ax_part2_config,
     install_axproverbase_capsule_feedback,
     validate_ax_proposal_safety,
@@ -95,6 +96,27 @@ def make_state(
 
 
 class AxIntegrationTest(unittest.TestCase):
+    def test_first_round_cache_matches_path_and_module_target_spellings(self):
+        with tempfile.TemporaryDirectory() as temp:
+            cache = Path(temp) / "first-round.json"
+            cache.write_text(
+                json.dumps(
+                    {
+                        "FATEM/1.lean:target": {
+                            "code": "theorem target : True := by trivial",
+                            "imports": [],
+                            "opens": [],
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            loaded = FirstRoundCandidateCache(cache)
+            self.assertEqual(
+                loaded.get("FATEM.1:target")["code"],
+                "theorem target : True := by trivial",
+            )
+
     def test_full_theorem_safety_gate_rejects_unsafe_and_statement_changes(self):
         state = make_state("A", FakeBuildSuccessFeedback())
         self.assertIsNone(
@@ -126,6 +148,16 @@ class AxIntegrationTest(unittest.TestCase):
             or "",
         )
 
+    def test_full_theorem_safety_gate_accepts_qualified_declaration_name(self):
+        theorem = "MonoidHom.eq_id_of_card_gcd_eq_one"
+        source = f"theorem {theorem} : True := by trivial"
+        state = make_state(
+            theorem,
+            FakeBuildSuccessFeedback(),
+            original_source=source,
+        )
+        self.assertIsNone(validate_ax_proposal_safety(state, source))
+
     def test_ax_wrapper_rejects_cached_generated_and_builder_unsafe_proposals(self):
         unsafe_source = (
             ROOT / "benchmarks" / "security" / "unsafe_inductive_false.lean"
@@ -156,13 +188,32 @@ class AxIntegrationTest(unittest.TestCase):
                 first_round_cache_path=cache,
             )
             cached_agent = CachedAgent(make_config(), object())
-            with self.assertRaisesRegex(ValueError, "rejected before Lean build"):
-                asyncio.run(
-                    cached_agent._proposer_node(make_state("A", FakeBuildSuccessFeedback(), 0))
-                )
+            cached_state = make_state("A", FakeBuildSuccessFeedback(), 0)
+            proposal_result = asyncio.run(
+                cached_agent._proposer_node(cached_state, {})
+            )
+            cached_state.last_proposal = proposal_result["messages"][0]
+            build_result = asyncio.run(cached_agent._builder_node(cached_state))
+            self.assertEqual(
+                build_result["messages"][0].feedback_type,
+                "build_failed",
+            )
+            self.assertIn(
+                "rejected before Lean build",
+                build_result["messages"][0].error_output,
+            )
             self.assertEqual(cached_agent.original_proposer_calls, 0)
-            rejection = json.loads(metrics.read_text(encoding="utf-8").splitlines()[0])
+            events = [
+                json.loads(line)
+                for line in metrics.read_text(encoding="utf-8").splitlines()
+            ]
+            rejection = next(
+                event
+                for event in events
+                if event["event"] == "unsafe_proposal_rejected"
+            )
             self.assertEqual(rejection["event"], "unsafe_proposal_rejected")
+            self.assertEqual(rejection["stage"], "builder_precompile_gate")
             self.assertTrue(rejection["rejected_before_builder"])
 
         class GeneratedAgent:
@@ -194,8 +245,14 @@ class AxIntegrationTest(unittest.TestCase):
         )
         generated_agent = GeneratedAgent(make_config(), object())
         state = make_state("A", FakeBuildSuccessFeedback())
-        with self.assertRaisesRegex(ValueError, "rejected before Lean build"):
-            asyncio.run(generated_agent._proposer_node(state))
+        proposal_result = asyncio.run(generated_agent._proposer_node(state, {}))
+        state.last_proposal = proposal_result["messages"][0]
+        build_result = asyncio.run(generated_agent._builder_node(state))
+        self.assertEqual(build_result["messages"][0].feedback_type, "build_failed")
+        self.assertIn(
+            "rejected before Lean build", build_result["messages"][0].error_output
+        )
+        self.assertEqual(generated_agent.builder_calls, 0)
 
         malicious = FakeProposalMessage(
             reasoning="unsafe",
@@ -207,8 +264,8 @@ class AxIntegrationTest(unittest.TestCase):
         builder_state = make_state(
             "A", FakeBuildSuccessFeedback(), last_proposal=malicious
         )
-        with self.assertRaisesRegex(ValueError, "rejected before Lean build"):
-            asyncio.run(generated_agent._builder_node(builder_state))
+        build_result = asyncio.run(generated_agent._builder_node(builder_state))
+        self.assertEqual(build_result["messages"][0].feedback_type, "build_failed")
         self.assertEqual(generated_agent.builder_calls, 0)
 
     def test_config_is_frozen_to_yxai_responses_memoryless_and_no_summary(self):
@@ -306,9 +363,11 @@ class AxIntegrationTest(unittest.TestCase):
             )
             success_message = FakeBuildSuccessFeedback()
             success = asyncio.run(agent._builder_node(make_state("A", success_message, 4)))
-            shared = asyncio.run(agent._proposer_node(make_state("A", success_message, 0)))
-            asyncio.run(agent._proposer_node(make_state("A", success_message, 1)))
-            asyncio.run(agent._reviewer_node(make_state("A", success_message, 1)))
+            shared = asyncio.run(
+                agent._proposer_node(make_state("A", success_message, 0), {})
+            )
+            asyncio.run(agent._proposer_node(make_state("A", success_message, 1), {}))
+            asyncio.run(agent._reviewer_node(make_state("A", success_message, 1), {}))
             asyncio.run(agent.chat(make_state("A", success_message, 4)))
 
             self.assertEqual(agent.builder_calls, 5)
@@ -364,7 +423,9 @@ class AxIntegrationTest(unittest.TestCase):
             )
             agent = FakeAgent(make_config(), object())
             with self.assertRaisesRegex(KeyError, "no exact entry"):
-                asyncio.run(agent._proposer_node(make_state("B", FakeBuildSuccessFeedback(), 0)))
+                asyncio.run(
+                    agent._proposer_node(make_state("B", FakeBuildSuccessFeedback(), 0), {})
+                )
 
 
 if __name__ == "__main__":

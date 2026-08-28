@@ -18,6 +18,12 @@ from pathlib import Path
 from typing import Any
 
 try:
+    from langchain_core.runnables import RunnableConfig
+except ModuleNotFoundError:
+    # The core Capsule library remains importable without the optional Ax stack.
+    RunnableConfig = dict[str, Any]  # type: ignore[misc,assignment]
+
+try:
     from compiler import CANDIDATE_POLICY, full_theorem_safety_violation
 except ModuleNotFoundError as exc:
     if exc.name != "compiler":
@@ -77,6 +83,25 @@ def _iteration_count(state: object) -> int:
         return max(0, int(_read(state, "iteration_count", 0)))
     except (TypeError, ValueError):
         return 0
+
+
+def _canonical_ax_target(theorem_key: str) -> str:
+    """Normalize equivalent Lean path and module target spellings."""
+
+    value = str(theorem_key).strip()
+    if ":" not in value:
+        raise ValueError(f"invalid Ax theorem target: {theorem_key!r}")
+    module, theorem = value.rsplit(":", 1)
+    module = module.strip().replace("\\", "/")
+    while module.startswith("./"):
+        module = module[2:]
+    if module.endswith(".lean"):
+        module = module[: -len(".lean")]
+    module = module.replace("/", ".").strip(".")
+    theorem = theorem.strip()
+    if not module or not theorem:
+        raise ValueError(f"invalid Ax theorem target: {theorem_key!r}")
+    return f"{module}:{theorem}"
 
 
 def validate_ax_proposal_safety(
@@ -245,14 +270,23 @@ class FirstRoundCandidateCache:
         loaded = json.loads(self.path.read_text(encoding="utf-8"))
         if not isinstance(loaded, Mapping):
             raise ValueError("first-round candidate cache must be a JSON object")
-        self._candidates = {str(key): value for key, value in loaded.items()}
+        self._candidates: dict[str, object] = {}
+        for key, value in loaded.items():
+            canonical = _canonical_ax_target(str(key))
+            previous = self._candidates.get(canonical)
+            if previous is not None and previous != value:
+                raise ValueError(
+                    f"conflicting first-round candidates for canonical target {canonical!r}"
+                )
+            self._candidates[canonical] = value
 
     def get(self, theorem_key: str) -> dict[str, Any]:
-        if theorem_key not in self._candidates:
+        canonical = _canonical_ax_target(theorem_key)
+        if canonical not in self._candidates:
             raise KeyError(
                 f"first-round candidate cache has no exact entry for {theorem_key!r}"
             )
-        value = self._candidates[theorem_key]
+        value = self._candidates[canonical]
         if isinstance(value, str):
             payload: dict[str, Any] = {"code": value}
         elif isinstance(value, Mapping):
@@ -403,7 +437,7 @@ def install_axproverbase_capsule_feedback(
         proposal: object,
         *,
         stage: str,
-    ) -> None:
+    ) -> str | None:
         code = _read(proposal, "code", "")
         violation = validate_ax_proposal_safety(
             state,
@@ -412,7 +446,7 @@ def install_axproverbase_capsule_feedback(
             opens=_read(proposal, "opens", []),
         )
         if violation is None:
-            return
+            return None
         theorem_key = _theorem_key(state)
         self._capsule_feedback_telemetry.append(
             {
@@ -428,7 +462,7 @@ def install_axproverbase_capsule_feedback(
                 "rejected_before_builder": True,
             }
         )
-        raise ValueError(f"Ax proposal rejected before Lean build: {violation}")
+        return violation
 
     def patched_init(self: object, config: object, runtime: object) -> None:
         enforce_ax_part2_config(config)
@@ -444,6 +478,7 @@ def install_axproverbase_capsule_feedback(
             "proposer": 0,
             "proposer_uncached": 0,
             "shared_first_round": 0,
+            "builder": 0,
             "memory": 0,
             "reviewer": 0,
         }
@@ -473,7 +508,20 @@ def install_axproverbase_capsule_feedback(
     async def patched_builder(self: object, state: object) -> dict:
         last_proposal = _read(state, "last_proposal")
         if last_proposal is not None:
-            reject_unsafe_proposal(self, state, last_proposal, stage="builder_defense_in_depth")
+            violation = reject_unsafe_proposal(
+                self, state, last_proposal, stage="builder_precompile_gate"
+            )
+            if violation is not None:
+                return {
+                    "messages": [
+                        build_failed_class(
+                            error_output=(
+                                "TRACER candidate rejected before Lean build: " + violation
+                            )
+                        )
+                    ]
+                }
+        self._capsule_node_counts["builder"] += 1
         builder_started = time.perf_counter()
         result = await original_builder(self, state)
         builder_elapsed_ms = (time.perf_counter() - builder_started) * 1000
@@ -519,9 +567,10 @@ def install_axproverbase_capsule_feedback(
         self._capsule_node_counts["memory"] += 1
         return await original_memory(self, *args, **kwargs)
 
-    async def counted_proposer(self: object, *args: object, **kwargs: object) -> object:
+    async def counted_proposer(
+        self: object, state: object, config: RunnableConfig
+    ) -> object:
         self._capsule_node_counts["proposer"] += 1
-        state = args[0] if args else kwargs.get("state")
         if self._capsule_first_round_cache is not None and _iteration_count(state) == 0:
             theorem_key = _theorem_key(state)
             candidate = self._capsule_first_round_cache.get(theorem_key)
@@ -533,7 +582,6 @@ def install_axproverbase_capsule_feedback(
                 imports=candidate["imports"],
                 opens=candidate["opens"],
             )
-            reject_unsafe_proposal(self, state, proposal, stage="shared_first_round")
             self._capsule_node_counts["shared_first_round"] += 1
 
             self._capsule_feedback_telemetry.append(
@@ -556,22 +604,19 @@ def install_axproverbase_capsule_feedback(
         previous_role = self._capsule_active_llm_role
         self._capsule_active_llm_role = "proposer"
         try:
-            result = await original_proposer(self, *args, **kwargs)
-            messages = _read(result, "messages", [])
-            if isinstance(messages, list):
-                for message in messages:
-                    if isinstance(message, proposal_class) or _read(message, "type") == "proposal":
-                        reject_unsafe_proposal(self, state, message, stage="generated_proposal")
+            result = await original_proposer(self, state, config)
             return result
         finally:
             self._capsule_active_llm_role = previous_role
 
-    async def counted_reviewer(self: object, *args: object, **kwargs: object) -> object:
+    async def counted_reviewer(
+        self: object, state: object, config: RunnableConfig
+    ) -> object:
         self._capsule_node_counts["reviewer"] += 1
         previous_role = self._capsule_active_llm_role
         self._capsule_active_llm_role = "reviewer"
         try:
-            return await original_reviewer(self, *args, **kwargs)
+            return await original_reviewer(self, state, config)
         finally:
             self._capsule_active_llm_role = previous_role
 

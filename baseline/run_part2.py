@@ -1,8 +1,8 @@
-"""Run one Part 1 AxProverBase target through the Python API.
+"""Run pairing-ready Part 2 CapsuleFeedback experiments through the Ax API.
 
-The pinned Ax CLI only serializes ``success/error/summary``. This runner uses
-``ProverAgentState`` directly so the first full theorem, Ax metrics and LLM
-usage remain available for the Part 1/Part 2 paired experiment.
+The upstream Ax CLI intentionally emits only ``success/error/summary``.  This
+runner keeps the full ``ProverAgentState`` so Part 2 can produce the same
+per-task JSONL contract as Part 1 and pass the strict pairing gate.
 """
 
 from __future__ import annotations
@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import os
 import sys
 import time
 import uuid
@@ -24,7 +25,12 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from compiler import CANDIDATE_POLICY  # noqa: E402
-from leancapsule.ax_integration import validate_ax_proposal_safety  # noqa: E402
+from leancapsule.ax_integration import (  # noqa: E402
+    AX_INTEGRATION_VERSION,
+    FirstRoundCandidateCache,
+    enforce_ax_part2_config,
+    install_axproverbase_capsule_feedback,
+)
 from leancapsule.feedback import (  # noqa: E402
     AXPROVERBASE_COMMIT,
     AXPROVER_YXAI_MODEL,
@@ -35,104 +41,10 @@ from leancapsule.feedback import (  # noqa: E402
 )
 
 
-_USAGE = {"prompt": 0, "completion": 0, "calls": 0}
-_USAGE_PATCH_MARKER = "__tracer_part1_usage_tracking__"
-_SAFETY_PATCH_MARKER = "__tracer_part1_safety_gate__"
-
-
 def _read(value: object, name: str, default: object = None) -> object:
     if isinstance(value, Mapping):
         return value.get(name, default)
     return getattr(value, name, default)
-
-
-def _response_usage(response: object) -> tuple[int, int]:
-    usage = _read(response, "usage_metadata", {})
-    if not isinstance(usage, Mapping) or not usage:
-        metadata = _read(response, "response_metadata", {})
-        usage = metadata.get("token_usage", {}) if isinstance(metadata, Mapping) else {}
-    if not isinstance(usage, Mapping):
-        return 0, 0
-    prompt = int(usage.get("input_tokens", usage.get("prompt_tokens", 0)) or 0)
-    completion = int(usage.get("output_tokens", usage.get("completion_tokens", 0)) or 0)
-    return prompt, completion
-
-
-def _install_usage_tracking() -> None:
-    """Patch the pinned Ax LLM client once, without importing Ax during unit tests."""
-
-    from ax_prover.utils import llm as llm_module
-
-    llm_client = llm_module.LLMClient
-    if getattr(llm_client, _USAGE_PATCH_MARKER, False):
-        return
-    original = llm_client.ainvoke
-
-    async def tracked(self: object, messages: object, **kwargs: object) -> object:
-        response = await original(self, messages, **kwargs)
-        prompt, completion = _response_usage(response)
-        _USAGE["prompt"] += prompt
-        _USAGE["completion"] += completion
-        _USAGE["calls"] += 1
-        return response
-
-    llm_client.ainvoke = tracked
-    setattr(llm_client, _USAGE_PATCH_MARKER, True)
-
-
-def _install_safety_gate(agent_class: type, build_failed_class: type | None = None) -> None:
-    """Reject unsafe full-theorem proposals before Ax invokes Lean."""
-
-    if getattr(agent_class, _SAFETY_PATCH_MARKER, False):
-        return
-    if build_failed_class is None:
-        from ax_prover.models.messages import BuildFailedFeedback
-
-        build_failed_class = BuildFailedFeedback
-    original_builder = agent_class._builder_node
-
-    async def guarded_builder(self: object, state: object) -> dict:
-        proposal = _read(state, "last_proposal")
-        if proposal is not None:
-            violation = validate_ax_proposal_safety(
-                state,
-                _read(proposal, "code", ""),
-                imports=_read(proposal, "imports", []),
-                opens=_read(proposal, "opens", []),
-            )
-            if violation:
-                return {
-                    "messages": [
-                        build_failed_class(
-                            error_output=(
-                                "TRACER candidate rejected before Lean build: " + violation
-                            )
-                        )
-                    ]
-                }
-
-        started = time.perf_counter()
-        try:
-            return await original_builder(self, state)
-        finally:
-            elapsed = (time.perf_counter() - started) * 1000
-            self._tracer_part1_builder_calls = (
-                int(getattr(self, "_tracer_part1_builder_calls", 0)) + 1
-            )
-            self._tracer_part1_builder_elapsed_ms = (
-                float(getattr(self, "_tracer_part1_builder_elapsed_ms", 0.0)) + elapsed
-            )
-
-    agent_class._builder_node = guarded_builder
-    setattr(agent_class, _SAFETY_PATCH_MARKER, True)
-
-
-def _snap_usage() -> dict[str, int]:
-    return dict(_USAGE)
-
-
-def _usage_diff(before: Mapping[str, int], after: Mapping[str, int]) -> dict[str, int]:
-    return {key: int(after[key]) - int(before[key]) for key in before}
 
 
 def _proposal_messages(state: object) -> list[object]:
@@ -140,17 +52,9 @@ def _proposal_messages(state: object) -> list[object]:
     return [message for message in messages if _read(message, "type") == "proposal"]
 
 
-def _reviewer_call_count(state: object) -> int:
-    messages = list(_read(state, "messages", []) or [])
-    return sum(
-        1
-        for message in messages
-        if _read(message, "feedback_type") in {"review_approved", "review_rejected"}
-    )
-
-
 def _contract_from_config(config: object) -> dict[str, Any]:
     prover = _read(config, "prover")
+    enforce_ax_part2_config(prover)
     llm = _read(prover, "prover_llm")
     provider = _read(llm, "provider_config", {})
     reasoning = _read(provider, "reasoning", {})
@@ -181,8 +85,8 @@ def _contract_from_config(config: object) -> dict[str, Any]:
         "memory_processor": str(_read(memory, "class_name", "")),
         "summary_enabled": bool(_read(summary, "enabled", True)),
     }
-    errors: list[str] = []
     provider_contract = contract["provider_config"]
+    errors: list[str] = []
     allowed_provider_keys = {
         "base_url",
         "max_tokens",
@@ -211,56 +115,51 @@ def _contract_from_config(config: object) -> dict[str, Any]:
         errors.append(f"reasoning effort must be {YXAI_REASONING_EFFORT}")
     if provider_contract["output_version"] != "responses/v1":
         errors.append("output_version must be responses/v1")
-    if contract["memory_processor"] != "ExperienceProcessor":
-        errors.append("Part 1 memory must be ExperienceProcessor")
+    if contract["memory_processor"] != "MemorylessProcessor":
+        errors.append("Part 2 memory must be MemorylessProcessor")
     if contract["summary_enabled"]:
         errors.append("final LLM summary must be disabled")
     if contract["budget"]["max_iterations"] <= 0:
         errors.append("max_iterations must be positive")
     if errors:
-        raise ValueError("invalid Part 1 experiment config: " + "; ".join(errors))
+        raise ValueError("invalid Part 2 experiment config: " + "; ".join(errors))
     return contract
 
 
 def extract_record(
     target: str,
     state: object,
-    usage: Mapping[str, int],
-    price: Mapping[str, float | None],
+    prover: object,
     contract: Mapping[str, Any],
     *,
     task_metadata: Mapping[str, Any] | None = None,
     run_elapsed_ms: int = 0,
-    builder_elapsed_ms: int = 0,
-    builder_calls: int = 0,
 ) -> dict[str, Any]:
-    """Extract a pairing-ready Part 1 record from ``ProverAgentState``."""
+    """Extract one pairing-ready Capsule condition record."""
 
     metadata = dict(task_metadata or {})
     proposals = _proposal_messages(state)
     first = proposals[0] if proposals else None
     metrics_obj = _read(state, "metrics")
     metrics = metrics_obj.model_dump() if hasattr(metrics_obj, "model_dump") else {}
-    prompt = int(usage.get("prompt", 0))
-    completion = int(usage.get("completion", 0))
-    total = prompt + completion
-    price_in = price.get("input_usd_per_1k")
-    price_out = price.get("output_usd_per_1k")
-    cost = (
-        (prompt / 1000 * price_in) + (completion / 1000 * price_out)
-        if isinstance(price_in, (int, float)) and isinstance(price_out, (int, float))
-        else None
-    )
-    rounds = int(_read(state, "iteration_count", len(proposals)) or len(proposals))
     state_item = _read(state, "item")
     location = _read(state_item, "location")
     theorem = str(metadata.get("theorem") or _read(location, "name", ""))
     module = str(metadata.get("module") or "")
     is_proven = bool(_read(state_item, "is_proven", _read(state, "approved", False)))
-    reviewer_calls = _reviewer_call_count(state)
-    proposer_calls = len(proposals)
-    total_llm_calls = int(usage.get("calls", 0))
-    memory_calls = max(0, total_llm_calls - proposer_calls - reviewer_calls)
+    rounds = int(_read(state, "iteration_count", len(proposals)) or len(proposals))
+
+    node_calls = dict(getattr(prover, "_capsule_node_counts", {}) or {})
+    llm_calls = dict(getattr(prover, "_capsule_llm_calls", {}) or {})
+    usage = dict(getattr(prover, "_capsule_usage", {}) or {})
+    prompt_tokens = int(usage.get("input_tokens", usage.get("prompt_tokens", 0)) or 0)
+    completion_tokens = int(
+        usage.get("output_tokens", usage.get("completion_tokens", 0)) or 0
+    )
+    total_tokens = int(usage.get("total_tokens", prompt_tokens + completion_tokens) or 0)
+    proposer_calls = int(llm_calls.get("proposer", 0) or 0)
+    reviewer_calls = int(llm_calls.get("reviewer", 0) or 0)
+    other_llm_calls = int(llm_calls.get("other", 0) or 0)
     provider_contract = dict(contract["provider_config"])
 
     return {
@@ -271,8 +170,10 @@ def extract_record(
         "module": module,
         "theorem": theorem,
         "path": str(_read(location, "path", "")),
-        "condition": "baseline",
-        "memory_mode": "self_managed",
+        "condition": "capsule",
+        "memory_mode": "capsule_feedback",
+        "memory_processor": "MemorylessProcessor",
+        "integration_schema_version": AX_INTEGRATION_VERSION,
         "axproverbase_commit": AXPROVERBASE_COMMIT,
         "model": contract["model"],
         "base_url": provider_contract["base_url"],
@@ -292,21 +193,24 @@ def extract_record(
         "reviewer_rejections": metrics.get("reviewer_rejections", 0),
         "max_iterations_reached": metrics.get("max_iterations_reached", False),
         "run_elapsed_ms": run_elapsed_ms,
-        "compile_elapsed_ms": builder_elapsed_ms,
+        "node_calls": node_calls,
         "calls": {
             "proposer_calls": proposer_calls,
-            "memory_calls": memory_calls,
             "reviewer_calls": reviewer_calls,
-            "tool_calls": 0,
-            "compiler_calls": builder_calls,
+            "memory_calls": 0,
+            "other_llm_calls": other_llm_calls,
+            "tool_calls": int(getattr(prover, "_capsule_tool_calls", 0) or 0),
+            "compiler_calls": int(node_calls.get("builder", 0) or 0),
+            "capsule_llm_calls": 0,
+            "capsule_compiler_calls": 0,
         },
-        "call_count": total_llm_calls,
+        "call_count": proposer_calls + reviewer_calls + other_llm_calls,
         "usage": {
-            "prompt_tokens": prompt,
-            "completion_tokens": completion,
-            "total_tokens": total,
+            "prompt_tokens": prompt_tokens,
+            "completion_tokens": completion_tokens,
+            "total_tokens": total_tokens,
         },
-        "estimated_cost_usd": round(cost, 6) if cost is not None else None,
+        "estimated_cost_usd": None,
         "first_round_candidate": str(_read(first, "code", "")) if first else "",
         "first_round_reasoning": str(_read(first, "reasoning", "")) if first else "",
         "first_round_imports": list(_read(first, "imports", []) or []) if first else [],
@@ -319,7 +223,7 @@ async def run_target(
     target: str,
     folder: str,
     config_yaml: str,
-    price: Mapping[str, float | None],
+    *,
     task_metadata: Mapping[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     from ax_prover.config import Config
@@ -333,13 +237,11 @@ async def run_target(
         prove_single_item,
     )
 
-    _install_usage_tracking()
-    _install_safety_gate(ProverAgent)
+    install_axproverbase_capsule_feedback()
     load_env_secrets(folder)
-    # The upstream default.yaml selects Claude. Deep-merging our OpenAI config
-    # into it retains Claude-only provider keys such as ``betas`` and
-    # ``thinking``. Our experiment YAML is complete, so merge it directly onto
-    # the structured defaults instead of inheriting a different provider.
+    # Do not inherit upstream default.yaml: it selects Claude, and OmegaConf's
+    # deep merge otherwise leaves Claude-only ``betas``/``thinking`` keys in
+    # this OpenAI-compatible provider request.
     config = merge_configs([Config(), config_yaml], folder=folder)
     contract = _contract_from_config(config)
     tool_lifespans = await create_tool_lifespans(config.prover.proposer_tools)
@@ -347,60 +249,133 @@ async def run_target(
     async with Runtime.open(config.runtime, folder, tool_lifespans) as runtime:
         items = await parse_prove_target(runtime.lean_interact_server, folder, target)
         for item in items:
-            before = _snap_usage()
             prover = await ProverAgent.create(config=config.prover, runtime=runtime)
-            thread_id = f"part1_{item.location.name}_{uuid.uuid4().hex[:6]}"
+            thread_id = f"part2_{item.location.name}_{uuid.uuid4().hex[:6]}"
             started = time.perf_counter()
             state = await prove_single_item(prover, item, thread_id=thread_id)
-            run_elapsed_ms = int((time.perf_counter() - started) * 1000)
-            used = _usage_diff(before, _snap_usage())
             records.append(
                 extract_record(
                     target,
                     state,
-                    used,
-                    price,
+                    prover,
                     contract,
                     task_metadata=task_metadata,
-                    run_elapsed_ms=run_elapsed_ms,
-                    builder_elapsed_ms=int(
-                        getattr(prover, "_tracer_part1_builder_elapsed_ms", 0.0)
-                    ),
-                    builder_calls=int(getattr(prover, "_tracer_part1_builder_calls", 0)),
+                    run_elapsed_ms=int((time.perf_counter() - started) * 1000),
                 )
             )
     return records
 
 
-def _cost_text(cost: object) -> str:
-    return "unknown" if not isinstance(cost, (int, float)) else f"${cost:.6f}"
+def _read_jsonl(path: Path) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for line_no, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+        if not line.strip():
+            continue
+        value = json.loads(line)
+        if not isinstance(value, dict):
+            raise ValueError(f"{path}:{line_no} must be a JSON object")
+        rows.append(value)
+    return rows
 
 
-def main() -> int:
+def validate_inputs(
+    rows: list[dict[str, Any]], cache_path: Path
+) -> list[dict[str, Any]]:
+    """Fail before any live call if the paired inputs are incomplete or drifted."""
+
+    if not rows:
+        raise ValueError("baseline JSONL is empty")
+    cache = FirstRoundCandidateCache(cache_path)
+    seen: set[str] = set()
+    for row_no, row in enumerate(rows, start=1):
+        task_id = str(row.get("task_id") or "")
+        target = str(row.get("target") or "")
+        candidate = str(row.get("first_round_candidate") or "")
+        if not task_id or not target or not candidate.strip():
+            raise ValueError(
+                f"baseline row {row_no} requires task_id, target, and first_round_candidate"
+            )
+        if task_id in seen:
+            raise ValueError(f"duplicate baseline task_id: {task_id}")
+        seen.add(task_id)
+        cached = cache.get(target)
+        if cached["code"] != candidate:
+            raise ValueError(f"first-round candidate cache mismatch for {target}")
+    return rows
+
+
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--target", required=True)
+    parser.add_argument("--baseline", type=Path, required=True)
     parser.add_argument("--folder", required=True)
     parser.add_argument("--config", required=True)
-    parser.add_argument("--out", required=True)
-    parser.add_argument("--price-out", type=float)
-    parser.add_argument("--price-in", type=float)
-    args = parser.parse_args()
+    parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--limit", type=int)
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Replace a non-empty output file instead of refusing to create duplicate task rows",
+    )
+    args = parser.parse_args(argv)
 
-    price = {"input_usd_per_1k": args.price_in, "output_usd_per_1k": args.price_out}
-    records = asyncio.run(run_target(args.target, args.folder, args.config, price))
-    output = Path(args.out)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    with output.open("a", encoding="utf-8") as handle:
-        for record in records:
-            handle.write(json.dumps(record, ensure_ascii=False) + "\n")
-    print(f"wrote {len(records)} record(s) -> {output}")
-    for record in records:
-        print(
-            f"  {record['theorem']}: proven={record['compile_ok']} "
-            f"rounds={record['rounds']} calls={record['call_count']} "
-            f"tokens={record['usage']['total_tokens']} "
-            f"cost={_cost_text(record['estimated_cost_usd'])}"
-        )
+    cache_value = os.environ.get("CAPSULE_FIRST_ROUND_CACHE", "")
+    if not cache_value:
+        print("CAPSULE_FIRST_ROUND_CACHE is required", file=sys.stderr)
+        return 2
+    try:
+        rows = validate_inputs(_read_jsonl(args.baseline), Path(cache_value))
+        if args.limit is not None:
+            if args.limit <= 0:
+                raise ValueError("--limit must be positive")
+            rows = rows[: args.limit]
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        print(f"Part 2 preflight failed: {exc}", file=sys.stderr)
+        return 2
+
+    if args.out.exists() and args.out.stat().st_size:
+        if not args.overwrite:
+            print(
+                f"Part 2 preflight failed: output is not empty: {args.out}; "
+                "choose a new path or pass --overwrite",
+                file=sys.stderr,
+            )
+            return 2
+        args.out.write_text("", encoding="utf-8")
+
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    failures = 0
+    with args.out.open("a", encoding="utf-8", newline="\n") as stream:
+        for index, row in enumerate(rows, start=1):
+            target = str(row["target"])
+            metadata = {
+                "id": row["task_id"],
+                "module": row.get("module", ""),
+                "theorem": row.get("theorem", ""),
+            }
+            try:
+                records = asyncio.run(
+                    run_target(target, args.folder, args.config, task_metadata=metadata)
+                )
+            except Exception as exc:  # noqa: BLE001
+                print(f"[{index}/{len(rows)}] {target}: ERROR {exc}")
+                failures += 1
+                continue
+            if not records:
+                print(f"[{index}/{len(rows)}] {target}: ERROR no result record")
+                failures += 1
+                continue
+            for record in records:
+                stream.write(json.dumps(record, ensure_ascii=False) + "\n")
+                print(
+                    f"[{index}/{len(rows)}] {record['theorem']}: "
+                    f"proven={record['compile_ok']} rounds={record['rounds']} "
+                    f"calls={record['call_count']} tokens={record['usage']['total_tokens']}"
+                )
+            stream.flush()
+    print(f"wrote -> {args.out}")
+    if failures:
+        print(f"failed targets: {failures}/{len(rows)}")
+        return 1
     return 0
 
 

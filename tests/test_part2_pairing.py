@@ -4,12 +4,20 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from leancapsule.pairing import validate_paired_runs  # noqa: E402
+from baseline.run_part2 import (  # noqa: E402
+    _contract_from_config,
+    extract_record,
+    main as run_part2_main,
+    validate_inputs,
+)
 from scripts.prepare_part2_first_round_cache import prepare_cache  # noqa: E402
 
 
@@ -46,6 +54,172 @@ def record(
 
 
 class Part2PairingTest(unittest.TestCase):
+    def test_part2_rejects_inherited_provider_specific_keys(self):
+        provider = {
+            "base_url": "https://yxai.chat/v1",
+            "use_responses_api": True,
+            "store": False,
+            "reasoning": {"effort": "high"},
+            "output_version": "responses/v1",
+            "max_tokens": None,
+            "profile": {"max_input_tokens": 65536},
+            "betas": ["claude-only"],
+            "thinking": {"type": "enabled"},
+        }
+        config = SimpleNamespace(
+            prover=SimpleNamespace(
+                prover_llm=SimpleNamespace(
+                    model="openai:gpt-5.6-sol", provider_config=provider
+                ),
+                memory_config=SimpleNamespace(class_name="MemorylessProcessor"),
+                summarize_output=SimpleNamespace(enabled=False),
+                max_iterations=4,
+            ),
+            runtime=SimpleNamespace(max_tool_calling_iterations=1),
+        )
+        with self.assertRaisesRegex(ValueError, "unsupported keys: betas, thinking"):
+            _contract_from_config(config)
+
+    def test_real_part2_record_is_pairing_ready(self):
+        class Metrics:
+            def model_dump(self):
+                return {
+                    "number_of_iterations": 2,
+                    "compilation_error_count": 1,
+                    "build_timeout_count": 0,
+                    "reviewer_rejections": 0,
+                    "max_iterations_reached": False,
+                }
+
+        candidate = "theorem target (h : True) : True := by exact h"
+        proposal = SimpleNamespace(
+            type="proposal",
+            code=candidate,
+            reasoning="paired",
+            imports=[],
+            opens=[],
+        )
+        state = SimpleNamespace(
+            messages=[proposal],
+            item=SimpleNamespace(
+                location=SimpleNamespace(name="target", path=Path("FATEM/1.lean")),
+                is_proven=True,
+            ),
+            metrics=Metrics(),
+            iteration_count=1,
+        )
+        prover = SimpleNamespace(
+            _capsule_node_counts={"builder": 1, "shared_first_round": 1},
+            _capsule_llm_calls={"proposer": 0, "reviewer": 1, "other": 0},
+            _capsule_usage={"input_tokens": 50, "output_tokens": 10, "total_tokens": 60},
+            _capsule_tool_calls=0,
+        )
+        contract = {
+            "model": "openai:gpt-5.6-sol",
+            "provider_config": {
+                "base_url": "https://yxai.chat/v1",
+                "wire_api": "responses",
+                "use_responses_api": True,
+                "store": False,
+                "reasoning": {"effort": "high"},
+                "output_version": "responses/v1",
+                "max_tokens": None,
+                "profile": {"max_input_tokens": 65536},
+            },
+            "budget": {
+                "max_iterations": 4,
+                "max_input_tokens": 65536,
+                "max_tool_calling_iterations": 1,
+            },
+        }
+        capsule = extract_record(
+            "FATEM/1.lean:target",
+            state,
+            prover,
+            contract,
+            task_metadata={"id": "fate-001", "module": "FATEM/1.lean", "theorem": "target"},
+        )
+        baseline = record("baseline", candidate=candidate)
+        baseline["budget"] = dict(contract["budget"])
+        self.assertTrue(validate_paired_runs([baseline], [capsule])["ok"])
+        self.assertEqual(capsule["calls"]["compiler_calls"], 1)
+        self.assertEqual(capsule["calls"]["memory_calls"], 0)
+        self.assertEqual(capsule["calls"]["capsule_llm_calls"], 0)
+
+    def test_part2_preflight_rejects_cache_drift_before_live_run(self):
+        baseline = record("baseline")
+        baseline.update(
+            {
+                "target": "FATEM/1.lean:target",
+                "module": "FATEM/1.lean",
+                "theorem": "target",
+            }
+        )
+        with tempfile.TemporaryDirectory() as temp:
+            cache = Path(temp) / "cache.json"
+            cache.write_text(
+                json.dumps(
+                    {
+                        "FATEM/1.lean:target": {
+                            "code": "theorem target : True := by trivial",
+                            "reasoning": "different",
+                            "imports": [],
+                            "opens": [],
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "cache mismatch"):
+                validate_inputs([baseline], cache)
+
+    def test_part2_runner_refuses_nonempty_output_before_live_run(self):
+        baseline = record("baseline")
+        baseline.update(
+            {
+                "target": "FATEM/1.lean:target",
+                "module": "FATEM/1.lean",
+                "theorem": "target",
+            }
+        )
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            baseline_path = base / "baseline.jsonl"
+            cache_path = base / "cache.json"
+            output_path = base / "capsule.jsonl"
+            baseline_path.write_text(json.dumps(baseline) + "\n", encoding="utf-8")
+            cache_path.write_text(
+                json.dumps(
+                    {
+                        baseline["target"]: {
+                            "code": baseline["first_round_candidate"],
+                            "reasoning": "paired",
+                            "imports": [],
+                            "opens": [],
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            output_path.write_text("existing\n", encoding="utf-8")
+            with patch.dict(
+                "os.environ", {"CAPSULE_FIRST_ROUND_CACHE": str(cache_path)}, clear=False
+            ):
+                code = run_part2_main(
+                    [
+                        "--baseline",
+                        str(baseline_path),
+                        "--folder",
+                        str(base),
+                        "--config",
+                        "unused.yaml",
+                        "--out",
+                        str(output_path),
+                    ]
+                )
+            self.assertEqual(code, 2)
+            self.assertEqual(output_path.read_text(encoding="utf-8"), "existing\n")
+
     def test_part1_metrics_are_converted_to_exact_ax_target_cache(self):
         cache = prepare_cache(
             [

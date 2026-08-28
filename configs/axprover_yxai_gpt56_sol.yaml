@@ -2,6 +2,14 @@ prover:
   max_iterations: 4
   prover_llm:
     model: "openai:gpt-5.6-sol"
+    retry_config:
+      stop_after_attempt: 3
+      wait_exponential_jitter: true
+      exponential_jitter_params:
+        initial: 0.5
+        max: 3
+        exp_base: 2.0
+        jitter: 1.0
     provider_config:
       base_url: "https://yxai.chat/v1"
       use_responses_api: true
