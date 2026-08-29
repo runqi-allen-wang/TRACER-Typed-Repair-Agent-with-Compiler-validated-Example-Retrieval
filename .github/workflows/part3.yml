@@ -1,0 +1,48 @@
+name: Part 3 配对交接验证
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/part3.yml"
+      - "docs/part3_experiment_handoff.md"
+      - "scripts/validate_part3_handoff.py"
+      - "scripts/validate_part2_pairing.py"
+      - "src/leancapsule/pairing.py"
+      - "results/handoff/part12-live-20260828-corrected/**"
+      - "README.md"
+      - "README.zh-CN.md"
+      - "PROGRESS.md"
+  pull_request:
+    paths:
+      - ".github/workflows/part3.yml"
+      - "docs/part3_experiment_handoff.md"
+      - "scripts/validate_part3_handoff.py"
+      - "scripts/validate_part2_pairing.py"
+      - "src/leancapsule/pairing.py"
+      - "results/handoff/part12-live-20260828-corrected/**"
+      - "README.md"
+      - "README.zh-CN.md"
+      - "PROGRESS.md"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: part3-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  handoff:
+    name: Part 3 handoff contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate corrected paired handoff
+        run: python scripts/validate_part3_handoff.py
