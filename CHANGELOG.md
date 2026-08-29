@@ -2,6 +2,12 @@
 
 本文件记录影响安全性、实验可复现性、Lean 编译边界和公开发布的补丁。它与 `PROGRESS.md` 的职责不同：`PROGRESS.md` 描述当前状态，本文按提交批次记录变更原因、影响范围和验证证据。
 
+## 2026-08-29 — 合并最新 main 并重跑 Part 3
+
+- 在 `leiteng` 合并 `origin/main@90ba62b`，当前 HEAD 为 `53bc501`；保留 Part 1/2、D01、Capsule challenge 和 CI 改动，并在合并后的代码状态上重新运行 Part 3。
+- FATE-M 前 25 题 Raw/Capsule 严格配对为 25/25；最新批次 Raw 22/25、Capsule 19/25，9 个共享首轮失败题分别最终修复 6/9 与 3/9，正式交接包为 `results/handoff/part3-after-main-90ba62b-20260829/`，无 API/基础设施错误。
+- 最新批次使用已有的 yxai、Lean、Ax 和 Python 环境，没有重新下载依赖；Windows 全量 Python 回归为 205 项，203 项通过，2 项 Linux-only 测试跳过。旧的 502 批次和原始工件继续保留，不被新结果覆盖。
+
 ## 2026-08-28 — 在最新 main 上合并研究与证明协议补丁
 
 - 基线从 `a3dee99` 快进到本轮获取的 `origin/main@f6a684f`（9 个上游提交），继续使用本地 `runqi` 分支，不覆盖 Git 或删除实验目录。上游独立的 stage3 分支尚未进入 main，本轮没有擅自引入。
