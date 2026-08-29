@@ -90,3 +90,4 @@
 - 本次代码迁移没有伪造真实 provider 轨迹；若 `results/real_pilot_runs.jsonl` 尚未由真实 provider 生成，严格校验和导出会明确拒绝，不能把 smoke/mock 记录冒充正式实验。
 - 本地编译隔离是环境清理和候选策略防护，不等同于操作系统级沙箱；运行不受信任项目时仍应使用容器或独立低权限环境。
 - Part 1/2 的 25 题结果是单模型、单批次运行证据，不能据此声称统计显著优势或通用定理证明能力；Part 3 仍需正式统计解释与更大规模重复实验。
+- 新增 Part 3 交接清单与轻量校验入口：`docs/part3_experiment_handoff.md`、`scripts/validate_part3_handoff.py` 和 `.github/workflows/part3.yml` 只检查 corrected handoff 的配对协议和公开数字，不调用模型 API。
