@@ -1,4 +1,4 @@
-"""Validate a baseline/Capsule paired-run smoke result."""
+"""Validate a baseline/Capsule paired-run result, including the B arm."""
 
 from __future__ import annotations
 
@@ -30,9 +30,43 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--baseline", type=Path, required=True)
     parser.add_argument("--capsule", type=Path, required=True)
+    parser.add_argument(
+        "--capsule-condition",
+        choices=["capsule", "capsule_experience"],
+        default="capsule",
+        help="Right-hand condition; capsule_experience selects the B arm",
+    )
+    parser.add_argument(
+        "--capsule-memory-class",
+        choices=["MemorylessProcessor", "ExperienceProcessor"],
+        help="Override the expected right-hand memory processor",
+    )
+    parser.add_argument(
+        "--capsule-memory-mode",
+        help="Override the expected right-hand memory mode",
+    )
     parser.add_argument("--out", type=Path)
     args = parser.parse_args(argv)
-    report = validate_paired_runs(_read_jsonl(args.baseline), _read_jsonl(args.capsule))
+    if args.capsule_condition == "capsule_experience":
+        memory_class = args.capsule_memory_class or "ExperienceProcessor"
+        memory_mode = args.capsule_memory_mode or "experience_capsule_feedback"
+        report = validate_paired_runs(
+            _read_jsonl(args.baseline),
+            _read_jsonl(args.capsule),
+            right_condition=args.capsule_condition,
+            right_feedback_mode="capsule",
+            right_memory_mode=memory_mode,
+            right_memory_processor=memory_class,
+            require_zero_memory_calls=False,
+        )
+    else:
+        report = validate_paired_runs(
+            _read_jsonl(args.baseline),
+            _read_jsonl(args.capsule),
+            right_condition=args.capsule_condition,
+            right_memory_mode=args.capsule_memory_mode or "capsule_feedback",
+            right_memory_processor=args.capsule_memory_class or "MemorylessProcessor",
+        )
     text = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)

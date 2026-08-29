@@ -190,9 +190,19 @@ Model settings, output budget, compiler, timeout, problem order, and the three-r
 
 Evaluation does not use a runtime answer table. Retrieval checks for examples with declarations identical to evaluation problems; similar but non-identical propositions still require manual review. **Text deduplication does not eliminate every form of semantic leakage.** Here, `pass@3` means the proportion of tasks with at least one success within three rounds, not an unbiased pass@k estimate from independent samples. See the [experimental protocol](docs/methodology.md).
 
-### AxProverBase Part 1 + Part 2 paired experiment
+### AxProverBase Part 1 + Part 2 paired experiment and B confound arm
 
-The separate FATE-M experiment compares Part 1's AxProverBase `ExperienceProcessor` baseline with Part 2's `MemorylessProcessor` plus deterministic `CapsuleFeedback`. Both conditions reuse the same first-round candidate for each of 25 problems and freeze `gpt-5.6-sol`, the AI4Math `yxai` Responses endpoint, budgets, and candidate policy. Both solved 25/25; total rounds decreased from 39 to 36, compilation errors from 14 to 11, LLM calls from 79 to 36, and tokens from 656,657 to 274,742. Capsule processing itself made zero LLM and compiler calls. See the [Part 2 design](docs/part2_capsule_feedback.md) and [reviewed result handoff](results/handoff/part12-live-20260828-corrected/README.md).
+The separate FATE-M experiment compares Part 1's AxProverBase `ExperienceProcessor` baseline with Part 2's `MemorylessProcessor` plus deterministic `CapsuleFeedback`. Both conditions reuse the same first-round candidate for each of 25 problems and freeze `gpt-5.6-sol`, the AI4Math `yxai` Responses endpoint, budgets, and candidate policy. Both solved 25/25; total rounds decreased from 39 to 36, compilation errors from 14 to 11, LLM calls from 79 to 36, and tokens from 656,657 to 274,742. In that Memoryless Part 2 condition, Capsule processing itself made zero LLM and compiler calls. See the [Part 2 design](docs/part2_capsule_feedback.md) and [reviewed result handoff](results/handoff/part12-live-20260828-corrected/README.md).
+
+Because the original comparison changes both memory and feedback at once, a separate
+`capsule_experience` confound arm was run with Part 1's `ExperienceProcessor` and the
+same deterministic `CapsuleFeedback`. It solved 20/25 (80.0%), with 47 total rounds,
+69 LLM requests (27 Memory requests), 27 compilation errors, and 659,791 total tokens;
+4 of the 9 shared first-round failures were repaired. This is a single descriptive
+batch, not a replacement for the original two-condition result. It is also distinct
+from the Evaluation18 condition named B above and is not a fourth ABCD agent condition.
+See the [B arm design and result](docs/part2_capsule_feedback_confound_arm.md) and the
+[B arm handoff report](results/handoff/part2-experience-capsule-20260829/REPORT.md).
 
 ## Pilot results
 
@@ -335,6 +345,7 @@ Keep these checks distinct:
 | Look up per-round record fields | [JSONL format](docs/jsonl_schema.md) |
 | Create publicly shareable failure artifacts | [Artifact format](docs/CAPSULE_FORMAT.md) and [case contribution guide](docs/CONTRIBUTING_CAPSULES.md) |
 | Run or inspect the AxProverBase Part 1 + Part 2 experiment | [Part 1 guide](baseline/README.md), [Part 2 design](docs/part2_capsule_feedback.md), [Part 3 handoff checklist](docs/part3_experiment_handoff.md), and [result handoff](results/handoff/part12-live-20260828-corrected/README.md) |
+| Inspect the Experience + CapsuleFeedback confound arm | [B arm design and result](docs/part2_capsule_feedback_confound_arm.md) and [B arm handoff](results/handoff/part2-experience-capsule-20260829/REPORT.md) |
 | Inspect the D01 pre-compilation security gate | [Type D security regression](docs/security_type_d.md) |
 | Inspect the 12-core / 4-challenge clean-replay experiment | [Capsule feasibility report](docs/CAPSULE_FEASIBILITY.md) |
 | Inspect published experiments and proofs | [Pilot release](published/pilot-20260826T122354Z-d628742d) |
@@ -354,7 +365,7 @@ lean_project/          Lean problems and local-dependency cases
 mathlib_project/       Separate Mathlib dependency project
 prompts/               A/B/C prompt templates
 scripts/               Dependency setup, tests, pilot validation, and export
-baseline/              AxProverBase Part 1 and paired Part 2 experiment runners
+baseline/              AxProverBase Part 1 and paired Part 2/B experiment runners
 configs/               Frozen AxProverBase model and memory configurations
 tests/                 Automated tests
 results/               Local run data and reports

@@ -284,6 +284,88 @@ class AxIntegrationTest(unittest.TestCase):
         self.assertFalse(config.summarize_output.enabled)
         self.assertIs(config.summarize_output.llm, config.prover_llm)
 
+    def test_experience_arm_reuses_the_frozen_prover_llm(self):
+        config = make_config()
+        enforce_ax_part2_config(config, memory_class="ExperienceProcessor")
+        self.assertEqual(config.memory_config.class_name, "ExperienceProcessor")
+        memory_llm = config.memory_config.init_args["llm_config"]
+        self.assertIsInstance(memory_llm, dict)
+        self.assertEqual(memory_llm["model"], config.prover_llm.model)
+        self.assertEqual(memory_llm["provider_config"], config.prover_llm.provider_config)
+        self.assertFalse(config.summarize_output.enabled)
+
+    def test_experience_arm_counts_the_memory_llm_client(self):
+        class FakeMemory:
+            def __init__(self):
+                self.llm = FakeLLMClient()
+
+            async def process(self, state):
+                await self.llm.ainvoke([])
+                return {"experience": "remembered"}
+
+        class ExperienceAgent:
+            def __init__(self, config, runtime):
+                self.llm_client = FakeLLMClient()
+                self.memory = FakeMemory()
+
+            async def _memory_processor_node(self, state):
+                return await self.memory.process(state)
+
+            async def _builder_node(self, state):
+                return {"messages": [FakeBuildFailedFeedback("error: x")]}
+
+            async def _proposer_node(self, state, config=None):
+                await self.llm_client.ainvoke([])
+                return {"messages": []}
+
+            async def _reviewer_node(self, state, config=None):
+                await self.llm_client.ainvoke([])
+                return {"messages": []}
+
+        with tempfile.TemporaryDirectory() as temp:
+            metrics = Path(temp) / "metrics.jsonl"
+            install_axproverbase_capsule_feedback(
+                agent_class=ExperienceAgent,
+                build_failed_class=FakeBuildFailedFeedback,
+                proposal_class=FakeProposalMessage,
+                telemetry_path=metrics,
+                feedback_mode="capsule",
+                memory_class="ExperienceProcessor",
+            )
+            agent = ExperienceAgent(make_config(), object())
+            asyncio.run(
+                agent._memory_processor_node(
+                    make_state("A", FakeBuildSuccessFeedback())
+                )
+            )
+            asyncio.run(
+                agent._proposer_node(make_state("A", FakeBuildSuccessFeedback()), {})
+            )
+            asyncio.run(
+                agent._reviewer_node(make_state("A", FakeBuildSuccessFeedback()), {})
+            )
+            asyncio.run(
+                agent._builder_node(
+                    make_state("A", FakeBuildFailedFeedback("error: x"))
+                )
+            )
+
+            self.assertEqual(agent._capsule_llm_calls["memory"], 1)
+            self.assertEqual(agent._capsule_llm_calls["proposer"], 1)
+            self.assertEqual(agent._capsule_llm_calls["reviewer"], 1)
+            self.assertEqual(agent._capsule_usage["total_tokens"], 42)
+            event = next(
+                row
+                for row in (
+                    json.loads(line)
+                    for line in metrics.read_text(encoding="utf-8").splitlines()
+                )
+                if row.get("feedback_mode") == "capsule"
+                and "feedback_text" in row
+            )
+            self.assertEqual(event["memory_processor"], "ExperienceProcessor")
+            self.assertEqual(event["memory_llm_calls"], 1)
+
     def test_sessions_are_isolated_bounded_and_persisted_per_theorem(self):
         with tempfile.TemporaryDirectory() as temp:
             pool = CapsuleFeedbackSessions(max_sessions=2, state_dir=temp)

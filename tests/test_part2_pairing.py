@@ -11,7 +11,10 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from leancapsule.pairing import validate_paired_runs  # noqa: E402
+from leancapsule.pairing import (  # noqa: E402
+    validate_experience_capsule_pair,
+    validate_paired_runs,
+)
 from baseline.run_part2 import (  # noqa: E402
     _contract_from_config,
     extract_record,
@@ -169,6 +172,85 @@ class Part2PairingTest(unittest.TestCase):
         )
         self.assertFalse(failed["compile_ok"])
         self.assertIsNone(failed["success_node"])
+
+    def test_experience_capsule_record_counts_memory_calls(self):
+        candidate = "theorem target (h : True) : True := by exact h"
+        proposal = SimpleNamespace(
+            type="proposal",
+            code=candidate,
+            reasoning="paired",
+            imports=[],
+            opens=[],
+        )
+        state = SimpleNamespace(
+            messages=[proposal],
+            item=SimpleNamespace(
+                location=SimpleNamespace(name="target", path=Path("FATEM/1.lean"))
+            ),
+            metrics=SimpleNamespace(model_dump=lambda: {}),
+            iteration_count=2,
+            approved=True,
+        )
+        prover = SimpleNamespace(
+            _capsule_node_counts={"builder": 1},
+            _capsule_llm_calls={"proposer": 0, "reviewer": 1, "memory": 2, "other": 0},
+            _capsule_usage={"input_tokens": 20, "output_tokens": 10, "total_tokens": 30},
+            _capsule_tool_calls=0,
+            _feedback_events=[],
+        )
+        contract = {
+            "model": "openai:gpt-5.6-sol",
+            "memory_processor": "ExperienceProcessor",
+            "provider_config": {
+                "base_url": "https://yxai.chat/v1",
+                "wire_api": "responses",
+                "use_responses_api": True,
+                "store": False,
+                "reasoning": {"effort": "high"},
+                "output_version": "responses/v1",
+                "max_tokens": None,
+                "profile": {"max_input_tokens": 65536},
+            },
+            "budget": {"max_iterations": 4},
+        }
+        result = extract_record(
+            "FATEM/1.lean:target",
+            state,
+            prover,
+            contract,
+            feedback_mode="capsule",
+            condition="capsule_experience",
+            memory_mode="experience_capsule_feedback",
+            memory_processor="ExperienceProcessor",
+            task_metadata={"id": "fate-001", "module": "FATEM/1.lean", "theorem": "target"},
+        )
+        self.assertEqual(result["condition"], "capsule_experience")
+        self.assertEqual(result["memory_processor"], "ExperienceProcessor")
+        self.assertEqual(result["memory_llm_calls"], 2)
+        self.assertEqual(result["calls"]["memory_calls"], 2)
+        self.assertEqual(result["call_count"], 3)
+
+    def test_experience_capsule_pairing_allows_counted_memory_calls(self):
+        baseline = record("baseline")
+        b_arm = record("capsule_experience")
+        b_arm.update(
+            {
+                "feedback_mode": "capsule",
+                "memory_mode": "experience_capsule_feedback",
+                "memory_processor": "ExperienceProcessor",
+                "memory_llm_calls": 1,
+            }
+        )
+        b_arm["calls"]["memory_calls"] = 1
+        report = validate_experience_capsule_pair([baseline], [b_arm])
+        self.assertTrue(report["ok"], report["errors"])
+        self.assertEqual(report["expected_right_condition"], "capsule_experience")
+        self.assertFalse(report["require_zero_memory_calls"])
+
+        b_arm["memory_llm_calls"] = 0
+        report = validate_experience_capsule_pair([baseline], [b_arm])
+        self.assertFalse(report["ok"])
+        self.assertIn("memory_llm_calls mismatch", "\n".join(report["errors"]))
 
     def test_part2_preflight_rejects_cache_drift_before_live_run(self):
         baseline = record("baseline")

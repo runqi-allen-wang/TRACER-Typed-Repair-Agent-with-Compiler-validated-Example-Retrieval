@@ -2,7 +2,7 @@
 
 ## 研究问题
 
-Part 1 的 Experience 与 Part 2 的 CapsuleFeedback 同时改变了 memory 和失败反馈格式，不能单独说明 CapsuleFeedback 的影响。Part 3 补充一个更窄的对照：两组都使用 `MemorylessProcessor`，只比较 Ax 原始 `BuildFailedFeedback` 与确定性的 `CapsuleFeedback`。
+Part 1 的 Experience 与 Part 2 的 CapsuleFeedback 同时改变了 memory 和失败反馈格式，不能单独说明 CapsuleFeedback 的影响。Part 3 补充一个更窄的对照：两组都使用 `MemorylessProcessor`，只比较 Ax 原始 `BuildFailedFeedback` 与确定性的 `CapsuleFeedback`。另有独立的 `capsule_experience` B 臂用于拆分该混杂因素，但不并入 Raw/Capsule 的主汇总。
 
 结论范围限定为“共享首轮候选条件下的后续修复比较”。这是单模型、单批次的小型 pilot，不是显著性检验，也不代表通用能力或 SOTA 结果。
 
@@ -11,6 +11,7 @@ Part 1 的 Experience 与 Part 2 的 CapsuleFeedback 同时改变了 memory 和�
 | 条件 | Memory | 编译失败反馈 | 首轮候选 |
 | --- | --- | --- | --- |
 | Experience（参考） | `ExperienceProcessor` | 原始 Ax 流程 | Part 1 已有结果 |
+| B 混杂拆分臂（独立） | `ExperienceProcessor` | 确定性的 `CapsuleFeedback` | 见独立 B handoff |
 | Raw | `MemorylessProcessor` | 原始 `BuildFailedFeedback` 原样传给下一轮 Proposer | 与 Capsule 完全共享 |
 | Capsule | `MemorylessProcessor` | 确定性的 `CapsuleFeedback` | 与 Raw 完全共享 |
 
@@ -91,6 +92,13 @@ finally {
 本次最新 main 批次的 `errors.jsonl` 为空，未发生 API/基础设施错误。更早的 `07301eb` 批次中，`fate24` 的 Capsule 请求收到一次 `502 Bad Gateway`；该批次原始目录 [`results/work/part3-after-main-20260829/full/`](../results/work/part3-after-main-20260829/full/) 及单题重试目录 `full-corrected/` 均保留，历史结果没有被覆盖。该重试仅用于纠正基础设施缺失，不与模型条件效果混为一谈。
 
 Part 1 Experience 结果仅作资源参考：25/25 成功、39 总轮数、14 次编译错误、79 次 LLM 调用、656657 token。它使用 `ExperienceProcessor`，且运行时间不同，不能与 Raw/Capsule 做因果归因或合并成一个三条件结论。
+
+独立 B 混杂拆分臂（`ExperienceProcessor + CapsuleFeedback`）在同一 25 题上通过 20/25，
+总轮数 47，LLM 请求 69（其中 Memory 27），编译错误 27，总 token 659791；9 个共享
+首轮失败中修复 4 个。该结果来自单独批次，详见
+[`part2_capsule_feedback_confound_arm.md`](part2_capsule_feedback_confound_arm.md)及
+[`B handoff`](../results/handoff/part2-experience-capsule-20260829/REPORT.md)，不能与
+本节 Raw/Capsule 数字直接拼接成四条件结论。
 
 逐题结果、候选和遥测摘要见 [`results/handoff/part3-after-main-90ba62b-20260829/`](../results/handoff/part3-after-main-90ba62b-20260829/)，其中：
 

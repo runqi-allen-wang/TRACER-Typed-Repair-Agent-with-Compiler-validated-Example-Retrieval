@@ -64,9 +64,11 @@ def _is_repeated_feedback_event(event: Mapping[str, Any]) -> bool:
         return False
 
 
-def _contract_from_config(config: object) -> dict[str, Any]:
+def _contract_from_config(
+    config: object, *, memory_class: str = "MemorylessProcessor"
+) -> dict[str, Any]:
     prover = _read(config, "prover")
-    enforce_ax_part2_config(prover)
+    enforce_ax_part2_config(prover, memory_class=memory_class)
     llm = _read(prover, "prover_llm")
     provider = _read(llm, "provider_config", {})
     reasoning = _read(provider, "reasoning", {})
@@ -127,8 +129,8 @@ def _contract_from_config(config: object) -> dict[str, Any]:
         errors.append(f"reasoning effort must be {YXAI_REASONING_EFFORT}")
     if provider_contract["output_version"] != "responses/v1":
         errors.append("output_version must be responses/v1")
-    if contract["memory_processor"] != "MemorylessProcessor":
-        errors.append("Part 2 memory must be MemorylessProcessor")
+    if contract["memory_processor"] != memory_class:
+        errors.append(f"memory must be {memory_class}")
     if contract["summary_enabled"]:
         errors.append("final LLM summary must be disabled")
     if contract["budget"]["max_iterations"] <= 0:
@@ -147,6 +149,9 @@ def extract_record(
     feedback_mode: str = "capsule",
     task_metadata: Mapping[str, Any] | None = None,
     run_elapsed_ms: int = 0,
+    condition: str | None = None,
+    memory_mode: str | None = None,
+    memory_processor: str | None = None,
 ) -> dict[str, Any]:
     """Extract one pairing-ready Raw or Capsule condition record."""
 
@@ -177,6 +182,7 @@ def extract_record(
     total_tokens = int(usage.get("total_tokens", prompt_tokens + completion_tokens) or 0)
     proposer_calls = int(llm_calls.get("proposer", 0) or 0)
     reviewer_calls = int(llm_calls.get("reviewer", 0) or 0)
+    memory_calls = int(llm_calls.get("memory", 0) or 0)
     other_llm_calls = int(llm_calls.get("other", 0) or 0)
     provider_contract = dict(contract["provider_config"])
     feedback_events = [
@@ -189,7 +195,13 @@ def extract_record(
     repeated_diagnostic_count = sum(
         _is_repeated_feedback_event(event) for event in feedback_events
     )
-    memory_mode = "raw_feedback" if feedback_mode == "raw" else "capsule_feedback"
+    resolved_condition = condition or feedback_mode
+    resolved_memory_mode = memory_mode or (
+        "raw_feedback" if feedback_mode == "raw" else "capsule_feedback"
+    )
+    resolved_memory_processor = memory_processor or str(
+        contract.get("memory_processor") or "MemorylessProcessor"
+    )
 
     return {
         "run_id": uuid.uuid4().hex[:12],
@@ -199,10 +211,11 @@ def extract_record(
         "module": module,
         "theorem": theorem,
         "path": str(_read(location, "path", "")),
-        "condition": feedback_mode,
+        "condition": resolved_condition,
         "feedback_mode": feedback_mode,
-        "memory_mode": memory_mode,
-        "memory_processor": "MemorylessProcessor",
+        "memory_mode": resolved_memory_mode,
+        "memory_processor": resolved_memory_processor,
+        "memory_llm_calls": memory_calls,
         "integration_schema_version": AX_INTEGRATION_VERSION,
         "axproverbase_commit": AXPROVERBASE_COMMIT,
         "model": contract["model"],
@@ -227,14 +240,14 @@ def extract_record(
         "calls": {
             "proposer_calls": proposer_calls,
             "reviewer_calls": reviewer_calls,
-            "memory_calls": 0,
+            "memory_calls": memory_calls,
             "other_llm_calls": other_llm_calls,
             "tool_calls": int(getattr(prover, "_capsule_tool_calls", 0) or 0),
             "compiler_calls": int(node_calls.get("builder", 0) or 0),
             "capsule_llm_calls": 0,
             "capsule_compiler_calls": 0,
         },
-        "call_count": proposer_calls + reviewer_calls + other_llm_calls,
+        "call_count": proposer_calls + reviewer_calls + memory_calls + other_llm_calls,
         "usage": {
             "prompt_tokens": prompt_tokens,
             "completion_tokens": completion_tokens,
@@ -263,6 +276,10 @@ async def run_target(
     state_dir: str | Path | None = None,
     first_round_cache_path: str | Path | None = None,
     task_metadata: Mapping[str, Any] | None = None,
+    memory_class: str = "MemorylessProcessor",
+    condition: str | None = None,
+    memory_mode: str | None = None,
+    memory_processor: str | None = None,
 ) -> list[dict[str, Any]]:
     from ax_prover.config import Config
     from ax_prover.prover.agent import ProverAgent
@@ -282,20 +299,24 @@ async def run_target(
         telemetry_path=telemetry_path,
         state_dir=state_dir,
         first_round_cache_path=first_round_cache_path,
+        memory_class=memory_class,
     )
     load_env_secrets(folder)
     # Do not inherit upstream default.yaml: it selects Claude, and OmegaConf's
     # deep merge otherwise leaves Claude-only ``betas``/``thinking`` keys in
     # this OpenAI-compatible provider request.
     config = merge_configs([Config(), config_yaml], folder=folder)
-    contract = _contract_from_config(config)
+    contract = _contract_from_config(config, memory_class=memory_class)
     tool_lifespans = await create_tool_lifespans(config.prover.proposer_tools)
     records: list[dict[str, Any]] = []
     async with Runtime.open(config.runtime, folder, tool_lifespans) as runtime:
         items = await parse_prove_target(runtime.lean_interact_server, folder, target)
         for item in items:
             prover = await ProverAgent.create(config=config.prover, runtime=runtime)
-            thread_id = f"part3_{feedback_mode}_{item.location.name}_{uuid.uuid4().hex[:6]}"
+            thread_id = (
+                f"part2_{condition or feedback_mode}_{item.location.name}_"
+                f"{uuid.uuid4().hex[:6]}"
+            )
             started = time.perf_counter()
             state = await prove_single_item(prover, item, thread_id=thread_id)
             records.append(
@@ -307,6 +328,9 @@ async def run_target(
                     feedback_mode=feedback_mode,
                     task_metadata=task_metadata,
                     run_elapsed_ms=int((time.perf_counter() - started) * 1000),
+                    condition=condition,
+                    memory_mode=memory_mode,
+                    memory_processor=memory_processor,
                 )
             )
     return records
@@ -465,11 +489,28 @@ def main(argv: list[str] | None = None) -> int:
         help="Feedback condition to run (default: capsule)",
     )
     parser.add_argument(
+        "--memory-class",
+        choices=["MemorylessProcessor", "ExperienceProcessor"],
+        default="MemorylessProcessor",
+        help=(
+            "Memory strategy. Use ExperienceProcessor with --feedback capsule "
+            "for the B arm; the default preserves the original Part 2 condition."
+        ),
+    )
+    parser.add_argument(
         "--overwrite",
         action="store_true",
         help="Replace a non-empty output file instead of refusing to create duplicate task rows",
     )
     args = parser.parse_args(argv)
+
+    if args.memory_class == "ExperienceProcessor" and args.feedback != "capsule":
+        print(
+            "Part 2 preflight failed: ExperienceProcessor is only supported with "
+            "the capsule feedback condition",
+            file=sys.stderr,
+        )
+        return 2
 
     cache_value = os.environ.get("CAPSULE_FIRST_ROUND_CACHE", "")
     if not cache_value:
@@ -507,6 +548,11 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     failures = 0
+    arm_experience = args.memory_class == "ExperienceProcessor"
+    arm_condition = "capsule_experience" if arm_experience else "capsule"
+    arm_memory_mode = (
+        "experience_capsule_feedback" if arm_experience else "capsule_feedback"
+    )
     with args.out.open("a", encoding="utf-8", newline="\n") as stream:
         for index, row in enumerate(rows, start=1):
             target = str(row["target"])
@@ -526,6 +572,10 @@ def main(argv: list[str] | None = None) -> int:
                         state_dir=state_value or None,
                         first_round_cache_path=cache_value,
                         task_metadata=metadata,
+                        memory_class=args.memory_class,
+                        condition=arm_condition,
+                        memory_mode=arm_memory_mode,
+                        memory_processor=args.memory_class,
                     )
                 )
             except Exception as exc:  # noqa: BLE001

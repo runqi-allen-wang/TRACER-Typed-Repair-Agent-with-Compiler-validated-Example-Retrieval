@@ -6,7 +6,7 @@
 
 ## 已完成
 
-- 本轮 Part 3 运行基于 `origin/main@90ba62b` 与 `leiteng` 提交 `53bc501`；随后远端 main 又合入 Stage 3 交接协议（`origin/main@37f12de`），已在 `leiteng` 合并为当前 HEAD `23ec5a3`。该新增 diff 只涉及交接文档、轻量校验器和 CI workflow，不改变 runner/Ax/Lean 实验逻辑；`origin/main` 已是当前分支祖先。
+- 本轮 Part 3 运行基于 `origin/main@90ba62b` 与 `leiteng` 提交 `53bc501`；随后远端 main 又合入 Stage 3 交接协议（`origin/main@37f12de`），已在 `leiteng` 合并为 `23ec5a3`，并由后续交接校验文档提交更新到当前 HEAD `0e90c2e`。该新增 diff 只涉及交接文档、轻量校验器和 CI workflow，不改变 runner/Ax/Lean 实验逻辑；`origin/main` 已是当前分支祖先。
 - 合并前本地 64 份公开源码/文档均已备份，备份根目录为本次 Codex 工作目录下 `tracer-merge-backup-20260828-v2-complete`，含 base/remote/local/merged 与逐文件合并计划；所有原有补丁文件仍存在。两份上游交接包只清理派生元数据，原始运行/候选不变。
 - 保留无派生摘要约束：诊断按可读全文比较，Ax 状态使用随机会话文件名及完整定理键，首轮 Proposal 直接逐字段配对。新旧状态格式隔离；DeepSeek 研究不继承终端的 Responses/推理配置。已修复 Responses 截断与空输出处理和 Windows 测试输出解码。
 - 完成真实 DeepSeek 预跑审计：批次 research-80be2a1f-c253-4b1b-a3cc-b901e9d120b7，48 个 B 组任务、69 次请求；Flash 20/24、Pro 19/24，首轮均 18/24，39/39 成功文件独立复编译并检查公理依赖。保留原始旧协议成绩与未完成的人工复核表，详细观察见 docs/RESEARCH_PROTOCOL.md。
@@ -59,6 +59,7 @@
 - `results/solutions/` 会按条件保存每个成功候选，`results/real_pilot_runs.jsonl` 保存逐轮原始轨迹；`evaluate.py --fresh` 会先归档旧实验，避免不同批次混合。
 - 已合入 AxProverBase Part 1 Experience baseline 与 Part 2 `MemorylessProcessor + CapsuleFeedback`：冻结 Ax commit、`yxai` Responses 模型条件、预算、首轮候选和逐题遥测；Part 2 直接消费已有 Builder 结果，不重复调用 Lean 或模型。
 - 已完成 FATE-M 25 题正式配对实验：两组均 25/25 成功，严格配对 25/25 通过；修正版总轮次 39→36、编译错误 14→11、LLM calls 79→36、tokens 656657→274742，上游交接结果与可读文件清单位于 `results/handoff/part12-live-20260828-corrected/`；旧目录保留为历史工件。
+- 已完成 B 臂 `ExperienceProcessor + CapsuleFeedback` 的 25 题正式运行：20/25（80.0%）通过，47 轮、69 次 LLM 请求（其中 27 次 Memory）、47 次 Lean 编译、659791 tokens、27 次编译错误、0 次超时；与 Part 1 共享的 9 个首轮失败中修复 4 个。结果位于 `results/work/part2-experience-capsule-20260829/`，配对校验 25/25 通过；本次没有运行完整 ABCD，也没有重新下载依赖。
 - 新增独立 D01 安全回归：`unsafe inductive` 构造 `False` 的候选在 Agent、AxProverBase 缓存/Proposal/Builder、Capsule pack/replay/audit 的 Lean 编译前拒绝；D 类不是 A/B/C 的第四个实验条件。
 - 已在 `53bc501`（当时已合并 `origin/main@90ba62b`）完成 FATE-M 前 25 题 Part 3 Raw/Capsule 交错实验；正式交接包位于 `results/handoff/part3-after-main-90ba62b-20260829/`，严格配对 25/25 通过。Raw 为 22/25、Capsule 为 19/25；9 个共享首轮失败题中分别最终修复 6/9 与 3/9，正式运行无 API/基础设施错误。之后合入的 `37f12de` 仅增加交接验收工具，未重新调用模型；此前 `07301eb` 批次的 502 失败、修正版和原始目录仍保留在 `results/handoff/part3-after-main-20260829/` 与 `results/work/part3-after-main-20260829/`，未覆盖。
 
@@ -70,6 +71,7 @@
 - `leancapsule audit capsules`：24/24 通过，无发布审计错误。
 - 合并版 Windows 全量回归 205 项：203 项通过，2 项 Windows 不适用的 Linux 符号链接测试跳过。含证明协议、合并专项、Ax/Proposal/D01 与研究矩阵回归。显式 Lean 4.28 的 `lake build` 本轮通过；18 题输入保留预期的 sorry 占位警告，不能将此构建当作完成证明。
 - Part 3 严格报告门禁通过：25/25 配对、共享首轮 `code/reasoning/imports/opens` 四字段一致、配置与安全策略一致、最新批次 `errors.jsonl` 为空；旧批次的 502 重试原因和路径已在 Part 3 文档记录。新增 `scripts/validate_part3_handoff.py` 在当前合并版上也通过，且不调用模型 API。
+- B 臂结果完整性校验通过：输出 25 条且 task id 唯一，77 条遥测事件，`condition`/Memory 标记正确，首轮四字段逐题一致，`memory_llm_calls == calls.memory_calls`，API 错误和编译超时均为 0。
 - Capsule 发布回归在本机 Windows 已使用现有 Lean `v4.32.0` 和 Mathlib 缓存通过 `verify 24/24`、`audit 24/24`；不要在 WSL 的 Lean 4.28 环境直接验证这些 v4.32 capsule，以免把工具链不匹配误报为案例失败。
 - 新修复集：24 个初始候选失败，24 个测试参考证明通过；不联网六组矩阵完成候选生成替身→真实 Lean 编译→保存→独立重编译→报告验证。此测试数据不是模型实验结果。
 - Windows 首次度量：24 案例 × 2 次，共 47/48 匹配；mathlib/elab-prime-instance 首次 60 秒超时，第二次通过。修正原文件 Mathlib 项目选择后，独立热缓存复测 24/24；23 对原始/精简源码诊断匹配，行数与字节缩减中位数均为 0。两批原始记录均保留于 results/research-capsule-windows-20260828 和 results/research-capsule-windows-warm-20260828。
@@ -89,5 +91,5 @@
 - `manual_review.csv` 的 54 条人工复核仍必须由研究者逐条填写；系统不会自动伪造 kernel_pass、假设合理性或泄漏风险结论。
 - 本次代码迁移没有伪造真实 provider 轨迹；若 `results/real_pilot_runs.jsonl` 尚未由真实 provider 生成，严格校验和导出会明确拒绝，不能把 smoke/mock 记录冒充正式实验。
 - 本地编译隔离是环境清理和候选策略防护，不等同于操作系统级沙箱；运行不受信任项目时仍应使用容器或独立低权限环境。
-- Part 1/2 的 25 题结果是单模型、单批次运行证据，不能据此声称统计显著优势或通用定理证明能力；Part 3 仍需正式统计解释与更大规模重复实验。
+- Part 1/2/B 的 25 题结果是单模型、单批次运行证据，不能据此声称统计显著优势、反馈或 Memory 的因果收益，或通用定理证明能力；完整 ABCD 仍未运行，Part 3 仍需正式统计解释与更大规模重复实验。
 - 新增 Part 3 交接清单与轻量校验入口：`docs/part3_experiment_handoff.md`、`scripts/validate_part3_handoff.py` 和 `.github/workflows/part3.yml` 只检查 corrected handoff 的配对协议和公开数字，不调用模型 API。

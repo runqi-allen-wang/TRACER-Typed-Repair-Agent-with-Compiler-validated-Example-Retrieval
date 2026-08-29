@@ -20,6 +20,12 @@ Stage 3 回答的问题是：在同一批 Lean theorem proving 任务、同一�
 `Evaluation18` 只用于本地 API、Lean 和 runner smoke test。正式配对结果使用
 `baseline/manifest.json` 中的 FATE-M 25 题。
 
+为拆开 Part 1/Part 2 同时改变 Memory 与反馈格式的混杂因素，另有独立的
+`capsule_experience` B 臂：它使用 `ExperienceProcessor + CapsuleFeedback`，允许并记录
+Memory 的真实 LLM 调用。B 不属于本交接清单的 Raw/Capsule 正式对比，也不是 ABCD 的
+第四个 Agent 条件；设计、结果和单独 handoff 见
+[`part2_capsule_feedback_confound_arm.md`](part2_capsule_feedback_confound_arm.md)。
+
 ## 工作流
 
 ```mermaid
@@ -44,9 +50,11 @@ flowchart TD
 - `configs/axprover_yxai_gpt56_sol.yaml`：共享模型、Responses endpoint、reasoning、预算和工具配置。
 - `configs/axprover_part1_experience.yaml`：Part 1 baseline memory 配置。
 - `configs/axprover_part2_capsule.yaml`：Part 2 CapsuleFeedback memory 配置。
+- `configs/axprover_experience_capsule.yaml`：B 臂 Experience + CapsuleFeedback 配置。
 - `scripts/prepare_part2_first_round_cache.py`：从 baseline JSONL 抽取首轮候选缓存。
 - `scripts/validate_part2_pairing.py`：严格检查 baseline 与 capsule 的配对一致性。
 - `results/handoff/part12-live-20260828-corrected/`：当前可公开复查的 corrected handoff。
+- `results/handoff/part2-experience-capsule-20260829/`：B 臂的独立结果 handoff。
 
 ## 最小可复查命令
 
@@ -78,7 +86,7 @@ python scripts/validate_part2_pairing.py \
 5. 配对报告固定 AxProverBase commit、模型、endpoint、Responses API、`store=false` 和 `reasoning_effort=high`。
 6. Capsule 条件的 `memory_calls`、`capsule_llm_calls`、`capsule_compiler_calls` 均为 0。
 7. `part2-first-round-full.json` 覆盖每个 paired target。
-8. 汇总数字与 README/handoff 中的公开结论一致：baseline/capsule 均为 25/25 成功，轮次 39→36，编译错误 14→11，LLM calls 79→36，tokens 656657→274742。
+8. 汇总数字与 README/handoff 中的公开结论一致：原 baseline/capsule 均为 25/25 成功，轮次 39→36，编译错误 14→11，LLM calls 79→36，tokens 656657→274742。B 臂有自己的结果和门禁，不套用原 Capsule 的零 Memory 调用条件。
 
 ## 报告边界
 
@@ -87,6 +95,7 @@ python scripts/validate_part2_pairing.py \
 - 两组在 FATE-M 25 题上严格配对，且首轮候选一致。
 - CapsuleFeedback 条件在该批次中没有额外 Memory LLM、Capsule 内部 LLM 或 Capsule 内部编译调用。
 - 该批次的轮数、编译错误、LLM 调用和 token 总量低于 Experience baseline。
+- 独立 B 臂的 20/25 结果及其 4/9 首轮失败修复率；这些数字只适用于 B 的单批次运行。
 
 不能报告：
 
@@ -94,6 +103,7 @@ python scripts/validate_part2_pairing.py \
 - 通用自动定理证明能力。FATE-M 25 是固定小样本。
 - Evaluation18 上的本地 smoke 数字是正式 Stage 3 证据。
 - 观察后修改的协议是预注册实验设计。
+- B 臂与 Raw/Capsule 的运行批次不同，不能拼成一个四条件或因果结论。
 
 ## 后续扩展
 

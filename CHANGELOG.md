@@ -2,6 +2,13 @@
 
 本文件记录影响安全性、实验可复现性、Lean 编译边界和公开发布的补丁。它与 `PROGRESS.md` 的职责不同：`PROGRESS.md` 描述当前状态，本文按提交批次记录变更原因、影响范围和验证证据。
 
+## 2026-08-29 — 完成 B 臂 Experience + CapsuleFeedback 运行
+
+- 接入 `ExperienceProcessor + CapsuleFeedback` 的 B 条件，复用 Part 1 的完整首轮候选，并冻结现有 `yxai` Responses 配置、预算和候选安全策略。
+- FATE-M 前 25 题完成一次正式运行：20/25 通过（80.0%），47 轮、69 次 LLM 请求、27 次 Memory 请求、47 次 Lean 编译，659791 tokens，27 次编译错误，0 次超时。
+- 严格配对门禁和逐行完整性校验通过：25/25 task 配对、首轮 `code/reasoning/imports/opens` 全部一致、77 条遥测事件、无 API 错误；结果保存在 `results/work/part2-experience-capsule-20260829/`。
+- 本次只运行 B，未运行完整 ABCD；使用已有 Lean/Ax/Python 环境和缓存，没有重新下载依赖，也没有提交、推送或合并。
+
 ## 2026-08-29 — 吸收最新 main 的 Stage 3 交接工作流
 
 - 远端 main 在 Part 3 运行后合入 PR #15（`37f12de`）；`leiteng` 随后以 `23ec5a3` 合并，新增 `docs/part3_experiment_handoff.md`、`scripts/validate_part3_handoff.py` 和 `.github/workflows/part3.yml`，并同步双语 README 入口。
