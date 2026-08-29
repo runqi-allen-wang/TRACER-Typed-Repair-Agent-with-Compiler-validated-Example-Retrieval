@@ -10,23 +10,41 @@
 [![Lean toolchain](https://img.shields.io/badge/Lean-4.32.0-blue)](lean-toolchain)
 [![CI Python version](https://img.shields.io/badge/CI_Python-3.11-blue)](.github/workflows/ci.yml)
 
-[Quick start](#quick-start) · [Design contributions](#design-contributions) · [Pilot results](#pilot-results) · [API guide](docs/API_GUIDE.md) · [Failure gallery](capsules/index.md) · [Contributing](CONTRIBUTING.md)
+[Quick start](#quick-start) · [Naming](#experiment-and-policy-namespaces) · [Design contributions](#design-contributions) · [Pilot results](#pilot-results) · [API guide](docs/API_GUIDE.md) · [Failure gallery](capsules/index.md) · [Contributing](CONTRIBUTING.md)
 
 ![TRACER overview](TRACER.png)
 
 TRACER is a **research toolkit for Lean 4 proof repair, failure reproduction, and evaluation**. It connects language-model candidates, Lean compiler feedback, local example retrieval, and per-round experiment records. Its **LeanCapsule** component packages failures into shareable, replayable, and auditable artifacts.
 
-The project offers two complementary workflows: reproduce an error with LeanCapsule, **without a model API**, or connect a real provider to run bounded proof repair and A/B/C experiments. Both share compilation and diagnostic infrastructure, but have separate entry points and acceptance criteria.
+The project offers two complementary workflows: reproduce an error with LeanCapsule, **without a model API**, or connect a real provider to run bounded proof repair. The published smoke pilot retains its historical A/B/C condition names, while the current repair24 protocol exposes six research arms, R-A through R-F. Both workflows share compilation and diagnostic infrastructure, but have separate entry points and acceptance criteria.
 
 > **Research scope:** TRACER does not train or fine-tune models. It focuses on inference-time feedback, local repair, and reproducible experiment and failure artifacts, providing replaceable, inspectable infrastructure for method research.
+
+## Experiment and policy namespaces
+
+TRACER uses three deliberately separate namespaces. They describe different evidence layers and must not be counted as one flat sequence of experimental groups.
+
+| Namespace | Members | Purpose | Current evidence state |
+| --- | --- | --- | --- |
+| **Published pilot conditions** | A / B / C | Historical 18-problem smoke test: theorem only; compiler feedback; feedback plus static retrieval | Published 18 × 3 real-provider batch with traces, proofs, and manual review |
+| **Research arms** | R-A / R-B / R-C / R-D / R-E / R-F | repair24 protocol for separating feedback, retrieval, error-adaptive queries, and failure-context reuse | Runner, budgets, frozen tasks, and offline gates exist; the full multi-model repeated matrix is pending |
+| **Security policies** | SP-1, then SP-n | Pre-compilation rejection policies for candidates that may compile but violate the project's trust boundary | SP-1 is implemented as a regression gate; it is not a seventh research arm |
+
+The current research-arm map is:
+
+- **R-A:** theorem only; **R-B:** compiler feedback without retrieval.
+- **R-C:** static retrieval plus feedback; **R-D:** retrieval only, with no diagnostic feedback returned to generation.
+- **R-E:** feedback plus error-adaptive retrieval queries; **R-F:** R-E plus reusable public failure-capsule context.
+
+Machine-facing values remain `A/B/C/D/C_dynamic/C_failure` for compatibility with existing scripts and records. Public research discussion should use R-A through R-F. Security cases use SP identifiers exclusively; [SP-1](docs/security_policy.md) currently rejects an unsafe declaration pattern before Lean compilation.
 
 Available artifacts:
 
 - **24 public failure capsules**, spanning four error families and Std, Mathlib, and project-local dependencies.
 - **A 12-core / 4-challenge feasibility experiment** whose 16 cases preserve normalized diagnostics and replay in clean temporary directories, including project-local multi-file cases.
-- **18 frozen problems × 3 experimental conditions**, with a published real-provider pilot containing 56 per-round records and 54 successful proof files.
+- **18 frozen problems × 3 historical pilot conditions (A/B/C)**, with a published real-provider pilot containing 56 per-round records and 54 successful proof files.
 - **An end-to-end workflow** covering a single-problem CLI, local HTTP API, batch evaluation, manual review, report validation, and sanitized export.
-- **A separate repair24 research suite** with retrieval-only, diagnostic-query and failure-context controls. The runner and offline checks exist; the full multi-model repeated experiment is pending. Jump to [research evaluation](#research-evaluation-beyond-the-smoke-test) and [related work](#related-work).
+- **A separate six-arm repair24 research suite (R-A through R-F)** with retrieval-only, diagnostic-query and failure-context controls. The runner and offline checks exist; the full multi-model repeated experiment is pending. Jump to [research evaluation](#research-evaluation-beyond-the-smoke-test) and [related work](#related-work).
 
 These artifact counts are not evidence of general theorem-proving ability or superior performance; experimental limitations are discussed below.
 
@@ -59,11 +77,11 @@ Implementation: [repair loop](src/agent.py) · [capsule packaging](src/leancapsu
 
 ```mermaid
 flowchart TD
-    S["Lean source and project environment"] --> A["Repair entry: problem and A/B/C context"]
+    S["Lean source and project environment"] --> A["Repair entry: pilot A/B/C or research R-A–R-F"]
     A --> P["Provider generates a local proof"]
     P --> V["Candidate checks and temporary compilation"]
     V -->|"Compilation passes"| O["Save proof and per-round traces"]
-    V -->|"Failure with rounds remaining"| F["Record diagnostics; B/C receive feedback"]
+    V -->|"Failure with rounds remaining"| F["Record diagnostics; feedback-enabled arms receive them"]
     F --> A
     V -->|"Round limit or provider failure"| E["Save last candidate and failure reason"]
     S --> K["Reproduction entry: LeanCapsule packaging"]
@@ -79,7 +97,7 @@ The two entry points work independently. The Agent does not automatically turn e
 - **Agent success:** a candidate passes Lean compilation and the project's incomplete-proof checks.
 - **Capsule replay success:** the observed compilation status, diagnostic category, and normalized diagnostic text match expectations. For a case expected to fail compilation, reproducing that failure is a successful replay.
 
-Thus, 24/24 gallery replays do not mean that a model solved 24 proofs, and must not be conflated with A/B/C repair success rates.
+Thus, 24/24 gallery replays do not mean that a model solved 24 proofs, and must not be conflated with either the historical A/B/C pilot or R-A through R-F repair outcomes.
 
 ## Who is it for?
 
