@@ -1,4 +1,4 @@
-"""求解 CLI 与 A/B/C/D 证明修复循环，支持独立的动态检索消融。"""
+"""求解 CLI 与四种提示上下文策略，支持独立的动态检索消融。"""
 
 from __future__ import annotations
 

@@ -211,7 +211,7 @@ class Part1BaselineIntegrationTest(unittest.TestCase):
         self.assertFalse(failed["compile_ok"])
         self.assertIsNone(failed["success_node"])
 
-    def test_part1_safety_gate_rejects_d01_before_builder(self):
+    def test_part1_safety_gate_rejects_sp1_before_builder(self):
         class FakeBuildFailedFeedback:
             feedback_type = "build_failed"
 

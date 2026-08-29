@@ -1,6 +1,7 @@
 {
   "experiment": "leancapsule-feasibility-v1",
   "generated_at_utc": "2026-08-28T08:56:09.959278+00:00",
+  "metadata_note": "On 2026-08-29, derived summary fields were removed; measured outcomes and timings are unchanged.",
   "environment": {
     "git_commit": "11b614a0bc1fde4b5f88d434f5ccdc4d2437903d",
     "git_branch": "zhewen-capsule-multifile-core",
@@ -47,8 +48,7 @@
       "pack_elapsed_ms": 762.6,
       "replay_elapsed_ms": 182.8,
       "strict_ordered_diagnostics_preserved": true,
-      "strict_original_diagnostics_sha256": "9544a0adcd2664a4f452e208194768c51821b02ce38a078f78bccf75a9e87815",
-      "strict_capsule_diagnostics_sha256": "9544a0adcd2664a4f452e208194768c51821b02ce38a078f78bccf75a9e87815",
+      "strict_comparison_method": "direct_normalized_text_equality",
       "strict_metric_scope": "Feasibility analysis only: complete ordered diagnostic text after path, location, metavariable, and trailing-whitespace normalization; not semantic equivalence and not a replacement for the official diagnostic_key.",
       "notes": "No additional limitation observed."
     },
@@ -89,8 +89,7 @@
       "pack_elapsed_ms": 762.9,
       "replay_elapsed_ms": 194.7,
       "strict_ordered_diagnostics_preserved": true,
-      "strict_original_diagnostics_sha256": "f77b30f1d8a87e8b6b35e44ca01ac842e4fcd4525c8c943fb87da48ab8ea3f60",
-      "strict_capsule_diagnostics_sha256": "f77b30f1d8a87e8b6b35e44ca01ac842e4fcd4525c8c943fb87da48ab8ea3f60",
+      "strict_comparison_method": "direct_normalized_text_equality",
       "strict_metric_scope": "Feasibility analysis only: complete ordered diagnostic text after path, location, metavariable, and trailing-whitespace normalization; not semantic equivalence and not a replacement for the official diagnostic_key.",
       "notes": "No additional limitation observed."
     },
@@ -131,8 +130,7 @@
       "pack_elapsed_ms": 799.9,
       "replay_elapsed_ms": 241.9,
       "strict_ordered_diagnostics_preserved": true,
-      "strict_original_diagnostics_sha256": "e8121bf1cc9f2bf1aa5c8db28f58345e9e5766432326279c7ab384b5cb5d5c06",
-      "strict_capsule_diagnostics_sha256": "e8121bf1cc9f2bf1aa5c8db28f58345e9e5766432326279c7ab384b5cb5d5c06",
+      "strict_comparison_method": "direct_normalized_text_equality",
       "strict_metric_scope": "Feasibility analysis only: complete ordered diagnostic text after path, location, metavariable, and trailing-whitespace normalization; not semantic equivalence and not a replacement for the official diagnostic_key.",
       "notes": "No additional limitation observed."
     },
@@ -173,8 +171,7 @@
       "pack_elapsed_ms": 785.5,
       "replay_elapsed_ms": 179.2,
       "strict_ordered_diagnostics_preserved": true,
-      "strict_original_diagnostics_sha256": "7cf297b055d6d742c72cca919ece3e7d6fbfb5eaaaad8581d7ba89ca1bd3c12c",
-      "strict_capsule_diagnostics_sha256": "7cf297b055d6d742c72cca919ece3e7d6fbfb5eaaaad8581d7ba89ca1bd3c12c",
+      "strict_comparison_method": "direct_normalized_text_equality",
       "strict_metric_scope": "Feasibility analysis only: complete ordered diagnostic text after path, location, metavariable, and trailing-whitespace normalization; not semantic equivalence and not a replacement for the official diagnostic_key.",
       "notes": "No additional limitation observed."
     },
@@ -215,8 +212,7 @@
       "pack_elapsed_ms": 750.4,
       "replay_elapsed_ms": 191.3,
       "strict_ordered_diagnostics_preserved": true,
-      "strict_original_diagnostics_sha256": "e608f692f7bb8392a58c1618d259dec4ba7b9fc7ff231db147af50d8b1f1085e",
-      "strict_capsule_diagnostics_sha256": "e608f692f7bb8392a58c1618d259dec4ba7b9fc7ff231db147af50d8b1f1085e",
+      "strict_comparison_method": "direct_normalized_text_equality",
       "strict_metric_scope": "Feasibility analysis only: complete ordered diagnostic text after path, location, metavariable, and trailing-whitespace normalization; not semantic equivalence and not a replacement for the official diagnostic_key.",
       "notes": "No additional limitation observed."
     },
@@ -254,8 +250,7 @@
       "pack_elapsed_ms": 595.6,
       "replay_elapsed_ms": 288.1,
       "strict_ordered_diagnostics_preserved": true,
-      "strict_original_diagnostics_sha256": "20540226ed54d6e8907b72e492dcb8b756e063296fa14eeec5c2494ca1193038",
-      "strict_capsule_diagnostics_sha256": "20540226ed54d6e8907b72e492dcb8b756e063296fa14eeec5c2494ca1193038",
+      "strict_comparison_method": "direct_normalized_text_equality",
       "strict_metric_scope": "Feasibility analysis only: complete ordered diagnostic text after path, location, metavariable, and trailing-whitespace normalization; not semantic equivalence and not a replacement for the official diagnostic_key.",
       "notes": "theorem extraction required full-file fallback"
     },
@@ -293,8 +288,7 @@
       "pack_elapsed_ms": 575.8,
       "replay_elapsed_ms": 280.7,
       "strict_ordered_diagnostics_preserved": true,
-      "strict_original_diagnostics_sha256": "39d593b6576c82344e073cf1f62b34178f75c235504b4f4b9701a2e296797df1",
-      "strict_capsule_diagnostics_sha256": "39d593b6576c82344e073cf1f62b34178f75c235504b4f4b9701a2e296797df1",
+      "strict_comparison_method": "direct_normalized_text_equality",
       "strict_metric_scope": "Feasibility analysis only: complete ordered diagnostic text after path, location, metavariable, and trailing-whitespace normalization; not semantic equivalence and not a replacement for the official diagnostic_key.",
       "notes": "theorem extraction required full-file fallback"
     },
@@ -332,8 +326,7 @@
       "pack_elapsed_ms": 583.3,
       "replay_elapsed_ms": 279.9,
       "strict_ordered_diagnostics_preserved": true,
-      "strict_original_diagnostics_sha256": "907e0d0000ca332a36c1c57dba70bb322156c27932c5dcd981795161f86cab1c",
-      "strict_capsule_diagnostics_sha256": "907e0d0000ca332a36c1c57dba70bb322156c27932c5dcd981795161f86cab1c",
+      "strict_comparison_method": "direct_normalized_text_equality",
       "strict_metric_scope": "Feasibility analysis only: complete ordered diagnostic text after path, location, metavariable, and trailing-whitespace normalization; not semantic equivalence and not a replacement for the official diagnostic_key.",
       "notes": "theorem extraction required full-file fallback"
     },
@@ -371,8 +364,7 @@
       "pack_elapsed_ms": 350.9,
       "replay_elapsed_ms": 560.4,
       "strict_ordered_diagnostics_preserved": true,
-      "strict_original_diagnostics_sha256": "96f13e1f206c909379a5ec075a4fe74243bad03aab825710d21997396b430638",
-      "strict_capsule_diagnostics_sha256": "96f13e1f206c909379a5ec075a4fe74243bad03aab825710d21997396b430638",
+      "strict_comparison_method": "direct_normalized_text_equality",
       "strict_metric_scope": "Feasibility analysis only: complete ordered diagnostic text after path, location, metavariable, and trailing-whitespace normalization; not semantic equivalence and not a replacement for the official diagnostic_key.",
       "notes": "theorem extraction required full-file fallback"
     },
@@ -410,8 +402,7 @@
       "pack_elapsed_ms": 396.4,
       "replay_elapsed_ms": 558.6,
       "strict_ordered_diagnostics_preserved": true,
-      "strict_original_diagnostics_sha256": "94103d89305919098fe5e12f4b719a0b179d33559c2c01ffbf394d129862a139",
-      "strict_capsule_diagnostics_sha256": "94103d89305919098fe5e12f4b719a0b179d33559c2c01ffbf394d129862a139",
+      "strict_comparison_method": "direct_normalized_text_equality",
       "strict_metric_scope": "Feasibility analysis only: complete ordered diagnostic text after path, location, metavariable, and trailing-whitespace normalization; not semantic equivalence and not a replacement for the official diagnostic_key.",
       "notes": "theorem extraction required full-file fallback"
     },
@@ -449,8 +440,7 @@
       "pack_elapsed_ms": 348.1,
       "replay_elapsed_ms": 560.0,
       "strict_ordered_diagnostics_preserved": true,
-      "strict_original_diagnostics_sha256": "4ca169c2db006dc8ab3c52f94e87a2bf05a7f36e52025bf17633a6c385f89917",
-      "strict_capsule_diagnostics_sha256": "4ca169c2db006dc8ab3c52f94e87a2bf05a7f36e52025bf17633a6c385f89917",
+      "strict_comparison_method": "direct_normalized_text_equality",
       "strict_metric_scope": "Feasibility analysis only: complete ordered diagnostic text after path, location, metavariable, and trailing-whitespace normalization; not semantic equivalence and not a replacement for the official diagnostic_key.",
       "notes": "theorem extraction required full-file fallback"
     },
@@ -488,8 +478,7 @@
       "pack_elapsed_ms": 344.9,
       "replay_elapsed_ms": 564.4,
       "strict_ordered_diagnostics_preserved": true,
-      "strict_original_diagnostics_sha256": "907e0d0000ca332a36c1c57dba70bb322156c27932c5dcd981795161f86cab1c",
-      "strict_capsule_diagnostics_sha256": "907e0d0000ca332a36c1c57dba70bb322156c27932c5dcd981795161f86cab1c",
+      "strict_comparison_method": "direct_normalized_text_equality",
       "strict_metric_scope": "Feasibility analysis only: complete ordered diagnostic text after path, location, metavariable, and trailing-whitespace normalization; not semantic equivalence and not a replacement for the official diagnostic_key.",
       "notes": "theorem extraction required full-file fallback"
     }
@@ -529,8 +518,7 @@
       "pack_elapsed_ms": 603.8,
       "replay_elapsed_ms": 287.3,
       "strict_ordered_diagnostics_preserved": true,
-      "strict_original_diagnostics_sha256": "5f76ec1180b6cc5318d6ed16df3a9bd21107eb3c0f0de1bed8d3429d96edd5c4",
-      "strict_capsule_diagnostics_sha256": "5f76ec1180b6cc5318d6ed16df3a9bd21107eb3c0f0de1bed8d3429d96edd5c4",
+      "strict_comparison_method": "direct_normalized_text_equality",
       "strict_metric_scope": "Feasibility analysis only: complete ordered diagnostic text after path, location, metavariable, and trailing-whitespace normalization; not semantic equivalence and not a replacement for the official diagnostic_key.",
       "notes": "theorem extraction required full-file fallback"
     },
@@ -568,8 +556,7 @@
       "pack_elapsed_ms": 335.9,
       "replay_elapsed_ms": 555.5,
       "strict_ordered_diagnostics_preserved": true,
-      "strict_original_diagnostics_sha256": "61ee746ee3be6fdf3650908d5176f0a38b7abc3b243699ff6f35cd9d0532d1e5",
-      "strict_capsule_diagnostics_sha256": "61ee746ee3be6fdf3650908d5176f0a38b7abc3b243699ff6f35cd9d0532d1e5",
+      "strict_comparison_method": "direct_normalized_text_equality",
       "strict_metric_scope": "Feasibility analysis only: complete ordered diagnostic text after path, location, metavariable, and trailing-whitespace normalization; not semantic equivalence and not a replacement for the official diagnostic_key.",
       "notes": "theorem extraction required full-file fallback"
     },
@@ -610,8 +597,7 @@
       "pack_elapsed_ms": 760.6,
       "replay_elapsed_ms": 181.2,
       "strict_ordered_diagnostics_preserved": true,
-      "strict_original_diagnostics_sha256": "e1d5d1748393b03b77eba9a3bfa88a528fad413b766f41f3cce62afa5dff5d75",
-      "strict_capsule_diagnostics_sha256": "e1d5d1748393b03b77eba9a3bfa88a528fad413b766f41f3cce62afa5dff5d75",
+      "strict_comparison_method": "direct_normalized_text_equality",
       "strict_metric_scope": "Feasibility analysis only: complete ordered diagnostic text after path, location, metavariable, and trailing-whitespace normalization; not semantic equivalence and not a replacement for the official diagnostic_key.",
       "notes": "No additional limitation observed."
     },
@@ -652,8 +638,7 @@
       "pack_elapsed_ms": 764.4,
       "replay_elapsed_ms": 212.9,
       "strict_ordered_diagnostics_preserved": true,
-      "strict_original_diagnostics_sha256": "8e1755c4bbe31623b721fd9ac3aebd550cbc3a7dae479670c87902a564c3d1d5",
-      "strict_capsule_diagnostics_sha256": "8e1755c4bbe31623b721fd9ac3aebd550cbc3a7dae479670c87902a564c3d1d5",
+      "strict_comparison_method": "direct_normalized_text_equality",
       "strict_metric_scope": "Feasibility analysis only: complete ordered diagnostic text after path, location, metavariable, and trailing-whitespace normalization; not semantic equivalence and not a replacement for the official diagnostic_key.",
       "notes": "No additional limitation observed."
     }

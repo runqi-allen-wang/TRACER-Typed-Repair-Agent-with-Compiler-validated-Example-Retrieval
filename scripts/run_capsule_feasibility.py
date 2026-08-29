@@ -6,6 +6,7 @@ import argparse
 import json
 import platform
 import sys
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -120,6 +121,11 @@ def render_markdown(payload: dict[str, Any]) -> str:
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--timeout", type=float, default=60.0)
+    parser.add_argument(
+        "--verify-only",
+        action="store_true",
+        help="在仓库内的临时目录复验，不覆盖已发布的结果与报告。",
+    )
     return parser.parse_args(argv)
 
 
@@ -131,8 +137,19 @@ def main(argv: list[str] | None = None) -> int:
     if len(core_cases) != 12 or len(challenge_cases) != 4:
         raise SystemExit(f"expected 12 core and 4 challenge cases, found {len(core_cases)} and {len(challenge_cases)}")
 
-    core_capsules = RESULTS_ROOT / "capsules"
-    challenge_capsules = CHALLENGE_RESULTS / "capsules"
+    temporary: tempfile.TemporaryDirectory[str] | None = None
+    if args.verify_only:
+        (ROOT / "results").mkdir(parents=True, exist_ok=True)
+        temporary = tempfile.TemporaryDirectory(prefix=".feasibility-check-", dir=ROOT / "results")
+        check_root = Path(temporary.name)
+        results_root = check_root / "core"
+        challenge_results = check_root / "challenge"
+    else:
+        results_root = RESULTS_ROOT
+        challenge_results = CHALLENGE_RESULTS
+
+    core_capsules = results_root / "capsules"
+    challenge_capsules = challenge_results / "capsules"
     core_capsules.mkdir(parents=True, exist_ok=True)
     challenge_capsules.mkdir(parents=True, exist_ok=True)
     core_results = [engine.run_case(case, core_capsules, args.timeout) for case in core_cases]
@@ -155,14 +172,15 @@ def main(argv: list[str] | None = None) -> int:
         "challenge_summary": engine.summarize(challenge_results),
         "all_summary": engine.summarize(all_results),
     }
-    RESULTS_ROOT.mkdir(parents=True, exist_ok=True)
-    markdown = render_markdown(payload)
-    (RESULTS_ROOT / "summary.json").write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    (RESULTS_ROOT / "summary.md").write_text(markdown, encoding="utf-8")
-    REPORT.write_text(markdown, encoding="utf-8")
+    if not args.verify_only:
+        RESULTS_ROOT.mkdir(parents=True, exist_ok=True)
+        markdown = render_markdown(payload)
+        (RESULTS_ROOT / "summary.json").write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        (RESULTS_ROOT / "summary.md").write_text(markdown, encoding="utf-8")
+        REPORT.write_text(markdown, encoding="utf-8")
     print(
         json.dumps(
             {
@@ -170,11 +188,15 @@ def main(argv: list[str] | None = None) -> int:
                 "core_passed": payload["core_passed_count"],
                 "challenge_replay": payload["challenge_summary"]["replay_success_count"],
                 "all_replay": payload["all_summary"]["replay_success_count"],
+                "verify_only": args.verify_only,
             },
             ensure_ascii=False,
         )
     )
-    return 0 if payload["core_passed_count"] == 12 else 1
+    exit_code = 0 if payload["core_passed_count"] == 12 else 1
+    if temporary is not None:
+        temporary.cleanup()
+    return exit_code
 
 
 if __name__ == "__main__":

@@ -26,7 +26,7 @@ Available artifacts:
 - **A 12-core / 4-challenge feasibility experiment** whose 16 cases preserve normalized diagnostics and replay in clean temporary directories, including project-local multi-file cases.
 - **18 frozen problems × 3 experimental conditions**, with a published real-provider pilot containing 56 per-round records and 54 successful proof files.
 - **An end-to-end workflow** covering a single-problem CLI, local HTTP API, batch evaluation, manual review, report validation, and sanitized export.
-- **A separate repair24 research suite** with retrieval-only, diagnostic-query and failure-context controls; multi-model results are pending. Jump to [research evaluation](#research-evaluation-beyond-the-smoke-test) and [related work](#related-work).
+- **A separate repair24 research suite** with retrieval-only, diagnostic-query and failure-context controls. The runner and offline checks exist; the full multi-model repeated experiment is pending. Jump to [research evaluation](#research-evaluation-beyond-the-smoke-test) and [related work](#related-work).
 
 These artifact counts are not evidence of general theorem-proving ability or superior performance; experimental limitations are discussed below.
 
@@ -291,7 +291,7 @@ These checks do not call paid model APIs, but end-to-end tests require a real Le
 
 ```text
 lake build
-python scripts/run_capsule_feasibility.py
+python scripts/run_capsule_feasibility.py --verify-only
 python scripts/run_ci_tests.py
 python -m leancapsule audit capsules
 ```
@@ -319,9 +319,9 @@ Keep these checks distinct:
 ## Safety and scope
 
 - **Not an operating-system sandbox.** Temporary HOME/TMP/APPDATA directories, minimal environment variables, and candidate policies are defense layers. Run untrusted projects or Lean code in a container, VM, or isolated low-privilege environment.
-- **Local repair only.** The Agent must not rewrite imports or theorem headers. Candidates containing `sorry`, `admit`, `sorryAx`, unfinished-proof warnings, unsafe declarations, or certain explicit native-execution constructs are rejected. D01 verifies that an `unsafe inductive` construction of `False` is rejected before Agent, AxProverBase, Capsule pack, replay, or audit can compile it; this is a security regression, not a fourth A/B/C condition and not the research matrix’s retrieval-only arm D. Text rules cannot be assumed to detect every Lean metaprogramming construct.
+- **Local repair only.** The Agent must not rewrite imports or theorem headers. Candidates containing `sorry`, `admit`, `sorryAx`, unfinished-proof warnings, unsafe declarations, or certain explicit native-execution constructs are rejected. SP-1 verifies that an `unsafe inductive` construction of `False` is rejected before Agent, AxProverBase, Capsule pack, replay, or audit can compile it. SP identifies a non-experimental security policy, so it cannot be confused with research arm R-D. Text rules cannot be assumed to detect every Lean metaprogramming construct.
 - **Separate credentials from releases.** The provider restricts cross-origin redirects and sanitizes errors; keys are not experiment-record fields. Still inspect exports and send keys only to trusted providers.
-- **Readable comparisons and caching.** Diagnostic comparisons and request caching use normalized readable text, without digest or fingerprint computation. Cache reuse is for local debugging, not independent real sampling.
+- **Readable comparisons and caching.** Diagnostic comparisons and request caching use normalized readable text and do not create opaque derived identifiers. Cache reuse is for local debugging, not independent real sampling.
 - **Extraction is not global minimization.** Full-file fallback and explicit local-file manifests are not arbitrary multi-file program slicing. Diagnostic consistency does not guarantee preservation of every contextual meaning.
 - **Implemented infrastructure, unproven generalization.** The toolkit and published pilot do not replace larger, harder, multi-model, repeated experiments. The current retriever is not a learned premise-selection model.
 
@@ -334,8 +334,8 @@ Keep these checks distinct:
 | Understand condition controls and validity constraints | [Methodology](docs/methodology.md) |
 | Look up per-round record fields | [JSONL format](docs/jsonl_schema.md) |
 | Create publicly shareable failure artifacts | [Artifact format](docs/CAPSULE_FORMAT.md) and [case contribution guide](docs/CONTRIBUTING_CAPSULES.md) |
-| Run or inspect the AxProverBase Part 1 + Part 2 experiment | [Part 1 guide](baseline/README.md), [Part 2 design](docs/part2_capsule_feedback.md), [Part 3 handoff checklist](docs/part3_experiment_handoff.md), and [result handoff](results/handoff/part12-live-20260828-corrected/README.md) |
-| Inspect the D01 pre-compilation security gate | [Type D security regression](docs/security_type_d.md) |
+| Run or inspect the AxProverBase Part 1 + Part 2 experiment | [Part 1 guide](baseline/README.md), [Part 2 design](docs/part2_capsule_feedback.md), [Part 3 follow-up checklist](docs/part3_experiment_handoff.md), and [result handoff](results/handoff/part12-live-20260828-corrected/README.md) |
+| Inspect the SP-1 pre-compilation security gate | [Security-policy regression](docs/security_policy.md) |
 | Inspect the 12-core / 4-challenge clean-replay experiment | [Capsule feasibility report](docs/CAPSULE_FEASIBILITY.md) |
 | Inspect published experiments and proofs | [Pilot release](published/pilot-20260826T122354Z-d628742d) |
 | Check current status and past changes | [PROGRESS](PROGRESS.md) and [CHANGELOG](CHANGELOG.md) |
@@ -352,7 +352,7 @@ examples/              Local retrieval examples and failing inputs
 benchmarks/            Frozen problem metadata
 lean_project/          Lean problems and local-dependency cases
 mathlib_project/       Separate Mathlib dependency project
-prompts/               A/B/C prompt templates
+prompts/               A/B/C/D context-strategy prompt templates
 scripts/               Dependency setup, tests, pilot validation, and export
 baseline/              AxProverBase Part 1 and paired Part 2 experiment runners
 configs/               Frozen AxProverBase model and memory configurations
@@ -364,22 +364,24 @@ docs/                  Usage guides and research methodology
 
 ## Research evaluation beyond the smoke test
 
-**Preflight observation (2026-08-28, legacy strict-warning protocol):** DeepSeek Flash passed 20/24 and Pro 19/24 within three attempts in the B-only, single-repeat run; both passed 18/24 on the first attempt. All 39 saved successes were independently recompiled. There were 69 requests, no infrastructure failures, and an estimated total cost of $1.2260 under the recorded prices—not a bill. These local, not-yet-published results do not establish a model ranking or feedback/retrieval gains.
+**Historical local preflight note (2026-08-28, legacy strict-warning protocol):** a previous local audit reported DeepSeek Flash 20/24 and Pro 19/24 within three attempts in an R-B-only (stored arm `B`), single-repeat run; both were 18/24 on the first attempt. It also reported 39 independently recompiled successes, 69 requests, no infrastructure failures, and an estimated cost of $1.2260 under then-recorded prices—not a bill. The raw trajectories and proof directory are **not included in this source export**, so these figures are not independently verifiable from the present repository and are not a published result or evidence of model ranking or feedback/retrieval gains.
 
 The audit found 21 output-limit truncations with no final proof, three otherwise valid candidates rejected only by linters, and confusion between completing a proof tail and replacing the whole proof. New runs use **`tracer-proof-v2`**: an explicit whole-proof contract shared by all arms, frozen prompt templates, separate truncation outcomes, and separate kernel/warning-free fields. Incomplete proofs remain rejected. Historical scores are unchanged, and protocol versions must not be mixed. See [the audit, evidence location, and revised protocol](docs/RESEARCH_PROTOCOL.md#4-轨迹与报告); v2 has only offline validation so far.
 
 The original 18 problems and published A/B/C pilot remain an **engineering smoke test**, not evidence of broad superiority. The new [repair24-v1](benchmarks/repair24/manifest.json) contains 24 authored repair tasks across recursive lists, quantifiers, functions, options, and recursive arithmetic. Each has a concrete broken proof and a separately tested reference repair. Structural difficulty is a design objective; the limited preflight above does not establish generalization.
 
-| Arm | Compiler feedback | Retrieved examples | Query |
-| --- | --- | --- | --- |
-| A | No | No | — |
-| B | Yes | No | — |
-| C | Yes | Yes | Fixed |
-| D | No | Yes | Fixed |
-| C_dynamic | Yes | Yes | Updated from errors, types and goals |
-| C_failure | Yes | Yes, plus failure-capsule context | Same strategy as C_dynamic |
+To prevent labels from different levels being conflated, public documentation uses the following display names. Existing stored arm IDs remain unchanged so historical local directories and tools stay readable.
 
-A/D still compile to decide whether to stop; diagnostics are not sent back to the generator. The two additional arms separate query adaptation from failure reuse, rather than silently changing the old C condition. Model weights are never updated.
+| Display arm | Stored `arm` | Prompt strategy | Compiler feedback | Retrieved examples | Query |
+| --- | --- | --- | --- | --- | --- |
+| R-A | `A` | A | No | No | — |
+| R-B | `B` | B | Yes | No | — |
+| R-C | `C` | C | Yes | Yes | Fixed |
+| R-D | `D` | D | No | Yes | Fixed |
+| R-E | `C_dynamic` | C | Yes | Yes | Updated from errors, types and goals |
+| R-F | `C_failure` | C | Yes | Yes, plus failure-capsule context | Same strategy as R-E |
+
+R-A/R-D still compile to decide whether to stop; diagnostics are not sent back to the generator. R-E/R-F separate query adaptation from failure reuse rather than silently changing R-C. `SP-1` is a security-policy regression, not a seventh research arm. Model weights are never updated.
 
 The [research runner](src/research.py) freezes readable input snapshots, randomizes task order, disables request-cache reuse, records full prompts and usage, and independently recompiles saved proofs. It supports multiple models and repeats; incomplete or mixed traces are rejected by report validation. Unknown costs remain unknown, and manual review is separate from automatic checks.
 
@@ -390,13 +392,15 @@ python src/research.py plan --config experiments/research.example.json
 
 The example plan has **864 tasks / at most 2,592 logical generations**: 24 problems × 2 models × 3 repeats × 6 arms. These commands do not call a model API. Replace the example model names and review the budget before explicitly running a paid experiment. See the [research protocol and commands](docs/RESEARCH_PROTOCOL.md).
 
-Ready-to-review DeepSeek configurations are available for [Flash/Pro preflight](experiments/research.deepseek.preflight.json) (48 B-arm tasks) and the [full matrix](experiments/research.deepseek.json). The paid CLI requires explicit call and conservative cost-reservation limits, uses hidden in-memory key entry, and disables automatic HTTP retries. These limits are not a vendor-enforced billing cap. Thinking mode is explicitly fixed; DeepSeek ignores temperature in this mode. No new paid results are claimed until the actual traces exist.
+Ready-to-review DeepSeek configurations are available for [Flash/Pro preflight](experiments/research.deepseek.preflight.json) (48 R-B tasks; stored arm `B`) and the [full matrix](experiments/research.deepseek.json). The paid CLI requires explicit call and conservative cost-reservation limits, uses hidden in-memory key entry, and disables automatic HTTP retries. These limits are not a vendor-enforced billing cap. Thinking mode is explicitly fixed; DeepSeek ignores temperature in this mode. No new paid results are claimed until the actual traces exist.
 
-The [human-study runner](src/human_study.py) offers 8 compiler-checked synthetic context/reduced pairs, complementary participant assignments, source display only after timing starts, abandonment/timeout records, and separate review records. The existing gallery's 23 mapped source pairs are identical, so they cannot establish source-reduction benefits through reading-time comparisons. The new materials are a **synthetic feasibility study**, not a study of naturally occurring bugs. Timings must come from real people, not AI substitutes; do not read the materials or reviewer answers before participating.
+The [human-study runner](src/human_study.py) can prepare 8 compiler-checked synthetic context/reduced pairs, complementary participant assignments, source display only after timing starts, abandonment/timeout records, and separate review records. No participant responses or human-time results are included in this export. The existing gallery's 23 mapped source pairs are identical, so they cannot establish source-reduction benefits through reading-time comparisons. Any generated materials are a **synthetic feasibility study**, not a study of naturally occurring bugs. Timings must come from real people, not AI substitutes; do not inspect generated materials or reviewer answers before participating.
 
 [Capsule metrics](src/capsule_metrics.py) separately measure replay agreement, source-size reduction and human diagnosis times. Cross-environment claims require actual independent environment records; changing a label is not a new environment. Human timings require participants and reviewed diagnoses. The experimental machinery is implemented; **multi-model gains, cross-environment benefits and human-time savings are not yet established**.
 
-Local reproducibility check (2026-08-28): **Windows 11 and Ubuntu WSL2 each matched 48/48 replays** of the same 24 cases under native Lean 4.32.0. This is cross-OS diagnostic reproduction on one physical machine—not independent hardware validation, a cold-start benchmark, or evidence of speedup. Both environments validated 23 source pairs; their median source reduction remains zero. Local trace locations and the retained incomplete precheck are recorded in [PROGRESS.md](PROGRESS.md).
+A historical local note reported that Windows 11 and Ubuntu WSL2 each matched 48/48 replays of the same 24 cases under native Lean 4.32.0. Those raw cross-OS records are not included in this source export, so the claim cannot be independently checked here. Even if reproduced, it would describe two operating systems on one physical machine—not independent hardware validation, a cold-start benchmark, or evidence of speedup.
+
+The [Part 3 checklist](docs/part3_experiment_handoff.md) validates the existing corrected Part 1/2 handoff only. No separate Part 3 model run or additional outcome is included.
 
 ## Related work
 

@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from compiler import CANDIDATE_POLICY, lean_subprocess_environment
 from export_pilot import reject_secrets, sanitize
-from validate_pilot import expected_pairs, validate_runs
+from validate_pilot import expected_pairs, load_runs, validate_runs
 
 
 class PilotWorkflowTest(unittest.TestCase):
@@ -46,10 +46,21 @@ class PilotWorkflowTest(unittest.TestCase):
 
     def test_secret_rejection(self):
         with self.assertRaises(ValueError):
-            reject_secrets("Authorization: Bearer sk-test-secret-value-1234")
+            reject_secrets("Authorization: Bearer " + "sk-" + "test-secret-value-1234")
 
     def test_manifest_has_frozen_pairs(self):
         self.assertEqual(len(expected_pairs(ROOT / "benchmarks" / "manifest.json")), 54)
+
+    def test_published_v1_pilot_requires_explicit_compatibility_mode(self):
+        release = ROOT / "published/pilot-20260826T122354Z-d628742d"
+        rows = load_runs(release / "real_pilot_runs.sanitized.jsonl")
+        expected = expected_pairs(ROOT / "benchmarks/manifest.json")
+        strict_errors = validate_runs(rows, expected, allow_cache_hits=False)
+        self.assertTrue(any("candidate security policy" in item for item in strict_errors))
+        self.assertEqual(
+            validate_runs(rows, expected, allow_cache_hits=False, allow_legacy_candidate_policy=True),
+            [],
+        )
 
 
 if __name__ == "__main__":
