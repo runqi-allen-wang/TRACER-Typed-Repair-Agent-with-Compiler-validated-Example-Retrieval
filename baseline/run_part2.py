@@ -56,9 +56,11 @@ def _proposal_messages(state: object) -> list[object]:
     return [message for message in messages if _read(message, "type") == "proposal"]
 
 
-def _contract_from_config(config: object) -> dict[str, Any]:
+def _contract_from_config(
+    config: object, *, memory_class: str = "MemorylessProcessor"
+) -> dict[str, Any]:
     prover = _read(config, "prover")
-    enforce_ax_part2_config(prover)
+    enforce_ax_part2_config(prover, memory_class=memory_class)
     llm = _read(prover, "prover_llm")
     provider = _read(llm, "provider_config", {})
     reasoning = _read(provider, "reasoning", {})
@@ -119,8 +121,8 @@ def _contract_from_config(config: object) -> dict[str, Any]:
         errors.append(f"reasoning effort must be {YXAI_REASONING_EFFORT}")
     if provider_contract["output_version"] != "responses/v1":
         errors.append("output_version must be responses/v1")
-    if contract["memory_processor"] != "MemorylessProcessor":
-        errors.append("Part 2 memory must be MemorylessProcessor")
+    if contract["memory_processor"] != memory_class:
+        errors.append(f"memory must be {memory_class}")
     if contract["summary_enabled"]:
         errors.append("final LLM summary must be disabled")
     if contract["budget"]["max_iterations"] <= 0:
@@ -138,6 +140,9 @@ def extract_record(
     *,
     task_metadata: Mapping[str, Any] | None = None,
     run_elapsed_ms: int = 0,
+    condition: str = "capsule",
+    memory_mode: str = "capsule_feedback",
+    memory_processor: str = "MemorylessProcessor",
 ) -> dict[str, Any]:
     """Extract one pairing-ready Capsule condition record."""
 
@@ -165,6 +170,7 @@ def extract_record(
     total_tokens = int(usage.get("total_tokens", prompt_tokens + completion_tokens) or 0)
     proposer_calls = int(llm_calls.get("proposer", 0) or 0)
     reviewer_calls = int(llm_calls.get("reviewer", 0) or 0)
+    memory_calls = int(llm_calls.get("memory", 0) or 0)
     other_llm_calls = int(llm_calls.get("other", 0) or 0)
     provider_contract = dict(contract["provider_config"])
 
@@ -176,9 +182,9 @@ def extract_record(
         "module": module,
         "theorem": theorem,
         "path": str(_read(location, "path", "")),
-        "condition": "capsule",
-        "memory_mode": "capsule_feedback",
-        "memory_processor": "MemorylessProcessor",
+        "condition": condition,
+        "memory_mode": memory_mode,
+        "memory_processor": memory_processor,
         "integration_schema_version": AX_INTEGRATION_VERSION,
         "axproverbase_commit": AXPROVERBASE_COMMIT,
         "model": contract["model"],
@@ -203,14 +209,14 @@ def extract_record(
         "calls": {
             "proposer_calls": proposer_calls,
             "reviewer_calls": reviewer_calls,
-            "memory_calls": 0,
+            "memory_calls": memory_calls,
             "other_llm_calls": other_llm_calls,
             "tool_calls": int(getattr(prover, "_capsule_tool_calls", 0) or 0),
             "compiler_calls": int(node_calls.get("builder", 0) or 0),
             "capsule_llm_calls": 0,
             "capsule_compiler_calls": 0,
         },
-        "call_count": proposer_calls + reviewer_calls + other_llm_calls,
+        "call_count": proposer_calls + reviewer_calls + memory_calls + other_llm_calls,
         "usage": {
             "prompt_tokens": prompt_tokens,
             "completion_tokens": completion_tokens,
@@ -231,6 +237,10 @@ async def run_target(
     config_yaml: str,
     *,
     task_metadata: Mapping[str, Any] | None = None,
+    memory_class: str = "MemorylessProcessor",
+    condition: str = "capsule",
+    memory_mode: str = "capsule_feedback",
+    memory_processor: str = "MemorylessProcessor",
 ) -> list[dict[str, Any]]:
     from ax_prover.config import Config
     from ax_prover.prover.agent import ProverAgent
@@ -243,13 +253,13 @@ async def run_target(
         prove_single_item,
     )
 
-    install_axproverbase_capsule_feedback()
+    install_axproverbase_capsule_feedback(memory_class=memory_class)
     load_env_secrets(folder)
     # Do not inherit upstream default.yaml: it selects Claude, and OmegaConf's
     # deep merge otherwise leaves Claude-only ``betas``/``thinking`` keys in
     # this OpenAI-compatible provider request.
     config = merge_configs([Config(), config_yaml], folder=folder)
-    contract = _contract_from_config(config)
+    contract = _contract_from_config(config, memory_class=memory_class)
     tool_lifespans = await create_tool_lifespans(config.prover.proposer_tools)
     records: list[dict[str, Any]] = []
     async with Runtime.open(config.runtime, folder, tool_lifespans) as runtime:
@@ -267,6 +277,9 @@ async def run_target(
                     contract,
                     task_metadata=task_metadata,
                     run_elapsed_ms=int((time.perf_counter() - started) * 1000),
+                    condition=condition,
+                    memory_mode=memory_mode,
+                    memory_processor=memory_processor,
                 )
             )
     return records
@@ -411,6 +424,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--limit", type=int)
     parser.add_argument(
+        "--memory-class",
+        default="MemorylessProcessor",
+        choices=["MemorylessProcessor", "ExperienceProcessor"],
+        help="Memory strategy for this arm: MemorylessProcessor (Part 2 capsule, "
+        "default) or ExperienceProcessor (experiment-capsule arm, reuses the "
+        "shared yxai model and its LLM calls are counted)",
+    )
+    parser.add_argument(
         "--overwrite",
         action="store_true",
         help="Replace a non-empty output file instead of refusing to create duplicate task rows",
@@ -446,6 +467,9 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     failures = 0
+    arm_experience = args.memory_class == "ExperienceProcessor"
+    arm_condition = "capsule_experience" if arm_experience else "capsule"
+    arm_memory_mode = "experience_capsule_feedback" if arm_experience else "capsule_feedback"
     with args.out.open("a", encoding="utf-8", newline="\n") as stream:
         for index, row in enumerate(rows, start=1):
             target = str(row["target"])
@@ -456,7 +480,16 @@ def main(argv: list[str] | None = None) -> int:
             }
             try:
                 records = asyncio.run(
-                    run_target(target, args.folder, args.config, task_metadata=metadata)
+                    run_target(
+                        target,
+                        args.folder,
+                        args.config,
+                        task_metadata=metadata,
+                        memory_class=args.memory_class,
+                        condition=arm_condition,
+                        memory_mode=arm_memory_mode,
+                        memory_processor=args.memory_class,
+                    )
                 )
             except Exception as exc:  # noqa: BLE001
                 print(f"[{index}/{len(rows)}] {target}: ERROR {exc}")

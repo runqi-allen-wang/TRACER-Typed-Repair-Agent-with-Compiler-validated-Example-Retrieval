@@ -134,8 +134,19 @@ def validate_ax_proposal_safety(
     )
 
 
-def enforce_ax_part2_config(config: object) -> object:
-    """Freeze the Part 2 model, Memoryless strategy, and disabled summary."""
+def enforce_ax_part2_config(
+    config: object,
+    *,
+    memory_class: str = "MemorylessProcessor",
+    memory_init_args: object = None,
+) -> object:
+    """Freeze the Part 2 model, memory strategy, and disabled summary.
+
+    ``memory_class`` defaults to the Capsule condition's ``MemorylessProcessor``.
+    The experiment-capsule arm (Experience + CapsuleFeedback) passes
+    ``memory_class="ExperienceProcessor"`` with the matching ``init_args.llm_config``
+    so the shared yxai model is reused for the memory node too.
+    """
 
     llm = _read(config, "prover_llm")
     if llm is None:
@@ -160,8 +171,21 @@ def enforce_ax_part2_config(config: object) -> object:
     memory = _read(config, "memory_config")
     if memory is None:
         raise ValueError("Ax Part 2 requires prover.memory_config configuration")
-    _write(memory, "class_name", "MemorylessProcessor")
-    _write(memory, "init_args", {})
+    _write(memory, "class_name", memory_class)
+    if memory_class == "MemorylessProcessor":
+        _write(memory, "init_args", {})
+    else:
+        init_args = _read(memory, "init_args")
+        if not isinstance(init_args, Mapping):
+            init_args = {}
+        updated = dict(init_args)
+        if memory_init_args is not None:
+            if not isinstance(memory_init_args, Mapping):
+                raise ValueError("memory_init_args must be a mapping")
+            updated.update(memory_init_args)
+        if "llm_config" not in updated:
+            updated["llm_config"] = llm
+        _write(memory, "init_args", updated)
 
     summary = _read(config, "summarize_output")
     if summary is None:
@@ -366,6 +390,8 @@ def _capsule_event(
     payload: Mapping[str, Any],
     builder_elapsed_ms: float,
     capsule_elapsed_ms: float,
+    memory_processor: str = "MemorylessProcessor",
+    memory_llm_calls: int = 0,
 ) -> dict[str, Any]:
     return {
         "integration_schema_version": AX_INTEGRATION_VERSION,
@@ -394,8 +420,8 @@ def _capsule_event(
         "builder_result_reused": True,
         "capsule_compiler_calls": 0,
         "capsule_llm_calls": 0,
-        "memory_llm_calls": 0,
-        "memory_processor": "MemorylessProcessor",
+        "memory_llm_calls": memory_llm_calls,
+        "memory_processor": memory_processor,
     }
 
 
@@ -407,8 +433,14 @@ def install_axproverbase_capsule_feedback(
     telemetry_path: str | Path | None = None,
     state_dir: str | Path | None = None,
     first_round_cache_path: str | Path | None = None,
+    memory_class: str = "MemorylessProcessor",
+    memory_init_args: object = None,
 ) -> type:
     """Install the Part 2 wrapper before Ax constructs ``ProverAgent``.
+
+    ``memory_class`` selects the Ax memory strategy: the default ``MemorylessProcessor``
+    keeps the original Part 2 condition deterministic; the experiment-capsule arm
+    passes ``memory_class="ExperienceProcessor"`` so memory reuses the yxai model.
 
     Optional class injection keeps the integration testable without importing
     Ax's heavy runtime.  Production callers should omit it.
@@ -474,8 +506,9 @@ def install_axproverbase_capsule_feedback(
         return violation
 
     def patched_init(self: object, config: object, runtime: object) -> None:
-        enforce_ax_part2_config(config)
+        enforce_ax_part2_config(config, memory_class=memory_class, memory_init_args=memory_init_args)
         original_init(self, config, runtime)
+        self._capsule_memory_processor = memory_class
         self._capsule_feedback_sessions = CapsuleFeedbackSessions(state_dir=configured_state_dir)
         self._capsule_feedback_telemetry = JsonlTelemetry(configured_telemetry_path)
         self._capsule_first_round_cache = (
@@ -492,7 +525,7 @@ def install_axproverbase_capsule_feedback(
             "reviewer": 0,
         }
         self._capsule_active_llm_role = "other"
-        self._capsule_llm_calls = {"proposer": 0, "reviewer": 0, "other": 0}
+        self._capsule_llm_calls = {"proposer": 0, "reviewer": 0, "memory": 0, "other": 0}
         self._capsule_tool_calls = 0
         self._capsule_usage = {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0}
         llm_client = getattr(self, "llm_client", None)
@@ -563,6 +596,8 @@ def install_axproverbase_capsule_feedback(
                     payload=payload,
                     builder_elapsed_ms=builder_elapsed_ms,
                     capsule_elapsed_ms=capsule_elapsed_ms,
+                    memory_processor=self._capsule_memory_processor,
+                    memory_llm_calls=int(self._capsule_llm_calls.get("memory", 0) or 0),
                 )
             )
             changed = True
@@ -574,7 +609,12 @@ def install_axproverbase_capsule_feedback(
 
     async def counted_memory(self: object, *args: object, **kwargs: object) -> object:
         self._capsule_node_counts["memory"] += 1
-        return await original_memory(self, *args, **kwargs)
+        previous_role = self._capsule_active_llm_role
+        self._capsule_active_llm_role = "memory"
+        try:
+            return await original_memory(self, *args, **kwargs)
+        finally:
+            self._capsule_active_llm_role = previous_role
 
     async def counted_proposer(
         self: object, state: object, config: RunnableConfig
@@ -637,15 +677,15 @@ def install_axproverbase_capsule_feedback(
                 "use_responses_api": True,
                 "store": YXAI_STORE_RESPONSES,
                 "reasoning_effort": YXAI_REASONING_EFFORT,
-                "memory_processor": "MemorylessProcessor",
-                "memory_llm_calls": 0,
+                "memory_processor": self._capsule_memory_processor,
+                "memory_llm_calls": int(self._capsule_llm_calls.get("memory", 0) or 0),
                 "capsule_llm_calls": 0,
                 "capsule_compiler_calls": 0,
                 "node_calls": dict(self._capsule_node_counts),
                 "calls": {
                     "proposer_calls": self._capsule_llm_calls["proposer"],
                     "reviewer_calls": self._capsule_llm_calls["reviewer"],
-                    "memory_calls": 0,
+                    "memory_calls": int(self._capsule_llm_calls.get("memory", 0) or 0),
                     "other_llm_calls": self._capsule_llm_calls["other"],
                     "tool_calls": self._capsule_tool_calls,
                     "capsule_llm_calls": 0,
