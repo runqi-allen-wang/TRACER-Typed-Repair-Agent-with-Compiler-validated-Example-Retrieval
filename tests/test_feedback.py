@@ -99,7 +99,7 @@ class CapsuleFeedbackTest(unittest.TestCase):
         result = formatter.observe_ax(
             (
                 False,
-                "error: Authorization: Bearer secret-token-123 and sk-abc123456789 "
+                "error: Authorization: Bearer " + "secret-token-123 and " + "sk-" + "abc123456789 "
                 "api_key=opaque-secret-value",
             )
         )

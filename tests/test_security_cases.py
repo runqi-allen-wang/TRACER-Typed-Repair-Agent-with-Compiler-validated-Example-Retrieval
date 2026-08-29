@@ -18,22 +18,22 @@ from compiler import (  # noqa: E402
 from provider import MockProvider  # noqa: E402
 
 
-class SecurityTypeDTest(unittest.TestCase):
+class SecurityPolicyTest(unittest.TestCase):
     def setUp(self):
         manifest_path = ROOT / "benchmarks" / "security" / "manifest.json"
         self.cases = json.loads(manifest_path.read_text(encoding="utf-8"))
 
-    def test_type_d_manifest_is_well_formed(self):
+    def test_security_manifest_is_well_formed(self):
         self.assertTrue(self.cases)
         self.assertEqual(len({case["id"] for case in self.cases}), len(self.cases))
         for case in self.cases:
-            self.assertRegex(case["id"], r"^D\d{2}$")
-            self.assertEqual(case["type"], "D")
+            self.assertRegex(case["id"], r"^SP-\d+$")
+            self.assertEqual(case["type"], "security_policy")
             self.assertEqual(case["expected_category"], "unsafe_candidate")
             self.assertEqual(case["expected_policy"], "reject_before_compile")
             self.assertTrue((ROOT / case["file"]).is_file())
 
-    def test_type_d_cases_are_rejected_before_lean_compilation(self):
+    def test_security_cases_are_rejected_before_lean_compilation(self):
         source_path = ROOT / "lean_project" / "Benchmarks" / "Evaluation18.lean"
         for case in self.cases:
             with self.subTest(case=case["id"]):
@@ -62,7 +62,7 @@ class SecurityTypeDTest(unittest.TestCase):
                 self.assertIn("unsafe", result["diagnostic"]["summary"])
                 self.assertEqual(result["candidate_policy"], CANDIDATE_POLICY)
 
-    def test_type_d_rule_covers_declaration_modifiers(self):
+    def test_security_rule_covers_declaration_modifiers(self):
         for source in (
             "private unsafe inductive Bad\n  | mk : (Bad → False) → Bad\n",
             "private /- split modifier -/ unsafe inductive Bad\n  | mk : (Bad → False) → Bad\n",

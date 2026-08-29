@@ -7,33 +7,29 @@
   "files": [
     {
       "path": "raw.jsonl",
-      "bytes": 100999,
-      "sha256": "736f5c75dc79adad8b5db936f6cfe3be3a4bf4853e285453c98ee5f5d7f37d6e"
+      "bytes": 100999
     },
     {
       "path": "capsule.jsonl",
-      "bytes": 113307,
-      "sha256": "2d52d75143dccd2aee364066d46e4411db70b1028bcf2b6011df11abc4ee4df0"
+      "bytes": 113307
     },
     {
       "path": "pairing.json",
-      "bytes": 27148,
-      "sha256": "f5c7ae52f609183ad674e272b14f2dd76fb1cbbc9e58d995211a8a19bdc233ac"
+      "bytes": 27148
     },
     {
       "path": "per-task.csv",
-      "bytes": 3570,
-      "sha256": "75a33c8bf226eda60abda845f2562ec95baf10d93843b552fe595376a11f3ee8"
+      "bytes": 3570
     },
     {
       "path": "summary.json",
-      "bytes": 1703,
-      "sha256": "afee3a3c20d3b51978640ad18e2d0ffcd95ef1ea14316f5db5812a1ffe7f4454"
+      "bytes": 1703
     },
     {
       "path": "REPORT.md",
-      "bytes": 3501,
-      "sha256": "e4685f09b9c659ddff559eb9a923ae4c637b996e4f2bd189099d0e36e01d4518"
+      "bytes": 3501
     }
-  ]
+  ],
+  "metadata_revision": "readable-manifest-v2",
+  "metadata_note": "仅保留相对路径与文件字节数；未重新调用模型。"
 }

@@ -159,7 +159,7 @@ class CapsuleTest(unittest.TestCase):
                 result = replay_capsule(capsule)
             self.assertTrue(result["ok"])
 
-    def test_pack_and_replay_reject_type_d_before_compilation(self):
+    def test_pack_and_replay_reject_sp1_before_compilation(self):
         unsafe_source = (ROOT / "benchmarks" / "security" / "unsafe_inductive_false.lean").read_text(
             encoding="utf-8"
         )

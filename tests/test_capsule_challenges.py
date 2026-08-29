@@ -1,7 +1,9 @@
 import importlib.util
 import json
+import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -69,6 +71,14 @@ class CapsuleChallengeTest(unittest.TestCase):
             metadata = json.loads(text)
             self.assertEqual(metadata["case_id"], path.parent.name)
             self.assertNotIn(str(ROOT), text)
+
+    def test_source_export_does_not_inherit_parent_git_metadata(self):
+        with tempfile.TemporaryDirectory() as directory, \
+             patch.object(challenge, "ROOT", Path(directory)), \
+             patch.object(challenge.subprocess, "run") as run:
+            value = challenge._git_value("rev-parse", "HEAD")
+        run.assert_not_called()
+        self.assertEqual(value, "unavailable (source export without repository metadata)")
 
 
 if __name__ == "__main__":

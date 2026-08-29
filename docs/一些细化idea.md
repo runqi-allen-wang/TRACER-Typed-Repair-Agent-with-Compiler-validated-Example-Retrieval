@@ -1,17 +1,17 @@
-# LeanCapsule 细化 idea
+# LeanCapsule 实施状态与后续研究
 
-- **安全对抗补充**：新增独立 D 类安全回归，D01 覆盖 `unsafe inductive` 绕过 positivity 检查并构造 `False`。D 类不是 A/B/C 的第四个 Agent 条件；它要求原 Agent、AxProverBase 与 Capsule 在编译前拒绝恶意候选，详见 [`security_type_d.md`](security_type_d.md)。
+- **安全对抗（已实现）**：独立安全策略案例 SP-1 覆盖 `unsafe inductive` 绕过 positivity 检查并构造 `False`。SP 不是实验组；它要求 Agent、AxProverBase 与 Capsule 在编译前拒绝恶意候选，详见 [`security_policy.md`](security_policy.md)。
 
 ## 1. 提高错误保真度，同时控制验证成本
 
 - **当前做法**：`pack` 比较原文件与 capsule 的编译状态及规范化 `diagnostic_key`；`replay/verify` 再检查状态、诊断类别和 key，并保留原始诊断供人工复核。
-- **不足**：key 主要来自前两条、至多 700 字符的诊断摘要；路径、位置和 metavariable 被归一化后，不同错误可能碰巧相同。后续回放只与 manifest 比较，无法证明它仍与原项目中的真实错误一致，也未完整绑定源码和依赖状态。
-- **建议**：保留目标位置、全部相关错误及 goal/local context 等结构化诊断，并保存源码、工具链版本和依赖锁文件原文。`pack` 或发布 CI 采用严格模式，对原错误与 capsule 做同环境差分复编译；日常 `replay` 重新编译，并直接比较编译状态和规范化后的完整诊断文本。每次发布重新验证全部案例；若抽取后的编译结果与原文件不一致，则退回 full-file capsule，并保留人工抽检。
+- **已补强**：12-core / 4-challenge 可行性运行额外直接比较完整有序的规范化诊断文本，并保留源码、工具链与依赖清单原文；若抽取后的状态或诊断变化则退回 full-file capsule。该严格比较是分析指标，不替代现有 `diagnostic_key`，也不等于语义等价。
+- **仍待研究**：目前不是完整的 goal/local-context 捕获或任意项目依赖绑定。后续可扩展结构化诊断，但不能把 16 个合成案例外推为普遍保真。
 
 ## 2. 扩充 Capsule 可行性案例集
 
-- **当前问题**：现有 24 个案例虽覆盖四类常见错误和三类来源，但大多是 3～10 行的人工校准程序；22 个使用 full-file fallback，几乎没有验证失败定理的 standalone 抽取，也缺少多错误、多文件、复杂局部上下文和跨环境案例，因此只能证明原型可回放，不能证明普遍可行。
-- **快速方案**：保留现有案例作为回归集，新增约 16 组“正确模板 + 单点错误变异”，按 Name、Type、Elaboration、Goal 四类覆盖独立定理、同文件依赖、项目依赖和对抗场景。脚本自动编译两个版本、执行 `pack/replay`、在干净目录复验，并汇总诊断保真率、standalone/fallback 比例和耗时；其中 12 个作为必须通过的 core，4 个作为保留失败结果的 challenge，避免只筛选成功案例。
+- **已完成**：在 24 个公开 gallery 回归之外，新增 16 组“正确模板 + 单点错误变异”。12 个 core 覆盖四类错误 × 三种上下文，4 个 challenge 保留同文件依赖、项目多文件、命名空间和多诊断边界。自动运行会编译两个版本、执行 `pack/replay`、复制到干净目录复验并汇总结果。
+- **当前证据**：core 门禁 12/12、challenge 干净回放 4/4，全部 16 个案例保留诊断键和完整有序规范化诊断。core standalone/fallback 为 5/7，challenge 为 2/2。结果见 [`CAPSULE_FEASIBILITY.md`](CAPSULE_FEASIBILITY.md)。这些是有限合成案例，不包含任意 Lake 动态依赖或真实大型维护故障。
 
 ## 3. 给Capsule 加入接口，加入基线agent后比对效果
 
@@ -40,7 +40,7 @@ Memory 把失败经验压缩成“实验笔记”
             ↓
 Memory 把失败经验压缩成“实验笔记”
 
-具体流程分为这3部分
+该工作流分为以下三部分。Part 1/2 已完成一批正式配对运行；Part 3 目前只有后续复验清单，不是新增结果。
 ### Part 1：基线准备
 
 从一个公开 benchmark 固定抽取约 20～30 题，冻结 AxProverBase commit、Lean/Mathlib 环境、模型、工具和预算配置。先运行默认 Experience memory，时间允许时补充 Memoryless；关闭不参与证明的最终 LLM summary，并按 proposer、memory、reviewer、tool 分别记录调用次数、token、成本、编译时间和成功节点，同时缓存每题的首轮候选。
@@ -51,6 +51,6 @@ Memory 把失败经验压缩成“实验笔记”
 
 当前状态：Part 1 runner、Part 2 核心与真实 Ax 包裹入口、逐 theorem 状态、Memoryless/`yxai` Responses 配置、遥测和严格配对门禁均已实现。FATE-M 25 题配对实验已完成；为拆分 Memory 与反馈格式的混杂因素，又完成了 `ExperienceProcessor + CapsuleFeedback` 的 B 臂（20/25，通过配对 25/25）。正式结果分别位于 `results/handoff/part12-live-20260828-corrected/` 和 `results/handoff/part2-experience-capsule-20260829/`。
 
-### Part 3：修改后 Agent 测试
+### Part 3：后续重复与扩展（尚未执行）
 
-在同一批任务上配对比较原始 AxProverBase 与 `AxProverBase + CapsuleFeedback`，共享首轮候选，并固定模型、工具和总 LLM 调用/token/成本预算。当前已完成 Raw/Capsule 主对照和独立 B 混杂拆分臂；主要比较最终通过率、首轮失败后的修复率、调用与成本、重复错误比例。正式结论前仍应在同一时间窗口重跑各条件，避免模型服务变化影响结果；本轮没有运行完整 ABCD。
+在同一批任务上配对比较原始 AxProverBase 与 `AxProverBase + CapsuleFeedback`，共享首轮候选，并固定模型、工具和总 LLM 调用/token/成本预算。当前已完成 Raw/Capsule 主对照和独立 B 混杂拆分臂；主要比较最终通过率、首轮失败后的修复率、调用与成本、重复错误比例。正式结论前仍应在同一时间窗口重跑各条件，避免模型服务变化影响结果；本轮没有运行完整 repair24 六臂矩阵。已有 [交接清单](part3_experiment_handoff.md) 只校验当前交接包，不调用模型；后续扩大模型或批次时仍应使用独立目录并按 task id 配对分析。

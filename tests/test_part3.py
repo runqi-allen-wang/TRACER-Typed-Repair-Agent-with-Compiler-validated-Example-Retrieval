@@ -261,7 +261,7 @@ def _part3_record(
     event = {
         "integration_schema_version": AXPROVERBASE_COMMIT,
         "feedback_mode": mode,
-        "fingerprint": "a" * 16,
+        "feedback_text": '{"category":"type_mismatch","diagnostic":"expected type differs"}',
         "category": "type_mismatch",
         "repeat_count": 1,
         "round": 1,

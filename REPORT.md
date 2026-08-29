@@ -1,4 +1,6 @@
-# TRACER Pilot Report
+# TRACER 已发布 18×3 Pilot 报告
+
+> 本文件只报告历史 18 题 A/B/C smoke pilot，不汇总 repair24、LeanCapsule 可行性实验或 AxProverBase Part 1/2 配对结果。全项目当前状态见 `README.md` 与 `PROGRESS.md`。
 
 - Experiment ID: `pilot-20260826T122354Z-d628742d`
 - Status: **FORMAL**

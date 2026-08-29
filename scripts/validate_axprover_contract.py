@@ -49,18 +49,20 @@ def validate_axprover_source(root: Path, *, expected_commit: str | None = EXPECT
         package = root / "ax_prover"
 
     if expected_commit is not None:
-        completed = subprocess.run(
-            ["git", "rev-parse", "HEAD"],
-            cwd=root,
-            text=True,
-            capture_output=True,
-            check=False,
-        )
-        actual = completed.stdout.strip()
-        if completed.returncode != 0:
+        if not (root / ".git").exists():
             errors.append("cannot read AxProverBase git commit")
-        elif actual != expected_commit:
-            errors.append(f"AxProverBase commit mismatch: expected {expected_commit}, got {actual}")
+        else:
+            completed = subprocess.run(
+                ["git", "-C", str(root), "rev-parse", "HEAD"],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            actual = completed.stdout.strip()
+            if completed.returncode != 0:
+                errors.append("cannot read AxProverBase git commit")
+            elif actual != expected_commit:
+                errors.append(f"AxProverBase commit mismatch: expected {expected_commit}, got {actual}")
 
     required = {
         "agent": package / "prover" / "agent.py",

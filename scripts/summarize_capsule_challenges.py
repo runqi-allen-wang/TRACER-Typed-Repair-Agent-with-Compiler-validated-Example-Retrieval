@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import os
 import platform
@@ -318,8 +317,7 @@ def run_case(case: dict[str, Any], capsules_root: Path, timeout: float) -> dict[
         "pack_elapsed_ms": pack_elapsed_ms,
         "replay_elapsed_ms": replay_elapsed_ms,
         "strict_ordered_diagnostics_preserved": strict_preserved,
-        "strict_original_diagnostics_sha256": hashlib.sha256(strict_original.encode("utf-8")).hexdigest(),
-        "strict_capsule_diagnostics_sha256": hashlib.sha256(strict_capsule.encode("utf-8")).hexdigest() if capsule_result else None,
+        "strict_comparison_method": "direct_normalized_text_equality",
         "strict_metric_scope": (
             "Feasibility analysis only: complete ordered diagnostic text after path, location, "
             "metavariable, and trailing-whitespace normalization; not semantic equivalence and "
@@ -553,8 +551,12 @@ def _version(command: list[str]) -> str:
 
 
 def _git_value(*arguments: str) -> str:
+    # 源码压缩包可能位于另一个仓库目录下。没有自身 Git 元数据时禁止向父目录
+    # 递归寻找仓库，否则会把无关项目的版本错误写入实验环境。
+    if not (ROOT / ".git").exists():
+        return "unavailable (source export without repository metadata)"
     process = subprocess.run(
-        ["git", *arguments],
+        ["git", "-C", str(ROOT), *arguments],
         cwd=ROOT,
         text=True,
         encoding="utf-8",
@@ -562,7 +564,7 @@ def _git_value(*arguments: str) -> str:
         capture_output=True,
         check=False,
     )
-    return process.stdout.strip() if process.returncode == 0 else "unknown"
+    return process.stdout.strip() if process.returncode == 0 else "unavailable"
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:

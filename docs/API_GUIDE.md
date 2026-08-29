@@ -18,7 +18,7 @@
 
 重要限制：
 
-- Chat 模式地址应为完整端点；Responses 模式显式传 `--wire-api responses` 时可给 `/v1` base URL，provider 会追加 `/responses`。不要粘贴 Markdown 的 `[网址](网址)` 包装。
+- Chat 模式地址应为完整端点；Responses 模式显式传 `--wire-api responses` 时可给 `/v1` base URL，provider 会追加 `/responses`。不要粘贴带 Markdown 链接包装的地址。
 - `--reasoning-effort` 根据协议分别传入 Responses 的 `reasoning.effort` 或兼容 Chat 接口的 `reasoning_effort`；`--disable-response-storage` 会发送 `store=false`。不要假设所有兼容服务都支持这些字段。
 - 不能把示例模型名任意替换为其他模型。部分模型需要不同输出预算字段或不接受温度参数；应先核对对应协议。Chat 模式仍使用 `max_tokens`，Responses 模式使用 `max_output_tokens`。
 - 需要其他协议时，可实现 `--provider command` 适配器：标准输入接收 `{"prompt":"..."}`，标准输出返回 `{"candidate":"by ...","usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2}}`。诊断写标准错误；不得把密钥写入命令字符串、候选或日志。当前命令 provider 默认超时为 60 秒。
@@ -184,9 +184,9 @@ try {
 
 ## 9. 新修复集的多模型研究
 
-48 任务预跑已完成，结果与审计见 [研究协议第 4 节](RESEARCH_PROTOCOL.md#4-轨迹与报告)。现行代码使用 v2 完整证明替换契约，分开记录生成截断、Lean 验证和普通警告；不改写已完成批次。下列命令只是启动示例，不代表需要重跑，也不构成对下一批费用的授权。
+历史本地说明记录过一次 48 任务预跑，限定与缺失证据见 [研究协议第 4 节](RESEARCH_PROTOCOL.md#4-轨迹与报告)。本源码导出版不含该批原始轨迹或证明目录，不能在仓库内独立核验其数字。现行代码使用 v2 完整证明替换契约，分开记录生成截断、Lean 验证和普通警告；下列命令只是启动示例，不代表需要重跑，也不构成对下一批费用的授权。
 
-旧 18 题 pilot 保持不变；repair24 新研究使用独立 `research.py`。已提供 DeepSeek Flash/Pro 的 48 任务 B 组预跑配置，以及 864 任务完整矩阵。详见 [研究协议](RESEARCH_PROTOCOL.md)。
+旧 18 题 pilot 保持不变；repair24 新研究使用独立 `research.py`。已提供 DeepSeek Flash/Pro 的 48 任务 R-B 预跑配置，以及 864 任务完整矩阵。详见 [研究协议](RESEARCH_PROTOCOL.md)。
 
 用户确认付费预算后，预跑命令为：
 

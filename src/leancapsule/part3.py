@@ -164,7 +164,8 @@ def _validate_events(task_id: str, row: Mapping[str, Any], mode: str, errors: li
     for event in events:
         if event.get("feedback_mode") != mode:
             errors.append(f"{task_id}: {mode} feedback event has the wrong mode")
-        if "feedback_text" not in event and "fingerprint" not in event:
+        feedback_text = event.get("feedback_text")
+        if not isinstance(feedback_text, str) or not feedback_text.strip():
             errors.append(f"{task_id}: {mode} feedback event lacks feedback_text")
         for field in ("category", "repeat_count", "round"):
             if field not in event:

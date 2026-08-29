@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import re
 import shutil
@@ -106,8 +105,7 @@ def _write_handoff(out_dir: Path, pairing: dict[str, Any]) -> Path:
     files = []
     for name in included:
         path = out_dir / name
-        digest = hashlib.sha256(path.read_bytes()).hexdigest()
-        files.append({"path": name, "bytes": path.stat().st_size, "sha256": digest})
+        files.append({"path": name, "bytes": path.stat().st_size})
     handoff = {
         "format": "tracer-part3-handoff-v1",
         "benchmark": "FATE-M",
@@ -115,6 +113,8 @@ def _write_handoff(out_dir: Path, pairing: dict[str, Any]) -> Path:
         "pairing_ok": bool(pairing.get("ok")),
         "source_revision": _git_revision(),
         "files": files,
+        "metadata_revision": "readable-manifest-v2",
+        "metadata_note": "仅保留相对路径与文件字节数；未重新调用模型。",
     }
     path = out_dir / "handoff.json"
     path.write_text(json.dumps(handoff, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

@@ -81,7 +81,7 @@ Part 1/Part 2 历史结果，也不是 ABCD 的第四个条件。
 - 使用 Ax 的 `module_path:theorem_name` 作为精确 session key；
 - 每个 theorem 拥有独立规范化诊断文本、重复次数和历史；
 - session 池使用 LRU 上限；
-- 可通过 `CAPSULE_FEEDBACK_STATE_DIR` 按 theorem 哈希文件持久化；
+- 可通过 `CAPSULE_FEEDBACK_STATE_DIR` 按随机会话文件持久化，文件内保存完整可读 theorem key；
 - 状态写入采用临时文件替换，避免半写入文件。
 
 测试证明相同错误分别出现在 theorem A 和 B 时，两者的首次 `repeat_count` 都为 1。
@@ -148,7 +148,7 @@ Part 2/B runner 直接包裹实际 `LLMClient.ainvoke`，不再用节点次数�
 - 反馈字符数；
 - Builder 总耗时；
 - CapsuleFeedback 单独处理耗时；
-- 共享首轮候选哈希；
+- 逐字段直接比较共享首轮候选全文；
 - 固定 Ax commit、模型和 endpoint；
 - CapsuleFeedback 零额外编译/LLM 调用声明。
 
@@ -174,7 +174,7 @@ Part 2/B runner 直接包裹实际 `LLMClient.ainvoke`，不再用节点次数�
 
 ### 3.10 完整 theorem 候选可能通过 unsafe 或结构修改绕过可信性
 
-新增 D 类编译前安全门禁并接入 AxProverBase：
+新增 SP 编译前安全门禁并接入 AxProverBase：
 
 - 共享首轮缓存和后续 LLM `ProposalMessage` 在进入 Builder 前统一检查；
 - Builder 入口再次执行同一检查，形成纵深防御；
@@ -184,7 +184,7 @@ Part 2/B runner 直接包裹实际 `LLMClient.ainvoke`，不再用节点次数�
 - 拒绝事件仅记录随机事件编号、候选长度、阶段和原因，不把恶意源码写入遥测；
 - Part 1/Part 2 配对门禁要求两组逐题使用同一 `tracer-candidate-v2` 策略。
 
-D01 的 `unsafe inductive` 构造 `False` 源码已由 Lean 直接验证为可接受，同时自动测试证明其在缓存、生成和 Builder 三个 Ax 入口均于编译前被拒绝。
+SP-1 的 `unsafe inductive` 构造 `False` 源码已由 Lean 直接验证为可接受，同时自动测试证明其在缓存、生成和 Builder 三个 Ax 入口均于编译前被拒绝。
 
 ## 4. 当前数据流
 
@@ -201,7 +201,7 @@ prepare_part2_first_round_cache.py
 Ax Proposer 第一轮直接使用缓存 ProposalMessage
       |
       v
-完整 theorem D 类安全门禁
+完整 theorem SP 安全门禁
       |
       v
 Ax 原 Builder -> 原有 check_lean_file（至多一次）
@@ -260,7 +260,7 @@ CapsuleFeedback.observe_ax（0 次额外编译，0 次 LLM）
 | LLM/token/tool 遥测 | 通过 |
 | 固定 Ax 源码契约 | 通过 |
 | 真实 Ax Python 类型 smoke | 通过 |
-| D01 unsafe theorem 编译前拦截 | 通过 |
+| SP-1 unsafe theorem 编译前拦截 | 通过 |
 | Ax 缓存/生成/Builder 三层安全门禁 | 通过 |
 | Part 1/Part 2 v2 安全策略配对 | 通过 |
 | B 臂 FATE-M 25 题运行 | 20/25 成功；配对 25/25；0 API/编译超时 |
@@ -325,7 +325,7 @@ Part 1/2/B 实现与首批正式配对运行已经完成。复现实验时仍需
 - Part 1 使用 `configs/axprover_part1_experience.yaml` 并输出完整首轮 theorem；
 - Part 2 使用 `configs/axprover_part2_capsule.yaml`；B 使用 `configs/axprover_experience_capsule.yaml`，两种结果都保留配对门禁要求的 provider、预算和 calls 字段；
 - 真实 `yxai` 调用只通过进程环境配置 `OPENAI_API_KEY`，`auth.json` 不得进入仓库；
-- 当前 Part 1/Part 2/B 数据是 25 题、单模型、单批次，不支持统计显著性、Memory/反馈因果结论或通用性能结论；完整 ABCD 和 Part 3 仍需要正式统计分析与更大规模重复实验。
+- 当前 Part 1/Part 2/B 与 Part 3 数据是 25 题、单模型、单批次，不支持统计显著性、Memory/反馈因果结论或通用性能结论；完整 repair24 六臂矩阵仍需要正式统计分析与更大规模重复实验。
 
 ## 当前合并版的状态格式
 

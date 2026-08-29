@@ -3,6 +3,7 @@ import ast
 import copy
 import json
 import os
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -15,6 +16,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from agent import solve_problem
 from provider import generation_finish_reason, parse_generation
 from research import load_config, run_matrix, valid_protocol_record
+from scripts import export_pilot
 from leancapsule.ax_integration import CapsuleFeedbackSessions
 from leancapsule.feedback import CapsuleFeedback, normalized_feedback_text
 from leancapsule.pairing import validate_paired_runs
@@ -108,10 +110,12 @@ class MergeCompatibilityTest(unittest.TestCase):
         self.assertFalse(validate_paired_runs(left, changed)["ok"])
 
     def test_handoff_has_readable_metadata_without_derived_fields(self):
+        prohibited_field_parts = ("sha" + "256", "finger" + "print")
+
         def check(value):
             if isinstance(value, dict):
                 for key, child in value.items():
-                    self.assertFalse(any(word in key.lower() for word in ("sha256", "fingerprint")), key)
+                    self.assertFalse(any(word in key.lower() for word in prohibited_field_parts), key)
                     check(child)
             elif isinstance(value, list):
                 for child in value:
@@ -129,12 +133,86 @@ class MergeCompatibilityTest(unittest.TestCase):
                 else:
                     check(json.loads(path.read_text(encoding="utf-8")))
 
-    def test_runtime_does_not_import_digest_library(self):
-        for folder in (ROOT / "src", ROOT / "baseline"):
+    def test_runtime_and_experiment_scripts_do_not_import_digest_library(self):
+        prohibited_module = "ha" + "sh" + "lib"
+        for folder in (ROOT / "src", ROOT / "baseline", ROOT / "scripts"):
             for path in folder.rglob("*.py"):
                 tree = ast.parse(path.read_text(encoding="utf-8-sig"))
                 for node in ast.walk(tree):
                     if isinstance(node, ast.Import):
-                        self.assertNotIn("hashlib", [alias.name for alias in node.names], str(path))
+                        self.assertNotIn(prohibited_module, [alias.name for alias in node.names], str(path))
                     elif isinstance(node, ast.ImportFrom):
-                        self.assertNotEqual(node.module, "hashlib", str(path))
+                        self.assertNotEqual(node.module, prohibited_module, str(path))
+
+    def test_feasibility_results_contain_only_readable_comparison_metadata(self):
+        prohibited_field_parts = ("sha" + "256", "finger" + "print")
+        for path in (
+            ROOT / "results/capsule_feasibility/summary.json",
+            ROOT / "results/capsule_challenges/summary.json",
+        ):
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            for case in payload["cases"] if "cases" in payload else [*payload["core_cases"], *payload["challenge_cases"]]:
+                self.assertFalse(
+                    any(part in key.lower() for key in case for part in prohibited_field_parts),
+                    f"{path}: {case['case_id']}",
+                )
+                self.assertEqual(case["strict_comparison_method"], "direct_normalized_text_equality")
+
+    def test_repository_text_does_not_reintroduce_prohibited_derived_identifiers(self):
+        # PowerShell 的 hashtable 是普通容器，不属于被禁止的派生摘要机制。
+        prohibited = ("sha" + "256", "ha" + "sh" + "lib", "finger" + "print")
+        suffixes = {".py", ".json", ".jsonl", ".md", ".toml", ".yaml", ".yml", ".ps1", ".sh", ".csv", ".txt"}
+        tracked: set[Path] | None = None
+        git_files = subprocess.run(
+            ["git", "ls-files", "-z"],
+            cwd=ROOT,
+            capture_output=True,
+            check=False,
+        )
+        if git_files.returncode == 0:
+            tracked = {
+                ROOT / name
+                for name in git_files.stdout.decode("utf-8", errors="replace").split("\x00")
+                if name
+            }
+        if tracked is not None:
+            paths = sorted(tracked)
+        else:
+            paths = []
+            for directory, child_dirs, filenames in os.walk(ROOT):
+                child_dirs[:] = [
+                    name
+                    for name in child_dirs
+                    if not name.startswith(".codex-")
+                    and name not in {".git", ".lake", "work", "handoff"}
+                ]
+                paths.extend(Path(directory) / name for name in filenames)
+        for path in paths:
+            if not path.is_file() or path.suffix.lower() not in suffixes:
+                continue
+            relative_parts = path.relative_to(ROOT).parts
+            if tracked is not None and path not in tracked:
+                # Ignore local runtime output, including already-downloaded dependencies.
+                if any(part.startswith(".codex-") for part in relative_parts):
+                    continue
+                if relative_parts[:2] in {
+                    ("results", "work"),
+                    ("results", "handoff"),
+                }:
+                    continue
+            if ".lake" in path.parts or path.name == "lake-manifest.json":
+                continue
+            try:
+                text = path.read_text(encoding="utf-8-sig", errors="replace").lower()
+            except OSError:
+                # A local dependency can disappear while the scan is running.
+                continue
+            self.assertFalse(any(term in text for term in prohibited), str(path))
+
+    def test_export_from_source_archive_does_not_inherit_parent_git_metadata(self):
+        with tempfile.TemporaryDirectory() as directory, \
+             patch.object(export_pilot, "ROOT", Path(directory)), \
+             patch.object(export_pilot.subprocess, "run") as run:
+            value = export_pilot.git_revision()
+        run.assert_not_called()
+        self.assertEqual(value, "unavailable (source export without repository metadata)")
