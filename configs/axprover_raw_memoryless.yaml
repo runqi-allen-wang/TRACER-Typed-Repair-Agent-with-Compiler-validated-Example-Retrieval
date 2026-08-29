@@ -1,0 +1,9 @@
+import:
+  - axprover_yxai_gpt56_sol.yaml
+
+# Part 3 Raw condition: the same Memoryless agent as Capsule, with Ax's
+# original BuildFailedFeedback passed unchanged to the next Proposer round.
+prover:
+  memory_config:
+    class_name: MemorylessProcessor
+    init_args: {}

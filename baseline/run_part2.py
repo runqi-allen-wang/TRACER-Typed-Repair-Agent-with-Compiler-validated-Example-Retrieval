@@ -28,6 +28,7 @@ if str(SRC) not in sys.path:
 from compiler import CANDIDATE_POLICY  # noqa: E402
 from leancapsule.ax_integration import (  # noqa: E402
     AX_INTEGRATION_VERSION,
+    FEEDBACK_MODES,
     FirstRoundCandidateCache,
     enforce_ax_part2_config,
     install_axproverbase_capsule_feedback,
@@ -56,9 +57,18 @@ def _proposal_messages(state: object) -> list[object]:
     return [message for message in messages if _read(message, "type") == "proposal"]
 
 
-def _contract_from_config(config: object) -> dict[str, Any]:
+def _is_repeated_feedback_event(event: Mapping[str, Any]) -> bool:
+    try:
+        return int(event.get("repeat_count", 1) or 1) > 1
+    except (TypeError, ValueError):
+        return False
+
+
+def _contract_from_config(
+    config: object, *, memory_class: str = "MemorylessProcessor"
+) -> dict[str, Any]:
     prover = _read(config, "prover")
-    enforce_ax_part2_config(prover)
+    enforce_ax_part2_config(prover, memory_class=memory_class)
     llm = _read(prover, "prover_llm")
     provider = _read(llm, "provider_config", {})
     reasoning = _read(provider, "reasoning", {})
@@ -119,8 +129,8 @@ def _contract_from_config(config: object) -> dict[str, Any]:
         errors.append(f"reasoning effort must be {YXAI_REASONING_EFFORT}")
     if provider_contract["output_version"] != "responses/v1":
         errors.append("output_version must be responses/v1")
-    if contract["memory_processor"] != "MemorylessProcessor":
-        errors.append("Part 2 memory must be MemorylessProcessor")
+    if contract["memory_processor"] != memory_class:
+        errors.append(f"memory must be {memory_class}")
     if contract["summary_enabled"]:
         errors.append("final LLM summary must be disabled")
     if contract["budget"]["max_iterations"] <= 0:
@@ -136,10 +146,17 @@ def extract_record(
     prover: object,
     contract: Mapping[str, Any],
     *,
+    feedback_mode: str = "capsule",
     task_metadata: Mapping[str, Any] | None = None,
     run_elapsed_ms: int = 0,
+    condition: str | None = None,
+    memory_mode: str | None = None,
+    memory_processor: str | None = None,
 ) -> dict[str, Any]:
-    """Extract one pairing-ready Capsule condition record."""
+    """Extract one pairing-ready Raw or Capsule condition record."""
+
+    if feedback_mode not in FEEDBACK_MODES:
+        raise ValueError(f"unsupported feedback mode: {feedback_mode}")
 
     metadata = dict(task_metadata or {})
     proposals = _proposal_messages(state)
@@ -150,8 +167,8 @@ def extract_record(
     location = _read(state_item, "location")
     theorem = str(metadata.get("theorem") or _read(location, "name", ""))
     module = str(metadata.get("module") or "")
-    # FATE-M source declarations already contain reference proofs, so
-    # TargetItem.is_proven starts true even when this Agent run fails.
+    # FATE-M source declarations contain reference proofs, so TargetItem.is_proven
+    # can be true even when this Agent run has not been approved.
     is_proven = bool(_read(state, "approved", False))
     rounds = int(_read(state, "iteration_count", len(proposals)) or len(proposals))
 
@@ -165,8 +182,26 @@ def extract_record(
     total_tokens = int(usage.get("total_tokens", prompt_tokens + completion_tokens) or 0)
     proposer_calls = int(llm_calls.get("proposer", 0) or 0)
     reviewer_calls = int(llm_calls.get("reviewer", 0) or 0)
+    memory_calls = int(llm_calls.get("memory", 0) or 0)
     other_llm_calls = int(llm_calls.get("other", 0) or 0)
     provider_contract = dict(contract["provider_config"])
+    feedback_events = [
+        dict(event)
+        for event in (getattr(prover, "_feedback_events", []) or [])
+        if isinstance(event, Mapping)
+    ]
+    # Each feedback event is one observed diagnostic.  Count later occurrences
+    # once; summing cumulative repeat_count values would double-count them.
+    repeated_diagnostic_count = sum(
+        _is_repeated_feedback_event(event) for event in feedback_events
+    )
+    resolved_condition = condition or feedback_mode
+    resolved_memory_mode = memory_mode or (
+        "raw_feedback" if feedback_mode == "raw" else "capsule_feedback"
+    )
+    resolved_memory_processor = memory_processor or str(
+        contract.get("memory_processor") or "MemorylessProcessor"
+    )
 
     return {
         "run_id": uuid.uuid4().hex[:12],
@@ -176,9 +211,11 @@ def extract_record(
         "module": module,
         "theorem": theorem,
         "path": str(_read(location, "path", "")),
-        "condition": "capsule",
-        "memory_mode": "capsule_feedback",
-        "memory_processor": "MemorylessProcessor",
+        "condition": resolved_condition,
+        "feedback_mode": feedback_mode,
+        "memory_mode": resolved_memory_mode,
+        "memory_processor": resolved_memory_processor,
+        "memory_llm_calls": memory_calls,
         "integration_schema_version": AX_INTEGRATION_VERSION,
         "axproverbase_commit": AXPROVERBASE_COMMIT,
         "model": contract["model"],
@@ -203,14 +240,14 @@ def extract_record(
         "calls": {
             "proposer_calls": proposer_calls,
             "reviewer_calls": reviewer_calls,
-            "memory_calls": 0,
+            "memory_calls": memory_calls,
             "other_llm_calls": other_llm_calls,
             "tool_calls": int(getattr(prover, "_capsule_tool_calls", 0) or 0),
             "compiler_calls": int(node_calls.get("builder", 0) or 0),
             "capsule_llm_calls": 0,
             "capsule_compiler_calls": 0,
         },
-        "call_count": proposer_calls + reviewer_calls + other_llm_calls,
+        "call_count": proposer_calls + reviewer_calls + memory_calls + other_llm_calls,
         "usage": {
             "prompt_tokens": prompt_tokens,
             "completion_tokens": completion_tokens,
@@ -222,6 +259,10 @@ def extract_record(
         "first_round_imports": list(_read(first, "imports", []) or []) if first else [],
         "first_round_opens": list(_read(first, "opens", []) or []) if first else [],
         "candidate_count": len(proposals),
+        "feedback_events": feedback_events,
+        "diagnostic_event_count": len(feedback_events),
+        "repeated_diagnostic_count": repeated_diagnostic_count,
+        "api_error_count": 0,
     }
 
 
@@ -230,7 +271,15 @@ async def run_target(
     folder: str,
     config_yaml: str,
     *,
+    feedback_mode: str = "capsule",
+    telemetry_path: str | Path | None = None,
+    state_dir: str | Path | None = None,
+    first_round_cache_path: str | Path | None = None,
     task_metadata: Mapping[str, Any] | None = None,
+    memory_class: str = "MemorylessProcessor",
+    condition: str | None = None,
+    memory_mode: str | None = None,
+    memory_processor: str | None = None,
 ) -> list[dict[str, Any]]:
     from ax_prover.config import Config
     from ax_prover.prover.agent import ProverAgent
@@ -243,20 +292,31 @@ async def run_target(
         prove_single_item,
     )
 
-    install_axproverbase_capsule_feedback()
+    if feedback_mode not in FEEDBACK_MODES:
+        raise ValueError(f"unsupported feedback mode: {feedback_mode}")
+    install_axproverbase_capsule_feedback(
+        feedback_mode=feedback_mode,
+        telemetry_path=telemetry_path,
+        state_dir=state_dir,
+        first_round_cache_path=first_round_cache_path,
+        memory_class=memory_class,
+    )
     load_env_secrets(folder)
     # Do not inherit upstream default.yaml: it selects Claude, and OmegaConf's
     # deep merge otherwise leaves Claude-only ``betas``/``thinking`` keys in
     # this OpenAI-compatible provider request.
     config = merge_configs([Config(), config_yaml], folder=folder)
-    contract = _contract_from_config(config)
+    contract = _contract_from_config(config, memory_class=memory_class)
     tool_lifespans = await create_tool_lifespans(config.prover.proposer_tools)
     records: list[dict[str, Any]] = []
     async with Runtime.open(config.runtime, folder, tool_lifespans) as runtime:
         items = await parse_prove_target(runtime.lean_interact_server, folder, target)
         for item in items:
             prover = await ProverAgent.create(config=config.prover, runtime=runtime)
-            thread_id = f"part2_{item.location.name}_{uuid.uuid4().hex[:6]}"
+            thread_id = (
+                f"part2_{condition or feedback_mode}_{item.location.name}_"
+                f"{uuid.uuid4().hex[:6]}"
+            )
             started = time.perf_counter()
             state = await prove_single_item(prover, item, thread_id=thread_id)
             records.append(
@@ -265,8 +325,12 @@ async def run_target(
                     state,
                     prover,
                     contract,
+                    feedback_mode=feedback_mode,
                     task_metadata=task_metadata,
                     run_elapsed_ms=int((time.perf_counter() - started) * 1000),
+                    condition=condition,
+                    memory_mode=memory_mode,
+                    memory_processor=memory_processor,
                 )
             )
     return records
@@ -346,7 +410,7 @@ def prepare_run_artifacts(
     overwrite: bool,
     protected_paths: tuple[Path, ...] = (),
 ) -> None:
-    """Require a fresh formal run, or safely reset only known Part 2 artifacts."""
+    """Require a fresh formal run and reset only known experiment artifacts."""
 
     output_resolved = output_path.resolve()
     metrics_resolved = metrics_path.resolve() if metrics_path is not None else None
@@ -364,9 +428,13 @@ def prepare_run_artifacts(
         if not state_dir.is_dir():
             raise ValueError("CAPSULE_FEEDBACK_STATE_DIR must be a directory")
         state_entries = list(state_dir.iterdir())
-        unexpected = [entry for entry in state_entries if not (
-            entry.is_file() and _CAPSULE_STATE_FILE_RE.fullmatch(entry.name)
-        )]
+        unexpected = [
+            entry
+            for entry in state_entries
+            if entry.is_symlink()
+            or not entry.is_file()
+            or _CAPSULE_STATE_FILE_RE.fullmatch(entry.name) is None
+        ]
         if unexpected:
             names = ", ".join(sorted(entry.name for entry in unexpected)[:5])
             raise ValueError(
@@ -389,13 +457,17 @@ def prepare_run_artifacts(
         )
 
     if overwrite:
-        if output_path.exists():
+        if output_path.exists() and output_path.is_file():
             output_path.write_text("", encoding="utf-8")
-        if metrics_path is not None and metrics_path.exists():
+        if metrics_path is not None and metrics_path.exists() and metrics_path.is_file():
             metrics_path.write_text("", encoding="utf-8")
         for state_path in state_entries:
             state_path.unlink()
 
+    if output_path.exists() and not output_path.is_file():
+        raise ValueError("Part 2 output path must be a file")
+    if metrics_path is not None and metrics_path.exists() and not metrics_path.is_file():
+        raise ValueError("CAPSULE_FEEDBACK_METRICS must be a file")
     output_path.parent.mkdir(parents=True, exist_ok=True)
     if metrics_path is not None:
         metrics_path.parent.mkdir(parents=True, exist_ok=True)
@@ -411,11 +483,34 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--limit", type=int)
     parser.add_argument(
+        "--feedback",
+        choices=sorted(FEEDBACK_MODES),
+        default="capsule",
+        help="Feedback condition to run (default: capsule)",
+    )
+    parser.add_argument(
+        "--memory-class",
+        choices=["MemorylessProcessor", "ExperienceProcessor"],
+        default="MemorylessProcessor",
+        help=(
+            "Memory strategy. Use ExperienceProcessor with --feedback capsule "
+            "for the B arm; the default preserves the original Part 2 condition."
+        ),
+    )
+    parser.add_argument(
         "--overwrite",
         action="store_true",
         help="Replace a non-empty output file instead of refusing to create duplicate task rows",
     )
     args = parser.parse_args(argv)
+
+    if args.memory_class == "ExperienceProcessor" and args.feedback != "capsule":
+        print(
+            "Part 2 preflight failed: ExperienceProcessor is only supported with "
+            "the capsule feedback condition",
+            file=sys.stderr,
+        )
+        return 2
 
     cache_value = os.environ.get("CAPSULE_FIRST_ROUND_CACHE", "")
     if not cache_value:
@@ -431,8 +526,15 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Part 2 preflight failed: {exc}", file=sys.stderr)
         return 2
 
-    state_value = os.environ.get("CAPSULE_FEEDBACK_STATE_DIR", "")
-    metrics_value = os.environ.get("CAPSULE_FEEDBACK_METRICS", "")
+    state_value = os.environ.get(
+        "AX_FEEDBACK_STATE_DIR", os.environ.get("CAPSULE_FEEDBACK_STATE_DIR", "")
+    )
+    metrics_value = os.environ.get(
+        "AX_FEEDBACK_METRICS", os.environ.get("CAPSULE_FEEDBACK_METRICS", "")
+    )
+    if args.feedback == "raw" and state_value:
+        print("Part 3 preflight failed: Raw condition must not use Capsule state", file=sys.stderr)
+        return 2
     try:
         prepare_run_artifacts(
             args.out,
@@ -446,6 +548,11 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     failures = 0
+    arm_experience = args.memory_class == "ExperienceProcessor"
+    arm_condition = "capsule_experience" if arm_experience else "capsule"
+    arm_memory_mode = (
+        "experience_capsule_feedback" if arm_experience else "capsule_feedback"
+    )
     with args.out.open("a", encoding="utf-8", newline="\n") as stream:
         for index, row in enumerate(rows, start=1):
             target = str(row["target"])
@@ -456,7 +563,20 @@ def main(argv: list[str] | None = None) -> int:
             }
             try:
                 records = asyncio.run(
-                    run_target(target, args.folder, args.config, task_metadata=metadata)
+                    run_target(
+                        target,
+                        args.folder,
+                        args.config,
+                        feedback_mode=args.feedback,
+                        telemetry_path=metrics_value or None,
+                        state_dir=state_value or None,
+                        first_round_cache_path=cache_value,
+                        task_metadata=metadata,
+                        memory_class=args.memory_class,
+                        condition=arm_condition,
+                        memory_mode=arm_memory_mode,
+                        memory_processor=args.memory_class,
+                    )
                 )
             except Exception as exc:  # noqa: BLE001
                 print(f"[{index}/{len(rows)}] {target}: ERROR {exc}")

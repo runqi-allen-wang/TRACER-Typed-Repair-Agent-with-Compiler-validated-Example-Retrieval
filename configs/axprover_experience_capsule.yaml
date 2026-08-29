@@ -1,0 +1,8 @@
+import:
+  - axprover_yxai_gpt56_sol.yaml
+
+prover:
+  memory_config:
+    class_name: ExperienceProcessor
+    init_args:
+      llm_config: ${prover.prover_llm}

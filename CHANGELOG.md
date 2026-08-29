@@ -2,12 +2,37 @@
 
 本文件记录影响安全性、实验可复现性、Lean 编译边界和公开发布的补丁。它与 `PROGRESS.md` 的职责不同：`PROGRESS.md` 描述当前状态，本文按提交批次记录变更原因、影响范围和验证证据。
 
+## 2026-08-30 — 发布 B 臂实验交接包
+
+- 将 B 臂 `ExperienceProcessor + CapsuleFeedback` 的完整 FATE-M 25 题原始结果从本地运行目录整理为 `results/handoff/part2-experience-capsule-20260829/`，包含逐题 JSONL、77 条遥测、首轮缓存、配对报告、9 个状态快照、报告和可读文件清单。
+- 新增 `scripts/validate_b_handoff.py`，离线检查清单字节数、条件与 Memory 标记、25 题唯一性、首轮四字段配对、汇总数字、遥测、状态快照和凭据模式；Part 3 workflow 在 corrected handoff 后运行该门禁。
+- 更新 B 臂、Part 3、results 和当前进度文档，明确原始目录与发布副本的关系，并保留单模型单批次的解释边界。
+- 本次发布没有重新调用模型、修改实验结果或下载依赖；本地验证通过后由远程 Actions 完成最终 CI 验收。
+- 本地验证：B handoff、两套配对门禁和完整 Python 回归通过（217 项通过，2 项 Windows 平台不适用而跳过），`git diff --check` 通过。
+
+## 2026-08-29 — 完成 B 臂 Experience + CapsuleFeedback 运行
+
+- 接入 `ExperienceProcessor + CapsuleFeedback` 的 B 条件，复用 Part 1 的完整首轮候选，并冻结现有 `yxai` Responses 配置、预算和候选安全策略。
+- FATE-M 前 25 题完成一次正式运行：20/25 通过（80.0%），47 轮、69 次 LLM 请求、27 次 Memory 请求、47 次 Lean 编译，659791 tokens，27 次编译错误，0 次超时。
+- 严格配对门禁和逐行完整性校验通过：25/25 task 配对、首轮 `code/reasoning/imports/opens` 全部一致、77 条遥测事件、无 API 错误；结果保存在 `results/work/part2-experience-capsule-20260829/`。
+- 本次只运行 B，未运行完整 ABCD；使用已有 Lean/Ax/Python 环境和缓存，没有重新下载依赖，也没有提交、推送或合并。
+
+## 2026-08-29 — 吸收最新 main 的 Stage 3 交接工作流
+
+- 远端 main 在 Part 3 运行后合入 PR #15（`37f12de`）；`leiteng` 随后以 `23ec5a3` 合并，新增 `docs/part3_experiment_handoff.md`、`scripts/validate_part3_handoff.py` 和 `.github/workflows/part3.yml`，并同步双语 README 入口。
+- 新校验器在当前工作区通过，检查的是已提交的 Part 1/2 corrected handoff，不调用模型 API。此前 Part 3 Raw/Capsule 轨迹仍准确标注运行源版本 `53bc501`，不把后续文档/CI 合并误报成新的实验运行。
+
+## 2026-08-29 — 合并最新 main 并重跑 Part 3
+
+- 在 `leiteng` 合并 `origin/main@90ba62b`，当前 HEAD 为 `53bc501`；保留 Part 1/2、D01、Capsule challenge 和 CI 改动，并在合并后的代码状态上重新运行 Part 3。
+- FATE-M 前 25 题 Raw/Capsule 严格配对为 25/25；最新批次 Raw 22/25、Capsule 19/25，9 个共享首轮失败题分别最终修复 6/9 与 3/9，正式交接包为 `results/handoff/part3-after-main-90ba62b-20260829/`，无 API/基础设施错误。
+- 最新批次使用已有的 yxai、Lean、Ax 和 Python 环境，没有重新下载依赖；Windows 全量 Python 回归为 205 项，203 项通过，2 项 Linux-only 测试跳过。旧的 502 批次和原始工件继续保留，不被新结果覆盖。
 ## 2026-08-29 — 全量一致性审查与证据边界修复
 
 - 移除 12-core / 4-challenge 脚本和已保存 JSON 中重新出现的派生摘要字段，严格诊断仍以规范化可读全文直接比较；新增回归覆盖 `src/`、`baseline/`、`scripts/` 与可行性结果。
 - 源码导出版缺少自身 `.git` 元数据时不再向父目录寻找仓库，避免写入无关项目的提交与分支；CI 使用 `--verify-only` 在临时目录执行可行性门禁，不覆盖已保存的测量结果。
 - 将非同级安全案例规范为 SP-1；研究实验统一显示为 R-A～R-F，原 `arm` 存储值保留以兼容历史本地接口和目录。
-- 重写当前进度、项目概览和 results 说明；双语 README 与研究协议明确区分已随仓库提供的证据、仅有历史本地说明的材料和尚未开展的实验。Part 3 明确为后续清单，不冒充新运行。
+- 重写当前进度、项目概览和 results 说明；双语 README 与研究协议明确区分已随仓库提供的证据、仅有历史本地说明的材料和尚未开展的实验。main 的导出版将 Part 3 标为后续清单；本合并版继续保留 leiteng 已完成的 Part 3 runner、交接包和结果，并明确区分既有运行与后续重复。
 
 ## 2026-08-28 — 在最新 main 上合并研究与证明协议补丁
 

@@ -1,0 +1,55 @@
+{
+  "theorem_key": "FATEM.23:isMaximal_of_isPrime_of_fintype",
+  "state": {
+    "schema_version": "capsule-feedback.readable.v0.2",
+    "attempt_count": 4,
+    "feedback_counts": {
+      "{\"category\":\"compile_error\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_23_bsgsw4fe (7.3s) ╭─ Error at line <loc> │ exact hI.isMaximal │ ^^^ ╰─ failed to synthesize instance of type class Ring.DimensionLEOne R Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command. error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_23_bsgsw4fe error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"compile_error\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_23__xxdlfno (7.9s) ╭─ Error at line <loc> │ exact hI.isMaximal_of_finite │ ^^^ ╰─ Invalid field `isMaximal_of_finite`: The environment does not contain `Ideal.IsPrime.isMaximal_of_finite`, so it is not possible to project the field `isMaximal_of_finite` from an expression hI of type `I.IsPrime` error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_23__xxdlfno error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"unknown_identifier\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_23_6nc4dkjz (18s) info: FATEM<path>:<loc>: Try this: [apply] exact (Ideal.Quotient.isDomain_iff_prime I).mpr hI ╭─ Error at line <loc> │ letI : Field (R ⧸ I) := Fintype.field _ │ ^^^ ╰─ Unknown constant `Fintype.field` info: FATEM<path>:<loc>: Try this: [apply] exact Ideal.IsPrime.isMaximal' hI error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_23_6nc4dkjz error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"unknown_identifier\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_23_8t43fi4t (10s) ╭─ Error at line <loc> │ exact hI.ne_top (Ideal.eq_top_of_one_mem h) │ ^^^ ╰─ Unknown constant `Ideal.eq_top_of_one_mem` ╭─ Error at line <loc> │ toNoZeroDivisors := │ ^^^ ╰─ `toNoZeroDivisors` is not a field of structure `IsDomain` ╭─ Error at line <loc> │ letI : Field (R ⧸ I) := Fintype.field _ │ ^^^ ╰─ Unknown constant `Fintype.field` ╭─ Error at line <loc> │ intro J hIJ hJ │ ^^^ ╰─ Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce R : Type u_1 inst✝¹ : CommRing R inst✝ : Fintype R I : Ideal R hI : I.IsPrime hone : 1 ∉ I hzero_one : 0 ≠ 1 this✝¹ : IsDomain (R ⧸ I) := let __Nontrivial := { exists_pair_ne := Exists.intro 0 (Exists.intro 1 hzero_one) }; { toIsCancelMulZero := (Ideal.Quotient.isDomain I).toIsCancelMulZero, toNontrivial := __Nontrivial } this✝ : Fintype (R ⧸ I) := Fintype.ofFinite (R ⧸ I) this : Field (R ⧸ I) := sorry J : Ideal R hIJ : I < J ⊢ J = ⊤ error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_23_8t43fi4t error: build failed\",\"goal_state\":\"\"}": 1
+    },
+    "history": [
+      {
+        "round": 1,
+        "compile_ok": false,
+        "category": "compile_error",
+        "feedback_text": "{\"category\":\"compile_error\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_23_bsgsw4fe (7.3s) ╭─ Error at line <loc> │ exact hI.isMaximal │ ^^^ ╰─ failed to synthesize instance of type class Ring.DimensionLEOne R Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command. error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_23_bsgsw4fe error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "initial",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_23_bsgsw4fe (7.3s)"
+      },
+      {
+        "round": 2,
+        "compile_ok": false,
+        "category": "compile_error",
+        "feedback_text": "{\"category\":\"compile_error\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_23__xxdlfno (7.9s) ╭─ Error at line <loc> │ exact hI.isMaximal_of_finite │ ^^^ ╰─ Invalid field `isMaximal_of_finite`: The environment does not contain `Ideal.IsPrime.isMaximal_of_finite`, so it is not possible to project the field `isMaximal_of_finite` from an expression hI of type `I.IsPrime` error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_23__xxdlfno error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "diagnostic_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_23__xxdlfno (7.9s)"
+      },
+      {
+        "round": 3,
+        "compile_ok": false,
+        "category": "unknown_identifier",
+        "feedback_text": "{\"category\":\"unknown_identifier\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_23_6nc4dkjz (18s) info: FATEM<path>:<loc>: Try this: [apply] exact (Ideal.Quotient.isDomain_iff_prime I).mpr hI ╭─ Error at line <loc> │ letI : Field (R ⧸ I) := Fintype.field _ │ ^^^ ╰─ Unknown constant `Fintype.field` info: FATEM<path>:<loc>: Try this: [apply] exact Ideal.IsPrime.isMaximal' hI error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_23_6nc4dkjz error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "category_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_23_6nc4dkjz (18s)"
+      },
+      {
+        "round": 4,
+        "compile_ok": false,
+        "category": "unknown_identifier",
+        "feedback_text": "{\"category\":\"unknown_identifier\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_23_8t43fi4t (10s) ╭─ Error at line <loc> │ exact hI.ne_top (Ideal.eq_top_of_one_mem h) │ ^^^ ╰─ Unknown constant `Ideal.eq_top_of_one_mem` ╭─ Error at line <loc> │ toNoZeroDivisors := │ ^^^ ╰─ `toNoZeroDivisors` is not a field of structure `IsDomain` ╭─ Error at line <loc> │ letI : Field (R ⧸ I) := Fintype.field _ │ ^^^ ╰─ Unknown constant `Fintype.field` ╭─ Error at line <loc> │ intro J hIJ hJ │ ^^^ ╰─ Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce R : Type u_1 inst✝¹ : CommRing R inst✝ : Fintype R I : Ideal R hI : I.IsPrime hone : 1 ∉ I hzero_one : 0 ≠ 1 this✝¹ : IsDomain (R ⧸ I) := let __Nontrivial := { exists_pair_ne := Exists.intro 0 (Exists.intro 1 hzero_one) }; { toIsCancelMulZero := (Ideal.Quotient.isDomain I).toIsCancelMulZero, toNontrivial := __Nontrivial } this✝ : Fintype (R ⧸ I) := Fintype.ofFinite (R ⧸ I) this : Field (R ⧸ I) := sorry J : Ideal R hIJ : I < J ⊢ J = ⊤ error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_23_8t43fi4t error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "diagnostic_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_23_8t43fi4t (10s)"
+      }
+    ]
+  }
+}

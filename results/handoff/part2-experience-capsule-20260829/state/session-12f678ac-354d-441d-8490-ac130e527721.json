@@ -1,0 +1,55 @@
+{
+  "theorem_key": "FATEM.10:pow_mem_ker_of_card_eq",
+  "state": {
+    "schema_version": "capsule-feedback.readable.v0.2",
+    "attempt_count": 4,
+    "feedback_counts": {
+      "{\"category\":\"unsolved_goals\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_10_32y4_nd_ (8.5s) ╭─ Error at line <loc> │ · subst n │ ^^^ ╰─ unsolved goals case pos G : Type u_1 H : Type u_2 inst✝¹ : Group G inst✝ : Group H f : G →* H g : G hn : Nat.card ↥f.range = 0 ⊢ f g ^ Nat.card { x // ∃ x_1, f x_1 = x } = 1 ╭─ Error at line <loc> │ simpa [h] using hn │ ^^^ ╰─ Type mismatch: After simplification, term hn has type ¬n = 0 but is expected to have type ¬Nat.card { x // ∃ x_1, f x_1 = x } = 0 ╭─ Error at line <loc> │ have hx : x ^ Nat.card f.range = 1 := pow_card_eq_one x │ ^^^ ╰─ Function expected at pow_card_eq_one but this term has type <mvar> ^ Fintype.card <mvar> = 1 x error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_10_32y4_nd_ error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"compile_error\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_10_tqywgfjy (8.5s) ╭─ Error at line <loc> │ exact pow_card_eq_one x │ ^^^ ╰─ Function expected at pow_card_eq_one but this term has type <mvar> ^ Fintype.card <mvar> = 1 x error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_10_tqywgfjy error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"compile_error\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_10_ggrmpqk8 (8.0s) ╭─ Error at line <loc> │ have hx : x ^ Fintype.card f.range = (1 : f.range) := pow_card_eq_one x │ ^^^ ╰─ Function expected at pow_card_eq_one but this term has type <mvar> ^ Fintype.card <mvar> = 1 x error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_10_ggrmpqk8 error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"type_mismatch\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_10_ld71ari8 (8.3s) ╭─ Error at line <loc> │ simpa [h] using hn │ ^^^ ╰─ Type mismatch: After simplification, term hn has type ¬n = 0 but is expected to have type ¬Nat.card { x // ∃ x_1, f x_1 = x } = 0 ╭─ Error at line <loc> │ exact pow_card_eq_one x │ ^^^ ╰─ Function expected at pow_card_eq_one but this term has type <mvar> ^ Fintype.card <mvar> = 1 x error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_10_ld71ari8 error: build failed\",\"goal_state\":\"\"}": 1
+    },
+    "history": [
+      {
+        "round": 1,
+        "compile_ok": false,
+        "category": "unsolved_goals",
+        "feedback_text": "{\"category\":\"unsolved_goals\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_10_32y4_nd_ (8.5s) ╭─ Error at line <loc> │ · subst n │ ^^^ ╰─ unsolved goals case pos G : Type u_1 H : Type u_2 inst✝¹ : Group G inst✝ : Group H f : G →* H g : G hn : Nat.card ↥f.range = 0 ⊢ f g ^ Nat.card { x // ∃ x_1, f x_1 = x } = 1 ╭─ Error at line <loc> │ simpa [h] using hn │ ^^^ ╰─ Type mismatch: After simplification, term hn has type ¬n = 0 but is expected to have type ¬Nat.card { x // ∃ x_1, f x_1 = x } = 0 ╭─ Error at line <loc> │ have hx : x ^ Nat.card f.range = 1 := pow_card_eq_one x │ ^^^ ╰─ Function expected at pow_card_eq_one but this term has type <mvar> ^ Fintype.card <mvar> = 1 x error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_10_32y4_nd_ error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "initial",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_10_32y4_nd_ (8.5s)"
+      },
+      {
+        "round": 2,
+        "compile_ok": false,
+        "category": "compile_error",
+        "feedback_text": "{\"category\":\"compile_error\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_10_tqywgfjy (8.5s) ╭─ Error at line <loc> │ exact pow_card_eq_one x │ ^^^ ╰─ Function expected at pow_card_eq_one but this term has type <mvar> ^ Fintype.card <mvar> = 1 x error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_10_tqywgfjy error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "category_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_10_tqywgfjy (8.5s)"
+      },
+      {
+        "round": 3,
+        "compile_ok": false,
+        "category": "compile_error",
+        "feedback_text": "{\"category\":\"compile_error\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_10_ggrmpqk8 (8.0s) ╭─ Error at line <loc> │ have hx : x ^ Fintype.card f.range = (1 : f.range) := pow_card_eq_one x │ ^^^ ╰─ Function expected at pow_card_eq_one but this term has type <mvar> ^ Fintype.card <mvar> = 1 x error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_10_ggrmpqk8 error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "diagnostic_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_10_ggrmpqk8 (8.0s)"
+      },
+      {
+        "round": 4,
+        "compile_ok": false,
+        "category": "type_mismatch",
+        "feedback_text": "{\"category\":\"type_mismatch\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_10_ld71ari8 (8.3s) ╭─ Error at line <loc> │ simpa [h] using hn │ ^^^ ╰─ Type mismatch: After simplification, term hn has type ¬n = 0 but is expected to have type ¬Nat.card { x // ∃ x_1, f x_1 = x } = 0 ╭─ Error at line <loc> │ exact pow_card_eq_one x │ ^^^ ╰─ Function expected at pow_card_eq_one but this term has type <mvar> ^ Fintype.card <mvar> = 1 x error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_10_ld71ari8 error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "category_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_10_ld71ari8 (8.3s)"
+      }
+    ]
+  }
+}

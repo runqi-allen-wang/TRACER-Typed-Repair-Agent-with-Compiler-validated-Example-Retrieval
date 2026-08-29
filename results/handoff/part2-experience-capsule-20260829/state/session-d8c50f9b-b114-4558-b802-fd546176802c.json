@@ -1,0 +1,55 @@
+{
+  "theorem_key": "FATEM.25:primeAvoidance",
+  "state": {
+    "schema_version": "capsule-feedback.readable.v0.2",
+    "attempt_count": 4,
+    "feedback_counts": {
+      "{\"category\":\"compile_error\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_25_umxszyj7 (19s) ╭─ Error at line <loc> │ exact? │ ^^^ ╰─ `exact?` could not close the goal. Try `apply?` to see partial suggestions. error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_25_umxszyj7 error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"unknown_identifier\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_25_pd2a7doa (8.4s) ╭─ Error at line <loc> │ exact not_subset.mp (hnot i) │ ^^^ ╰─ Unknown identifier `not_subset.mp` ╭─ Error at line <loc> │ exact hxP a (by simpa using ‹x a * (∅ : Finset (Fin (m + 1))).prod x ∈ P i›) │ ^^^ ╰─ Tactic `assumption` failed R : Type inst✝ : CommRing R A : Ideal R m : ℕ P : Fin (m + 1) → Ideal R pp : ∀ (i : Fin (m + 1)), (P i).IsPrime hA : A.carrier ⊆ ⋃ i, ↑(P i) h : ¬∃ i, A.carrier ⊆ ↑(P i) hnot : ∀ (i : Fin (m + 1)), ¬A.carrier ⊆ ↑(P i) hex : ∀ (i : Fin (m + 1)), ∃ x ∈ A, x ∉ P i x : Fin (m + 1) → R := fun i ↦ Classical.choose ⋯ hxA : ∀ (i : Fin (m + 1)), x i ∈ A hxP : ∀ (i : Fin (m + 1)), x i ∉ P i hprod_mem : ∀ (s : Finset (Fin (m + 1))), (∃ i ∈ s, x i ∈ A) → s.prod x ∈ A hmemA : Finset.univ.prod x ∈ A i a : Fin (m + 1) ha : a ∉ ∅ ih : ∅.Nonempty → ∅.prod x ∉ P i hs : (insert a ∅).Nonempty ⊢ x a * ∅.prod x ∈ P i ╭─ Error at line <loc> │ rcases (pp i).mem_mul.mp hp_mem with hxa | hrest │ ^^^ ╰─ Invalid field `mem_mul`: The environment does not contain `Ideal.IsPrime.mem_mul`, so it is not possible to project the field `mem_mul` from an expression pp i of type `(P i).IsPrime` ╭─ Error at line <loc> │ rcases (pp i).mem_mul.mp hp_mem with hxa | hrest │ ^^^ ╰─ Tactic `rcases` failed: `x✝ : <mvar>` is not an inductive datatype error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_25_pd2a7doa error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"unknown_identifier\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_25_w4j02cfw (7.5s) ╭─ Error at line <loc> │ apply Ideal.prime_avoidance <;> │ ^^^ ╰─ Unknown constant `Ideal.prime_avoidance` error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_25_w4j02cfw error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"compile_error\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_25_ina3hbnh (19s) ╭─ Error at line <loc> │ exact? │ ^^^ ╰─ `exact?` could not close the goal. Try `apply?` to see partial suggestions. error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_25_ina3hbnh error: build failed\",\"goal_state\":\"\"}": 1
+    },
+    "history": [
+      {
+        "round": 1,
+        "compile_ok": false,
+        "category": "compile_error",
+        "feedback_text": "{\"category\":\"compile_error\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_25_umxszyj7 (19s) ╭─ Error at line <loc> │ exact? │ ^^^ ╰─ `exact?` could not close the goal. Try `apply?` to see partial suggestions. error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_25_umxszyj7 error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "initial",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_25_umxszyj7 (19s)"
+      },
+      {
+        "round": 2,
+        "compile_ok": false,
+        "category": "unknown_identifier",
+        "feedback_text": "{\"category\":\"unknown_identifier\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_25_pd2a7doa (8.4s) ╭─ Error at line <loc> │ exact not_subset.mp (hnot i) │ ^^^ ╰─ Unknown identifier `not_subset.mp` ╭─ Error at line <loc> │ exact hxP a (by simpa using ‹x a * (∅ : Finset (Fin (m + 1))).prod x ∈ P i›) │ ^^^ ╰─ Tactic `assumption` failed R : Type inst✝ : CommRing R A : Ideal R m : ℕ P : Fin (m + 1) → Ideal R pp : ∀ (i : Fin (m + 1)), (P i).IsPrime hA : A.carrier ⊆ ⋃ i, ↑(P i) h : ¬∃ i, A.carrier ⊆ ↑(P i) hnot : ∀ (i : Fin (m + 1)), ¬A.carrier ⊆ ↑(P i) hex : ∀ (i : Fin (m + 1)), ∃ x ∈ A, x ∉ P i x : Fin (m + 1) → R := fun i ↦ Classical.choose ⋯ hxA : ∀ (i : Fin (m + 1)), x i ∈ A hxP : ∀ (i : Fin (m + 1)), x i ∉ P i hprod_mem : ∀ (s : Finset (Fin (m + 1))), (∃ i ∈ s, x i ∈ A) → s.prod x ∈ A hmemA : Finset.univ.prod x ∈ A i a : Fin (m + 1) ha : a ∉ ∅ ih : ∅.Nonempty → ∅.prod x ∉ P i hs : (insert a ∅).Nonempty ⊢ x a * ∅.prod x ∈ P i ╭─ Error at line <loc> │ rcases (pp i).mem_mul.mp hp_mem with hxa | hrest │ ^^^ ╰─ Invalid field `mem_mul`: The environment does not contain `Ideal.IsPrime.mem_mul`, so it is not possible to project the field `mem_mul` from an expression pp i of type `(P i).IsPrime` ╭─ Error at line <loc> │ rcases (pp i).mem_mul.mp hp_mem with hxa | hrest │ ^^^ ╰─ Tactic `rcases` failed: `x✝ : <mvar>` is not an inductive datatype error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_25_pd2a7doa error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "category_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_25_pd2a7doa (8.4s)"
+      },
+      {
+        "round": 3,
+        "compile_ok": false,
+        "category": "unknown_identifier",
+        "feedback_text": "{\"category\":\"unknown_identifier\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_25_w4j02cfw (7.5s) ╭─ Error at line <loc> │ apply Ideal.prime_avoidance <;> │ ^^^ ╰─ Unknown constant `Ideal.prime_avoidance` error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_25_w4j02cfw error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "diagnostic_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_25_w4j02cfw (7.5s)"
+      },
+      {
+        "round": 4,
+        "compile_ok": false,
+        "category": "compile_error",
+        "feedback_text": "{\"category\":\"compile_error\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_25_ina3hbnh (19s) ╭─ Error at line <loc> │ exact? │ ^^^ ╰─ `exact?` could not close the goal. Try `apply?` to see partial suggestions. error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_25_ina3hbnh error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "category_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_25_ina3hbnh (19s)"
+      }
+    ]
+  }
+}

@@ -49,8 +49,8 @@ Memory 把失败经验压缩成“实验笔记”
 
 待 Capsule 保真度和案例集优化完成后，将其封装为轻量 `CapsuleFeedback`：直接消费 Ax 已有的编译结果，不重复编译，只输出错误类别、规范化诊断文本、重复次数、诊断变化和紧凑历史，供下一轮 Proposer 使用；重复判断直接比较规范化诊断文本。
 
-当前状态：Part 1 runner、Part 2 核心与真实 Ax 包裹入口、逐 theorem 状态、Memoryless/`yxai` Responses 配置、遥测和严格配对门禁均已实现。FATE-M 25 题配对实验已完成，修正版正式交接结果位于 `results/handoff/part12-live-20260828-corrected/`。
+当前状态：Part 1 runner、Part 2 核心与真实 Ax 包裹入口、逐 theorem 状态、Memoryless/`yxai` Responses 配置、遥测和严格配对门禁均已实现。FATE-M 25 题配对实验已完成；为拆分 Memory 与反馈格式的混杂因素，又完成了 `ExperienceProcessor + CapsuleFeedback` 的 B 臂（20/25，通过配对 25/25）。正式结果分别位于 `results/handoff/part12-live-20260828-corrected/` 和 `results/handoff/part2-experience-capsule-20260829/`。
 
 ### Part 3：后续重复与扩展（尚未执行）
 
-已完成的 Part 1/2 批次在同一批任务上配对比较原始 AxProverBase 与 `AxProverBase + CapsuleFeedback`，共享首轮候选并固定模型和配置。若开展新的 Part 3，应在独立目录中重复两组、扩大模型或批次，并按 task id 做配对分析；现有 [交接清单](part3_experiment_handoff.md) 只校验已有 handoff，不调用模型，也不构成新的实验。
+在同一批任务上配对比较原始 AxProverBase 与 `AxProverBase + CapsuleFeedback`，共享首轮候选，并固定模型、工具和总 LLM 调用/token/成本预算。当前已完成 Raw/Capsule 主对照和独立 B 混杂拆分臂；主要比较最终通过率、首轮失败后的修复率、调用与成本、重复错误比例。正式结论前仍应在同一时间窗口重跑各条件，避免模型服务变化影响结果；本轮没有运行完整 repair24 六臂矩阵。已有 [交接清单](part3_experiment_handoff.md) 只校验当前交接包，不调用模型；后续扩大模型或批次时仍应使用独立目录并按 task id 配对分析。

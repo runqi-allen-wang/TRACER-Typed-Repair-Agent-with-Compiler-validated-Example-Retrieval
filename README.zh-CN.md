@@ -206,9 +206,16 @@ DeepSeek Flash 可将模型改为 `deepseek-v4-flash`。GPT-4.1 是当前请求�
 
 评测不依赖运行时答案表。检索会检查与评测题声明相同的示例；相似但不相同的命题仍需人工复核，**文本去重不等于消除了所有语义泄漏风险**。这里的 `pass@3` 指三轮预算内至少一次成功的题目比例，不是多次独立采样得到的无偏 pass@k 估计。方法详见 [实验协议](docs/methodology.md)。
 
-### AxProverBase Part 1 + Part 2 配对实验
+### AxProverBase Part 1 + Part 2 配对实验及 B 混杂拆分臂
 
-另一组 FATE-M 实验比较 Part 1 的 AxProverBase `ExperienceProcessor` baseline 与 Part 2 的 `MemorylessProcessor + CapsuleFeedback`。两组在 25 题上逐题复用相同首轮候选，并冻结 `gpt-5.6-sol`、AI4Math `yxai` Responses endpoint、预算和候选安全策略。两组均为 25/25 成功；总轮次由 39 降至 36，编译错误由 14 降至 11，LLM 调用由 79 降至 36，token 由 656,657 降至 274,742；Capsule 处理本身没有额外 LLM 或编译调用。详见 [Part 2 设计](docs/part2_capsule_feedback.md)与[正式结果交接包](results/handoff/part12-live-20260828-corrected/README.md)。
+另一组 FATE-M 实验比较 Part 1 的 AxProverBase `ExperienceProcessor` baseline 与 Part 2 的 `MemorylessProcessor + CapsuleFeedback`。两组在 25 题上逐题复用相同首轮候选，并冻结 `gpt-5.6-sol`、AI4Math `yxai` Responses endpoint、预算和候选安全策略。两组均为 25/25 成功；总轮次由 39 降至 36，编译错误由 14 降至 11，LLM 调用由 79 降至 36，token 由 656,657 降至 274,742；在这个 Memoryless Part 2 条件中，Capsule 处理本身没有额外 LLM 或编译调用。详见 [Part 2 设计](docs/part2_capsule_feedback.md)与[正式结果交接包](results/handoff/part12-live-20260828-corrected/README.md)。
+
+由于原始比较同时改变了 Memory 和失败反馈格式，另运行了独立的
+`capsule_experience` 混杂拆分臂：使用 Part 1 的 `ExperienceProcessor`，但采用同一
+确定性 `CapsuleFeedback`。该臂通过 20/25（80.0%），总计 47 轮、69 次 LLM 请求
+（其中 27 次 Memory 请求）、27 次编译错误和 659,791 tokens；9 个共享首轮失败中
+修复了 4 个。这是单批次描述性结果，不替代原来的两条件结果；它也不同于上面的
+Evaluation18 B 条件，不是 ABCD 的第四个 Agent 条件。详见 [B 臂设计与结果](docs/part2_capsule_feedback_confound_arm.md)和[B 臂交接报告](results/handoff/part2-experience-capsule-20260829/REPORT.md)。
 
 ## 实验结果
 
@@ -350,7 +357,8 @@ python -m leancapsule gallery capsules --out capsules/index.json
 | 理解条件控制和有效性约束 | [方法设计](docs/methodology.md) |
 | 查阅逐轮记录字段 | [JSONL 格式](docs/jsonl_schema.md) |
 | 创建可公开分享的失败工件 | [工件格式](docs/CAPSULE_FORMAT.md)与[案例贡献指南](docs/CONTRIBUTING_CAPSULES.md) |
-| 运行或检查 AxProverBase Part 1 + Part 2 实验 | [Part 1 指南](baseline/README.md)、[Part 2 设计](docs/part2_capsule_feedback.md)、[Part 3 后续清单](docs/part3_experiment_handoff.md)与[结果交接包](results/handoff/part12-live-20260828-corrected/README.md) |
+| 运行或检查 AxProverBase Part 1 + Part 2 实验 | [Part 1 指南](baseline/README.md)、[Part 2 设计](docs/part2_capsule_feedback.md)、[Part 3 交接清单](docs/part3_experiment_handoff.md)与[结果交接包](results/handoff/part12-live-20260828-corrected/README.md) |
+| 查看 Experience + CapsuleFeedback 混杂拆分臂 | [B 臂设计与结果](docs/part2_capsule_feedback_confound_arm.md)与[B 臂交接报告](results/handoff/part2-experience-capsule-20260829/REPORT.md) |
 | 查看 SP-1 编译前安全门禁 | [安全策略回归](docs/security_policy.md) |
 | 查看 12 core + 4 challenge 干净回放实验 | [Capsule 可行性报告](docs/CAPSULE_FEASIBILITY.md) |
 | 查看已发布实验与证明 | [Pilot 交付目录](published/pilot-20260826T122354Z-d628742d) |
@@ -370,7 +378,7 @@ lean_project/          Lean 题目与本地依赖案例
 mathlib_project/       独立 Mathlib 依赖工程
 prompts/               A/B/C/D 上下文策略提示模板
 scripts/               依赖准备、测试、pilot 校验与导出
-baseline/              AxProverBase Part 1 与配对 Part 2 实验 runner
+baseline/              AxProverBase Part 1 与配对 Part 2/B 实验 runner
 configs/               冻结的 AxProverBase 模型与 memory 配置
 tests/                 自动化测试
 results/               本地运行数据与报告
@@ -416,7 +424,7 @@ python src/research.py plan --config experiments/research.example.json
 
 历史本地记录曾报告 Windows 11 与 Ubuntu WSL2 在原生 Lean 4.32.0 下，对同一 24 个案例均取得 48/48 回放匹配。本源码导出版未包含这些跨 OS 原始记录，因此目前不能在仓库内独立核验。即使复现，它也只表示同一物理机上的两个操作系统，不是独立硬件验证、严格冷启动基准或加速证据。
 
-[Part 3 清单](docs/part3_experiment_handoff.md) 目前只校验已有的 corrected Part 1/2 handoff；仓库没有单独的 Part 3 模型运行或新增结果。
+[Part 3 交接报告](docs/part3_raw_capsule_experiment.md)记录了此前合并 main 后已经完成的 Raw/CapsuleFeedback 模型运行：25/25 题严格配对，Raw 最终 22/25、Capsule 19/25。[交接清单](docs/part3_experiment_handoff.md)只校验相邻的 Part 1/2 handoff，本身不调用模型；两份文档都不应被理解为新的重复实验。
 
 ## 相关工作
 

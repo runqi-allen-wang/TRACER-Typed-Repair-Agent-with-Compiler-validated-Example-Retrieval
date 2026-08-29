@@ -66,12 +66,24 @@ def _index(rows: Iterable[Mapping[str, Any]], label: str, errors: list[str]) -> 
 def validate_paired_runs(
     baseline_rows: Iterable[Mapping[str, Any]],
     capsule_rows: Iterable[Mapping[str, Any]],
+    *,
+    right_condition: str = "capsule",
+    right_feedback_mode: str | None = None,
+    right_memory_mode: str = "capsule_feedback",
+    right_memory_processor: str = "MemorylessProcessor",
+    require_zero_memory_calls: bool = True,
 ) -> dict[str, Any]:
-    """Require exact first-candidate, model, endpoint, and budget pairing."""
+    """Require exact first-candidate, model, endpoint, and budget pairing.
+
+    The defaults validate the original Part 2 ``capsule`` arm.  The optional
+    right-hand settings also cover the B arm (``ExperienceProcessor`` plus
+    CapsuleFeedback) without weakening the default Memoryless gate.
+    """
 
     errors: list[str] = []
     baseline = _index(baseline_rows, "baseline", errors)
-    capsule = _index(capsule_rows, "capsule", errors)
+    right_label = "capsule" if right_condition == "capsule" else right_condition
+    capsule = _index(capsule_rows, right_label, errors)
     baseline_ids = set(baseline)
     capsule_ids = set(capsule)
     for missing in sorted(baseline_ids - capsule_ids):
@@ -84,11 +96,20 @@ def validate_paired_runs(
         left = baseline[task_id]
         right = capsule[task_id]
         left_condition = str(left.get("condition") or "")
-        right_condition = str(right.get("condition") or "")
+        observed_right_condition = str(right.get("condition") or "")
         if left_condition not in {"baseline", "experience"}:
             errors.append(f"{task_id}: baseline condition must be baseline/experience")
-        if right_condition != "capsule":
-            errors.append(f"{task_id}: capsule condition must be capsule")
+        if observed_right_condition != right_condition:
+            errors.append(
+                f"{task_id}: {right_label} condition must be {right_condition}"
+            )
+        if (
+            right_feedback_mode is not None
+            and str(right.get("feedback_mode") or "") != right_feedback_mode
+        ):
+            errors.append(
+                f"{task_id}: {right_label} feedback_mode must be {right_feedback_mode}"
+            )
 
         for field in ("target", "module", "theorem", "path"):
             left_value = str(left.get(field) or "")
@@ -115,10 +136,14 @@ def validate_paired_runs(
 
         if str(left.get("memory_mode") or "") != "self_managed":
             errors.append(f"{task_id}: baseline memory_mode must be self_managed")
-        if str(right.get("memory_mode") or "") != "capsule_feedback":
-            errors.append(f"{task_id}: capsule memory_mode must be capsule_feedback")
-        if str(right.get("memory_processor") or "") != "MemorylessProcessor":
-            errors.append(f"{task_id}: capsule memory_processor must be MemorylessProcessor")
+        if str(right.get("memory_mode") or "") != right_memory_mode:
+            errors.append(
+                f"{task_id}: {right_label} memory_mode must be {right_memory_mode}"
+            )
+        if str(right.get("memory_processor") or "") != right_memory_processor:
+            errors.append(
+                f"{task_id}: {right_label} memory_processor must be {right_memory_processor}"
+            )
 
         left_candidate = str(left.get("first_round_candidate") or "")
         right_candidate = str(right.get("first_round_candidate") or "")
@@ -197,14 +222,39 @@ def validate_paired_runs(
 
         calls = right.get("calls")
         if not isinstance(calls, Mapping):
-            errors.append(f"{task_id}: capsule call counters are missing")
+            errors.append(f"{task_id}: {right_label} call counters are missing")
         else:
-            if calls.get("memory_calls") != 0:
+            memory_calls = calls.get("memory_calls")
+            if (
+                not isinstance(memory_calls, int)
+                or isinstance(memory_calls, bool)
+                or memory_calls < 0
+            ):
+                errors.append(
+                    f"{task_id}: {right_label} memory_calls must be a non-negative integer"
+                )
+            elif require_zero_memory_calls and memory_calls != 0:
                 errors.append(f"{task_id}: Capsule condition memory_calls must be 0")
+            reported_memory_calls = right.get("memory_llm_calls")
+            if (
+                reported_memory_calls is not None
+                and reported_memory_calls != memory_calls
+            ):
+                errors.append(f"{task_id}: {right_label} memory_llm_calls mismatch")
             if calls.get("capsule_llm_calls", 0) != 0:
-                errors.append(f"{task_id}: CapsuleFeedback made an LLM call")
+                if right_condition == "capsule":
+                    errors.append(f"{task_id}: CapsuleFeedback made an LLM call")
+                else:
+                    errors.append(
+                        f"{task_id}: {right_label} CapsuleFeedback made an LLM call"
+                    )
             if calls.get("capsule_compiler_calls", 0) != 0:
-                errors.append(f"{task_id}: CapsuleFeedback made an extra compiler call")
+                if right_condition == "capsule":
+                    errors.append(f"{task_id}: CapsuleFeedback made an extra compiler call")
+                else:
+                    errors.append(
+                        f"{task_id}: {right_label} CapsuleFeedback made an extra compiler call"
+                    )
 
         pairs.append(
             {
@@ -236,9 +286,30 @@ def validate_paired_runs(
         "expected_store": YXAI_STORE_RESPONSES,
         "expected_reasoning_effort": YXAI_REASONING_EFFORT,
         "expected_candidate_policy": dict(CANDIDATE_POLICY),
+        "expected_right_condition": right_condition,
+        "expected_right_memory_mode": right_memory_mode,
+        "expected_right_memory_processor": right_memory_processor,
+        "require_zero_memory_calls": require_zero_memory_calls,
         "pairs": pairs,
         "errors": errors,
     }
 
 
-__all__ = ["validate_paired_runs"]
+def validate_experience_capsule_pair(
+    baseline_rows: Iterable[Mapping[str, Any]],
+    experience_capsule_rows: Iterable[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Validate Part 1 baseline against the B arm."""
+
+    return validate_paired_runs(
+        baseline_rows,
+        experience_capsule_rows,
+        right_condition="capsule_experience",
+        right_feedback_mode="capsule",
+        right_memory_mode="experience_capsule_feedback",
+        right_memory_processor="ExperienceProcessor",
+        require_zero_memory_calls=False,
+    )
+
+
+__all__ = ["validate_experience_capsule_pair", "validate_paired_runs"]

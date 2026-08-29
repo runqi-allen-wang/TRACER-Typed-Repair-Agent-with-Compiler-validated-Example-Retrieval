@@ -1,0 +1,33 @@
+{
+  "theorem_key": "FATEM.17:ideal_span_eq_diagonal_map_sum",
+  "state": {
+    "schema_version": "capsule-feedback.readable.v0.2",
+    "attempt_count": 2,
+    "feedback_counts": {
+      "{\"category\":\"unsolved_goals\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_17_yfy0rhp2 (8.6s) ╭─ Error at line <loc> │ | cons p T ih => │ ^^^ ╰─ unsolved goals case cons R : Type u_1 inst✝ : CommRing R S : Set R c : R p : R × ↑S T : Multiset (R × ↑S) ih : c • (Multiset.map (fun p ↦ p.1 * ↑p.2) T).sum = (Multiset.map (fun p ↦ p.1 * ↑p.2) (Multiset.map (fun p ↦ (c * p.1, p.2)) T)).sum ⊢ c * (Multiset.map (fun p ↦ p.1 * ↑p.2) T).sum = (Multiset.map (fun x ↦ c * (x.1 * ↑x.2)) T).sum ih Hint: Omit it from the simp argument list. simp [Multiset.map_map, smul_eq_mul, mul_add, mul_assoc,̵ ̵i̵h̵] error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_17_yfy0rhp2 error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"unsolved_goals\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_17_tloj3u0y (6.4s) ╭─ Error at line <loc> │ | cons p T ih => │ ^^^ ╰─ unsolved goals case cons R : Type u_1 inst✝ : CommRing R S : Set R c x : R p : R × ↑S T : Multiset (R × ↑S) ih : x = (Multiset.map (fun p ↦ p.1 * ↑p.2) T).sum → c * (Multiset.map (fun p ↦ p.1 * ↑p.2) T).sum = (Multiset.map (fun p ↦ p.1 * ↑p.2) (Multiset.map (fun p ↦ (c * p.1, p.2)) T)).sum hT : x = (Multiset.map (fun p ↦ p.1 * ↑p.2) (p ::ₘ T)).sum ⊢ x = (Multiset.map (fun p ↦ p.1 * ↑p.2) T).sum error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_17_tloj3u0y error: build failed\",\"goal_state\":\"\"}": 1
+    },
+    "history": [
+      {
+        "round": 1,
+        "compile_ok": false,
+        "category": "unsolved_goals",
+        "feedback_text": "{\"category\":\"unsolved_goals\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_17_yfy0rhp2 (8.6s) ╭─ Error at line <loc> │ | cons p T ih => │ ^^^ ╰─ unsolved goals case cons R : Type u_1 inst✝ : CommRing R S : Set R c : R p : R × ↑S T : Multiset (R × ↑S) ih : c • (Multiset.map (fun p ↦ p.1 * ↑p.2) T).sum = (Multiset.map (fun p ↦ p.1 * ↑p.2) (Multiset.map (fun p ↦ (c * p.1, p.2)) T)).sum ⊢ c * (Multiset.map (fun p ↦ p.1 * ↑p.2) T).sum = (Multiset.map (fun x ↦ c * (x.1 * ↑x.2)) T).sum ih Hint: Omit it from the simp argument list. simp [Multiset.map_map, smul_eq_mul, mul_add, mul_assoc,̵ ̵i̵h̵] error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_17_yfy0rhp2 error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "initial",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_17_yfy0rhp2 (8.6s)"
+      },
+      {
+        "round": 2,
+        "compile_ok": false,
+        "category": "unsolved_goals",
+        "feedback_text": "{\"category\":\"unsolved_goals\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_17_tloj3u0y (6.4s) ╭─ Error at line <loc> │ | cons p T ih => │ ^^^ ╰─ unsolved goals case cons R : Type u_1 inst✝ : CommRing R S : Set R c x : R p : R × ↑S T : Multiset (R × ↑S) ih : x = (Multiset.map (fun p ↦ p.1 * ↑p.2) T).sum → c * (Multiset.map (fun p ↦ p.1 * ↑p.2) T).sum = (Multiset.map (fun p ↦ p.1 * ↑p.2) (Multiset.map (fun p ↦ (c * p.1, p.2)) T)).sum hT : x = (Multiset.map (fun p ↦ p.1 * ↑p.2) (p ::ₘ T)).sum ⊢ x = (Multiset.map (fun p ↦ p.1 * ↑p.2) T).sum error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_17_tloj3u0y error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "diagnostic_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_17_tloj3u0y (6.4s)"
+      }
+    ]
+  }
+}

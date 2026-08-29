@@ -1,0 +1,22 @@
+{
+  "theorem_key": "FATEM.4:mul_mem_ker_comm",
+  "state": {
+    "schema_version": "capsule-feedback.readable.v0.2",
+    "attempt_count": 1,
+    "feedback_counts": {
+      "{\"category\":\"compile_error\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_4_8rehayi8 (7.7s) ╭─ Error at line <loc> │ simpa only [map_mul] using (mul_eq_one_comm (f a) (f b)) │ ^^^ ╰─ Function expected at mul_eq_one_comm but this term has type <mvar> * <mvar> = 1 ↔ <mvar> * <mvar> = 1 (f a) error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_4_8rehayi8 error: build failed\",\"goal_state\":\"\"}": 1
+    },
+    "history": [
+      {
+        "round": 1,
+        "compile_ok": false,
+        "category": "compile_error",
+        "feedback_text": "{\"category\":\"compile_error\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_4_8rehayi8 (7.7s) ╭─ Error at line <loc> │ simpa only [map_mul] using (mul_eq_one_comm (f a) (f b)) │ ^^^ ╰─ Function expected at mul_eq_one_comm but this term has type <mvar> * <mvar> = 1 ↔ <mvar> * <mvar> = 1 (f a) error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_4_8rehayi8 error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "initial",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_4_8rehayi8 (7.7s)"
+      }
+    ]
+  }
+}

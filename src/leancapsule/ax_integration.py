@@ -7,6 +7,7 @@ returned by that node and therefore never invokes Lean or an LLM itself.
 
 from __future__ import annotations
 
+from dataclasses import fields, is_dataclass
 from uuid import uuid4
 import json
 import os
@@ -25,10 +26,12 @@ except ModuleNotFoundError:
 
 try:
     from compiler import CANDIDATE_POLICY, full_theorem_safety_violation
+    from diagnostics import classify_diagnostic_text
 except ModuleNotFoundError as exc:
     if exc.name != "compiler":
         raise
     from src.compiler import CANDIDATE_POLICY, full_theorem_safety_violation
+    from src.diagnostics import classify_diagnostic_text
 
 from .feedback import (
     AXPROVERBASE_COMMIT,
@@ -38,6 +41,7 @@ from .feedback import (
     YXAI_STORE_RESPONSES,
     YXAI_WIRE_API,
     CapsuleFeedback,
+    normalized_feedback_text,
 )
 
 
@@ -45,6 +49,10 @@ AX_INTEGRATION_VERSION = "ax-capsule-feedback.readable.v0.3"
 DEFAULT_MAX_THEOREM_SESSIONS = 128
 YXAI_MAX_INPUT_TOKENS = 65536
 _PATCH_MARKER = "__leancapsule_part2_installed__"
+_PATCH_MODE_ATTR = "__leancapsule_feedback_mode__"
+_PATCH_OPTIONS_ATTR = "__leancapsule_feedback_options__"
+FEEDBACK_MODES = frozenset({"raw", "capsule"})
+MEMORY_CLASSES = frozenset({"MemorylessProcessor", "ExperienceProcessor"})
 
 
 def _read(value: object, name: str, default: object = None) -> object:
@@ -58,6 +66,26 @@ def _write(value: object, name: str, replacement: object) -> None:
         value[name] = replacement
     else:
         setattr(value, name, replacement)
+
+
+def _plain_value(value: object) -> object:
+    """Convert config containers to values accepted by Ax's memory constructor."""
+
+    if isinstance(value, Mapping):
+        return {key: _plain_value(item) for key, item in value.items()}
+    if is_dataclass(value) and not isinstance(value, type):
+        return {
+            field.name: _plain_value(getattr(value, field.name))
+            for field in fields(value)
+        }
+    attributes = getattr(value, "__dict__", None)
+    if isinstance(attributes, dict):
+        return {key: _plain_value(item) for key, item in attributes.items()}
+    if isinstance(value, list):
+        return [_plain_value(item) for item in value]
+    if isinstance(value, tuple):
+        return tuple(_plain_value(item) for item in value)
+    return value
 
 
 def _theorem_key(state: object) -> str:
@@ -134,8 +162,22 @@ def validate_ax_proposal_safety(
     )
 
 
-def enforce_ax_part2_config(config: object) -> object:
-    """Freeze the Part 2 model, Memoryless strategy, and disabled summary."""
+def enforce_ax_part2_config(
+    config: object,
+    *,
+    memory_class: str = "MemorylessProcessor",
+    memory_init_args: object = None,
+) -> object:
+    """Freeze the Part 2 model, memory strategy, and disabled summary.
+
+    ``MemorylessProcessor`` is the default Part 2 condition.  The B arm uses
+    ``ExperienceProcessor`` with the same frozen yxai ``prover_llm`` for its
+    memory node, so its extra memory calls remain part of the measured budget.
+    """
+
+    if memory_class not in MEMORY_CLASSES:
+        choices = ", ".join(sorted(MEMORY_CLASSES))
+        raise ValueError(f"unsupported Ax memory class {memory_class!r}; choose {choices}")
 
     llm = _read(config, "prover_llm")
     if llm is None:
@@ -160,8 +202,30 @@ def enforce_ax_part2_config(config: object) -> object:
     memory = _read(config, "memory_config")
     if memory is None:
         raise ValueError("Ax Part 2 requires prover.memory_config configuration")
-    _write(memory, "class_name", "MemorylessProcessor")
-    _write(memory, "init_args", {})
+    _write(memory, "class_name", memory_class)
+    if memory_class == "MemorylessProcessor":
+        _write(memory, "init_args", {})
+    else:
+        init_args = _read(memory, "init_args", {})
+        if init_args is None:
+            init_args = {}
+        if not isinstance(init_args, Mapping):
+            raise ValueError("Ax ExperienceProcessor memory init_args must be a mapping")
+        if memory_init_args is not None:
+            if not isinstance(memory_init_args, Mapping):
+                raise ValueError("memory_init_args must be a mapping")
+            init_args = {**dict(init_args), **dict(memory_init_args)}
+        else:
+            init_args = dict(init_args)
+        # Do not allow an imported/default config to silently select another
+        # provider for the memory node. Ax's BaseMemory expects this argument
+        # to be a mapping, while OmegaConf returns the interpolated LLMConfig
+        # as a dataclass instance.
+        memory_llm_config = _plain_value(llm)
+        if not isinstance(memory_llm_config, Mapping):
+            raise ValueError("Ax ExperienceProcessor llm_config must be a mapping")
+        init_args["llm_config"] = dict(memory_llm_config)
+        _write(memory, "init_args", init_args)
 
     summary = _read(config, "summarize_output")
     if summary is None:
@@ -169,6 +233,14 @@ def enforce_ax_part2_config(config: object) -> object:
     _write(summary, "enabled", False)
     _write(summary, "llm", llm)
     return config
+
+
+def _validate_feedback_mode(feedback_mode: str) -> str:
+    mode = str(feedback_mode or "").strip().lower()
+    if mode not in FEEDBACK_MODES:
+        choices = ", ".join(sorted(FEEDBACK_MODES))
+        raise ValueError(f"unsupported Ax feedback mode {feedback_mode!r}; choose {choices}")
+    return mode
 
 
 class CapsuleFeedbackSessions:
@@ -248,6 +320,52 @@ class CapsuleFeedbackSessions:
     @property
     def active_session_count(self) -> int:
         return len(self._sessions)
+
+
+class RawFeedbackTracker:
+    """Track Raw diagnostics for telemetry without changing Ax feedback."""
+
+    def __init__(self) -> None:
+        self._counts: dict[str, dict[str, int]] = {}
+        self._last: dict[str, str] = {}
+        self._consecutive: dict[str, int] = {}
+
+    def observe(self, theorem_key: str, feedback: object, *, round_no: int) -> dict[str, Any]:
+        feedback_type = _feedback_type(feedback)
+        goal_state = str(_read(feedback, "goal_state_at_sorries", "") or "")
+        if feedback_type == "sorries_goal_state":
+            diagnostic = goal_state
+            category = "unsolved_goals"
+        else:
+            diagnostic = str(_read(feedback, "error_output", "") or "")
+            category = classify_diagnostic_text(diagnostic)
+        feedback_text = normalized_feedback_text(category, diagnostic, goal_state)
+        counts = self._counts.setdefault(theorem_key, {})
+        repeat_count = counts.get(feedback_text, 0) + 1
+        counts[feedback_text] = repeat_count
+        previous = self._last.get(theorem_key)
+        if previous is None:
+            drift_kind = "initial"
+        elif previous == feedback_text:
+            drift_kind = "none"
+        else:
+            drift_kind = "diagnostic_changed"
+        consecutive = 1
+        if previous == feedback_text:
+            previous_consecutive = self._consecutive.get(theorem_key, 0)
+            consecutive = previous_consecutive + 1
+        self._consecutive[theorem_key] = consecutive
+        self._last[theorem_key] = feedback_text
+        return {
+            "input_feedback_type": feedback_type,
+            "category": category,
+            "feedback_text": feedback_text,
+            "repeat_count": repeat_count,
+            "consecutive_repeat_count": consecutive,
+            "drift_kind": drift_kind,
+            "diagnostic_drift": drift_kind == "diagnostic_changed",
+            "diagnostic_chars": min(len(diagnostic), 32768),
+        }
 
 
 class JsonlTelemetry:
@@ -366,9 +484,12 @@ def _capsule_event(
     payload: Mapping[str, Any],
     builder_elapsed_ms: float,
     capsule_elapsed_ms: float,
+    memory_processor: str = "MemorylessProcessor",
+    memory_llm_calls: int = 0,
 ) -> dict[str, Any]:
     return {
         "integration_schema_version": AX_INTEGRATION_VERSION,
+        "feedback_mode": "capsule",
         "capsule_schema_version": payload["schema_version"],
         "axproverbase_commit": AXPROVERBASE_COMMIT,
         "model": AXPROVER_YXAI_MODEL,
@@ -394,8 +515,50 @@ def _capsule_event(
         "builder_result_reused": True,
         "capsule_compiler_calls": 0,
         "capsule_llm_calls": 0,
-        "memory_llm_calls": 0,
-        "memory_processor": "MemorylessProcessor",
+        "memory_llm_calls": memory_llm_calls,
+        "memory_processor": memory_processor,
+    }
+
+
+def _raw_event(
+    *,
+    theorem_key: str,
+    round_no: int,
+    payload: Mapping[str, Any],
+    builder_elapsed_ms: float,
+    memory_processor: str = "MemorylessProcessor",
+    memory_llm_calls: int = 0,
+) -> dict[str, Any]:
+    """Record Raw feedback without changing the Ax feedback object."""
+
+    return {
+        "integration_schema_version": AX_INTEGRATION_VERSION,
+        "feedback_mode": "raw",
+        "event_id": str(uuid4()),
+        "axproverbase_commit": AXPROVERBASE_COMMIT,
+        "model": AXPROVER_YXAI_MODEL,
+        "base_url": YXAI_BASE_URL,
+        "wire_api": YXAI_WIRE_API,
+        "use_responses_api": True,
+        "store": YXAI_STORE_RESPONSES,
+        "reasoning_effort": YXAI_REASONING_EFFORT,
+        "candidate_policy": dict(CANDIDATE_POLICY),
+        "theorem_name": theorem_key.rsplit(":", 1)[-1][:160],
+        "round": round_no,
+        "input_feedback_type": payload["input_feedback_type"],
+        "category": payload["category"],
+        "feedback_text": payload["feedback_text"],
+        "repeat_count": payload["repeat_count"],
+        "consecutive_repeat_count": payload["consecutive_repeat_count"],
+        "drift_kind": payload["drift_kind"],
+        "diagnostic_drift": payload["diagnostic_drift"],
+        "diagnostic_chars": payload["diagnostic_chars"],
+        "builder_elapsed_ms": round(builder_elapsed_ms, 3),
+        "builder_result_reused": False,
+        "capsule_compiler_calls": 0,
+        "capsule_llm_calls": 0,
+        "memory_llm_calls": memory_llm_calls,
+        "memory_processor": memory_processor,
     }
 
 
@@ -404,15 +567,23 @@ def install_axproverbase_capsule_feedback(
     agent_class: type | None = None,
     build_failed_class: type | None = None,
     proposal_class: type | None = None,
+    feedback_mode: str = "capsule",
     telemetry_path: str | Path | None = None,
     state_dir: str | Path | None = None,
     first_round_cache_path: str | Path | None = None,
+    memory_class: str = "MemorylessProcessor",
+    memory_init_args: object = None,
 ) -> type:
-    """Install the Part 2 wrapper before Ax constructs ``ProverAgent``.
+    """Install the Raw/Capsule wrapper before Ax constructs ``ProverAgent``.
 
     Optional class injection keeps the integration testable without importing
     Ax's heavy runtime.  Production callers should omit it.
     """
+
+    feedback_mode = _validate_feedback_mode(feedback_mode)
+    if memory_class not in MEMORY_CLASSES:
+        choices = ", ".join(sorted(MEMORY_CLASSES))
+        raise ValueError(f"unsupported Ax memory class {memory_class!r}; choose {choices}")
 
     if agent_class is None or build_failed_class is None or proposal_class is None:
         try:
@@ -426,6 +597,16 @@ def install_axproverbase_capsule_feedback(
         build_failed_class = build_failed_class or BuildFailedFeedback
         proposal_class = proposal_class or ProposalMessage
 
+    options = {
+        "feedback_mode": feedback_mode,
+        "telemetry_path": telemetry_path,
+        "state_dir": state_dir,
+        "first_round_cache_path": first_round_cache_path,
+        "memory_class": memory_class,
+        "memory_init_args": memory_init_args,
+    }
+    setattr(agent_class, _PATCH_OPTIONS_ATTR, options)
+    setattr(agent_class, _PATCH_MODE_ATTR, feedback_mode)
     if getattr(agent_class, _PATCH_MARKER, False):
         return agent_class
 
@@ -435,12 +616,6 @@ def install_axproverbase_capsule_feedback(
     original_proposer = getattr(agent_class, "_proposer_node", None)
     original_reviewer = getattr(agent_class, "_reviewer_node", None)
     original_chat = getattr(agent_class, "chat", None)
-    configured_telemetry_path = telemetry_path or os.environ.get("CAPSULE_FEEDBACK_METRICS")
-    configured_state_dir = state_dir or os.environ.get("CAPSULE_FEEDBACK_STATE_DIR")
-    configured_first_round_cache = first_round_cache_path or os.environ.get(
-        "CAPSULE_FIRST_ROUND_CACHE"
-    )
-
     def reject_unsafe_proposal(
         self: object,
         state: object,
@@ -474,13 +649,40 @@ def install_axproverbase_capsule_feedback(
         return violation
 
     def patched_init(self: object, config: object, runtime: object) -> None:
-        enforce_ax_part2_config(config)
+        active_options = getattr(type(self), _PATCH_OPTIONS_ATTR, {})
+        active_memory_class = str(
+            active_options.get("memory_class", "MemorylessProcessor")
+        )
+        active_memory_init_args = active_options.get("memory_init_args")
+        enforce_ax_part2_config(
+            config,
+            memory_class=active_memory_class,
+            memory_init_args=active_memory_init_args,
+        )
         original_init(self, config, runtime)
-        self._capsule_feedback_sessions = CapsuleFeedbackSessions(state_dir=configured_state_dir)
-        self._capsule_feedback_telemetry = JsonlTelemetry(configured_telemetry_path)
+        active_mode = _validate_feedback_mode(active_options.get("feedback_mode", "capsule"))
+        self._capsule_memory_processor = active_memory_class
+        telemetry_value = active_options.get("telemetry_path") or os.environ.get(
+            "AX_FEEDBACK_METRICS", os.environ.get("CAPSULE_FEEDBACK_METRICS")
+        )
+        state_value = active_options.get("state_dir") or os.environ.get(
+            "AX_FEEDBACK_STATE_DIR", os.environ.get("CAPSULE_FEEDBACK_STATE_DIR")
+        )
+        cache_value = active_options.get("first_round_cache_path") or os.environ.get(
+            "CAPSULE_FIRST_ROUND_CACHE"
+        )
+        self._capsule_feedback_mode = active_mode
+        self._capsule_feedback_sessions = (
+            CapsuleFeedbackSessions(state_dir=state_value)
+            if active_mode == "capsule"
+            else None
+        )
+        self._raw_feedback_tracker = RawFeedbackTracker()
+        self._feedback_events: list[dict[str, Any]] = []
+        self._capsule_feedback_telemetry = JsonlTelemetry(telemetry_value)
         self._capsule_first_round_cache = (
-            FirstRoundCandidateCache(configured_first_round_cache)
-            if configured_first_round_cache
+            FirstRoundCandidateCache(cache_value)
+            if cache_value
             else None
         )
         self._capsule_node_counts = {
@@ -492,14 +694,26 @@ def install_axproverbase_capsule_feedback(
             "reviewer": 0,
         }
         self._capsule_active_llm_role = "other"
-        self._capsule_llm_calls = {"proposer": 0, "reviewer": 0, "other": 0}
+        self._capsule_llm_calls = {
+            "proposer": 0,
+            "reviewer": 0,
+            "memory": 0,
+            "other": 0,
+        }
         self._capsule_tool_calls = 0
         self._capsule_usage = {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0}
-        llm_client = getattr(self, "llm_client", None)
-        original_ainvoke = getattr(llm_client, "ainvoke", None)
-        if original_ainvoke is not None:
+
+        def instrument_llm_client(client: object, forced_role: str | None = None) -> None:
+            """Count both the prover client and ExperienceProcessor's client."""
+
+            if client is None:
+                return
+            original_ainvoke = getattr(client, "ainvoke", None)
+            if original_ainvoke is None:
+                return
+
             async def counted_ainvoke(*args: object, **kwargs: object) -> object:
-                role = self._capsule_active_llm_role
+                role = forced_role or self._capsule_active_llm_role
                 if role not in self._capsule_llm_calls:
                     role = "other"
                 self._capsule_llm_calls[role] += 1
@@ -512,7 +726,17 @@ def install_axproverbase_capsule_feedback(
                     self._capsule_tool_calls += len(tool_calls)
                 return response
 
-            llm_client.ainvoke = counted_ainvoke
+            client.ainvoke = counted_ainvoke
+
+        instrumented_clients: set[int] = set()
+        for client, forced_role in (
+            (getattr(self, "llm_client", None), None),
+            (getattr(getattr(self, "memory", None), "llm", None), "memory"),
+        ):
+            if client is None or id(client) in instrumented_clients:
+                continue
+            instrument_llm_client(client, forced_role=forced_role)
+            instrumented_clients.add(id(client))
 
     async def patched_builder(self: object, state: object) -> dict:
         last_proposal = _read(state, "last_proposal")
@@ -542,6 +766,27 @@ def install_axproverbase_capsule_feedback(
             return result
         theorem_key = _theorem_key(state)
         current_round = _round_no(state)
+
+        if getattr(self, "_capsule_feedback_mode", "capsule") == "raw":
+            for feedback in messages:
+                feedback_type = _feedback_type(feedback)
+                if feedback_type not in {"build_failed", "sorries_goal_state"}:
+                    continue
+                payload = self._raw_feedback_tracker.observe(
+                    theorem_key, feedback, round_no=current_round
+                )
+                event = _raw_event(
+                    theorem_key=theorem_key,
+                    round_no=current_round,
+                    payload=payload,
+                    builder_elapsed_ms=builder_elapsed_ms,
+                    memory_processor=self._capsule_memory_processor,
+                    memory_llm_calls=int(self._capsule_llm_calls.get("memory", 0) or 0),
+                )
+                self._feedback_events.append(dict(event))
+                self._capsule_feedback_telemetry.append(event)
+            return result
+
         transformed = []
         changed = False
         for feedback in messages:
@@ -555,16 +800,18 @@ def install_axproverbase_capsule_feedback(
             )
             capsule_elapsed_ms = (time.perf_counter() - capsule_started) * 1000
             transformed.append(build_failed_class(error_output=payload["prompt_feedback"]))
-            self._capsule_feedback_telemetry.append(
-                _capsule_event(
-                    theorem_key=theorem_key,
-                    round_no=current_round,
-                    input_feedback_type=feedback_type,
-                    payload=payload,
-                    builder_elapsed_ms=builder_elapsed_ms,
-                    capsule_elapsed_ms=capsule_elapsed_ms,
-                )
+            event = _capsule_event(
+                theorem_key=theorem_key,
+                round_no=current_round,
+                input_feedback_type=feedback_type,
+                payload=payload,
+                builder_elapsed_ms=builder_elapsed_ms,
+                capsule_elapsed_ms=capsule_elapsed_ms,
+                memory_processor=self._capsule_memory_processor,
+                memory_llm_calls=int(self._capsule_llm_calls.get("memory", 0) or 0),
             )
+            self._feedback_events.append(dict(event))
+            self._capsule_feedback_telemetry.append(event)
             changed = True
         if not changed:
             return result
@@ -574,7 +821,12 @@ def install_axproverbase_capsule_feedback(
 
     async def counted_memory(self: object, *args: object, **kwargs: object) -> object:
         self._capsule_node_counts["memory"] += 1
-        return await original_memory(self, *args, **kwargs)
+        previous_role = self._capsule_active_llm_role
+        self._capsule_active_llm_role = "memory"
+        try:
+            return await original_memory(self, *args, **kwargs)
+        finally:
+            self._capsule_active_llm_role = previous_role
 
     async def counted_proposer(
         self: object, state: object, config: RunnableConfig
@@ -598,6 +850,7 @@ def install_axproverbase_capsule_feedback(
                     "integration_schema_version": AX_INTEGRATION_VERSION,
                     "event": "shared_first_round_candidate",
                     "event_id": str(uuid4()),
+                    "feedback_mode": getattr(self, "_capsule_feedback_mode", "capsule"),
                     "theorem_name": theorem_key.rsplit(":", 1)[-1][:160],
                     "candidate_chars": len(candidate["code"]),
                     "proposer_llm_calls": 0,
@@ -630,6 +883,7 @@ def install_axproverbase_capsule_feedback(
             {
                 "integration_schema_version": AX_INTEGRATION_VERSION,
                 "event": "run_summary",
+                "feedback_mode": getattr(self, "_capsule_feedback_mode", "capsule"),
                 "axproverbase_commit": AXPROVERBASE_COMMIT,
                 "model": AXPROVER_YXAI_MODEL,
                 "base_url": YXAI_BASE_URL,
@@ -637,15 +891,15 @@ def install_axproverbase_capsule_feedback(
                 "use_responses_api": True,
                 "store": YXAI_STORE_RESPONSES,
                 "reasoning_effort": YXAI_REASONING_EFFORT,
-                "memory_processor": "MemorylessProcessor",
-                "memory_llm_calls": 0,
+                "memory_processor": self._capsule_memory_processor,
+                "memory_llm_calls": int(self._capsule_llm_calls.get("memory", 0) or 0),
                 "capsule_llm_calls": 0,
                 "capsule_compiler_calls": 0,
                 "node_calls": dict(self._capsule_node_counts),
                 "calls": {
                     "proposer_calls": self._capsule_llm_calls["proposer"],
                     "reviewer_calls": self._capsule_llm_calls["reviewer"],
-                    "memory_calls": 0,
+                    "memory_calls": int(self._capsule_llm_calls.get("memory", 0) or 0),
                     "other_llm_calls": self._capsule_llm_calls["other"],
                     "tool_calls": self._capsule_tool_calls,
                     "capsule_llm_calls": 0,
@@ -674,9 +928,12 @@ def install_axproverbase_capsule_feedback(
 __all__ = [
     "AX_INTEGRATION_VERSION",
     "CapsuleFeedbackSessions",
+    "FEEDBACK_MODES",
+    "MEMORY_CLASSES",
     "YXAI_MAX_INPUT_TOKENS",
     "FirstRoundCandidateCache",
     "JsonlTelemetry",
+    "RawFeedbackTracker",
     "enforce_ax_part2_config",
     "install_axproverbase_capsule_feedback",
 ]

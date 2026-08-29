@@ -1,0 +1,35 @@
+{
+  "format": "tracer-part3-handoff-v1",
+  "benchmark": "FATE-M",
+  "paired_problems": 25,
+  "pairing_ok": true,
+  "source_revision": "99681cabab6bdc54751f69cae1f7ac292923c833",
+  "files": [
+    {
+      "path": "raw.jsonl",
+      "bytes": 85926
+    },
+    {
+      "path": "capsule.jsonl",
+      "bytes": 92256
+    },
+    {
+      "path": "pairing.json",
+      "bytes": 25792
+    },
+    {
+      "path": "per-task.csv",
+      "bytes": 3597
+    },
+    {
+      "path": "summary.json",
+      "bytes": 1770
+    },
+    {
+      "path": "REPORT.md",
+      "bytes": 3573
+    }
+  ],
+  "metadata_revision": "readable-manifest-v2",
+  "metadata_note": "仅保留相对路径与文件字节数；未重新调用模型。"
+}

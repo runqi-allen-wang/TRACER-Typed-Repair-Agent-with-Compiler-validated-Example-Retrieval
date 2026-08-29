@@ -8,6 +8,13 @@ Part 2 的代码实现与验证基础设施已经完成。当前版本能够把 
 
 FATE-M 25 题真实配对实验已经完成：Part 1 与 Part 2 均为 25/25 成功，严格配对门禁 25/25 通过。修正版总轮次由 39 降至 36，编译错误由 14 降至 11，LLM calls 由 79 降至 36，tokens 由 656657 降至 274742；正式交接包位于 `results/handoff/part12-live-20260828-corrected/`。
 
+为拆开 Memory 与反馈格式的混杂因素，随后增加了独立 B 臂
+`ExperienceProcessor + CapsuleFeedback`。B 在同一 25 题、同一首轮候选下通过 20/25，
+共享首轮失败中修复 4/9；完整统计和交接证据见
+[`part2_capsule_feedback_confound_arm.md`](part2_capsule_feedback_confound_arm.md)及
+`results/handoff/part2-experience-capsule-20260829/`。B 是补充拆分臂，不改写上述
+Part 1/Part 2 历史结果，也不是 ABCD 的第四个条件。
+
 ## 2. 冻结实验条件
 
 | 项目 | 固定值 |
@@ -21,6 +28,8 @@ FATE-M 25 题真实配对实验已经完成：Part 1 与 Part 2 均为 25/25 成
 | 显式输入窗口 | `65536` tokens |
 | Part 1 Memory | `ExperienceProcessor` |
 | Part 2 Memory | `MemorylessProcessor` |
+| B Memory | `ExperienceProcessor` |
+| B 失败反馈 | `CapsuleFeedback` |
 | 最终 LLM summary | 关闭 |
 | CapsuleFeedback 编译调用 | `0` |
 | CapsuleFeedback LLM 调用 | `0` |
@@ -77,9 +86,9 @@ FATE-M 25 题真实配对实验已经完成：Part 1 与 Part 2 均为 25/25 成
 
 测试证明相同错误分别出现在 theorem A 和 B 时，两者的首次 `repeat_count` 都为 1。
 
-### 3.5 Capsule 条件仍可能调用 Memory LLM
+### 3.5 原 Part 2 Capsule 条件的 Memory 约束
 
-Part 2 runner 会在 Agent 初始化前强制：
+原 Part 2 Capsule runner 会在 Agent 初始化前强制：
 
 - `memory_config.class_name = MemorylessProcessor`；
 - `memory_config.init_args = {}`；
@@ -89,6 +98,12 @@ Part 2 runner 会在 Agent 初始化前强制：
 - endpoint 和模型 profile 使用冻结值。
 
 即使外部配置尝试覆盖上述字段，初始化前仍会再次执行约束。
+
+B 臂有意不使用这条 `MemorylessProcessor` 约束：它通过
+`configs/axprover_experience_capsule.yaml` 选择 `ExperienceProcessor`，并让 Memory
+复用与 Proposer/Reviewer 相同的冻结 `yxai` 配置。B 的 Memory 请求因此计入逐题
+`memory_llm_calls`、`calls.memory_calls`、`call_count` 和 `usage`；这正是拆分
+Memory 因素所需要的行为。原 Part 2 的 `memory_calls == 0` 门禁不适用于 B。
 
 ### 3.6 缺少共享首轮候选
 
@@ -114,14 +129,14 @@ Part 2 runner 会在 Agent 初始化前强制：
 - endpoint 相同且为冻结 endpoint；
 - wire API 均为 Responses、响应存储均关闭、推理强度均为 `high`；
 - 总预算字段相同；
-- Capsule `memory_calls == 0`；
+- 原 Part 2 Capsule 的 `memory_calls == 0`（B 臂允许并记录 ExperienceProcessor 的 Memory 调用）；
 - CapsuleFeedback 的额外 LLM/编译调用均为 0。
 
 任何一项不满足时，脚本退出码为 1，结果不能进入正式 Part 3 分析。
 
 ### 3.8 缺少真实调用和成本相关遥测
 
-Part 2 直接包裹实际 `LLMClient.ainvoke`，不再用节点次数冒充模型调用次数。JSONL 遥测现在包含：
+Part 2/B runner 直接包裹实际 `LLMClient.ainvoke`，不再用节点次数冒充模型调用次数。JSONL 遥测现在包含：
 
 - Proposer LLM 请求次数；
 - Reviewer LLM 请求次数；
@@ -218,6 +233,8 @@ CapsuleFeedback.observe_ax（0 次额外编译，0 次 LLM）
 | `configs/axprover_yxai_gpt56_sol.yaml` | Part 1/2/3 共享模型条件 |
 | `configs/axprover_part1_experience.yaml` | Part 1 Experience 配置 |
 | `configs/axprover_part2_capsule.yaml` | Part 2 Memoryless 配置 |
+| `configs/axprover_experience_capsule.yaml` | B 臂 Experience + CapsuleFeedback 配置 |
+| `docs/part2_capsule_feedback_confound_arm.md` | B 臂设计、运行命令与结果 |
 | `requirements-axprover-part2.txt` | 固定 AxProverBase commit |
 | `scripts/prepare_part2_first_round_cache.py` | 生成首轮候选缓存 |
 | `scripts/validate_part2_pairing.py` | 配对实验门禁 |
@@ -246,6 +263,7 @@ CapsuleFeedback.observe_ax（0 次额外编译，0 次 LLM）
 | SP-1 unsafe theorem 编译前拦截 | 通过 |
 | Ax 缓存/生成/Builder 三层安全门禁 | 通过 |
 | Part 1/Part 2 v2 安全策略配对 | 通过 |
+| B 臂 FATE-M 25 题运行 | 20/25 成功；配对 25/25；0 API/编译超时 |
 | Part 2 workflow 平台 | 仅 Ubuntu |
 | `git diff --check` | 通过 |
 
@@ -297,14 +315,17 @@ python .\scripts\validate_part2_pairing.py `
     --out .\runs\part2-pairing-report.json
 ```
 
+B 臂将 `--memory-class` 改为 `ExperienceProcessor`，完整的隔离路径和验收命令见
+[`B 臂设计与结果`](part2_capsule_feedback_confound_arm.md)。
+
 ## 8. 当前边界与后续工作
 
-Part 1/2 实现与首批正式配对运行已经完成。复现实验时仍需满足以下条件：
+Part 1/2/B 实现与首批正式配对运行已经完成。复现实验时仍需满足以下条件：
 
 - Part 1 使用 `configs/axprover_part1_experience.yaml` 并输出完整首轮 theorem；
-- Part 2 使用 `configs/axprover_part2_capsule.yaml`，两组结果保留配对门禁要求的 provider、预算和 calls 字段；
+- Part 2 使用 `configs/axprover_part2_capsule.yaml`；B 使用 `configs/axprover_experience_capsule.yaml`，两种结果都保留配对门禁要求的 provider、预算和 calls 字段；
 - 真实 `yxai` 调用只通过进程环境配置 `OPENAI_API_KEY`，`auth.json` 不得进入仓库；
-- 当前数据是 25 题、单模型、单批次，不支持统计显著性或通用性能结论；Part 3 需要正式统计分析与更大规模重复实验。
+- 当前 Part 1/Part 2/B 与 Part 3 数据是 25 题、单模型、单批次，不支持统计显著性、Memory/反馈因果结论或通用性能结论；完整 repair24 六臂矩阵仍需要正式统计分析与更大规模重复实验。
 
 ## 当前合并版的状态格式
 

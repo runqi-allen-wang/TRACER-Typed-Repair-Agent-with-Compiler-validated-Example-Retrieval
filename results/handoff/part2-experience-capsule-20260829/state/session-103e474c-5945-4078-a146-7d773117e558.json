@@ -1,0 +1,33 @@
+{
+  "theorem_key": "FATEM.24:isPrime_singleton",
+  "state": {
+    "schema_version": "capsule-feedback.readable.v0.2",
+    "attempt_count": 2,
+    "feedback_counts": {
+      "{\"category\":\"unsolved_goals\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_24_dw73betk (7.1s) ╭─ Error at line <loc> │ Ideal.IsPrime (Ideal.span {p}) ↔ Prime p := by │ ^^^ ╰─ unsolved goals R : Type u_1 inst✝¹ : CommRing R inst✝ : IsDomain R p : R hp : p ≠ 0 ⊢ (Ideal.span {p}).IsPrime ↔ ¬IsUnit p ∧ ∀ (a b : R), p ∣ a * b → p ∣ a ∨ p ∣ b Ideal.IsPrime Hint: Omit it from the simp argument list. simp [̵I̵d̵e̵a̵l̵.̵I̵s̵P̵r̵i̵m̵e̵,̵ ̵P̵r̵i̵m̵e̵,̵[̲P̲r̲i̲m̲e̲,̲ hp] error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_24_dw73betk error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"unknown_identifier\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_24_212an5yb (6.1s) ╭─ Error at line <loc> │ simpa using (Ideal.prime_span_singleton hp) │ ^^^ ╰─ Unknown constant `Ideal.prime_span_singleton` error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_24_212an5yb error: build failed\",\"goal_state\":\"\"}": 1
+    },
+    "history": [
+      {
+        "round": 1,
+        "compile_ok": false,
+        "category": "unsolved_goals",
+        "feedback_text": "{\"category\":\"unsolved_goals\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_24_dw73betk (7.1s) ╭─ Error at line <loc> │ Ideal.IsPrime (Ideal.span {p}) ↔ Prime p := by │ ^^^ ╰─ unsolved goals R : Type u_1 inst✝¹ : CommRing R inst✝ : IsDomain R p : R hp : p ≠ 0 ⊢ (Ideal.span {p}).IsPrime ↔ ¬IsUnit p ∧ ∀ (a b : R), p ∣ a * b → p ∣ a ∨ p ∣ b Ideal.IsPrime Hint: Omit it from the simp argument list. simp [̵I̵d̵e̵a̵l̵.̵I̵s̵P̵r̵i̵m̵e̵,̵ ̵P̵r̵i̵m̵e̵,̵[̲P̲r̲i̲m̲e̲,̲ hp] error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_24_dw73betk error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "initial",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_24_dw73betk (7.1s)"
+      },
+      {
+        "round": 2,
+        "compile_ok": false,
+        "category": "unknown_identifier",
+        "feedback_text": "{\"category\":\"unknown_identifier\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_24_212an5yb (6.1s) ╭─ Error at line <loc> │ simpa using (Ideal.prime_span_singleton hp) │ ^^^ ╰─ Unknown constant `Ideal.prime_span_singleton` error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_24_212an5yb error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "category_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_24_212an5yb (6.1s)"
+      }
+    ]
+  }
+}

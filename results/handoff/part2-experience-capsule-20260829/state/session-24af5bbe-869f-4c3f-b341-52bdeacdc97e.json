@@ -1,0 +1,33 @@
+{
+  "theorem_key": "FATEM.18:Ideal.add_le_of_le",
+  "state": {
+    "schema_version": "capsule-feedback.readable.v0.2",
+    "attempt_count": 2,
+    "feedback_counts": {
+      "{\"category\":\"compile_error\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_18_90rwnxxm (5.9s) ╭─ Error at line <loc> │ rintro x ⟨i, hi, j, hj, rfl⟩ │ ^^^ ╰─ Tactic `rcases` failed: `a✝ : ∀ t ∈ Set.range fun s ↦ ⋂ (_ : s ∈ {x | I ≤ x ∧ J ≤ x}), ↑s, x ∈ t` is not an inductive datatype error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_18_90rwnxxm error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"unknown_identifier\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_18_dvpp4g0k (7.1s) ╭─ Error at line <loc> │ rcases (Ideal.mem_add.mp hx) with ⟨i, hi, j, hj, h⟩ │ ^^^ ╰─ Unknown constant `Ideal.mem_add.mp` ╭─ Error at line <loc> │ rcases (Ideal.mem_add.mp hx) with ⟨i, hi, j, hj, h⟩ │ ^^^ ╰─ Tactic `rcases` failed: `x✝ : <mvar>` is not an inductive datatype error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_18_dvpp4g0k error: build failed\",\"goal_state\":\"\"}": 1
+    },
+    "history": [
+      {
+        "round": 1,
+        "compile_ok": false,
+        "category": "compile_error",
+        "feedback_text": "{\"category\":\"compile_error\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_18_90rwnxxm (5.9s) ╭─ Error at line <loc> │ rintro x ⟨i, hi, j, hj, rfl⟩ │ ^^^ ╰─ Tactic `rcases` failed: `a✝ : ∀ t ∈ Set.range fun s ↦ ⋂ (_ : s ∈ {x | I ≤ x ∧ J ≤ x}), ↑s, x ∈ t` is not an inductive datatype error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_18_90rwnxxm error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "initial",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_18_90rwnxxm (5.9s)"
+      },
+      {
+        "round": 2,
+        "compile_ok": false,
+        "category": "unknown_identifier",
+        "feedback_text": "{\"category\":\"unknown_identifier\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_18_dvpp4g0k (7.1s) ╭─ Error at line <loc> │ rcases (Ideal.mem_add.mp hx) with ⟨i, hi, j, hj, h⟩ │ ^^^ ╰─ Unknown constant `Ideal.mem_add.mp` ╭─ Error at line <loc> │ rcases (Ideal.mem_add.mp hx) with ⟨i, hi, j, hj, h⟩ │ ^^^ ╰─ Tactic `rcases` failed: `x✝ : <mvar>` is not an inductive datatype error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_18_dvpp4g0k error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "category_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_18_dvpp4g0k (7.1s)"
+      }
+    ]
+  }
+}

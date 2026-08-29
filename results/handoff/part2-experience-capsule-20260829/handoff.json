@@ -1,0 +1,74 @@
+{
+  "format": "tracer-b-arm-handoff-v1",
+  "experiment_date": "2026-08-29",
+  "export_date": "2026-08-30",
+  "source_revision": "1e1f1ade384324638ebf88a2c96ec14842b716fd",
+  "benchmark": "FATE-M",
+  "paired_problems": 25,
+  "pairing_ok": true,
+  "condition": "capsule_experience",
+  "feedback_mode": "capsule",
+  "memory_mode": "experience_capsule_feedback",
+  "memory_processor": "ExperienceProcessor",
+  "baseline_reference": "../part12-live-20260828-corrected/baseline-full.jsonl",
+  "files": [
+    {
+      "path": "capsule-experience.jsonl",
+      "bytes": 112829
+    },
+    {
+      "path": "metrics.jsonl",
+      "bytes": 70657
+    },
+    {
+      "path": "pairing.json",
+      "bytes": 19313
+    },
+    {
+      "path": "part2-first-round-full.json",
+      "bytes": 17986
+    },
+    {
+      "path": "REPORT.md",
+      "bytes": 3670
+    },
+    {
+      "path": "state/session-103e474c-5945-4078-a146-7d773117e558.json",
+      "bytes": 2972
+    },
+    {
+      "path": "state/session-12f678ac-354d-441d-8490-ac130e527721.json",
+      "bytes": 6190
+    },
+    {
+      "path": "state/session-1d233651-55bf-4ba2-8c53-3ccca398b9eb.json",
+      "bytes": 7905
+    },
+    {
+      "path": "state/session-24af5bbe-869f-4c3f-b341-52bdeacdc97e.json",
+      "bytes": 2894
+    },
+    {
+      "path": "state/session-8045673d-af9f-4cd5-bed4-6b7d5388649c.json",
+      "bytes": 3913
+    },
+    {
+      "path": "state/session-825bfa44-d479-4825-8cd5-7f0fe7c5883d.json",
+      "bytes": 7134
+    },
+    {
+      "path": "state/session-917aea85-e99e-418f-bfe2-77b347204ee6.json",
+      "bytes": 1417
+    },
+    {
+      "path": "state/session-d48d89d8-4ab6-4cfc-b709-1dd29c242500.json",
+      "bytes": 4827
+    },
+    {
+      "path": "state/session-d8c50f9b-b114-4558-b802-fd546176802c.json",
+      "bytes": 6989
+    }
+  ],
+  "metadata_revision": "readable-manifest-v2",
+  "metadata_note": "Exported from the completed local run; only line endings were normalized in the copied artifacts. Result fields and measured values were not rewritten."
+}

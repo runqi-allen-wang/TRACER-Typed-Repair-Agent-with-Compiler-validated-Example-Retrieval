@@ -102,9 +102,11 @@ python .\scripts\prepare_part2_first_round_cache.py `
     --out .\results\part2-first-round.json
 ```
 
-两组真实结果完成后，必须运行 `scripts/validate_part2_pairing.py`。门禁会核对题目身份、
-固定 Ax commit、完整首轮 Proposal、provider、预算、memory 条件和零额外调用声明；失败的
-数据不能进入 Part 3 结论。
+两组真实结果完成后，必须运行 `scripts/validate_part2_pairing.py`。原 Part 2 Capsule
+门禁会核对题目身份、固定 Ax commit、完整首轮 Proposal、provider、预算、memory 条件和
+零额外调用声明；B 臂 `capsule_experience` 使用单独的参数允许并核对
+`ExperienceProcessor` 的 Memory 调用。失败的数据不能进入 Part 3 结论。B 臂的完整运行
+命令与结果见 [`docs/part2_capsule_feedback_confound_arm.md`](../docs/part2_capsule_feedback_confound_arm.md)。
 
 ## CI
 
