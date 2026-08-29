@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import os
 import sys
 import time
 import uuid
@@ -24,7 +25,12 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from compiler import CANDIDATE_POLICY  # noqa: E402
-from leancapsule.ax_integration import validate_ax_proposal_safety  # noqa: E402
+from leancapsule.ax_integration import (  # noqa: E402
+    FirstRoundCandidateCache,
+    _iteration_count,
+    _theorem_key,
+    validate_ax_proposal_safety,
+)
 from leancapsule.feedback import (  # noqa: E402
     AXPROVERBASE_COMMIT,
     AXPROVER_YXAI_MODEL,
@@ -38,6 +44,7 @@ from leancapsule.feedback import (  # noqa: E402
 _USAGE = {"prompt": 0, "completion": 0, "calls": 0}
 _USAGE_PATCH_MARKER = "__tracer_part1_usage_tracking__"
 _SAFETY_PATCH_MARKER = "__tracer_part1_safety_gate__"
+_FIRST_ROUND_CACHE_PATCH_MARKER = "__tracer_part1_first_round_cache__"
 
 
 def _read(value: object, name: str, default: object = None) -> object:
@@ -127,6 +134,48 @@ def _install_safety_gate(agent_class: type, build_failed_class: type | None = No
     setattr(agent_class, _SAFETY_PATCH_MARKER, True)
 
 
+def _install_first_round_cache(
+    agent_class: type, proposal_class: type | None = None
+) -> None:
+    """Reuse Part 1's freshly generated first-round candidate for pairing parity.
+
+    The 2x2 control arm (Memoryless x native feedback) does not install the
+    CapsuleFeedback wrapper, but still reuses the same first-round candidate as
+    the Part 1 baseline so that only memory/feedback differ across conditions.
+    """
+
+    if getattr(agent_class, _FIRST_ROUND_CACHE_PATCH_MARKER, False):
+        return
+    if proposal_class is None:
+        from ax_prover.models.messages import ProposalMessage
+
+        proposal_class = ProposalMessage
+    original_proposer = agent_class._proposer_node
+
+    async def cached_proposer(self: object, state: object, config: object) -> object:
+        cache = getattr(self, "_tracer_first_round_cache", None)
+        if cache is None or _iteration_count(state) != 0:
+            return await original_proposer(self, state, config)
+        theorem_key = _theorem_key(state)
+        candidate = cache.get(theorem_key)
+        location = _read(_read(state, "item"), "location")
+        candidate_code = candidate["code"]
+        reasoning = candidate["reasoning"]
+        imports = candidate["imports"]
+        opens = candidate["opens"]
+        proposal = proposal_class(
+            reasoning=reasoning,
+            code=candidate_code,
+            location=location,
+            imports=imports,
+            opens=opens,
+        )
+        return {"messages": [proposal]}
+
+    agent_class._proposer_node = cached_proposer
+    setattr(agent_class, _FIRST_ROUND_CACHE_PATCH_MARKER, True)
+
+
 def _snap_usage() -> dict[str, int]:
     return dict(_USAGE)
 
@@ -149,7 +198,9 @@ def _reviewer_call_count(state: object) -> int:
     )
 
 
-def _contract_from_config(config: object) -> dict[str, Any]:
+def _contract_from_config(
+    config: object, *, memory_class: str = "ExperienceProcessor"
+) -> dict[str, Any]:
     prover = _read(config, "prover")
     llm = _read(prover, "prover_llm")
     provider = _read(llm, "provider_config", {})
@@ -211,8 +262,8 @@ def _contract_from_config(config: object) -> dict[str, Any]:
         errors.append(f"reasoning effort must be {YXAI_REASONING_EFFORT}")
     if provider_contract["output_version"] != "responses/v1":
         errors.append("output_version must be responses/v1")
-    if contract["memory_processor"] != "ExperienceProcessor":
-        errors.append("Part 1 memory must be ExperienceProcessor")
+    if contract["memory_processor"] != memory_class:
+        errors.append(f"memory must be {memory_class}")
     if contract["summary_enabled"]:
         errors.append("final LLM summary must be disabled")
     if contract["budget"]["max_iterations"] <= 0:
@@ -233,6 +284,9 @@ def extract_record(
     run_elapsed_ms: int = 0,
     builder_elapsed_ms: int = 0,
     builder_calls: int = 0,
+    condition: str = "baseline",
+    memory_mode: str = "self_managed",
+    memory_processor: str = "ExperienceProcessor",
 ) -> dict[str, Any]:
     """Extract a pairing-ready Part 1 record from ``ProverAgentState``."""
 
@@ -262,7 +316,10 @@ def extract_record(
     reviewer_calls = _reviewer_call_count(state)
     proposer_calls = len(proposals)
     total_llm_calls = int(usage.get("calls", 0))
-    memory_calls = max(0, total_llm_calls - proposer_calls - reviewer_calls)
+    if memory_processor == "MemorylessProcessor":
+        memory_calls = 0
+    else:
+        memory_calls = max(0, total_llm_calls - proposer_calls - reviewer_calls)
     provider_contract = dict(contract["provider_config"])
 
     return {
@@ -273,8 +330,9 @@ def extract_record(
         "module": module,
         "theorem": theorem,
         "path": str(_read(location, "path", "")),
-        "condition": "baseline",
-        "memory_mode": "self_managed",
+        "condition": condition,
+        "memory_mode": memory_mode,
+        "memory_processor": memory_processor,
         "axproverbase_commit": AXPROVERBASE_COMMIT,
         "model": contract["model"],
         "base_url": provider_contract["base_url"],
@@ -323,6 +381,12 @@ async def run_target(
     config_yaml: str,
     price: Mapping[str, float | None],
     task_metadata: Mapping[str, Any] | None = None,
+    *,
+    memory_class: str = "ExperienceProcessor",
+    condition: str = "baseline",
+    memory_mode: str = "self_managed",
+    memory_processor: str = "ExperienceProcessor",
+    first_round_cache_path: str | Path | None = None,
 ) -> list[dict[str, Any]]:
     from ax_prover.config import Config
     from ax_prover.prover.agent import ProverAgent
@@ -337,13 +401,18 @@ async def run_target(
 
     _install_usage_tracking()
     _install_safety_gate(ProverAgent)
+    _install_first_round_cache(ProverAgent)
     load_env_secrets(folder)
+    cache_value = "" if first_round_cache_path is None else str(first_round_cache_path)
+    if not cache_value:
+        cache_value = os.environ.get("CAPSULE_FIRST_ROUND_CACHE", "")
+    first_round_cache = FirstRoundCandidateCache(cache_value) if cache_value else None
     # The upstream default.yaml selects Claude. Deep-merging our OpenAI config
     # into it retains Claude-only provider keys such as ``betas`` and
     # ``thinking``. Our experiment YAML is complete, so merge it directly onto
     # the structured defaults instead of inheriting a different provider.
     config = merge_configs([Config(), config_yaml], folder=folder)
-    contract = _contract_from_config(config)
+    contract = _contract_from_config(config, memory_class=memory_class)
     tool_lifespans = await create_tool_lifespans(config.prover.proposer_tools)
     records: list[dict[str, Any]] = []
     async with Runtime.open(config.runtime, folder, tool_lifespans) as runtime:
@@ -351,6 +420,8 @@ async def run_target(
         for item in items:
             before = _snap_usage()
             prover = await ProverAgent.create(config=config.prover, runtime=runtime)
+            if first_round_cache is not None:
+                prover._tracer_first_round_cache = first_round_cache
             thread_id = f"part1_{item.location.name}_{uuid.uuid4().hex[:6]}"
             started = time.perf_counter()
             state = await prove_single_item(prover, item, thread_id=thread_id)
@@ -369,6 +440,9 @@ async def run_target(
                         getattr(prover, "_tracer_part1_builder_elapsed_ms", 0.0)
                     ),
                     builder_calls=int(getattr(prover, "_tracer_part1_builder_calls", 0)),
+                    condition=condition,
+                    memory_mode=memory_mode,
+                    memory_processor=memory_processor,
                 )
             )
     return records
@@ -386,10 +460,49 @@ def main() -> int:
     parser.add_argument("--out", required=True)
     parser.add_argument("--price-out", type=float)
     parser.add_argument("--price-in", type=float)
+    parser.add_argument(
+        "--memory-class",
+        default="ExperienceProcessor",
+        choices=["ExperienceProcessor", "MemorylessProcessor"],
+        help="Memory strategy: ExperienceProcessor (Part 1 baseline, default) or "
+        "MemorylessProcessor (pure-control arm: native feedback, no experience)",
+    )
+    parser.add_argument(
+        "--first-round-cache",
+        type=Path,
+        default=None,
+        help="Optional shared first-round candidate cache for pairing parity; "
+        "falls back to the CAPSULE_FIRST_ROUND_CACHE env var",
+    )
     args = parser.parse_args()
 
     price = {"input_usd_per_1k": args.price_in, "output_usd_per_1k": args.price_out}
-    records = asyncio.run(run_target(args.target, args.folder, args.config, price))
+    memory_class = args.memory_class
+    if memory_class == "MemorylessProcessor":
+        condition, memory_mode, memory_processor = (
+            "memoryless_native",
+            "memoryless_native",
+            "MemorylessProcessor",
+        )
+    else:
+        condition, memory_mode, memory_processor = (
+            "baseline",
+            "self_managed",
+            "ExperienceProcessor",
+        )
+    records = asyncio.run(
+        run_target(
+            args.target,
+            args.folder,
+            args.config,
+            price,
+            memory_class=memory_class,
+            condition=condition,
+            memory_mode=memory_mode,
+            memory_processor=memory_processor,
+            first_round_cache_path=args.first_round_cache,
+        )
+    )
     output = Path(args.out)
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("a", encoding="utf-8") as handle:

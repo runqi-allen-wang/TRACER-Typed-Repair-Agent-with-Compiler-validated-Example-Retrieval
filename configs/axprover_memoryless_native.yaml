@@ -1,0 +1,7 @@
+import:
+  - axprover_yxai_gpt56_sol.yaml
+
+prover:
+  memory_config:
+    class_name: MemorylessProcessor
+    init_args: {}
