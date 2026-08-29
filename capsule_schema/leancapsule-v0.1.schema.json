@@ -24,6 +24,7 @@
         "lake_manifest_present": {"type": "boolean"},
         "lakefile_present": {"type": "boolean"},
         "local_files": {"type": "array", "items": {"type": "string"}},
+        "local_build_targets": {"type": "array", "items": {"type": "string"}},
         "dependency_project": {"type": ["string", "null"]}
       }
     },

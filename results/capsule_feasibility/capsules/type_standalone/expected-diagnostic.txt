@@ -1,0 +1,6 @@
+Error.lean:4:9: error: Type mismatch
+  this
+has type
+  true = true
+but is expected to have type
+  1 = 1

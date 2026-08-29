@@ -1,0 +1,15 @@
+{
+  "case_id": "goal_project_local",
+  "order": 12,
+  "challenge_type": "project-local goal dependency",
+  "correct_file": "Correct.lean",
+  "error_file": "Error.lean",
+  "project_root": ".",
+  "theorem": "core_goal_project_local",
+  "mutation": "Apply the imported helper but solve only its first premise.",
+  "expected_failure": "Lean reports the remaining q premise after building the local library.",
+  "setup_command": ["lake", "build"],
+  "taxonomy": "Goal / scope",
+  "source_kind": "project_local",
+  "evaluation_set": "core"
+}

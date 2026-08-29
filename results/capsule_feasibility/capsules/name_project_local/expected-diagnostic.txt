@@ -1,0 +1,7 @@
+Error.lean:6:2: error: Tactic `rfl` failed: The left-hand side
+  localNameValu
+is not definitionally equal to the right-hand side
+  7
+
+localNameValu : Nat
+⊢ localNameValu = 7

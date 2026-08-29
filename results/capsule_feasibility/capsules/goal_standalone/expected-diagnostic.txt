@@ -1,0 +1,6 @@
+Error.lean:3:71: error: unsolved goals
+case right
+p q : Prop
+hp : p
+hq : q
+⊢ q

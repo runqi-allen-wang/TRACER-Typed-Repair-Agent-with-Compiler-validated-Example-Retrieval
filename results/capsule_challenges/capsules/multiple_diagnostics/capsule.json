@@ -1,0 +1,47 @@
+{
+  "schema_version": "leancapsule.v0.1",
+  "capsule_id": "multiple_diagnostics",
+  "target": {
+    "source_file": "Error.lean",
+    "theorem": "multiple_diagnostics",
+    "selection_mode": "theorem"
+  },
+  "environment": {
+    "lean_toolchain": "leanprover/lean4:v4.32.0",
+    "lake_manifest_present": true,
+    "lakefile_present": true,
+    "local_files": [],
+    "local_build_targets": [],
+    "dependency_project": null
+  },
+  "expected": {
+    "compile_ok": false,
+    "returncode": 1,
+    "category": "compile_error",
+    "diagnostic_key": "compile_error | compile_error: Tactic `rfl` failed: Expected the goal to be a binary relation; compile_error: Tactic `rfl` failed: Expected the goal to be a binary relation",
+    "summary": "compile_error: Tactic `rfl` failed: Expected the goal to be a binary relation; compile_error: Tactic `rfl` failed: Expected the goal to be a binary relation"
+  },
+  "extraction": {
+    "mode": "standalone",
+    "fallback_reason": null
+  },
+  "minimization": {
+    "mode": "standalone_verified_greedy_imports",
+    "original_imports": 1,
+    "retained_imports": 0,
+    "removed_imports": 1,
+    "compile_attempts": 1,
+    "budget_exhausted": false
+  },
+  "taxonomy": "Goal / scope",
+  "source_kind": "std",
+  "provenance": {
+    "license": "MIT",
+    "source_url": null,
+    "notes": "LeanCapsule challenge feasibility case: multiple_diagnostics."
+  },
+  "replay": {
+    "file": "Capsule.lean",
+    "command": "python -m leancapsule replay ."
+  }
+}

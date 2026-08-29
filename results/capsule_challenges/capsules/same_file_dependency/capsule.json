@@ -1,0 +1,44 @@
+{
+  "schema_version": "leancapsule.v0.1",
+  "capsule_id": "same_file_dependency",
+  "target": {
+    "source_file": "Error.lean",
+    "theorem": "LeanCapsuleChallenge.same_file_dependency",
+    "selection_mode": "theorem"
+  },
+  "environment": {
+    "lean_toolchain": "leanprover/lean4:v4.32.0",
+    "lake_manifest_present": true,
+    "lakefile_present": true,
+    "local_files": [],
+    "local_build_targets": [],
+    "dependency_project": null
+  },
+  "expected": {
+    "compile_ok": false,
+    "returncode": 1,
+    "category": "compile_error",
+    "diagnostic_key": "compile_error | compile_error: Tactic `rfl` failed: The left-hand side",
+    "summary": "compile_error: Tactic `rfl` failed: The left-hand side"
+  },
+  "extraction": {
+    "mode": "full_file_fallback",
+    "fallback_reason": "目标依赖完整文件上下文，或 standalone 编译结果与原始诊断不一致"
+  },
+  "minimization": {
+    "mode": "full_file_fallback",
+    "reason": "保留完整源文件以保证上下文不丢失",
+    "compile_attempts": 1
+  },
+  "taxonomy": "Goal / scope",
+  "source_kind": "std",
+  "provenance": {
+    "license": "MIT",
+    "source_url": null,
+    "notes": "LeanCapsule challenge feasibility case: same_file_dependency."
+  },
+  "replay": {
+    "file": "Capsule.lean",
+    "command": "python -m leancapsule replay ."
+  }
+}

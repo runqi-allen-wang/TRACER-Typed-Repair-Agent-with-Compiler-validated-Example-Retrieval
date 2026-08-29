@@ -1,0 +1,13 @@
+{
+  "case_id": "goal_same_file",
+  "order": 8,
+  "challenge_type": "same-file goal dependency",
+  "correct_file": "Correct.lean",
+  "error_file": "Error.lean",
+  "theorem": "core_goal_same_file",
+  "mutation": "Apply the helper but solve only its first premise.",
+  "expected_failure": "Lean reports the remaining q premise.",
+  "taxonomy": "Goal / scope",
+  "source_kind": "std",
+  "evaluation_set": "core"
+}

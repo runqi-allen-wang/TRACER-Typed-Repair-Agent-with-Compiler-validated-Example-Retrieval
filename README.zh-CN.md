@@ -23,6 +23,7 @@ TRACER 是面向 **Lean 4 形式化证明的修复、复现与评测研究工具
 目前可直接查看的交付：
 
 - **24 个公开失败 capsule**：覆盖 4 类错误家族，来源包括 Std、Mathlib 和项目本地依赖。
+- **12 core + 4 challenge 可行性实验**：16 个案例均保留规范化诊断并在干净临时目录回放成功，包含项目本地多文件案例。
 - **18 道冻结题 × 3 个实验条件**：已发布一批真实 provider pilot，包含 56 条逐轮记录和 54 个成功证明文件。
 - **完整操作链**：单题 CLI、本地 HTTP API、批量评测、人工复核、报告校验与脱敏导出。
 - **独立 repair24 研究套件**：提供仅检索、动态查询与失败上下文对照，多模型结果待测。跳转至 [研究评测](#超越-smoke-test-的研究评测) 和 [相关工作](#相关工作)。
@@ -258,6 +259,8 @@ LeanCapsule 提供一个**以诊断一致性为中心的失败复现协议**。�
 
 来源分布：**Std 14 · Mathlib 4 · project-local 6**。索引同时提供 [JSON](capsules/index.json)、[CSV](capsules/index.csv) 和 [Markdown](capsules/index.md)；[复核台账](capsules/MANUAL_REVIEW.csv)记录来源、语义与敏感内容检查。
 
+另有一组 [12 core + 4 challenge 可行性实验](docs/CAPSULE_FEASIBILITY.md)：core 按 4 类错误 × 3 类上下文平衡覆盖，并补充 4 个较难案例。16 个案例的完整有序规范化诊断均保持一致，复制到全新临时目录后均回放成功。项目本地 import 会按有界源码闭包打包，并在回放前从源码重新构建；不会携带 `.olean`/`.ilean` 编译产物。
+
 使用 `--theorem` 打包时，会尝试生成包含 imports、namespace 和目标定理的 standalone 文件；编译状态或规范化诊断发生变化则回退完整文件。standalone 验证后再进行有编译预算的 imports 精简，可用 `--no-minimize-imports` 关闭。通过 `--lines` 指定的范围用于记录目标，目前不是任意语义切片功能。
 
 ### Mathlib 环境
@@ -286,6 +289,7 @@ Bash 入口可通过 `TRACER_SETUP_ATTEMPTS`（1–5 次）和 `TRACER_SETUP_RET
 
 ```text
 lake build
+python scripts/run_capsule_feasibility.py
 python scripts/run_ci_tests.py
 python -m leancapsule audit capsules
 ```
@@ -330,6 +334,7 @@ python -m leancapsule gallery capsules --out capsules/index.json
 | 创建可公开分享的失败工件 | [工件格式](docs/CAPSULE_FORMAT.md)与[案例贡献指南](docs/CONTRIBUTING_CAPSULES.md) |
 | 运行或检查 AxProverBase Part 1 + Part 2 实验 | [Part 1 指南](baseline/README.md)、[Part 2 设计](docs/part2_capsule_feedback.md)与[结果交接包](results/handoff/part12-live-20260828-corrected/README.md) |
 | 查看 D01 编译前安全门禁 | [D 类安全回归](docs/security_type_d.md) |
+| 查看 12 core + 4 challenge 干净回放实验 | [Capsule 可行性报告](docs/CAPSULE_FEASIBILITY.md) |
 | 查看已发布实验与证明 | [Pilot 交付目录](published/pilot-20260826T122354Z-d628742d) |
 | 查看当前状态与历史改动 | [PROGRESS](PROGRESS.md)与[CHANGELOG](CHANGELOG.md) |
 

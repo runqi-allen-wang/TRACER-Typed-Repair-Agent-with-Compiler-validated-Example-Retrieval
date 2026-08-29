@@ -36,6 +36,11 @@ def validate_manifest(manifest: dict[str, Any]) -> list[str]:
     environment = manifest.get("environment")
     if not isinstance(environment, dict):
         errors.append("environment 必须是对象")
+    elif "local_build_targets" in environment and (
+        not isinstance(environment["local_build_targets"], list)
+        or not all(isinstance(item, str) for item in environment["local_build_targets"])
+    ):
+        errors.append("environment.local_build_targets 必须是文本列表")
     expected = manifest.get("expected")
     if not isinstance(expected, dict) or not expected.get("category"):
         errors.append("expected.category 必须存在")

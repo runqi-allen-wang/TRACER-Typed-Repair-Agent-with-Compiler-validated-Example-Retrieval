@@ -1,0 +1,6 @@
+name = "core_elab_project_local"
+version = "0.1.0"
+defaultTargets = ["CoreElab"]
+
+[[lean_lib]]
+name = "CoreElab"

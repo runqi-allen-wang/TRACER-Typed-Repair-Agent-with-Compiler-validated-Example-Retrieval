@@ -1,0 +1,13 @@
+{
+  "case_id": "name_same_file",
+  "order": 5,
+  "challenge_type": "same-file name dependency",
+  "correct_file": "Correct.lean",
+  "error_file": "Error.lean",
+  "theorem": "core_name_same_file",
+  "mutation": "Misspell a helper defined earlier in the same file.",
+  "expected_failure": "Lean reports an unknown identifier while full-file fallback retains the helper.",
+  "taxonomy": "Name / import",
+  "source_kind": "std",
+  "evaluation_set": "core"
+}

@@ -1,0 +1,15 @@
+{
+  "case_id": "multiple_diagnostics",
+  "order": 3,
+  "challenge_type": "multiple diagnostics from one propagated tactic mutation",
+  "correct_file": "Correct.lean",
+  "error_file": "Error.lean",
+  "project_root": null,
+  "theorem": "multiple_diagnostics",
+  "mutation": "Replace the shared assumption tactic with rfl after the <;> combinator.",
+  "expected_failure": "The single tactic mutation is applied to both generated goals and should emit multiple diagnostics.",
+  "setup_command": null,
+  "taxonomy": "Goal / scope",
+  "source_kind": "std",
+  "evaluation_set": "challenge"
+}

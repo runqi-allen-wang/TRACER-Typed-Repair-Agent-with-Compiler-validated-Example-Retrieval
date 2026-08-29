@@ -39,15 +39,34 @@ def _read_toolchain(root: Path | None) -> str | None:
     return path.read_text(encoding="utf-8").strip() if path.exists() else None
 
 
-def _copy_local_imports(source: str, project_root: Path | None, destination: Path) -> list[str]:
-    """复制项目内能直接定位的 import 源文件，避免 fallback 丢失局部模块。"""
+def _import_modules(source: str) -> list[str]:
+    modules: list[str] = []
+    for line in source.splitlines():
+        stripped = line.strip()
+        if not stripped.startswith("import "):
+            continue
+        for module in stripped[len("import ") :].split("--", 1)[0].split():
+            if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_.]*", module):
+                modules.append(module)
+    return modules
+
+
+def _copy_local_imports(
+    source: str,
+    project_root: Path | None,
+    destination: Path,
+) -> tuple[list[str], list[str]]:
+    """复制项目内 import 闭包及可用的顶层 Lake 库入口。"""
 
     if project_root is None:
-        return []
+        return [], []
     copied: list[str] = []
-    pending = [line.strip()[len("import "):].strip() for line in source.splitlines() if line.strip().startswith("import ")]
+    build_targets: list[str] = []
+    pending = _import_modules(source)
     seen: set[str] = set()
-    while pending and len(copied) < 32:
+    while pending:
+        if len(copied) >= 64:
+            raise ValueError("项目内 Lean 依赖超过 64 个文件，拒绝静默截断")
         module = pending.pop(0)
         if module in seen or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_.]*", module):
             continue
@@ -62,13 +81,17 @@ def _copy_local_imports(source: str, project_root: Path | None, destination: Pat
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(found, target)
         copied.append(str(relative_name).replace("\\", "/"))
-        olean = found.with_suffix(".olean")
-        if olean.exists():
-            shutil.copy2(olean, target.with_suffix(".olean"))
-            copied.append(str(relative_name.with_suffix(".olean")).replace("\\", "/"))
         imported = found.read_text(encoding="utf-8")
-        pending.extend(line.strip()[len("import "):].strip() for line in imported.splitlines() if line.strip().startswith("import "))
-    return copied
+        pending.extend(_import_modules(imported))
+
+        top_level = module.split(".", 1)[0]
+        top_level_source = project_root / f"{top_level}.lean"
+        if top_level_source.exists():
+            if top_level not in build_targets:
+                build_targets.append(top_level)
+            if top_level not in seen:
+                pending.append(top_level)
+    return copied, build_targets
 
 
 def _write_scripts(out: Path) -> None:
@@ -163,7 +186,7 @@ def pack_capsule(
     if lake_root:
         _copy_if_present(lake_root / "lakefile.lean", out)
         _copy_if_present(lake_root / "lean-toolchain", out)
-    local_files = _copy_local_imports(source, lake_root, out)
+    local_files, local_build_targets = _copy_local_imports(source, lake_root, out)
     dependency_project = None
     if lake_root and (lake_root / "lakefile.lean").exists():
         dependency_project = os.path.relpath(lake_root, out).replace("\\", "/")
@@ -230,6 +253,7 @@ def pack_capsule(
             "lake_manifest_present": copied_manifest,
             "lakefile_present": copied_lakefile,
             "local_files": local_files,
+            "local_build_targets": local_build_targets,
             "dependency_project": dependency_project,
         },
         "expected": {

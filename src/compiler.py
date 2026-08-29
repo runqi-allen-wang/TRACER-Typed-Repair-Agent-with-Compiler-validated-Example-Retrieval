@@ -119,6 +119,10 @@ def lean_subprocess_environment(project_root: Path | None = None, scratch_home: 
         if name.upper() in _SAFE_ENVIRONMENT_NAMES or name.upper() in {"LC_ALL", "LC_CTYPE", "LC_MESSAGES", "TERM", "NO_COLOR"}
     }
     if not environment.get("ELAN_HOME"):
+        unix_home = os.environ.get("HOME")
+        if unix_home and (Path(unix_home) / ".elan").exists():
+            environment["ELAN_HOME"] = str(Path(unix_home) / ".elan")
+    if not environment.get("ELAN_HOME"):
         user_profile = environment.get("USERPROFILE")
         if user_profile and (Path(user_profile) / ".elan").exists():
             environment["ELAN_HOME"] = str(Path(user_profile) / ".elan")
@@ -374,6 +378,56 @@ def run_lean_file(path: Path, timeout: float = 20.0, project_root: Path | None =
     elapsed_ms = round((time.perf_counter() - started) * 1000, 1)
     diagnostics = "\n".join(part for part in [process.stdout, process.stderr] if part).strip()
     return FileCompileResult(process.returncode == 0, elapsed_ms, diagnostics, False, process.returncode, command)
+
+
+def run_lake_build(
+    project_root: Path,
+    targets: list[str] | tuple[str, ...] = (),
+    timeout: float = 180.0,
+) -> FileCompileResult:
+    """在最小化子进程环境中构建经验证的 Lake 目标。"""
+
+    root = project_root.resolve()
+    command = ["lake", "build", *targets]
+    started = time.perf_counter()
+    try:
+        with tempfile.TemporaryDirectory(prefix="tracer-lake-env-") as scratch:
+            process = subprocess.run(
+                command,
+                cwd=root,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                capture_output=True,
+                timeout=timeout,
+                check=False,
+                env=lean_subprocess_environment(root, Path(scratch)),
+            )
+    except subprocess.TimeoutExpired as exc:
+        elapsed_ms = round((time.perf_counter() - started) * 1000, 1)
+        stdout = exc.stdout or ""
+        stderr = exc.stderr or ""
+        return FileCompileResult(
+            False,
+            elapsed_ms,
+            f"Lake 依赖构建超时（{timeout:g}s）\n{stdout}\n{stderr}".strip(),
+            True,
+            None,
+            command,
+        )
+    except FileNotFoundError as exc:
+        elapsed_ms = round((time.perf_counter() - started) * 1000, 1)
+        return FileCompileResult(False, elapsed_ms, f"无法启动 Lake: {exc}", False, None, command)
+    elapsed_ms = round((time.perf_counter() - started) * 1000, 1)
+    diagnostics = "\n".join(part for part in [process.stdout, process.stderr] if part).strip()
+    return FileCompileResult(
+        process.returncode == 0,
+        elapsed_ms,
+        diagnostics,
+        False,
+        process.returncode,
+        command,
+    )
 
 
 def _open_blocks_before(source: str, position: int) -> list[tuple[str, str | None]]:

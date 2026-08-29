@@ -1,0 +1,15 @@
+{
+  "case_id": "same_file_dependency",
+  "order": 1,
+  "challenge_type": "same-file preceding declaration dependency",
+  "correct_file": "Correct.lean",
+  "error_file": "Error.lean",
+  "project_root": null,
+  "theorem": "LeanCapsuleChallenge.same_file_dependency",
+  "mutation": "Change the expected result of normalizeNat 1 from 2 to 3.",
+  "expected_failure": "The rfl proof fails while normalizeNat remains available in the full source.",
+  "setup_command": null,
+  "taxonomy": "Goal / scope",
+  "source_kind": "std",
+  "evaluation_set": "challenge"
+}

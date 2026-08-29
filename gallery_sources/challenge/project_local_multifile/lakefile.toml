@@ -1,0 +1,7 @@
+name = "capsule_challenge_multifile"
+version = "0.1.0"
+defaultTargets = ["Challenge"]
+
+[[lean_lib]]
+name = "Challenge"
+

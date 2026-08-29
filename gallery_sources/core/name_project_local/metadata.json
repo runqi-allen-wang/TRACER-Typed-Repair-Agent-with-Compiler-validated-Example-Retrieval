@@ -1,0 +1,15 @@
+{
+  "case_id": "name_project_local",
+  "order": 9,
+  "challenge_type": "project-local name dependency",
+  "correct_file": "Correct.lean",
+  "error_file": "Error.lean",
+  "project_root": ".",
+  "theorem": "core_name_project_local",
+  "mutation": "Misspell a definition exported by CoreName.Helper.",
+  "expected_failure": "Lean reports an unknown identifier after building the local library.",
+  "setup_command": ["lake", "build"],
+  "taxonomy": "Name / import",
+  "source_kind": "project_local",
+  "evaluation_set": "core"
+}

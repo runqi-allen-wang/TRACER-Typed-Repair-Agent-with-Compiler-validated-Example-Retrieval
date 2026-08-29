@@ -9,7 +9,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from compiler import FileCompileResult
+from compiler import FileCompileResult, lean_subprocess_environment
 from leancapsule.diagnostics_key import diagnostic_key
 from leancapsule.extract import extract_theorem
 from leancapsule.minimize import minimize_imports
@@ -108,6 +108,36 @@ class CapsuleTest(unittest.TestCase):
             diagnostic = (base / "capsule" / "expected-diagnostic.txt").read_text(encoding="utf-8")
             self.assertNotIn(str(base), diagnostic)
 
+    def test_pack_copies_local_import_closure_and_library_root(self):
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            helper = base / "Challenge" / "Helper.lean"
+            helper.parent.mkdir()
+            helper.write_text("def localBump (n : Nat) := n + 1\n", encoding="utf-8")
+            helper.with_suffix(".olean").write_bytes(b"machine-specific")
+            (base / "Challenge.lean").write_text("import Challenge.Helper\n", encoding="utf-8")
+            (base / "lakefile.toml").write_text(
+                'name = "fixture"\n[[lean_lib]]\nname = "Challenge"\n',
+                encoding="utf-8",
+            )
+            source = base / "Error.lean"
+            source.write_text(
+                "import Challenge\ntheorem target : localBump 1 = 3 := by rfl\n",
+                encoding="utf-8",
+            )
+            fake = FileCompileResult(False, 1.0, "error: failed", False, 1, ["lean", str(source)])
+            with patch("leancapsule.pack.run_lean_file", return_value=fake):
+                manifest = pack_capsule(base, source, base / "capsule", theorem="target")
+            environment = manifest["environment"]
+            self.assertEqual(
+                environment["local_files"],
+                ["Challenge.lean", "Challenge/Helper.lean"],
+            )
+            self.assertEqual(environment["local_build_targets"], ["Challenge"])
+            self.assertTrue((base / "capsule" / "Challenge" / "Helper.lean").is_file())
+            self.assertTrue((base / "capsule" / "Challenge.lean").is_file())
+            self.assertFalse((base / "capsule" / "Challenge" / "Helper.olean").exists())
+
     def test_replay_matches_manifest(self):
         with tempfile.TemporaryDirectory() as temp:
             base = Path(temp)
@@ -160,3 +190,54 @@ class CapsuleTest(unittest.TestCase):
             compile_mock.assert_not_called()
             self.assertFalse(result["ok"])
             self.assertRegex(result["error"], "不安全声明|编译期执行入口")
+
+    def test_replay_prebuilds_local_lake_target(self):
+        with tempfile.TemporaryDirectory() as temp:
+            capsule = Path(temp) / "capsule"
+            (capsule / "Challenge").mkdir(parents=True)
+            (capsule / "Challenge.lean").write_text("import Challenge.Helper\n", encoding="utf-8")
+            (capsule / "Challenge" / "Helper.lean").write_text("def helper := 1\n", encoding="utf-8")
+            (capsule / "Capsule.lean").write_text("", encoding="utf-8")
+            (capsule / "lakefile.toml").write_text('name = "fixture"\n', encoding="utf-8")
+            manifest = {
+                "schema_version": "leancapsule.v0.1",
+                "capsule_id": "demo",
+                "target": {"source_file": "Demo.lean", "selection_mode": "lines", "lines": "1:1"},
+                "environment": {
+                    "local_files": ["Challenge.lean", "Challenge/Helper.lean"],
+                    "local_build_targets": ["Challenge"],
+                },
+                "expected": {
+                    "compile_ok": False,
+                    "category": "unknown_identifier",
+                    "diagnostic_key": "unknown_identifier | unknown_identifier: Unknown identifier `missing`",
+                },
+                "provenance": {"license": "MIT"},
+                "replay": {"file": "Capsule.lean"},
+            }
+            (capsule / "capsule.json").write_text(json.dumps(manifest), encoding="utf-8")
+            build = FileCompileResult(True, 2.0, "", False, 0, ["lake", "build", "Challenge"])
+            compile_result = FileCompileResult(
+                False,
+                1.0,
+                "x:1:1: error: Unknown identifier `missing`",
+                False,
+                1,
+                ["lake", "env", "lean", "Capsule.lean"],
+            )
+            with patch("leancapsule.replay.run_lake_build", return_value=build) as prebuild:
+                with patch("leancapsule.replay.run_lean_file", return_value=compile_result):
+                    result = replay_capsule(capsule)
+            self.assertTrue(result["ok"])
+            self.assertTrue(result["prebuild_required"])
+            prebuild.assert_called_once_with(capsule.resolve(), ["Challenge"], timeout=180.0)
+
+    def test_isolated_environment_keeps_existing_elan_home(self):
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            home = base / "home"
+            (home / ".elan").mkdir(parents=True)
+            with patch.dict("os.environ", {"HOME": str(home), "PATH": "bin"}, clear=True):
+                environment = lean_subprocess_environment(None, base / "scratch")
+            self.assertEqual(environment["ELAN_HOME"], str(home / ".elan"))
+            self.assertEqual(environment["HOME"], str(base / "scratch"))

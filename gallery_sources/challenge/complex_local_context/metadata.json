@@ -1,0 +1,15 @@
+{
+  "case_id": "complex_local_context",
+  "order": 4,
+  "challenge_type": "implicit parameters, type class coercion, and local context",
+  "correct_file": "Correct.lean",
+  "error_file": "Error.lean",
+  "project_root": null,
+  "theorem": "complex_local_context",
+  "mutation": "Replace the equality hypothesis h with the coerced source term x.",
+  "expected_failure": "Lean reports a type mismatch in the theorem's implicit and coercion-sensitive local context.",
+  "setup_command": null,
+  "taxonomy": "Type / application",
+  "source_kind": "std",
+  "evaluation_set": "challenge"
+}

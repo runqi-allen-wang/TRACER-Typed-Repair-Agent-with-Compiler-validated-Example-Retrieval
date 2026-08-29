@@ -1,0 +1,13 @@
+{
+  "case_id": "goal_standalone",
+  "order": 4,
+  "challenge_type": "standalone unsolved goal",
+  "correct_file": "Correct.lean",
+  "error_file": "Error.lean",
+  "theorem": "core_goal_standalone",
+  "mutation": "Construct only the first conjunct.",
+  "expected_failure": "Lean reports the remaining q goal.",
+  "taxonomy": "Goal / scope",
+  "source_kind": "std",
+  "evaluation_set": "core"
+}

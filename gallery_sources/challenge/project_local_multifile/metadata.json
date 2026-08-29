@@ -1,0 +1,15 @@
+{
+  "case_id": "project_local_multifile",
+  "order": 2,
+  "challenge_type": "project-local multi-file dependency",
+  "correct_file": "Correct.lean",
+  "error_file": "Error.lean",
+  "project_root": ".",
+  "theorem": "project_local_multifile",
+  "mutation": "Change the expected result of localBump 1 from 2 to 3.",
+  "expected_failure": "The rfl proof fails after importing the locally built Challenge.Helper module.",
+  "setup_command": ["lake", "build"],
+  "taxonomy": "Goal / scope",
+  "source_kind": "project_local",
+  "evaluation_set": "challenge"
+}
