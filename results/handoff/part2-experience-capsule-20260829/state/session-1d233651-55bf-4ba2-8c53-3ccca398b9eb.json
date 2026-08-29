@@ -1,0 +1,55 @@
+{
+  "theorem_key": "FATEM.19:ZMod.isField_iff_prime",
+  "state": {
+    "schema_version": "capsule-feedback.readable.v0.2",
+    "attempt_count": 4,
+    "feedback_counts": {
+      "{\"category\":\"unsolved_goals\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_19_05i139lv (7.4s) ╭─ Error at line <loc> │ have hn0 : n ≠ 0 := by │ ^^^ ╰─ unsolved goals h : IsField (ZMod 0) this : Field (ZMod 0) := h.toField hu : True ⊢ False ╭─ Error at line <loc> │ exact (CharP.char_is_prime_or_zero (ZMod n) n).resolve_left hn0 │ ^^^ ╰─ Application type mismatch: The argument hn0 has type n ≠ 0 but is expected to have type ¬Nat.Prime n in the application Or.resolve_left (CharP.char_is_prime_or_zero (ZMod n) n) hn0 ╭─ Error at line <loc> │ infer_instance │ ^^^ ╰─ type class instance expected IsField (ZMod n) error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_19_05i139lv error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"unknown_identifier\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_19_7gqau0if (11s) ╭─ Error at line <loc> │ (ZMod.natCast_zmod_eq_zero_iff_dvd).mp htwo │ ^^^ ╰─ Unknown constant `ZMod.natCast_zmod_eq_zero_iff_dvd` ╭─ Error at line <loc> │ rw [ZMod.isUnit_iff_coprime] at hu │ ^^^ ╰─ Tactic `rewrite` failed: Did not find an occurrence of the pattern @IsUnit (ZMod ?n) CommRing.toCommSemiring.toMonoidWithZero.toMonoid ↑?m in the target expression @IsUnit (ZMod 0) Field.toSemifield.toDivisionSemiring.toMonoidWithZero.toMonoid 2 h : IsField (ZMod 0) this : Field (ZMod 0) := h.toField htwo : 2 ≠ 0 hu : IsUnit 2 ⊢ False ╭─ Error at line <loc> │ infer_instance │ ^^^ ╰─ type class instance expected IsField (ZMod n) error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_19_7gqau0if error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"unknown_identifier\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_19_ukmadxo3 (6.7s) ╭─ Error at line <loc> │ have hc := ZMod.isUnit_iff_coprime.mp hu │ ^^^ ╰─ Unknown constant `ZMod.isUnit_iff_coprime.mp` ╭─ Error at line <loc> │ infer_instance │ ^^^ ╰─ type class instance expected IsField (ZMod n) error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_19_ukmadxo3 error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"type_mismatch\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_19_41koeoov (7.8s) ╭─ Error at line <loc> │ isUnit_iff_ne_zero.mpr htwo │ ^^^ ╰─ Type mismatch isUnit_iff_ne_zero.mpr <mvar> has type @IsUnit <mvar> (@MonoidWithZero.toMonoid <mvar> GroupWithZero.toMonoidWithZero) <mvar> but is expected to have type @IsUnit (ZMod 0) (@MonoidWithZero.toMonoid (ZMod 0) CommRing.toCommSemiring.toMonoidWithZero) 2 ╭─ Error at line <loc> │ exact (CharP.char_is_prime_or_zero (ZMod n) n).resolve_right hn0 │ ^^^ ╰─ failed to synthesize instance of type class NoZeroDivisors (ZMod n) Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command. ╭─ Error at line <loc> │ infer_instance │ ^^^ ╰─ type class instance expected IsField (ZMod n) error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_19_41koeoov error: build failed\",\"goal_state\":\"\"}": 1
+    },
+    "history": [
+      {
+        "round": 1,
+        "compile_ok": false,
+        "category": "unsolved_goals",
+        "feedback_text": "{\"category\":\"unsolved_goals\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_19_05i139lv (7.4s) ╭─ Error at line <loc> │ have hn0 : n ≠ 0 := by │ ^^^ ╰─ unsolved goals h : IsField (ZMod 0) this : Field (ZMod 0) := h.toField hu : True ⊢ False ╭─ Error at line <loc> │ exact (CharP.char_is_prime_or_zero (ZMod n) n).resolve_left hn0 │ ^^^ ╰─ Application type mismatch: The argument hn0 has type n ≠ 0 but is expected to have type ¬Nat.Prime n in the application Or.resolve_left (CharP.char_is_prime_or_zero (ZMod n) n) hn0 ╭─ Error at line <loc> │ infer_instance │ ^^^ ╰─ type class instance expected IsField (ZMod n) error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_19_05i139lv error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "initial",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_19_05i139lv (7.4s)"
+      },
+      {
+        "round": 2,
+        "compile_ok": false,
+        "category": "unknown_identifier",
+        "feedback_text": "{\"category\":\"unknown_identifier\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_19_7gqau0if (11s) ╭─ Error at line <loc> │ (ZMod.natCast_zmod_eq_zero_iff_dvd).mp htwo │ ^^^ ╰─ Unknown constant `ZMod.natCast_zmod_eq_zero_iff_dvd` ╭─ Error at line <loc> │ rw [ZMod.isUnit_iff_coprime] at hu │ ^^^ ╰─ Tactic `rewrite` failed: Did not find an occurrence of the pattern @IsUnit (ZMod ?n) CommRing.toCommSemiring.toMonoidWithZero.toMonoid ↑?m in the target expression @IsUnit (ZMod 0) Field.toSemifield.toDivisionSemiring.toMonoidWithZero.toMonoid 2 h : IsField (ZMod 0) this : Field (ZMod 0) := h.toField htwo : 2 ≠ 0 hu : IsUnit 2 ⊢ False ╭─ Error at line <loc> │ infer_instance │ ^^^ ╰─ type class instance expected IsField (ZMod n) error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_19_7gqau0if error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "category_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_19_7gqau0if (11s)"
+      },
+      {
+        "round": 3,
+        "compile_ok": false,
+        "category": "unknown_identifier",
+        "feedback_text": "{\"category\":\"unknown_identifier\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_19_ukmadxo3 (6.7s) ╭─ Error at line <loc> │ have hc := ZMod.isUnit_iff_coprime.mp hu │ ^^^ ╰─ Unknown constant `ZMod.isUnit_iff_coprime.mp` ╭─ Error at line <loc> │ infer_instance │ ^^^ ╰─ type class instance expected IsField (ZMod n) error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_19_ukmadxo3 error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "diagnostic_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_19_ukmadxo3 (6.7s)"
+      },
+      {
+        "round": 4,
+        "compile_ok": false,
+        "category": "type_mismatch",
+        "feedback_text": "{\"category\":\"type_mismatch\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_19_41koeoov (7.8s) ╭─ Error at line <loc> │ isUnit_iff_ne_zero.mpr htwo │ ^^^ ╰─ Type mismatch isUnit_iff_ne_zero.mpr <mvar> has type @IsUnit <mvar> (@MonoidWithZero.toMonoid <mvar> GroupWithZero.toMonoidWithZero) <mvar> but is expected to have type @IsUnit (ZMod 0) (@MonoidWithZero.toMonoid (ZMod 0) CommRing.toCommSemiring.toMonoidWithZero) 2 ╭─ Error at line <loc> │ exact (CharP.char_is_prime_or_zero (ZMod n) n).resolve_right hn0 │ ^^^ ╰─ failed to synthesize instance of type class NoZeroDivisors (ZMod n) Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command. ╭─ Error at line <loc> │ infer_instance │ ^^^ ╰─ type class instance expected IsField (ZMod n) error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_19_41koeoov error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "category_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_19_41koeoov (7.8s)"
+      }
+    ]
+  }
+}

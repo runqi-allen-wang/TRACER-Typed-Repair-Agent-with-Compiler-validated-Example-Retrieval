@@ -2,6 +2,14 @@
 
 本文件记录影响安全性、实验可复现性、Lean 编译边界和公开发布的补丁。它与 `PROGRESS.md` 的职责不同：`PROGRESS.md` 描述当前状态，本文按提交批次记录变更原因、影响范围和验证证据。
 
+## 2026-08-30 — 发布 B 臂实验交接包
+
+- 将 B 臂 `ExperienceProcessor + CapsuleFeedback` 的完整 FATE-M 25 题原始结果从本地运行目录整理为 `results/handoff/part2-experience-capsule-20260829/`，包含逐题 JSONL、77 条遥测、首轮缓存、配对报告、9 个状态快照、报告和可读文件清单。
+- 新增 `scripts/validate_b_handoff.py`，离线检查清单字节数、条件与 Memory 标记、25 题唯一性、首轮四字段配对、汇总数字、遥测、状态快照和凭据模式；Part 3 workflow 在 corrected handoff 后运行该门禁。
+- 更新 B 臂、Part 3、results 和当前进度文档，明确原始目录与发布副本的关系，并保留单模型单批次的解释边界。
+- 本次发布没有重新调用模型、修改实验结果或下载依赖；本地验证通过后由远程 Actions 完成最终 CI 验收。
+- 本地验证：B handoff、两套配对门禁和完整 Python 回归通过（217 项通过，2 项 Windows 平台不适用而跳过），`git diff --check` 通过。
+
 ## 2026-08-29 — 完成 B 臂 Experience + CapsuleFeedback 运行
 
 - 接入 `ExperienceProcessor + CapsuleFeedback` 的 B 条件，复用 Part 1 的完整首轮候选，并冻结现有 `yxai` Responses 配置、预算和候选安全策略。

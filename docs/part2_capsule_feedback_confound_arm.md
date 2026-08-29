@@ -87,13 +87,16 @@ B 的 16 个任务首轮通过；与 Part 1 共享的 9 个首轮失败任务中
 （`fate04`、`fate17`、`fate18`、`fate24`），修复率为 4/9（44.4%）。
 `fate10`、`fate16`、`fate19`、`fate23` 和 `fate25` 在 4 轮后仍未通过。
 
-逐题结果保存在
+逐题结果原始来源保存在
 `results/work/part2-experience-capsule-20260829/capsule-experience.jsonl`，遥测在同目录
-的 `metrics.jsonl`，配对门禁输出在 `pairing.json`。结果 JSONL 恰好包含 25 个唯一任务，
-77 条遥测事件，所有行均为 `capsule_experience`、`ExperienceProcessor` 和
-`experience_capsule_feedback`；`memory_llm_calls` 与逐行 `calls.memory_calls` 一致，
-API 错误为 0。`validate_part2_pairing.py` 已通过，并确认 25/25 对的首轮
-`code`、`reasoning`、`imports`、`opens` 完全一致。
+的 `metrics.jsonl`；配对门禁输出为 `pairing.json`。可发布的完整副本位于
+`results/handoff/part2-experience-capsule-20260829/`，另外包含首轮缓存、9 个最终状态快照、
+`REPORT.md` 和可读交接清单。结果 JSONL 恰好包含 25 个唯一任务，77 条遥测事件，所有行均为
+`capsule_experience`、`ExperienceProcessor` 和 `experience_capsule_feedback`；
+`memory_llm_calls` 与逐行 `calls.memory_calls` 一致，API 错误为 0。
+`validate_part2_pairing.py` 和发布级 `validate_b_handoff.py` 均确认 25/25 对的首轮
+`code`、`reasoning`、`imports`、`opens` 完全一致。交接包中的状态快照只是审计工件，不包含
+依赖缓存或凭据。
 
 配置中的模型字段 `openai:gpt-5.6-sol` 是 Ax 的模型命名空间；本次实际请求 endpoint
 是 `https://yxai.chat/v1`，使用 Responses API、`store=false` 和 `high` reasoning，不能

@@ -1,0 +1,598 @@
+{
+  "ok": true,
+  "pair_count": 25,
+  "expected_model": "openai:gpt-5.6-sol",
+  "expected_axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+  "expected_base_url": "https://yxai.chat/v1",
+  "expected_wire_api": "responses",
+  "expected_store": false,
+  "expected_reasoning_effort": "high",
+  "expected_candidate_policy": {
+    "version": "tracer-candidate-v2",
+    "meta_execution": "blocked",
+    "unsafe_declarations": "blocked",
+    "environment": "minimal"
+  },
+  "expected_right_condition": "capsule_experience",
+  "expected_right_memory_mode": "experience_capsule_feedback",
+  "expected_right_memory_processor": "ExperienceProcessor",
+  "require_zero_memory_calls": false,
+  "pairs": [
+    {
+      "task_id": "fate01",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/1.lean:prod_card_eq_card_pow",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate02",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/2.lean:monoidHom_eq_of_isCyclic",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate03",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/3.lean:comp_surjective_of_surjective",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate04",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/4.lean:mul_mem_ker_comm",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate05",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/5.lean:has_inverse_iff_isomorphism",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate06",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/6.lean:MonoidHom.eq_id_of_card_gcd_eq_one",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate07",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/7.lean:commutative_iff_commutator_mem_ker",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate08",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/8.lean:conj_ker_eq_center",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate09",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/9.lean:orderOf_eq_zero_of_monoidHom",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate10",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/10.lean:pow_mem_ker_of_card_eq",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate11",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/11.lean:mul_sub_and_sub_mul",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate12",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/12.lean:existUnique_ringHom_int",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate13",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/13.lean:commutative_of_relations",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate14",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/14.lean:zero_of_pow_eq_zero",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate15",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/15.lean:left_right_inverse_eq",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate16",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/16.lean:Ideal.span_eq_iff_associated",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate17",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/17.lean:ideal_span_eq_diagonal_map_sum",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate18",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/18.lean:Ideal.add_le_of_le",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate19",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/19.lean:ZMod.isField_iff_prime",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate20",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/20.lean:Field.ideal_eq_bot_or_top",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate21",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/21.lean:existUnique_linear_solution",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate22",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/22.lean:infinite_of_isAlgClosed",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate23",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/23.lean:isMaximal_of_isPrime_of_fintype",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate24",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/24.lean:isPrime_singleton",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    },
+    {
+      "task_id": "fate25",
+      "first_round_candidate_equal": true,
+      "first_round_proposal_equal": true,
+      "target": "FATEM/25.lean:primeAvoidance",
+      "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
+      "model": "openai:gpt-5.6-sol",
+      "base_url": "https://yxai.chat/v1",
+      "wire_api": "responses",
+      "store": false,
+      "reasoning_effort": "high",
+      "budget": {
+        "max_iterations": 4,
+        "max_input_tokens": 65536,
+        "max_tool_calling_iterations": 1
+      },
+      "candidate_policy": {
+        "version": "tracer-candidate-v2",
+        "meta_execution": "blocked",
+        "unsafe_declarations": "blocked",
+        "environment": "minimal"
+      }
+    }
+  ],
+  "errors": []
+}

@@ -59,7 +59,7 @@
 - `results/solutions/` 会按条件保存每个成功候选，`results/real_pilot_runs.jsonl` 保存逐轮原始轨迹；`evaluate.py --fresh` 会先归档旧实验，避免不同批次混合。
 - 已合入 AxProverBase Part 1 Experience baseline 与 Part 2 `MemorylessProcessor + CapsuleFeedback`：冻结 Ax commit、`yxai` Responses 模型条件、预算、首轮候选和逐题遥测；Part 2 直接消费已有 Builder 结果，不重复调用 Lean 或模型。
 - 已完成 FATE-M 25 题正式配对实验：两组均 25/25 成功，严格配对 25/25 通过；修正版总轮次 39→36、编译错误 14→11、LLM calls 79→36、tokens 656657→274742，上游交接结果与可读文件清单位于 `results/handoff/part12-live-20260828-corrected/`；旧目录保留为历史工件。
-- 已完成 B 臂 `ExperienceProcessor + CapsuleFeedback` 的 25 题正式运行：20/25（80.0%）通过，47 轮、69 次 LLM 请求（其中 27 次 Memory）、47 次 Lean 编译、659791 tokens、27 次编译错误、0 次超时；与 Part 1 共享的 9 个首轮失败中修复 4 个。结果位于 `results/work/part2-experience-capsule-20260829/`，配对校验 25/25 通过；本次没有运行完整 repair24 六臂矩阵，也没有重新下载依赖。
+- 已完成并整理 B 臂 `ExperienceProcessor + CapsuleFeedback` 的 25 题正式运行：20/25（80.0%）通过，47 轮、69 次 LLM 请求（其中 27 次 Memory）、47 次 Lean 编译、659791 tokens、27 次编译错误、0 次超时；与 Part 1 共享的 9 个首轮失败中修复 4 个。原始结果保留在 `results/work/part2-experience-capsule-20260829/`，可发布交接包为 `results/handoff/part2-experience-capsule-20260829/`，配对校验 25/25 通过；本次没有运行完整 repair24 六臂矩阵，也没有重新下载依赖。
 - 新增独立 SP-1 安全回归（历史实现曾称 D01）：`unsafe inductive` 构造 `False` 的候选在 Agent、AxProverBase 缓存/Proposal/Builder、Capsule pack/replay/audit 的 Lean 编译前拒绝；SP 不是研究臂。
 - 已在 `53bc501`（当时已合并 `origin/main@90ba62b`）完成 FATE-M 前 25 题 Part 3 Raw/Capsule 交错实验；正式交接包位于 `results/handoff/part3-after-main-90ba62b-20260829/`，严格配对 25/25 通过。Raw 为 22/25、Capsule 为 19/25；9 个共享首轮失败题中分别最终修复 6/9 与 3/9，正式运行无 API/基础设施错误。之后合入的 `37f12de` 仅增加交接验收工具，未重新调用模型；此前 `07301eb` 批次的 502 失败、修正版和原始目录仍保留在 `results/handoff/part3-after-main-20260829/` 与 `results/work/part3-after-main-20260829/`，未覆盖。
 - **局部证明修复 Agent**：支持四种 Prompt 上下文策略、最多三轮编译反馈、项目环境选择、候选安全检查、成功证明保存、逐轮 JSONL、SQLite 精确请求缓存、命令行 provider、OpenAI 兼容 HTTP provider 与本地 HTTP API。
@@ -69,7 +69,7 @@
 - **AxProverBase Part 1/2 配对批次**：`results/handoff/part12-live-20260828-corrected/` 含 FATE-M 25 题的 corrected handoff。两组均 25/25，首轮候选严格配对；轮次 39→36、编译错误 14→11、LLM calls 79→36、tokens 656657→274742。它是单模型、单批次证据，不支持统计显著性或通用能力结论。
 - **安全策略回归 SP-1**：验证 `unsafe inductive` 构造 `False` 的候选会在 Agent、AxProverBase 与 Capsule 编译入口前被拒绝。SP 是安全策略编号，不是实验组。
 - **repair24 研究基础设施**：24 道冻结修复题、六臂 runner、错误驱动查询、失败上下文、调用预算、随机顺序、协议快照、独立复编译和报告门禁已经实现。公开显示名为 R-A～R-F；存储值继续使用 `A/B/C/D/C_dynamic/C_failure` 以兼容已有接口。
-- **Part 3 交接检查**：`scripts/validate_part3_handoff.py` 与工作流只校验已有 Part 1/2 handoff 的配对协议和公开数字，不调用模型 API，也不是一轮新的 Part 3 实验。
+- **Part 3 交接检查**：`scripts/validate_part3_handoff.py` 校验已有 Part 1/2 handoff，`scripts/validate_b_handoff.py` 校验独立 B handoff；两者与工作流都只做离线文件验收，不调用模型 API，也不是一轮新的 Part 3 实验。
 
 ## 当前目录不含、不能据此独立核验的历史材料
 
@@ -84,9 +84,9 @@
 - 新修复集：24 个初始候选失败，24 个测试参考证明通过；不联网六组矩阵完成候选生成替身→真实 Lean 编译→保存→独立重编译→报告验证。此测试数据不是模型实验结果。
 - Windows 首次度量：24 案例 × 2 次，共 47/48 匹配；mathlib/elab-prime-instance 首次 60 秒超时，第二次通过。修正原文件 Mathlib 项目选择后，独立热缓存复测 24/24；23 对原始/精简源码诊断匹配，行数与字节缩减中位数均为 0。两批原始记录均保留于 results/research-capsule-windows-20260828 和 results/research-capsule-windows-warm-20260828。
 - 新的 Windows/Linux 比较已取得两套不同 OS 的实际记录，均为同一物理机上的本地/WSL2 环境，非独立硬件或 macOS 验证。23 对原文诊断在两端均匹配，现有 gallery 的精简率中位数仍为 0。准备、缓存和背景进程未作严格性能控制，不从耗时差推导 OS 加速收益；人工计时暂停，多模型仅完成一次 B 组预跑。
-- 本轮只读核对：DeepSeek 原批次 48 任务、69 请求、39 成功文件，轨迹校验 0 错误；上游 corrected FATE-M 首轮严格配对 25/25。上游曾完成的 Ubuntu CI 属于历史版本，本地合并补丁尚未推送，不能据此声称新的远程 CI 已通过。
+- 本轮只读核对：DeepSeek 原批次 48 任务、69 请求、39 成功文件，轨迹校验 0 错误；上游 corrected FATE-M 首轮严格配对 25/25。上游曾完成的 Ubuntu CI 属于历史版本；当前提交的远程验收结果以对应 Pull Request 的 Actions checks 为准，不能从本地记录推断。
 - Capsule 专项验证覆盖多文件依赖预构建、12 core + 4 challenge 矩阵、CI 硬门槛及 Bash 重试变量边界；合并后的当前测试结果以本节记录和最新 CI 为准，不沿用合并前的固定测试总数。
-- 本次网络故障测试使用命令替身，不等于已完成真实冷启动下载或远程 CI 验收；修复仍在本地，推送后需查看新的 Actions 结果。
+- 本次网络故障测试使用命令替身，不等于已完成真实冷启动下载或远程 CI 验收；远程验收以推送后的 Actions 结果为准。
 - 双语文档回归检查覆盖语言导航、运行命令一致性、旧 pilot 数字与证据链接、研究协议及相关工作入口；不再把新增章节数量写死。
 - Mathlib 回放在准备 `mathlib_project` 依赖缓存后通过；缓存目录不提交到仓库。
 - 历史本地审计曾记录一次 DeepSeek Flash/Pro、48 个 B 组任务的预跑；这些原始轨迹、成功证明目录和研究复核表不属于当前发布交付物。README 与研究协议只保留带限定的历史说明，不把数字当作当前可发布证据。
@@ -103,7 +103,7 @@
 - 本次代码迁移没有伪造真实 provider 轨迹；若 `results/real_pilot_runs.jsonl` 尚未由真实 provider 生成，严格校验和导出会明确拒绝，不能把 smoke/mock 记录冒充正式实验。
 - 本地编译隔离是环境清理和候选策略防护，不等同于操作系统级沙箱；运行不受信任项目时仍应使用容器或独立低权限环境。
 - Part 1/2/B 与 Part 3 的 25 题结果都是单模型、单批次运行证据，不能据此声称统计显著优势、反馈或 Memory 的因果收益，或通用定理证明能力；完整 repair24 六臂矩阵仍未运行，Part 3 仍需更大规模重复实验和正式统计解释。
-- 新增 Part 3 交接清单与轻量校验入口：`docs/part3_experiment_handoff.md`、`scripts/validate_part3_handoff.py` 和 `.github/workflows/part3.yml` 只检查 corrected handoff 的配对协议和公开数字，不调用模型 API。
+- 新增 Part 3 交接清单与轻量校验入口：`docs/part3_experiment_handoff.md`、`scripts/validate_part3_handoff.py`、`scripts/validate_b_handoff.py` 和 `.github/workflows/part3.yml` 分别检查 corrected handoff 与 B handoff 的配对协议、原始遥测和公开数字，不调用模型 API。
 - repair24 的完整多模型、三重复、六臂付费矩阵尚未运行和人工复核；现有配置与 plan 不能替代真实轨迹。
 - R-E/R-F 的动态查询与失败上下文接入已完成，但尚无正式配对结果可证明增益。
 - 人工定位研究尚无真实参与者数据。
@@ -119,6 +119,7 @@
 - Lean 与 Capsule：`lake build` 通过；24/24 Capsule 发布审计通过；在补齐清单固定 revision 的本地 Mathlib 依赖后，24/24 Capsule 全量回放通过。依赖与构建缓存位于忽略的 `.lake/` 目录，不属于源码改动。
 - 实验证据复核：16/16 可行性案例在 `--verify-only` 模式通过，且没有覆盖已保存结果；发布版 pilot 通过 56 记录/54 任务及人工复核门禁；54 个成功证明逐个独立重编译通过；Part 3 交接校验与 repair24 冻结题校验通过。
 - 结构复审：Python、JSON、JSONL、TOML、YAML 与 CSV 均可解析，Markdown 本地链接有效；三个交付清单登记的 74 个文件均存在且字节数一致；未发现公开凭据、本机用户路径、禁用的派生摘要实现或旧安全案例命名残留。
+- 本次 B handoff 发布前验证：B 专用门禁、B/Part 1 配对门禁、既有 Part 3 门禁、相关测试和完整 Python 回归均通过（217 项通过，2 项 Windows 平台不适用而跳过）；`git diff --check` 通过，未调用模型或下载依赖。
 
 ## 解释边界
 

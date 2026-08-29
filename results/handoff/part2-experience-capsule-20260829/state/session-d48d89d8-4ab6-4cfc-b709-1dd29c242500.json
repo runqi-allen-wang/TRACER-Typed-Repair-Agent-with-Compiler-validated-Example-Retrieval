@@ -1,0 +1,55 @@
+{
+  "theorem_key": "FATEM.16:Ideal.span_eq_iff_associated",
+  "state": {
+    "schema_version": "capsule-feedback.readable.v0.2",
+    "attempt_count": 4,
+    "feedback_counts": {
+      "{\"category\":\"type_mismatch\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_16_2qeyavzv (8.6s) ╭─ Error at line <loc> │ have hr₁ : r₁ = 0 := by simpa using ha │ ^^^ ╰─ Type mismatch: After simplification, term ha has type r₁ = r₁ * b * a but is expected to have type r₁ = 0 error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_16_2qeyavzv error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"type_mismatch\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_16_n84c27ou (8.3s) ╭─ Error at line <loc> │ simpa using ha │ ^^^ ╰─ Type mismatch: After simplification, term ha has type r₁ = r₁ * b * a but is expected to have type r₁ = 0 error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_16_n84c27ou error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"type_mismatch\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_16_8rywzzi9 (9.1s) ╭─ Error at line <loc> │ simpa using ha' │ ^^^ ╰─ Type mismatch: After simplification, term ha' has type r₁ = r₁ * b * a but is expected to have type r₁ = 0 error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_16_8rywzzi9 error: build failed\",\"goal_state\":\"\"}": 1,
+      "{\"category\":\"type_mismatch\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_16_74tv5fnl (8.4s) ╭─ Error at line <loc> │ _ = r₂ := hb │ ^^^ ╰─ Type mismatch hb has type r₂ = r₁ * b but is expected to have type r₁ * b = r₂ error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_16_74tv5fnl error: build failed\",\"goal_state\":\"\"}": 1
+    },
+    "history": [
+      {
+        "round": 1,
+        "compile_ok": false,
+        "category": "type_mismatch",
+        "feedback_text": "{\"category\":\"type_mismatch\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_16_2qeyavzv (8.6s) ╭─ Error at line <loc> │ have hr₁ : r₁ = 0 := by simpa using ha │ ^^^ ╰─ Type mismatch: After simplification, term ha has type r₁ = r₁ * b * a but is expected to have type r₁ = 0 error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_16_2qeyavzv error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "initial",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_16_2qeyavzv (8.6s)"
+      },
+      {
+        "round": 2,
+        "compile_ok": false,
+        "category": "type_mismatch",
+        "feedback_text": "{\"category\":\"type_mismatch\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_16_n84c27ou (8.3s) ╭─ Error at line <loc> │ simpa using ha │ ^^^ ╰─ Type mismatch: After simplification, term ha has type r₁ = r₁ * b * a but is expected to have type r₁ = 0 error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_16_n84c27ou error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "diagnostic_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_16_n84c27ou (8.3s)"
+      },
+      {
+        "round": 3,
+        "compile_ok": false,
+        "category": "type_mismatch",
+        "feedback_text": "{\"category\":\"type_mismatch\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_16_8rywzzi9 (9.1s) ╭─ Error at line <loc> │ simpa using ha' │ ^^^ ╰─ Type mismatch: After simplification, term ha' has type r₁ = r₁ * b * a but is expected to have type r₁ = 0 error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_16_8rywzzi9 error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "diagnostic_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_16_8rywzzi9 (9.1s)"
+      },
+      {
+        "round": 4,
+        "compile_ok": false,
+        "category": "type_mismatch",
+        "feedback_text": "{\"category\":\"type_mismatch\",\"diagnostic\":\"✖ [8026/8026] Building FATEM.tmp_16_74tv5fnl (8.4s) ╭─ Error at line <loc> │ _ = r₂ := hb │ ^^^ ╰─ Type mismatch hb has type r₂ = r₁ * b but is expected to have type r₁ * b = r₂ error: Lean exited with code 1 Some required targets logged failures: - FATEM.tmp_16_74tv5fnl error: build failed\",\"goal_state\":\"\"}",
+        "repeat_count": 1,
+        "consecutive_repeat_count": 1,
+        "drift_kind": "diagnostic_changed",
+        "summary": "✖ [8026/8026] Building FATEM.tmp_16_74tv5fnl (8.4s)"
+      }
+    ]
+  }
+}

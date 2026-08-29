@@ -8,10 +8,14 @@ on:
     paths:
       - ".github/workflows/part3.yml"
       - "docs/part3_experiment_handoff.md"
+      - "docs/part2_capsule_feedback_confound_arm.md"
       - "scripts/validate_part3_handoff.py"
+      - "scripts/validate_b_handoff.py"
       - "scripts/validate_part2_pairing.py"
       - "src/leancapsule/pairing.py"
       - "results/handoff/part12-live-20260828-corrected/**"
+      - "results/handoff/part2-experience-capsule-20260829/**"
+      - "results/README.md"
       - "README.md"
       - "README.zh-CN.md"
       - "PROGRESS.md"
@@ -19,10 +23,14 @@ on:
     paths:
       - ".github/workflows/part3.yml"
       - "docs/part3_experiment_handoff.md"
+      - "docs/part2_capsule_feedback_confound_arm.md"
       - "scripts/validate_part3_handoff.py"
+      - "scripts/validate_b_handoff.py"
       - "scripts/validate_part2_pairing.py"
       - "src/leancapsule/pairing.py"
       - "results/handoff/part12-live-20260828-corrected/**"
+      - "results/handoff/part2-experience-capsule-20260829/**"
+      - "results/README.md"
       - "README.md"
       - "README.zh-CN.md"
       - "PROGRESS.md"
@@ -46,3 +54,5 @@ jobs:
           python-version: "3.11"
       - name: Validate corrected paired handoff
         run: python scripts/validate_part3_handoff.py
+      - name: Validate B arm handoff
+        run: python scripts/validate_b_handoff.py

@@ -55,3 +55,13 @@ class ContinuousIntegrationTest(unittest.TestCase):
         self.assertIn("run: lake build", workflow)
         self.assertIn("contents: read", workflow)
         self.assertNotIn("secrets.", workflow)
+
+    def test_part3_workflow_validates_b_handoff(self):
+        workflow = (ROOT / ".github" / "workflows" / "part3.yml").read_text(encoding="utf-8")
+        self.assertIn("results/handoff/part2-experience-capsule-20260829/**", workflow)
+        self.assertIn("scripts/validate_b_handoff.py", workflow)
+        self.assertIn("run: python scripts/validate_b_handoff.py", workflow)
+        self.assertLess(
+            workflow.index("run: python scripts/validate_part3_handoff.py"),
+            workflow.index("run: python scripts/validate_b_handoff.py"),
+        )

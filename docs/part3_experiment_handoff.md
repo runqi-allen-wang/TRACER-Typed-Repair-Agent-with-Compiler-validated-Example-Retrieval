@@ -1,4 +1,4 @@
-# Part 3：配对实验后续交接与验收清单（尚未执行新实验）
+# Part 3：配对实验后续交接与验收清单（Raw/Capsule 之外尚未执行新实验）
 
 本文件把 Part 1 的 AxProverBase baseline、Part 2 的 CapsuleFeedback 接入，以及
 `results/handoff/part12-live-20260828-corrected/` 中的正式配对结果整理成一个可复查的
@@ -64,6 +64,15 @@ flowchart TD
 python scripts/validate_part3_handoff.py
 ```
 
+B 臂是独立的混杂拆分结果，使用单独的发布级门禁：
+
+```bash
+python scripts/validate_b_handoff.py
+```
+
+该门禁同时读取已发布的 Part 1 baseline，重新检查 B 臂的 25 题配对、首轮缓存、77 条遥测、
+状态快照和公开汇总数字；它只进行离线文件校验，不调用模型 API 或 Lean。
+
 若要重新验证底层配对报告：
 
 ```bash
@@ -87,6 +96,9 @@ python scripts/validate_part2_pairing.py \
 6. Capsule 条件的 `memory_calls`、`capsule_llm_calls`、`capsule_compiler_calls` 均为 0。
 7. `part2-first-round-full.json` 覆盖每个 paired target。
 8. 汇总数字与 README/handoff 中的公开结论一致：原 baseline/capsule 均为 25/25 成功，轮次 39→36，编译错误 14→11，LLM calls 79→36，tokens 656657→274742。B 臂有自己的结果和门禁，不套用原 Capsule 的零 Memory 调用条件。
+
+B 臂不使用上面第 6 条的零 Memory 调用要求；`validate_b_handoff.py` 另行检查其
+`ExperienceProcessor` Memory 调用、反馈遥测、状态快照和 20/25 汇总是否自洽。
 
 ## 报告边界
 
