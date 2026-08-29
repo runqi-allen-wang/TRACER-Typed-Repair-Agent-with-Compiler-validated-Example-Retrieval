@@ -92,6 +92,26 @@ class DocumentationConsistencyTest(unittest.TestCase):
                 for label in ("R-A", "R-B", "R-C", "R-D", "R-E", "R-F", "SP-1"):
                     self.assertIn(label, readme)
 
+    def test_readme_front_matter_separates_experiment_and_policy_namespaces(self):
+        """README 首屏必须同时解释历史试验、研究臂和安全策略三套命名。"""
+        headings = {
+            "README.md": "## Experiment and policy namespaces",
+            "README.zh-CN.md": "## 实验与安全命名体系",
+        }
+        quick_start = {
+            "README.md": "## Quick start",
+            "README.zh-CN.md": "## 快速开始",
+        }
+        for name, readme in self.readmes().items():
+            with self.subTest(language=name):
+                front = readme[: readme.index(quick_start[name])]
+                self.assertIn(headings[name], front)
+                self.assertIn("A / B / C", front)
+                for label in ("R-A", "R-B", "R-C", "R-D", "R-E", "R-F", "SP-1"):
+                    self.assertIn(label, front)
+                self.assertIn("C_dynamic", front)
+                self.assertIn("C_failure", front)
+
     def test_readme_commands_match_between_languages(self):
         # 仅比较执行命令；图中标签、目录注释和报错提示允许翻译。
         commands = []
