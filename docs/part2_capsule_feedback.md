@@ -39,7 +39,7 @@ next Proposer
 1. **核心接口（已实现）**：`leancapsule.feedback.CapsuleFeedback` 负责指纹、重复次数、漂移和历史；支持状态 JSON 往返。
 2. **命令行边界（已实现）**：`python -m leancapsule feedback` 从 JSON 读取已有编译结果，并可原子更新逐题 state 文件。
 3. **Ax 接线（已实现）**：`leancapsule.ax_integration` 包裹固定 commit 的原 `_builder_node`，转换其返回的 `BuildFailedFeedback`/`SorriesGoalStateFeedback`，不再次调用 `check_lean_file`；每个 theorem 使用独立且有界的 session。
-4. **配对 smoke 门禁（已实现）**：`scripts/validate_part2_pairing.py` 严格检查两组首轮候选、模型、endpoint、Responses wire API、响应存储、推理强度、预算和题集一致，并要求 Capsule 的 Memory/额外编译/额外 LLM 调用为零。真实模型结果仍需在 Part 1 产出后运行该门禁。
+4. **配对门禁（已实现并完成正式运行）**：`scripts/validate_part2_pairing.py` 严格检查两组题目身份、Ax commit、完整首轮 Proposal（code/reasoning/imports/opens）、模型、endpoint、Responses wire API、响应存储、推理强度、预算和题集一致，并要求 Capsule 的 Memory/额外编译/额外 LLM 调用为零。FATE-M 25 题修正版正式结果与配对报告位于 `results/handoff/part12-live-20260828-corrected/`。
 5. **正式 Part 3 准备（已实现）**：JSONL 遥测包含 fingerprint、repeat count、drift kind、feedback chars、Builder/CapsuleFeedback 耗时、固定模型、Proposer/Reviewer 的真实 `LLMClient.ainvoke` 次数、token、tool calls 和零额外调用声明。provider 未返回价格时成本保持 `null`。
 6. **D 类候选安全门禁（已实现）**：缓存和后续 LLM 的完整 theorem 都在 Builder 前检查 `unsafe`、占位符、额外声明、目标名和声明头；Builder 入口再次校验。配对门禁要求 Part 1/Part 2 都记录 `tracer-candidate-v2`。
 
@@ -102,7 +102,7 @@ python .\scripts\prepare_part2_first_round_cache.py `
     --out .\results\part2-first-round.json
 ```
 
-安全设置 `yxai` Key，并指定逐题状态、遥测目录和配对结果输出：
+安全设置 `yxai` Key，并指定逐题状态、遥测目录和配对结果输出。正式运行必须使用全新的路径；如果指定路径中已有上一轮工件，runner 会在任何 Lean/API 调用前拒绝。确认要完整重跑时可传 `--overwrite`，它会清空主输出、telemetry 和专用 state 目录中格式明确的 Capsule 状态文件；state 目录包含其他文件时仍会拒绝删除：
 
 ```powershell
 $secureKey = Read-Host "请输入 yxai API Key（输入不会显示）" -AsSecureString
@@ -123,9 +123,9 @@ finally {
 }
 ```
 
-设置 `CAPSULE_FIRST_ROUND_CACHE` 后，第一轮会直接构造 Ax `ProposalMessage`，不会调用 Proposer LLM；如果当前 theorem 没有精确缓存项，运行会立即失败，避免两组首轮候选失配。缓存值必须是 Ax 所需的完整更新后 theorem，而不只是 `by ...` proof body。
+设置 `CAPSULE_FIRST_ROUND_CACHE` 后，第一轮会直接构造 Ax `ProposalMessage`，不会调用 Proposer LLM；如果当前 theorem 没有精确缓存项，运行会立即失败。缓存会原样保留并逐字段校验 `code`、`reasoning`、`imports` 和 `opens`，包括合法的空 reasoning，避免两组首轮上下文失配。`code` 必须是 Ax 所需的完整更新后 theorem，而不只是 `by ...` proof body。
 
-`baseline/run_part2.py` 在任何 Lean 或 API 调用前检查全部 task ID、target、首轮候选和缓存的一致性，然后保留完整 Ax 状态并输出配对门禁所需的逐题 JSONL。冒烟测试可附加 `--limit 1`；正式实验不要加该参数。
+`baseline/run_part2.py` 在任何 Lean 或 API 调用前检查全部 task ID、target/module/theorem、完整首轮 Proposal、缓存和旧实验工件的一致性，然后保留完整 Ax 状态并输出配对门禁所需的逐题 JSONL。冒烟测试可附加 `--limit 1`；正式实验不要加该参数。
 
 该 runner 会安装 CapsuleFeedback 接入，并在构造 Agent 前再次强制校验 `gpt-5.6-sol`、Responses API、`store=false`、`reasoning.effort=high`、Memoryless 和关闭 summary，避免其他配置意外覆盖实验条件。配置还把实验输入预算显式固定为 `max_input_tokens=65536`，避免自定义模型别名没有 LangChain profile 时得到空值；该数字是实验预算，不宣称中转站模型的官方上下文上限。`python -m leancapsule.ax_runner` 仍可用于交互式单题调试，但它的上游 `-o` 只包含 `success/error/summary`，不能代替正式配对 JSONL。
 
@@ -153,10 +153,10 @@ python .\scripts\validate_part2_pairing.py `
 
 `.github/workflows/part2.yml` 是 Part 2 的独立验证入口，不读取 API Key，也不调用 `yxai`：
 
-- 推送 Part 2 相关文件到 `leiteng` 时自动触发；
+- 推送 Part 2 相关文件到 `main` 时自动触发；
 - Pull Request 修改 Part 2 相关文件时自动触发；
 - workflow 进入默认分支后可从 Actions 页面手动触发；
 - Ubuntu 执行 CapsuleFeedback、文档和 workflow 契约测试；
 - 专项测试通过后，Ubuntu 执行 `lake build` 和完整 Python 回归。
 
-由于 GitHub 只为默认分支上的 `workflow_dispatch` 显示手动运行入口，在该 workflow 尚未合并到默认分支时，应通过推送到 `leiteng` 或创建 Pull Request 触发。
+GitHub 只为默认分支上的 `workflow_dispatch` 显示手动运行入口；合并前可通过 Pull Request 触发，合并后也可在 Actions 页面手动运行。

@@ -87,7 +87,7 @@ finally {
 
 `runs/baseline.jsonl` 每题包含：
 
-- 完整首轮 theorem、reasoning、imports、opens；
+- 完整首轮 Proposal：theorem code、reasoning、imports、opens；空 reasoning 也是冻结输入的一部分，不能用说明文字替换；
 - proposer / memory / reviewer / compiler 调用数；
 - token、总运行时间、Builder 时间、成功轮次和 Ax metrics；
 - 模型、endpoint、Responses、存储、推理强度、预算和 Ax commit；
@@ -102,12 +102,9 @@ python .\scripts\prepare_part2_first_round_cache.py `
     --out .\results\part2-first-round.json
 ```
 
-两组真实结果完成后，必须运行 `scripts/validate_part2_pairing.py`；门禁失败的数据不能进入
-Part 3 结论。
-
-Part 3 的 Raw/Capsule 最小严格对比已经使用同一批 25 题完成。运行器、交错顺序、共享首轮候选和结果门禁见
-[`docs/part3_raw_capsule_experiment.md`](../docs/part3_raw_capsule_experiment.md)。不要把 `ExperienceProcessor` 的旧结果与 Raw/Capsule
-直接合并分析；它只作为资源参考。
+两组真实结果完成后，必须运行 `scripts/validate_part2_pairing.py`。门禁会核对题目身份、
+固定 Ax commit、完整首轮 Proposal、provider、预算、memory 条件和零额外调用声明；失败的
+数据不能进入 Part 3 结论。
 
 ## CI
 

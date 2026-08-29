@@ -7,25 +7,19 @@ import csv
 from collections import Counter
 from pathlib import Path
 
-from .schema import validate_full_manifest
+from .schema import validate_manifest
 
 
 def write_gallery_reports(index: dict, json_out: Path, csv_out: Path | None = None, markdown_out: Path | None = None) -> None:
     """同时写出 JSON、CSV 和面向读者的 Markdown 索引。"""
 
     json_out.parent.mkdir(parents=True, exist_ok=True)
-    json_out.write_text(
-        json.dumps(index, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n"
-    )
+    json_out.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     csv_out = csv_out or json_out.with_suffix(".csv")
     markdown_out = markdown_out or json_out.with_suffix(".md")
     csv_out.parent.mkdir(parents=True, exist_ok=True)
     with csv_out.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(
-            handle,
-            fieldnames=["capsule_id", "path", "taxonomy", "source_kind", "category", "extraction_mode"],
-            lineterminator="\n",
-        )
+        writer = csv.DictWriter(handle, fieldnames=["capsule_id", "path", "taxonomy", "source_kind", "category", "extraction_mode"])
         writer.writeheader()
         writer.writerows(index.get("capsules", []))
     lines = [
@@ -43,7 +37,7 @@ def write_gallery_reports(index: dict, json_out: Path, csv_out: Path | None = No
             f"{entry.get('taxonomy') or ''} | `{entry['category']}` | `{entry.get('extraction_mode') or ''}` |"
         )
     markdown_out.parent.mkdir(parents=True, exist_ok=True)
-    markdown_out.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+    markdown_out.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def build_gallery_index(root: Path) -> dict:
@@ -52,12 +46,8 @@ def build_gallery_index(root: Path) -> dict:
     entries: list[dict] = []
     errors: list[str] = []
     for path in sorted(root.rglob("capsule.json")):
-        try:
-            manifest = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError) as exc:
-            errors.append(f"{path.parent}: manifest 无法读取: {exc}")
-            continue
-        schema_errors = validate_full_manifest(manifest)
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+        schema_errors = validate_manifest(manifest)
         if schema_errors:
             errors.extend(f"{path.parent}: {error}" for error in schema_errors)
             continue

@@ -1,0 +1,152 @@
+{
+  "FATEM.1:prod_card_eq_card_pow": {
+    "code": "theorem prod_card_eq_card_pow {G : Type*} [Fintype G] [Group G] (n : ℕ) :\n    Fintype.card (Π _ : Fin n, G) = (Fintype.card G) ^ n := by\n  simp",
+    "reasoning": "",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.2:monoidHom_eq_of_isCyclic": {
+    "code": "theorem monoidHom_eq_of_isCyclic {G G' : Type*} [Group G] [Group G'] (a : G)\n    (h : ∀ g : G, ∃ n, g = a ^ n) (f1 f2 : G →* G') (heq : f1 a = f2 a) :\n    ∀ g : G, f1 g = f2 g := by\n  intro g\n  obtain ⟨n, rfl⟩ := h g\n  simp only [map_pow, heq]",
+    "reasoning": "",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.3:comp_surjective_of_surjective": {
+    "code": "theorem comp_surjective_of_surjective {G H K : Type*} [Group G] [Group H] [Group K]\n    (f : G →* H) (g : H →* K) (hf : Function.Surjective f) (hg : Function.Surjective g) :\n    Function.Surjective (g.comp f) := by\n  intro k\n  obtain ⟨h, hh⟩ := hg k\n  obtain ⟨x, hx⟩ := hf h\n  refine ⟨x, ?_⟩\n  change g (f x) = k\n  rw [hx, hh]",
+    "reasoning": "",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.4:mul_mem_ker_comm": {
+    "code": "theorem mul_mem_ker_comm {G G' : Type*} [Group G] [Group G'] (f : G →* G') {a b : G} :\n    (a * b ∈ f.ker)  ↔ (b * a ∈ f.ker) := by\n  change f (a * b) = 1 ↔ f (b * a) = 1\n  simpa only [map_mul] using (mul_eq_one_comm (f a) (f b))",
+    "reasoning": "",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.5:has_inverse_iff_isomorphism": {
+    "code": "theorem has_inverse_iff_isomorphism {G G' : Type*} [Group G] [Group G'] (φ : G →* G') :\n    (∃ φ₁ : G' → G, Function.LeftInverse φ₁ φ ∧ Function.RightInverse φ₁ φ) ↔\n    (Function.Injective φ ∧ Function.Surjective φ) := by\n  constructor\n  · rintro ⟨φ₁, hleft, hright⟩\n    constructor\n    · intro x y hxy\n      calc\n        x = φ₁ (φ x) := (hleft x).symm\n        _ = φ₁ (φ y) := congrArg φ₁ hxy\n        _ = y := hleft y\n    · intro y\n      exact ⟨φ₁ y, hright y⟩\n  · rintro ⟨hinj, hsurj⟩\n    classical\n    choose φ₁ hright using hsurj\n    refine ⟨φ₁, ?_, hright⟩\n    intro x\n    apply hinj\n    exact hright (φ x)",
+    "reasoning": "\n\n",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.6:MonoidHom.eq_id_of_card_gcd_eq_one": {
+    "code": "theorem MonoidHom.eq_id_of_card_gcd_eq_one {G H: Type*} [Finite H] [Finite G][Group G] [Group H]\n    (h : (Nat.card H).gcd (Nat.card G) = 1) (f : G →* H) : ∀ p : G , f p = 1 := by\n  intro p\n  have hH : orderOf (f p) ∣ Nat.card H := orderOf_dvd_natCard (f p)\n  have hG : orderOf (f p) ∣ Nat.card G :=\n    dvd_trans (orderOf_map_dvd f p) (orderOf_dvd_natCard p)\n  have hOrder : orderOf (f p) ∣ 1 := by\n    rw [← h]\n    exact Nat.dvd_gcd hH hG\n  exact orderOf_eq_one_iff.mp (Nat.dvd_one.mp hOrder)",
+    "reasoning": "\n\n\n\n",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.7:commutative_iff_commutator_mem_ker": {
+    "code": "theorem commutative_iff_commutator_mem_ker  {G H : Type} [Group G] [Group H] (f : G →* H) :\n    (∀ x y : H, x ∈ f.range ∧ y ∈ f.range → x * y = y * x)\n    ↔ ∀ x y : G, x * y * x⁻¹ * y⁻¹ ∈ f.ker := by\n  constructor\n  · intro h x y\n    change f (x * y * x⁻¹ * y⁻¹) = 1\n    simp only [map_mul, map_inv]\n    rw [h (f x) (f y) ⟨⟨x, rfl⟩, ⟨y, rfl⟩⟩]\n    simp\n  · intro h x y hxy\n    rcases hxy with ⟨⟨a, rfl⟩, ⟨b, rfl⟩⟩\n    have hab := h a b\n    change f (a * b * a⁻¹ * b⁻¹) = 1 at hab\n    simp only [map_mul, map_inv] at hab\n    calc\n      f a * f b =\n          (f a * f b * (f a)⁻¹ * (f b)⁻¹) * f b * f a := by\n            simp [mul_assoc]\n      _ = 1 * f b * f a := by rw [hab]\n      _ = f b * f a := by simp",
+    "reasoning": "\n\n\n\n\n\n",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.8:conj_ker_eq_center": {
+    "code": "theorem conj_ker_eq_center (G : Type*) [Group G] :\n    MonoidHom.ker (@MulAut.conj G _) = Subgroup.center G := by\n  ext x\n  rw [MonoidHom.mem_ker, Subgroup.mem_center_iff]\n  constructor\n  · intro hx y\n    have hxy : x * y * x⁻¹ = y := by\n      simpa using congrArg (fun f : MulAut G => f y) hx\n    calc\n      y * x = (x * y * x⁻¹) * x := by rw [hxy]\n      _ = x * y := by simp [mul_assoc]\n  · intro hx\n    ext y\n    change x * y * x⁻¹ = y\n    calc\n      x * y * x⁻¹ = (y * x) * x⁻¹ := by rw [hx y]\n      _ = y := by simp [mul_assoc]",
+    "reasoning": "\n\n\n\n\n\n\n\n",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.9:orderOf_eq_zero_of_monoidHom": {
+    "code": "theorem orderOf_eq_zero_of_monoidHom {G H : Type*} [Group G] [Group H] {f : G →* H} {a : G}\n    (h : orderOf (f a) = 0) : orderOf a = 0 := by\n  have hdiv : orderOf (f a) ∣ orderOf a := orderOf_map_dvd f a\n  simpa [h] using hdiv",
+    "reasoning": "",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.10:pow_mem_ker_of_card_eq": {
+    "code": "theorem pow_mem_ker_of_card_eq {G H : Type*} [Group G] [Group H] (f : G →* H) (n : ℕ)\n    (h : Nat.card f.range = n) : ∀ g : G, (g ^ n) ∈ f.ker := by\n  intro g\n  change f (g ^ n) = 1\n  rw [map_pow]\n  by_cases hn : n = 0\n  · subst n\n    simp\n  · have hcard : Nat.card f.range ≠ 0 := by\n      simpa [h] using hn\n    letI : Finite f.range := Nat.finite_of_card_ne_zero hcard\n    let x : f.range := ⟨f g, ⟨g, rfl⟩⟩\n    have hx : x ^ Nat.card f.range = 1 := pow_card_eq_one x\n    rw [h] at hx\n    simpa [x] using congrArg Subtype.val hx",
+    "reasoning": "\n\n\n\n",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.11:mul_sub_and_sub_mul": {
+    "code": "theorem mul_sub_and_sub_mul {R : Type*} [Ring R] (a b c : R) :\n    a * (b - c) = a * b - a * c ∧ (b - c) * a = b * a - c * a := by\n  exact ⟨mul_sub a b c, sub_mul b c a⟩",
+    "reasoning": "",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.12:existUnique_ringHom_int": {
+    "code": "theorem existUnique_ringHom_int {R : Type*} [Ring R] : ∃! f : ℤ →+* R, True := by\n  refine ⟨Int.castRingHom R, trivial, ?_⟩\n  intro f _\n  ext n\n  simp",
+    "reasoning": "",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.13:commutative_of_relations": {
+    "code": "theorem commutative_of_relations {R : Type*} [Ring R] : (∀ a : R, a ^ 3 = a) →\n    ∀ (a b : R), a * b = b * a := by\n  intro h\n\n  have square_zero_eq_zero (x : R) (hx : x ^ 2 = 0) : x = 0 := by\n    calc\n      x = x ^ 3 := (h x).symm\n      _ = x ^ 2 * x := by noncomm_ring\n      _ = 0 := by rw [hx, zero_mul]\n\n  have idempotent_central (e : R) (he : e * e = e) (r : R) :\n      e * r = r * e := by\n    have hleft : (1 - e) * e = 0 := by\n      calc\n        (1 - e) * e = e - e * e := by noncomm_ring\n        _ = 0 := by rw [he]; exact sub_self e\n    have hright : e * (1 - e) = 0 := by\n      calc\n        e * (1 - e) = e - e * e := by noncomm_ring\n        _ = 0 := by rw [he]; exact sub_self e\n    have hu : e * r * (1 - e) = 0 := by\n      apply square_zero_eq_zero\n      calc\n        (e * r * (1 - e)) ^ 2 =\n            e * r * ((1 - e) * e) * r * (1 - e) := by noncomm_ring\n        _ = 0 := by rw [hleft]; simp\n    have hv : (1 - e) * r * e = 0 := by\n      apply square_zero_eq_zero\n      calc\n        ((1 - e) * r * e) ^ 2 =\n            (1 - e) * r * (e * (1 - e)) * r * e := by noncomm_ring\n        _ = 0 := by rw [hright]; simp\n    calc\n      e * r = e * r * e + e * r * (1 - e) := by noncomm_ring\n      _ = e * r * e := by rw [hu, add_zero]\n      _ = e * r * e + (1 - e) * r * e := by rw [hv, add_zero]\n      _ = r * e := by noncomm_ring\n\n  have square_central (x y : R) : x ^ 2 * y = y * x ^ 2 := by\n    have hxidem : x ^ 2 * x ^ 2 = x ^ 2 := by\n      calc\n        x ^ 2 * x ^ 2 = x ^ 3 * x := by noncomm_ring\n        _ = x * x := by rw [h x]\n        _ = x ^ 2 := by noncomm_ring\n    exact idempotent_central (x ^ 2) hxidem y\n\n  have twice_central (x y : R) : (x + x) * y = y * (x + x) := by\n    calc\n      (x + x) * y = (x + 1) ^ 2 * y - x ^ 2 * y - y := by\n        noncomm_ring\n      _ = y * (x + 1) ^ 2 - y * x ^ 2 - y := by\n        rw [square_central (x + 1) y, square_central x y]\n      _ = y * (x + x) := by noncomm_ring\n\n  have three_relation (x : R) :\n      x + x + x = -(x ^ 2 + x ^ 2 + x ^ 2) := by\n    have hz : (x ^ 2 + x ^ 2 + x ^ 2) + (x + x + x) = 0 := by\n      calc\n        (x ^ 2 + x ^ 2 + x ^ 2) + (x + x + x) =\n            (x + 1) ^ 3 - x ^ 3 - 1 := by noncomm_ring\n        _ = (x + 1) - x - 1 := by rw [h (x + 1), h x]\n        _ = 0 := by noncomm_ring\n    calc\n      x + x + x =\n          ((x ^ 2 + x ^ 2 + x ^ 2) + (x + x + x)) -\n            (x ^ 2 + x ^ 2 + x ^ 2) := by noncomm_ring\n      _ = 0 - (x ^ 2 + x ^ 2 + x ^ 2) := by rw [hz]\n      _ = -(x ^ 2 + x ^ 2 + x ^ 2) := zero_sub _\n\n  have thrice_central (x y : R) : (x + x + x) * y = y * (x + x + x) := by\n    calc\n      (x + x + x) * y = (-(x ^ 2 + x ^ 2 + x ^ 2)) * y := by\n        rw [three_relation x]\n      _ = -(x ^ 2 * y + x ^ 2 * y + x ^ 2 * y) := by noncomm_ring\n      _ = -(y * x ^ 2 + y * x ^ 2 + y * x ^ 2) := by\n        rw [square_central x y]\n      _ = y * (-(x ^ 2 + x ^ 2 + x ^ 2)) := by noncomm_ring\n      _ = y * (x + x + x) := by rw [three_relation x]\n\n  intro a b\n  calc\n    a * b = ((a + a + a) - (a + a)) * b := by noncomm_ring\n    _ = (a + a + a) * b - (a + a) * b := by noncomm_ring\n    _ = b * (a + a + a) - b * (a + a) := by\n      rw [thrice_central a b, twice_central a b]\n    _ = b * a := by noncomm_ring",
+    "reasoning": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.14:zero_of_pow_eq_zero": {
+    "code": "theorem zero_of_pow_eq_zero {R : Type*} [Ring R] [IsDomain R] (a : R) (n : ℕ)\n    (eq : a ^ n = 0) : a = 0 := by\n  exact pow_eq_zero eq",
+    "reasoning": "",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.15:left_right_inverse_eq": {
+    "code": "theorem left_right_inverse_eq {R : Type*} [Ring R] {x y z : R} (hx : x ≠ 0) (hy : x * y = 1)\n    (hz : z * x = 1) : y = z := by\n  calc\n    y = 1 * y := (one_mul y).symm\n    _ = (z * x) * y := congrArg (fun a => a * y) hz.symm\n    _ = z * (x * y) := mul_assoc z x y\n    _ = z * 1 := congrArg (fun a => z * a) hy\n    _ = z := mul_one z",
+    "reasoning": "",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.16:Ideal.span_eq_iff_associated": {
+    "code": "theorem Ideal.span_eq_iff_associated {R : Type*} [CommRing R] [IsDomain R] (r₁ r₂ : R) :\n    Ideal.span {r₁} = Ideal.span {r₂} ↔ ∃ u : R, IsUnit u ∧ r₁ = u * r₂ := by\n  constructor\n  · intro h\n    have hr₁mem : r₁ ∈ Ideal.span {r₂} := by\n      rw [← h]\n      exact Ideal.subset_span (by simp)\n    have hr₂mem : r₂ ∈ Ideal.span {r₁} := by\n      rw [h]\n      exact Ideal.subset_span (by simp)\n    have h₁₂ : r₂ ∣ r₁ := Ideal.mem_span_singleton.mp hr₁mem\n    have h₂₁ : r₁ ∣ r₂ := Ideal.mem_span_singleton.mp hr₂mem\n    rcases h₁₂ with ⟨a, ha⟩\n    rcases h₂₁ with ⟨b, hb⟩\n    by_cases hr₂ : r₂ = 0\n    · subst r₂\n      have hr₁ : r₁ = 0 := by simpa using ha\n      subst r₁\n      exact ⟨1, isUnit_one, by simp⟩\n    · have hab : a * b = 1 := by\n        apply mul_left_cancel₀ hr₂\n        calc\n          r₂ * (a * b) = (r₂ * a) * b := by simp [mul_assoc]\n          _ = r₁ * b := by rw [← ha]\n          _ = r₂ := hb.symm\n          _ = r₂ * 1 := (mul_one r₂).symm\n      let ε : Rˣ :=\n        { val := a\n          inv := b\n          val_inv := hab\n          inv_val := by simpa [mul_comm] using hab }\n      refine ⟨a, ?_, ?_⟩\n      · exact ⟨ε, rfl⟩\n      · simpa [mul_comm] using ha\n  · rintro ⟨u, hu, hru⟩\n    rcases hu with ⟨ε, rfl⟩\n    apply le_antisymm\n    · refine Ideal.span_le.2 ?_\n      intro x hx\n      have hx' : x = r₁ := by simpa using hx\n      subst x\n      apply Ideal.mem_span_singleton.mpr\n      refine ⟨(↑ε : R), ?_⟩\n      calc\n        r₁ = (↑ε : R) * r₂ := hru\n        _ = r₂ * (↑ε : R) := mul_comm _ _\n    · refine Ideal.span_le.2 ?_\n      intro x hx\n      have hx' : x = r₂ := by simpa using hx\n      subst x\n      apply Ideal.mem_span_singleton.mpr\n      refine ⟨(↑(ε⁻¹) : R), ?_⟩\n      symm\n      calc\n        r₁ * (↑(ε⁻¹) : R) = ((↑ε : R) * r₂) * (↑(ε⁻¹) : R) := by rw [hru]\n        _ = ((↑ε : R) * (↑(ε⁻¹) : R)) * r₂ := by ac_rfl\n        _ = r₂ := by simp",
+    "reasoning": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.17:ideal_span_eq_diagonal_map_sum": {
+    "code": "theorem ideal_span_eq_diagonal_map_sum {R : Type*} [CommRing R] (S : Set R) :\n    (Ideal.span S) = {x : R | ∃ T : Multiset (R × S),\n      x = Multiset.sum (Multiset.map (fun (x : R × S) ↦ (x.1 : R) * (x.2 : R)) T)} := by\n  let I : Ideal R :=\n    { carrier := {x : R | ∃ T : Multiset (R × S),\n          x = Multiset.sum\n            (Multiset.map (fun (p : R × S) ↦ (p.1 : R) * (p.2 : R)) T)}\n      zero_mem' := by\n        refine ⟨0, ?_⟩\n        simp\n      add_mem' := by\n        intro a b ha hb\n        rcases ha with ⟨Ta, rfl⟩\n        rcases hb with ⟨Tb, rfl⟩\n        refine ⟨Ta + Tb, ?_⟩\n        simp\n      smul_mem' := by\n        intro c x hx\n        rcases hx with ⟨T, rfl⟩\n        refine ⟨T.map (fun p ↦ (c * p.1, p.2)), ?_⟩\n        induction T using Multiset.induction_on with\n        | empty => simp\n        | cons p T ih =>\n            simp [Multiset.map_map, smul_eq_mul, mul_add, mul_assoc, ih] }\n  ext x\n  constructor\n  · intro hx\n    change x ∈ I\n    refine (Ideal.span_le.2 ?_) hx\n    intro s hs\n    refine ⟨{(1, ⟨s, hs⟩)}, ?_⟩\n    simp\n  · rintro ⟨T, rfl⟩\n    induction T using Multiset.induction_on with\n    | empty => simp\n    | cons p T ih =>\n        simp only [Multiset.map_cons, Multiset.sum_cons]\n        have hp : (p.2 : R) ∈ Ideal.span S :=\n          Ideal.subset_span p.2.property\n        have hm : p.1 * (p.2 : R) ∈ Ideal.span S := by\n          simpa only [smul_eq_mul] using (Ideal.span S).smul_mem p.1 hp\n        exact (Ideal.span S).add_mem hm ih",
+    "reasoning": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.18:Ideal.add_le_of_le": {
+    "code": "theorem Ideal.add_le_of_le {R : Type*} [CommRing R] (I : Ideal R) (J : Ideal R) (K : Ideal R)\n    (h₁ : I ≤ K) (h₂ : J ≤ K) : I + J ≤ K := by\n  rintro x ⟨i, hi, j, hj, rfl⟩\n  exact K.add_mem (h₁ hi) (h₂ hj)",
+    "reasoning": "\n\n\n\n\n\n\n\n",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.19:ZMod.isField_iff_prime": {
+    "code": "theorem ZMod.isField_iff_prime (n : ℕ) : IsField (ZMod n) ↔ Nat.Prime n := by\n  constructor\n  · intro h\n    have hn0 : n ≠ 0 := by\n      intro hn\n      subst n\n      letI := h.toField\n      have hu : IsUnit (2 : ZMod 0) :=\n        isUnit_iff_ne_zero.mpr (by norm_num)\n      norm_num at hu\n    letI := h.toField\n    exact (CharP.char_is_prime_or_zero (ZMod n) n).resolve_left hn0\n  · intro hn\n    letI : Fact (Nat.Prime n) := ⟨hn⟩\n    infer_instance",
+    "reasoning": "\n\n\n\n\n\n\n\n\n\n",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.20:Field.ideal_eq_bot_or_top": {
+    "code": "theorem Field.ideal_eq_bot_or_top {F : Type*} [Field F] (I : Ideal F) : I = 0 ∨ I = ⊤ := by\n  by_cases h : ∃ x : F, x ∈ I ∧ x ≠ 0\n  · rcases h with ⟨x, hxI, hx0⟩\n    right\n    apply top_unique\n    intro y _\n    have h_one : (1 : F) ∈ I := by\n      simpa [hx0] using I.mul_mem_left x⁻¹ hxI\n    simpa using I.mul_mem_left y h_one\n  · left\n    ext x\n    constructor\n    · intro hxI\n      have hx0 : x = 0 := by\n        by_contra hx0\n        exact h ⟨x, hxI, hx0⟩\n      simpa [hx0]\n    · intro hx\n      have hx0 : x = 0 := by\n        simpa using hx\n      simpa [hx0] using I.zero_mem",
+    "reasoning": "\n\n\n\n",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.21:existUnique_linear_solution": {
+    "code": "theorem existUnique_linear_solution {F : Type*} [Field F] {a : Fˣ} {b : F} :\n    ∃! x, a * x + b = 0 := by\n  refine ⟨-((↑(a⁻¹) : F) * b), ?_, ?_⟩\n  · simp [mul_assoc]\n  · intro y hy\n    have hx :\n        (a : F) * (-((↑(a⁻¹) : F) * b)) + b = 0 := by\n      simp [mul_assoc]\n    have hmul :\n        (a : F) * y = (a : F) * (-((↑(a⁻¹) : F) * b)) := by\n      exact add_right_cancel (hy.trans hx.symm)\n    exact mul_left_cancel₀ (Units.ne_zero a) hmul",
+    "reasoning": "\n\n\n\n\n\n\n\n",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.22:infinite_of_isAlgClosed": {
+    "code": "theorem infinite_of_isAlgClosed {F : Type*} [Field F] [IsAlgClosed F] : Infinite F := by\n  infer_instance",
+    "reasoning": "",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.23:isMaximal_of_isPrime_of_fintype": {
+    "code": "theorem isMaximal_of_isPrime_of_fintype {R : Type*} [CommRing R] [Fintype R]\n    (I : Ideal R) (hI : I.IsPrime) : I.IsMaximal := by\n  exact hI.isMaximal",
+    "reasoning": "\n\n",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.24:isPrime_singleton": {
+    "code": "theorem isPrime_singleton {R : Type*} [CommRing R] [IsDomain R] {p : R} (hp : p ≠ 0) :\n    Ideal.IsPrime (Ideal.span {p}) ↔ Prime p := by\n  simp [Ideal.IsPrime, Prime, hp]",
+    "reasoning": "\n\n\n\n\n\n\n\n",
+    "imports": [],
+    "opens": []
+  },
+  "FATEM.25:primeAvoidance": {
+    "code": "theorem primeAvoidance {R : Type} [CommRing R] (A : Ideal R) (m : ℕ)\n    (P : Fin (m + 1) → Ideal R)\n    (pp : ∀ i : Fin (m + 1), (P i).IsPrime)\n    (hA : A.carrier ⊆ ⋃ (i : Fin (m + 1)), P i) :\n    ∃ i : Fin (m + 1), A.carrier ⊆ P i := by\n  classical\n  exact?",
+    "reasoning": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "imports": [],
+    "opens": []
+  }
+}

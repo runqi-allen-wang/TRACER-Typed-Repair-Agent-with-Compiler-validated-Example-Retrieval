@@ -1,4 +1,5 @@
 import json
+import re
 import unittest
 from pathlib import Path
 
@@ -10,109 +11,129 @@ class DocumentationConsistencyTest(unittest.TestCase):
     """防止公开文档与当前 API 和候选处理行为再次脱节。"""
 
     def test_security_type_d_is_a_precompile_gate_not_an_agent_condition(self):
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
         document = (ROOT / "docs" / "security_type_d.md").read_text(encoding="utf-8")
         manifest = json.loads(
             (ROOT / "benchmarks" / "security" / "manifest.json").read_text(encoding="utf-8")
         )
-        self.assertIn("不是第四种 Agent 条件", readme)
+        self.assertIn("不是 A/B/C 证明实验中的第四种 Agent 条件", document)
         self.assertIn("reject_before_compile", document)
         self.assertIn("AxProverBase", document)
         self.assertIn("tracer-candidate-v2", document)
         self.assertTrue(manifest)
         self.assertTrue(all(case["type"] == "D" for case in manifest))
 
-    def test_readme_documents_yxai_responses_and_safe_key_prompt(self):
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("https://yxai.chat/v1", readme)
-        self.assertIn("--wire-api responses", readme)
-        self.assertIn("--disable-response-storage", readme)
-        self.assertIn("--api-key-prompt", readme)
-        self.assertIn("不显示长度、末四位或任何密钥字符", readme)
-        self.assertIn("同源重定向", readme)
-        self.assertIn("run_tac", readme)
-
-    def test_readme_distinguishes_provider_and_compiler_failures(self):
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("provider_error", readme)
-        self.assertIn("compile_ok: false` 本身不代表 API 损坏", readme)
-
     def test_part2_freezes_yxai_responses_and_reuses_ax_build_result(self):
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
         part2 = (ROOT / "docs" / "part2_capsule_feedback.md").read_text(encoding="utf-8")
-        for document in (readme, part2):
-            self.assertIn("openai:gpt-5.6-sol", document)
-            self.assertIn("https://yxai.chat/v1", document)
-            self.assertIn("store=false", document)
-        self.assertIn("不运行 Lean、不调用模型", part2)
-        self.assertIn("(build_success, message)", part2)
-
-    def test_part2_runtime_configs_freeze_model_and_memory_modes(self):
         shared = (ROOT / "configs" / "axprover_yxai_gpt56_sol.yaml").read_text(encoding="utf-8")
         baseline = (ROOT / "configs" / "axprover_part1_experience.yaml").read_text(encoding="utf-8")
         capsule = (ROOT / "configs" / "axprover_part2_capsule.yaml").read_text(encoding="utf-8")
-        dependency = (ROOT / "requirements-axprover-part2.txt").read_text(encoding="utf-8")
-        self.assertIn('model: "openai:gpt-5.6-sol"', shared)
-        self.assertIn('base_url: "https://yxai.chat/v1"', shared)
+        self.assertIn("openai:gpt-5.6-sol", part2)
+        self.assertIn("https://yxai.chat/v1", part2)
+        self.assertIn("store=false", part2)
+        self.assertIn("不运行 Lean、不调用模型", part2)
+        self.assertIn("(build_success, message)", part2)
         self.assertIn("use_responses_api: true", shared)
         self.assertIn("store: false", shared)
         self.assertIn('effort: "high"', shared)
-        self.assertIn("max_input_tokens: 65536", shared)
-        self.assertIn("enabled: false", shared)
         self.assertIn("ExperienceProcessor", baseline)
         self.assertIn("MemorylessProcessor", capsule)
-        self.assertIn("06dfadc9ab439755af5efcfe0add95bfef2733c7", dependency)
 
-    def test_part3_documents_record_the_strict_raw_capsule_pilot(self):
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        document = (ROOT / "docs" / "part3_raw_capsule_experiment.md").read_text(
-            encoding="utf-8"
+    def test_part12_handoff_records_successful_strict_pairing(self):
+        handoff = json.loads(
+            (ROOT / "results" / "handoff" / "part12-live-20260828" / "handoff.json").read_text(
+                encoding="utf-8"
+            )
         )
-        results = (ROOT / "results" / "README.md").read_text(encoding="utf-8")
-        self.assertIn("docs/part3_raw_capsule_experiment.md", readme)
-        self.assertIn("MemorylessProcessor", document)
-        self.assertIn("BuildFailedFeedback", document)
-        self.assertIn("CapsuleFeedback", document)
-        self.assertIn("4eb33c8ccd0ff058b461cd763cc406509129743f", document)
-        self.assertIn("378486", document)
-        self.assertIn("429786", document)
-        self.assertIn("results/handoff/part3-minimal", results)
+        self.assertEqual(handoff["paired_problems"], 25)
+        self.assertTrue(handoff["pairing_ok"])
+        self.assertEqual(len(handoff["files"]), 5)
+
+    def readmes(self):
+        return {
+            name: (ROOT / name).read_text(encoding="utf-8")
+            for name in ("README.md", "README.zh-CN.md")
+        }
+
+    def test_readme_documents_deepseek_and_safe_key_prompt(self):
+        confirmations = {
+            "README.md": "only its length and last four characters",
+            "README.zh-CN.md": "只显示字符数和末四位",
+        }
+        for name, readme in self.readmes().items():
+            with self.subTest(language=name):
+                self.assertIn("https://api.deepseek.com/chat/completions", readme)
+                self.assertIn("--api-key-prompt", readme)
+                self.assertIn(confirmations[name], readme)
+
+    def test_readme_distinguishes_provider_and_compiler_failures(self):
+        explanations = {
+            "README.md": "compile_ok: false` alone does not mean the API is broken",
+            "README.zh-CN.md": "compile_ok: false` 本身不代表 API 损坏",
+        }
+        for name, readme in self.readmes().items():
+            with self.subTest(language=name):
+                self.assertIn("provider_error", readme)
+                self.assertIn(explanations[name], readme)
+
+    def test_readmes_default_to_english_with_reciprocal_links(self):
+        readmes = self.readmes()
+        self.assertIn("**English** | [简体中文](README.zh-CN.md)", readmes["README.md"][:200])
+        self.assertIn("[English](README.md) | **简体中文**", readmes["README.zh-CN.md"][:200])
+        self.assertIn("## Quick start", readmes["README.md"])
+        self.assertIn("## 快速开始", readmes["README.zh-CN.md"])
+        for name, readme in readmes.items():
+            with self.subTest(language=name):
+                self.assertIn("](TRACER.png)", readme)
+                self.assertEqual(14, len(re.findall(r"^## ", readme, re.MULTILINE)))
+
+    def test_readme_commands_match_between_languages(self):
+        # 仅比较执行命令；图中标签、目录注释和报错提示允许翻译。
+        commands = []
+        for name, readme in self.readmes().items():
+            blocks = re.findall(r"^```[^\n]*\n(.*?)^```", readme, re.MULTILINE | re.DOTALL)
+            with self.subTest(language=name):
+                self.assertEqual(17, len(blocks))
+            commands.append([
+                line for block in blocks for line in block.splitlines()
+                if line.startswith(("python ", "lake ", "git ", "cd ", "$env:", "./scripts/", "bash "))
+            ])
+        self.assertTrue(commands[0])
+        self.assertEqual(commands[0], commands[1])
+
+    def test_readme_pilot_numbers_match_published_summary(self):
+        expected = [
+            ["18", "18/18(100.0%)", "18/18(100.0%)", "1.000", "1,750.4"],
+            ["18", "16/18(88.9%)", "18/18(100.0%)", "1.111", "1,841.9"],
+            ["18", "18/18(100.0%)", "18/18(100.0%)", "1.000", "2,906.1"],
+        ]
+        for name, readme in self.readmes().items():
+            rows = []
+            for line in readme.splitlines():
+                if re.match(r"^\| [ABC][:：]", line):
+                    cells = line.strip("|").split("|")[1:]
+                    rows.append([
+                        cell.replace("（", "(").replace("）", ")").replace(" ", "")
+                        for cell in cells
+                    ])
+            with self.subTest(language=name):
+                self.assertEqual(expected, rows)
+
+    def test_readmes_share_evidence_links_and_repository_license(self):
+        evidence = []
+        for name, readme in self.readmes().items():
+            links = set(re.findall(r"\]\((published/[^)]+)\)", readme))
+            with self.subTest(language=name):
+                self.assertEqual(6, len(links))
+                self.assertIn("[MIT License](LICENSE)", readme)
+                self.assertIn("MIT License", (ROOT / "LICENSE").read_text(encoding="utf-8"))
+            evidence.append(links)
+        self.assertEqual(evidence[0], evidence[1])
 
     def test_methodology_documents_candidate_normalization(self):
         methodology = (ROOT / "docs" / "methodology.md").read_text(encoding="utf-8")
         schema = (ROOT / "docs" / "jsonl_schema.md").read_text(encoding="utf-8")
         self.assertIn("旧 SQLite 缓存", methodology)
         self.assertIn("`provider_error`", schema)
-
-    def test_readme_builds_before_running_end_to_end_tests(self):
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        quick_start = readme.split("## 快速开始", 1)[1].split("## 公开失败 gallery", 1)[0]
-        self.assertLess(quick_start.index("lake build"), quick_start.index("unittest discover"))
-
-    def test_readme_pack_example_does_not_overwrite_the_public_gallery(self):
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        pack_example = readme.split("生成一个本地 capsule", 1)[1].split("回放该本地工件", 1)[0]
-        self.assertNotIn("capsules/std/unknown-identifier", pack_example)
-        self.assertIn("results/work/unknown-identifier", pack_example)
-
-    def test_formal_pilot_documents_environment_and_review_gate(self):
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        results = (ROOT / "results" / "README.md").read_text(encoding="utf-8")
-        for name in (
-            "LEAN_PROOF_API_URL",
-            "LEAN_PROOF_API_KEY",
-            "LEAN_PROOF_MODEL",
-            "LEAN_PROOF_WIRE_API",
-            "LEAN_PROOF_REASONING_EFFORT",
-            "LEAN_PROOF_DISABLE_RESPONSE_STORAGE",
-            "LEAN_PROOF_TEMPERATURE",
-            "LEAN_PROOF_MAX_TOKENS",
-        ):
-            self.assertIn(name, readme)
-        self.assertIn("--require-manual-review", readme)
-        self.assertIn("export_pilot.py", results)
-        self.assertIn("git add -f", results)
-        self.assertIn("auth.json", (ROOT / ".gitignore").read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

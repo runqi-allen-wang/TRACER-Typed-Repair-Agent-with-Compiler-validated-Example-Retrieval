@@ -21,6 +21,8 @@ RESULTS = ROOT / "results"
 PILOT = RESULTS / "real_pilot_runs.jsonl"
 BENCHMARKS = ROOT / "benchmarks" / "manifest.json"
 MANUAL_REVIEW = RESULTS / "manual_review.csv"
+# 兼容旧测试和外部脚本的路径别名。
+REVIEW = MANUAL_REVIEW
 FAILURE_COLUMNS = ["condition", "problem_id", "category", "tags"]
 TOPIC_COLUMNS = ["condition", "tag", "tasks", "pass_at_1", "pass_at_3", "pass_at_1_rate", "pass_at_3_rate"]
 INFRASTRUCTURE_CATEGORIES = {"task_error", "provider_error", "compiler_unavailable"}
@@ -249,6 +251,27 @@ def validate_manual_review(
         if not note:
             errors.append(f"{pair} 缺少 reviewer_note")
     return errors, warnings
+
+
+def manual_review_complete(experiment_id: str | None, expected_pairs: set[tuple[str, str]] | None = None) -> bool:
+    """兼容旧调用：判断复核台账是否覆盖并填写指定实验。"""
+
+    review_path = REVIEW
+    if not experiment_id or not review_path.exists():
+        return False
+    try:
+        frame = pd.read_csv(review_path, dtype=str, encoding="utf-8-sig").fillna("")
+    except (OSError, ValueError):
+        return False
+    required = {"kernel_pass", "inappropriate_assumption", "leakage_risk", "reviewer_note"}
+    if not required.issubset(frame.columns) or "experiment_id" not in frame.columns:
+        return False
+    selected = frame[frame["experiment_id"] == experiment_id]
+    if expected_pairs is not None:
+        actual = set(zip(selected["condition"], selected["problem_id"])) if {"condition", "problem_id"}.issubset(selected.columns) else set()
+        if actual != expected_pairs or len(selected) != len(expected_pairs):
+            return False
+    return all(bool(str(value).strip()) for field in required for value in selected[field].tolist())
 
 
 def summarize(frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, Any]]:

@@ -1,9 +1,15 @@
 # 当前工作进度
 
-更新时间：2026-08-29
+更新时间：2026-08-28
+
+补丁明细见 [CHANGELOG.md](CHANGELOG.md)；本文件只维护当前状态和剩余边界。
 
 ## 已完成
 
+- 修复 Bash Mathlib 安装遇到临时网络错误就立即退出的问题：依赖同步与缓存下载有限重试，残缺传递依赖备份后重试，保留原始错误并在耗尽后失败；CI 设置 30 分钟安装步骤上限。同步中英文 README，未改 PowerShell 入口或依赖固定版本。
+- 新增中英文双版 README：默认首页 `README.md` 使用英文，`README.zh-CN.md` 保留完整中文，两版顶部相互链接；命令、实验数据和证据链接一致，许可说明同步为仓库现有 MIT License。
+- 重构 README 为研究工具首页：补充项目价值、可核查设计贡献、双入口架构图、适用场景、真实 pilot 结果及证据链接；明确无训练、失败回放与成功证明的区别，以及实验结论和许可边界。
+- 补充 `docs/API_GUIDE.md`，统一 DeepSeek / OpenAI GPT、PowerShell / Git Bash、安全密钥输入、本地 HTTP 接口与排错步骤；内置 provider 现同时支持 Chat Completions 与 Responses API，并显式控制 reasoning effort 和响应存储。
 - 将 TRACER 的编译器封装扩展为可直接运行 Lean 文件的 `run_lean_file()`。
 - 新增 `leancapsule pack`，支持按定理名或行区间选择输入并生成完整文件 fallback capsule。
 - 新增 `leancapsule replay`，编译 `Capsule.lean` 并比较编译状态、诊断类别和规范化 `diagnostic_key`。
@@ -11,8 +17,8 @@
 - 保存 `capsule.json`、工具链与 Lake 配置、原始诊断、README、PowerShell/Unix 回放脚本。
 - 增加 Std、Mathlib、project-local 三类来源的公开失败 gallery，共 24 个 capsule。
 - 增加单次 Agent 的 API 配置参数和本地 HTTP `/solve` 接口；密钥只在内存中使用。
-- CLI 只确认密钥已读取，不显示长度、末四位或字符信息；provider 错误与 Lean 编译错误分开记录，敏感内容会在日志、元数据和异常中脱敏。
-- README、Progress、核心新增代码注释统一使用中文。
+- CLI 会安全确认密钥长度和末四位，区分 provider 错误与 Lean 编译错误，并清洗模型及历史缓存中的 Markdown 代码围栏。
+- README 提供中英文双版；Progress、其他现有中文指南及核心新增代码注释保持中文。
 - 新增 theorem standalone 抽取：保留 imports、namespace 和目标定理，并在编译不一致时自动 fallback。
 - 新增有界贪心 import 删除；每次删除都重新编译并比较诊断键。
 - 增加 project-local fallback 示例、Mathlib v4.32.0 依赖工程和跨平台依赖准备脚本。
@@ -25,44 +31,32 @@
 - 将 Mathlib 冷启动回放预算调整为 180 秒，并避免环境脚本重复获取已存在的预编译缓存。
 - 修正 GitHub Actions 顺序：端到端测试依赖真实 Lean 编译器，现已在运行测试前安装 Lean，并增加顺序回归测试。
 - GitHub runner 的端到端 Lean 编译采用独立 120 秒预算；测试失败详情会直接写入 Actions Summary。
-- 正式 `run_all.ps1` 固定实验参数并请求严格 fresh 运行；旧状态由评测入口归档，复用缓存必须显式选择。
-- PowerShell 入口保持 ASCII，检查每个原生命令退出码；Mathlib 脚本在 Windows 和 Unix 上设置稳定缓存目录。
-- 新增 54 任务完整性、人工复核门禁与脱敏交接工具；原始路径、请求缓存和未复核草稿不会自动进入 Git。
-- 正式报告按单一 `experiment_id`/题目 `run_id` 校验，要求 A/B/C 全覆盖、单一非空 provider 配置、连续轮次和严格 fresh；未知价格保持 `unknown`，不再显示为零成本。
-- 同一次求解不会把失败候选从缓存中重复用于后续轮次；候选及成功工件同时拒绝 `sorry`、`sorryAx` 和 `admit`。
-- 定理定位拒绝不带命名空间的重名目标，限定名不再回退到同名定理；隔离编译保留有效本地 helper，并识别 `lakefile.lean` 项目。
-- 交接导出要求匹配当前实验的正式报告和每个成功证明工件，使用临时目录原子生成，并扫描常见认证 token。
-- CI 统一使用 Ubuntu runner，并通过 `pwsh` 保留 PowerShell 入口语法检查和脚本/文档静态回归。
-- 远程 provider 强制 HTTPS，只允许同源认证重定向，并限制成功响应和错误正文大小；非 JSON 错误正文不会写入日志。
-- 模型候选使用最小化子进程环境，阻止 `run_tac`、`run_term_elab`、`#eval` 等编译期执行入口，并把候选策略写入实验记录与正式报告。
-- 新增独立 D 类安全对抗回归；D01 覆盖 `unsafe inductive` 绕过 positivity 检查并构造 `False`，候选策略升级为 `tracer-candidate-v2`，原 Agent、AxProverBase 缓存/生成 ProposalMessage 与 Capsule pack/replay/audit 均在编译前拒绝不安全声明。
-- 条件 C 在调用 provider 前检查检索语料与目标声明重合；示例库中的 8 项直接答案重合已替换为相关但不同的证明示例。
-- 新增 Part 2 `CapsuleFeedback` 核心接口：直接消费 AxProverBase 已有编译结果，不重复编译、不调用 LLM，并输出稳定指纹、重复次数、诊断漂移和有界历史。
-- 新增 `leancapsule feedback` JSON CLI、逐题状态恢复、Ax 框线诊断兼容和敏感 token 脱敏；冻结 AxProverBase commit 与 AI4Math `yxai`/`gpt-5.6-sol` 跨 Part 1/2/3 模型契约。
-- 新增 Part 2 独立 GitHub Actions workflow：支持 `leiteng` push、Pull Request 和默认分支手动触发，在 Ubuntu 跑专项测试，再执行 Lean build 与完整 Python 回归；不读取模型密钥。
-- Part 2 已增加真实 AxProverBase 包裹入口：复用原 Builder 返回值并转换成 Ax `BuildFailedFeedback`，按 theorem 隔离状态，强制 Memoryless、关闭 summary，并记录有界 JSONL 遥测。
-- Part 1 Experience 与 Part 2 Capsule 均提供提交内 `yxai` Responses 配置；新增严格配对门禁，检查共享首轮候选、模型、endpoint、wire API、响应存储、推理强度、预算及 Capsule 零额外调用。
-- 固定 AxProverBase commit 现在由独立 Ubuntu job 拉取、静态校验、安装并执行真实消息类型 smoke；本地普通测试仍不需要安装 Ax。
-- 新增 Part 3 Raw/Capsule 最小严格对比 runner：两组均使用 `MemorylessProcessor`，Raw 原样透传 Ax `BuildFailedFeedback`，Capsule 使用确定性 `CapsuleFeedback`，按题交错运行并共享完整首轮候选。
-- 新增 Part 3 严格配对、逐题差值、汇总报告和脱敏交接导出；FATE-M 源文件运行前恢复到固定 pristine commit，运行后恢复外部工作区。
+- Provider 只允许同来源重定向，并在错误正文中隐藏密钥；Lean 子进程使用最小环境，不继承 API 密钥或其他令牌。
+- 候选拒绝显式本机元编程/IO 构造，并将 `sorryAx`、未完成证明警告视为失败；保留局部定义、严格匹配完全限定定理和 `lakefile.lean` 项目。
+- A/B/C 运行使用轮次感知缓存、`--fresh` 清理 SQLite 及旁车文件，并写入 `experiment_id`；报告禁止合并不同批次，未配置价格显示为“未配置”。
+- Capsule 回放脚本支持跨目录执行；审计扫描发布根目录孤立文件、标准 `auth.json` 凭据和脱敏路径；PowerShell 脚本统一 UTF-8 BOM 并检查 Mathlib 命令退出码。
+- 条件 C 会排除与评测命题完全相同的本地示例，避免把原题完整答案当作检索增益。
+- 吸收 leiteng 分支的临时 HOME/TMP/APPDATA 隔离、候选安全策略、严格 pilot 校验、正式报告门禁和脱敏导出流程；导出清单只记录相对路径与文件大小，不执行摘要计算。
+- `results/solutions/` 会按条件保存每个成功候选，`results/real_pilot_runs.jsonl` 保存逐轮原始轨迹；`evaluate.py --fresh` 会先归档旧实验，避免不同批次混合。
+- 已合入 AxProverBase Part 1 Experience baseline 与 Part 2 `MemorylessProcessor + CapsuleFeedback`：冻结 Ax commit、`yxai` Responses 模型条件、预算、首轮候选和逐题遥测；Part 2 直接消费已有 Builder 结果，不重复调用 Lean 或模型。
+- 已完成 FATE-M 25 题正式配对实验：两组均 25/25 成功，严格配对 25/25 通过；修正版总轮次 39→36、编译错误 14→11、LLM calls 79→36、tokens 656657→274742，正式结果与 SHA-256 清单位于 `results/handoff/part12-live-20260828-corrected/`；旧目录保留为历史工件。
+- 新增独立 D01 安全回归：`unsafe inductive` 构造 `False` 的候选在 Agent、AxProverBase 缓存/Proposal/Builder、Capsule pack/replay/audit 的 Lean 编译前拒绝；D 类不是 A/B/C 的第四个实验条件。
 
 ## 当前验证状态
 
 - `leancapsule verify capsules`：24/24 通过（Std 14、Mathlib 4、project-local 6）。
 - `leancapsule gallery capsules --out capsules/index.json`：通过；四类 taxonomy 均不少于 3 个，三类来源均不少于 4 个。
 - `leancapsule audit capsules`：24/24 通过，无发布审计错误。
-- 完整 Python 测试通过（150 项），包含 Part 2 有界状态、状态版本、逐 theorem 隔离、真实 Ax 消息桥接、首轮候选注入、零重复编译、Memoryless/`yxai` Responses 配置、D 类危险证明门禁、遥测、Part 3 Raw/Capsule 配对门禁、workflow 契约和脱敏回归，以及既有 Agent、provider、gallery、正式报告与复核账本检查；`lake build` 通过。
-- 固定 AxProverBase commit 已在隔离环境完成真实 Python 类型 smoke：仓库 YAML 可解析，真实 `LLMClient` 接受 `yxai` Responses endpoint/profile，补丁可安装到 `ProverAgent`；全过程未调用模型或 Lean。
-- `gpt-5.6-sol` 已完成真实在线 smoke：直接 provider/Agent 生成的单题证明通过 Lean，固定 AxProverBase/LangChain 路径成功返回；两条请求均使用 Responses、`store=false` 和 high reasoning。
-- FATE-M 25 题 Part 1 Experience / Part 2 CapsuleFeedback 正式配对实验已完成：两组均 25/25 证明成功，严格配对门禁 25/25 通过；总轮次由 39 降至 34，编译错误由 14 降至 9，LLM calls 由 79 降至 34，tokens 由 656657 降至 250030。Part 2 逐题复用了相同首轮候选，且 Memory、Capsule 内部 LLM 和 Capsule 额外编译调用均为 0。原始产物保存在忽略目录 `results/work/part12-live-20260828/`；经凭据和本机路径检查的正式交接包位于 `results/handoff/part12-live-20260828/`。
-- FATE-M 25 题 Part 3 Raw/Capsule 正式交错实验已完成：两组均 25/25 有记录，严格配对门禁通过，`errors.jsonl` 为空；共享首轮候选中 16 题首轮成功、9 题首轮失败。Raw 最终成功 21/25、首轮失败后最终修复 5/9、44 总轮数、23 次编译错误、40 次 LLM 调用、378486 token；Capsule 最终成功 19/25、首轮失败后最终修复 3/9、46 总轮数、27 次编译错误、40 次 LLM 调用、429786 token。正式交接包位于 `results/handoff/part3-minimal/`，运行期 metrics/state 仍在忽略目录。
+- 完整 Python 测试共 129 项：127 项通过，2 项 Linux 符号链接边界检查在 Windows 跳过。Part 1/2 配置、完整 Proposal 配对、重跑状态隔离、CapsuleFeedback、Ax 接入、D01 编译前门禁、双语文档、gallery、provider 和 pilot 门禁均通过；PR 的 Ubuntu `lake build` 与完整 Python 回归已通过。
+- 本次网络故障测试使用命令替身，不等于已完成真实冷启动下载或远程 CI 验收；修复仍在本地，推送后需查看新的 Actions 结果。
+- 中英文 README 各 43 个本地链接、3 个页内锚点、13 个 PowerShell 兼容代码块和 2 个 Bash 代码块检查通过；公开实验工件链接通过 Git 中的已提交文件核验。
 - Mathlib 回放在准备 `mathlib_project` 依赖缓存后通过；缓存目录不提交到仓库。
 
 ## 明确边界
 
 - capsule gallery 验收的是失败复现协议，不等同于真实模型 A/B/C 实验；模型实验需另行配置 provider、冻结模型参数并记录 token、延迟和编译次数。
 - 多文件依赖目前采用完整文件 fallback 与显式本地文件清单，不承诺任意项目的程序切片。
-    - 当前已覆盖 provider 的协议、重定向、响应边界和日志脱敏，也为候选编译提供静态元编程阻断与最小化环境；这仍不是通用操作系统级沙箱。项目源码、imports、依赖及自定义 tactic 必须被视为可信输入，不应在本机运行任意不受信任 Lean 项目。
-- 现有 TRACER A/B/C pilot 已完成正式复核；它与 AxProverBase Experience、Raw、Capsule 三套结果属于不同实验，不能直接合并为通用能力结论。
-- Part 3 只有一次单模型、单批次运行，9 个首轮失败题才是主要比较子集；结果是描述性 pilot，不做显著性检验。Experience 结果只作资源参考，Raw/Capsule 的首轮候选生成成本也未计入后续修复成本。
-- Part 1/2/3 正式配对数据和严格配对报告均已产生；Part 1/2 交接包位于 `results/handoff/part12-live-20260828/`，Part 3 交接包位于 `results/handoff/part3-minimal/`，均需显式 force-add 才会进入 Git。
+- `manual_review.csv` 的 54 条人工复核仍必须由研究者逐条填写；系统不会自动伪造 kernel_pass、假设合理性或泄漏风险结论。
+- 本次代码迁移没有伪造真实 provider 轨迹；若 `results/real_pilot_runs.jsonl` 尚未由真实 provider 生成，严格校验和导出会明确拒绝，不能把 smoke/mock 记录冒充正式实验。
+- 本地编译隔离是环境清理和候选策略防护，不等同于操作系统级沙箱；运行不受信任项目时仍应使用容器或独立低权限环境。
+- Part 1/2 的 25 题结果是单模型、单批次运行证据，不能据此声称统计显著优势或通用定理证明能力；Part 3 仍需正式统计解释与更大规模重复实验。

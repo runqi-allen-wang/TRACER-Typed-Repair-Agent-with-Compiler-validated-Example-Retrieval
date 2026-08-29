@@ -1,4 +1,4 @@
-"""Validate completeness and release gates for a TRACER provider pilot."""
+"""校验 TRACER provider pilot 的完整性和发布门禁。"""
 
 from __future__ import annotations
 

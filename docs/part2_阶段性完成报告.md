@@ -6,7 +6,7 @@ Part 2 的代码实现与验证基础设施已经完成。当前版本能够把 
 
 本阶段还完成了逐 theorem 状态隔离、状态大小控制、AI4Math `yxai`/`gpt-5.6-sol`/Memoryless 配置冻结、共享首轮候选注入、配对实验门禁、调用与 token 遥测，以及固定 AxProverBase commit 的真实类型验证。
 
-尚未产生的内容是依赖 Part 1 输出和模型 API 的真实配对实验数据。这属于后续实验执行，而不是 Part 2 实现缺口。
+FATE-M 25 题真实配对实验已经完成：Part 1 与 Part 2 均为 25/25 成功，严格配对门禁 25/25 通过。修正版总轮次由 39 降至 36，编译错误由 14 降至 11，LLM calls 由 79 降至 36，tokens 由 656657 降至 274742；正式交接包位于 `results/handoff/part12-live-20260828-corrected/`。
 
 ## 2. 冻结实验条件
 
@@ -229,7 +229,7 @@ CapsuleFeedback.observe_ax（0 次额外编译，0 次 LLM）
 
 | 验证项 | 结果 |
 |---|---|
-| 完整 Python 回归 | `126/126` 通过 |
+| 完整 Python 回归 | `122/124` 通过，2 项 Windows 平台跳过 |
 | `lake build` | 通过 |
 | Evaluation18 | 只有已有 `sorry` 警告 |
 | Capsule 有界状态 | 通过 |
@@ -299,12 +299,9 @@ python .\scripts\validate_part2_pairing.py `
 
 ## 8. 当前边界与后续工作
 
-Part 2 实现本身已经完成，仍需外部输入：
+Part 1/2 实现与首批正式配对运行已经完成。复现实验时仍需满足以下条件：
 
-- Part 1 runner 必须输出完整的首轮 theorem，而不是只有 proof body；
-- Part 1 需要采用 `configs/axprover_part1_experience.yaml`；
-- Part 1 与 Part 2 结果需要包含配对门禁要求的 provider、预算和 calls 字段；`baseline/run_part2.py` 已负责导出 Part 2 逐题记录；
-- 真实 `yxai` 调用需要用户在进程环境中配置 `OPENAI_API_KEY`；`auth.json` 不得进入仓库；
-- 真实配对数据产生后，才能进入 Part 3 的通过率、修复率、成本和重复错误比例分析。
-
-当前开发发生在 `leiteng` 分支，报告生成时相关修改尚未 commit 或 push。
+- Part 1 使用 `configs/axprover_part1_experience.yaml` 并输出完整首轮 theorem；
+- Part 2 使用 `configs/axprover_part2_capsule.yaml`，两组结果保留配对门禁要求的 provider、预算和 calls 字段；
+- 真实 `yxai` 调用只通过进程环境配置 `OPENAI_API_KEY`，`auth.json` 不得进入仓库；
+- 当前数据是 25 题、单模型、单批次，不支持统计显著性或通用性能结论；Part 3 需要正式统计分析与更大规模重复实验。

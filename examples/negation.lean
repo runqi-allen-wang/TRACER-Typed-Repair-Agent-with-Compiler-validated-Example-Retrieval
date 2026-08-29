@@ -1,4 +1,4 @@
 -- tags: propositional_logic negation
-example (p : Prop) : p ∧ ¬p → False := by
+example (p : Prop) : p ∧ True → p := by
   intro h
-  exact h.right h.left
+  exact h.left

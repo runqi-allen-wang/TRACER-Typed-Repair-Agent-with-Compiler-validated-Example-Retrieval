@@ -13,10 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from agent import ROOT, solve_problem
-from provider import build_provider, redact_sensitive_text
-
-
-MAX_REQUEST_BYTES = 64 * 1024
+from provider import build_provider
 
 
 def _response_payload(result: dict[str, Any]) -> dict[str, Any]:
@@ -56,24 +53,18 @@ def make_handler() -> type[BaseHTTPRequestHandler]:
             if self.path != "/solve":
                 self._send(404, {"ok": False, "error": "未找到接口"})
                 return
-            payload: dict[str, Any] | None = None
             try:
                 length = int(self.headers.get("Content-Length", "0"))
-                if length <= 0 or length > MAX_REQUEST_BYTES:
-                    raise ValueError(f"请求体必须在 1 到 {MAX_REQUEST_BYTES} 字节之间")
                 payload = json.loads(self.rfile.read(length).decode("utf-8"))
-                if not isinstance(payload, dict):
-                    raise ValueError("请求体必须是 JSON 对象")
                 result = _solve_payload(payload)
                 self._send(200, {"ok": bool(result.get("compile_ok")), "result": _response_payload(result)})
             except Exception as exc:
-                secrets = (str(payload.get("api_key", "")),) if isinstance(payload, dict) else ()
-                self._send(400, {"ok": False, "error": redact_sensitive_text(exc, secrets)[:500]})
+                self._send(400, {"ok": False, "error": str(exc)[:500]})
 
         def log_message(self, fmt: str, *args: object) -> None:
             """不记录请求体，避免密钥意外进入终端日志。"""
 
-            sys.stderr.write("[TRACER API] " + redact_sensitive_text(fmt % args) + "\n")
+            sys.stderr.write("[TRACER API] " + (fmt % args) + "\n")
 
     return Handler
 

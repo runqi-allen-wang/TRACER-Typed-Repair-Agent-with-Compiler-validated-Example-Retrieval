@@ -54,7 +54,7 @@ def validate_manifest(manifest: dict[str, Any]) -> list[str]:
     return errors
 
 
-def validate_json_schema(manifest: Any, schema_path: Path = DEFAULT_SCHEMA_PATH) -> list[str]:
+def validate_json_schema(manifest: dict[str, Any], schema_path: Path = DEFAULT_SCHEMA_PATH) -> list[str]:
     """使用发布的 JSON Schema 检查 manifest，并返回可读错误。"""
 
     try:
@@ -64,10 +64,3 @@ def validate_json_schema(manifest: Any, schema_path: Path = DEFAULT_SCHEMA_PATH)
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
     validator = Draft202012Validator(schema)
     return [f"JSON Schema: {error.message}" for error in sorted(validator.iter_errors(manifest), key=lambda item: list(item.path))]
-
-
-def validate_full_manifest(manifest: Any, schema_path: Path = DEFAULT_SCHEMA_PATH) -> list[str]:
-    """同时执行轻量语义检查和发布的 JSON Schema 检查。"""
-
-    errors = [*validate_manifest(manifest), *validate_json_schema(manifest, schema_path)]
-    return list(dict.fromkeys(errors))

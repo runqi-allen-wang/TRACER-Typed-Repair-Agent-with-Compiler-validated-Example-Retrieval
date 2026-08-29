@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - leiteng
+      - main
     paths:
       - ".github/workflows/part2.yml"
       - "src/diagnostics.py"

@@ -256,7 +256,9 @@ def extract_record(
     location = _read(state_item, "location")
     theorem = str(metadata.get("theorem") or _read(location, "name", ""))
     module = str(metadata.get("module") or "")
-    is_proven = bool(_read(state_item, "is_proven", _read(state, "approved", False)))
+    # FATE-M source declarations already contain reference proofs, so
+    # TargetItem.is_proven starts true even when this Agent run fails.
+    is_proven = bool(_read(state, "approved", False))
     reviewer_calls = _reviewer_call_count(state)
     proposer_calls = len(proposals)
     total_llm_calls = int(usage.get("calls", 0))

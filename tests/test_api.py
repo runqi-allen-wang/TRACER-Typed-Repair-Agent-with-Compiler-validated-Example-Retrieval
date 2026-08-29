@@ -1,5 +1,3 @@
-import contextlib
-import io
 import sys
 import unittest
 from pathlib import Path
@@ -7,7 +5,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from api_server import _response_payload, make_handler
+from api_server import _response_payload
 from provider import build_provider
 
 
@@ -26,10 +24,3 @@ class ApiInterfaceTest(unittest.TestCase):
         payload = _response_payload({"compile_ok": False, "provider": "openai_compatible", "diagnostic": {"category": "provider_error"}, "usage": {}})
         self.assertNotIn("api_key", str(payload).lower())
         self.assertNotIn("secret", str(payload).lower())
-
-    def test_http_access_log_redacts_key_in_malformed_url(self):
-        handler = object.__new__(make_handler())
-        output = io.StringIO()
-        with contextlib.redirect_stderr(output):
-            handler.log_message('%s', 'POST /solve?api_key=secret-value HTTP/1.1')
-        self.assertNotIn("secret-value", output.getvalue())

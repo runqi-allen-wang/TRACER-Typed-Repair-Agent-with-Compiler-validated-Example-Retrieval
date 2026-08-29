@@ -1,266 +1,375 @@
-# TRACER / LeanCapsule
+# TRACER
 
-TRACER 是一个由 Lean 编译器验证的证明修复与失败工件工具。LeanCapsule 是其中面向社区复现的核心协议：它把 Lean 文件、工具链、项目配置和规范化诊断打包成可回放的 capsule。
+**English** | [简体中文](README.zh-CN.md)
 
-仓库同时保留两条互补路径：
+### Typed Repair Agent with Compiler-validated Example Retrieval
 
-- `leancapsule`：生成、回放、批量验收和渲染 Lean 失败工件；
-- `src/agent.py`：使用编译反馈和本地示例进行局部证明修复。
+**Feedback-driven Lean proof repair. Replayable failures. Evidence-backed experiments.**
 
-## 快速开始
+[![CI](https://github.com/runqi-allen-wang/TRACER-Typed-Repair-Agent-with-Compiler-validated-Example-Retrieval/actions/workflows/ci.yml/badge.svg)](https://github.com/runqi-allen-wang/TRACER-Typed-Repair-Agent-with-Compiler-validated-Example-Retrieval/actions/workflows/ci.yml)
+[![Lean toolchain](https://img.shields.io/badge/Lean-4.32.0-blue)](lean-toolchain)
+[![CI Python version](https://img.shields.io/badge/CI_Python-3.11-blue)](.github/workflows/ci.yml)
 
-建议在已经安装 Lean、Lake 和 Python 的环境中运行：
+[Quick start](#quick-start) · [Design contributions](#design-contributions) · [Pilot results](#pilot-results) · [API guide](docs/API_GUIDE.md) · [Failure gallery](capsules/index.md) · [Contributing](CONTRIBUTING.md)
 
-```powershell
+![TRACER overview](TRACER.png)
+
+TRACER is a **research toolkit for Lean 4 proof repair, failure reproduction, and evaluation**. It connects language-model candidates, Lean compiler feedback, local example retrieval, and per-round experiment records. Its **LeanCapsule** component packages failures into shareable, replayable, and auditable artifacts.
+
+The project offers two complementary workflows: reproduce an error with LeanCapsule, **without a model API**, or connect a real provider to run bounded proof repair and A/B/C experiments. Both share compilation and diagnostic infrastructure, but have separate entry points and acceptance criteria.
+
+> **Research scope:** TRACER does not train or fine-tune models. It focuses on inference-time feedback, local repair, and reproducible experiment and failure artifacts, providing replaceable, inspectable infrastructure for method research.
+
+Available artifacts:
+
+- **24 public failure capsules**, spanning four error families and Std, Mathlib, and project-local dependencies.
+- **18 frozen problems × 3 experimental conditions**, with a published real-provider pilot containing 56 per-round records and 54 successful proof files.
+- **An end-to-end workflow** covering a single-problem CLI, local HTTP API, batch evaluation, manual review, report validation, and sanitized export.
+
+These artifact counts are not evidence of general theorem-proving ability or superior performance; experimental limitations are discussed below.
+
+Both README versions provide a full overview and runnable examples. Most linked detailed guides are currently in Chinese.
+
+## Why TRACER?
+
+Repairing a Lean proof raises three distinct questions:
+
+1. **Why did it fail?** An unresolved name, type mismatch, failed instance synthesis, or unfinished goal?
+2. **Can someone else reproduce it?** An error screenshot or proof fragment rarely captures the toolchain, imports, and local context.
+3. **Does an improvement actually help?** Success rates should be traceable to problems, model settings, candidates, compiler diagnostics, and final proofs—not just terminal output.
+
+TRACER treats these questions separately and connects them through readable records. Developers get repair artifacts they can recompile; researchers get evidence for inspecting experimental settings and failures; collaborators get replayable error cases.
+
+## Design contributions
+
+These are verifiable engineering contributions and a combination of design choices, not claims to have invented compiler feedback, retrieval augmentation, or automated theorem proving.
+
+| Design focus | Implementation | Value |
+| --- | --- | --- |
+| **Failures as first-class artifacts** | LeanCapsule stores Lean files, environment information, expected diagnostics, provenance, and replay entry points | Share, reproduce, and retain errors as regression cases without relying on the original terminal session |
+| **Compiler-checked case extraction** | Recompile extracted theorems, fall back to the full file if diagnostics change, and attempt import removal within a budget | Check that a smaller case preserves the failure instead of equating shorter files with successful reproduction |
+| **Controlled inference-time repair** | Local generation → candidate checks → compilation in the project environment → bounded feedback, for at most three rounds | Study feedback and examples without changing model weights or overwriting the original problem |
+| **Traceable experimental evidence** | Record model settings, candidates, actual retrieved examples, usage, and diagnostics; save proofs; validate before formal reporting | Reduce the risk of mistaking mixed batches, cache reuse, or infrastructure errors for improved model capability |
+
+Implementation: [repair loop](src/agent.py) · [capsule packaging](src/leancapsule/pack.py) · [import minimization](src/leancapsule/minimize.py) · [pilot validation](scripts/validate_pilot.py) · [release export](scripts/export_pilot.py).
+
+## How it works
+
+```mermaid
+flowchart TD
+    S["Lean source and project environment"] --> A["Repair entry: problem and A/B/C context"]
+    A --> P["Provider generates a local proof"]
+    P --> V["Candidate checks and temporary compilation"]
+    V -->|"Compilation passes"| O["Save proof and per-round traces"]
+    V -->|"Failure with rounds remaining"| F["Record diagnostics; B/C receive feedback"]
+    F --> A
+    V -->|"Round limit or provider failure"| E["Save last candidate and failure reason"]
+    S --> K["Reproduction entry: LeanCapsule packaging"]
+    K --> X["Try extraction; fall back if diagnostics change"]
+    X --> R["Replay and compare expected diagnostics"]
+    R --> G["Audit, gallery index, and issue text"]
+```
+
+The two entry points work independently. The Agent does not automatically turn every failed attempt into a capsule. To add a failure to the gallery, explicitly run `pack` and supply provenance and review information.
+
+**“Success” has two different meanings:**
+
+- **Agent success:** a candidate passes Lean compilation and the project's incomplete-proof checks.
+- **Capsule replay success:** the observed compilation status, diagnostic category, and normalized diagnostic text match expectations. For a case expected to fail compilation, reproducing that failure is a successful replay.
+
+Thus, 24/24 gallery replays do not mean that a model solved 24 proofs, and must not be conflated with A/B/C repair success rates.
+
+## Who is it for?
+
+- **Lean users and maintainers:** attach errors with environment details and reproduction steps to issues.
+- **Formal mathematics and AI4Math researchers:** reuse frozen problems, prompt templates, and per-round traces to compare inference-time feedback strategies.
+- **Agent developers:** replace the generation backend through the provider interface and judge repairs by compilation rather than model self-reports.
+- **Courses and small research teams:** start with API-free failure replay, then move to real-model experiments and manual review.
+
+## Quick start
+
+### 1. Prepare the environment
+
+Install Python, Git, and the Lean toolchain manager first. Ensure `python`, `lean`, and `lake` are available in your terminal. The repository's [lean-toolchain](lean-toolchain) pins Lean 4.32.0; CI uses Python 3.11. Installing Python dependencies does not install Lean.
+
+To clone the repository:
+
+```bash
+git clone https://github.com/runqi-allen-wang/TRACER-Typed-Repair-Agent-with-Compiler-validated-Example-Retrieval.git tracer
+cd tracer
+```
+
+If you already have a checkout, enter its root directory. These single-line commands work in both PowerShell and Git Bash:
+
+```text
 python -m pip install -r requirements.txt
 lake build
-python -m unittest discover -s tests -v
 ```
 
-生成一个本地 capsule。示例输出放在忽略目录中，不会覆盖 `capsules/` 下已经发布和审计的工件：
+If PowerShell cannot locate `ELAN_HOME`, set the existing toolchain directory for the current terminal and retry:
 
 ```powershell
-python -m leancapsule pack `
-  --project . `
-  --file examples/capsule_failures/unknown_identifier.lean `
-  --lines 1:7 `
-  --out results/work/unknown-identifier
+$env:ELAN_HOME = "$env:USERPROFILE\.elan"
 ```
 
-回放该本地工件：
+### 2. Replay a failure without an API
 
-```powershell
-python -m leancapsule replay results/work/unknown-identifier
-```
-
-验收仓库中的公开 gallery：
-
-```powershell
+```text
 python -m leancapsule replay capsules/std/unknown-identifier
-python -m leancapsule verify capsules
+```
+
+This case is expected to produce an unknown-identifier error. `ok: true` in the JSON output means **the expected error was reproduced**, not that the source compiled successfully.
+
+You can also package a supplied failing input into a new capsule. This example writes to `results/` without overwriting public cases:
+
+```text
+python -m leancapsule pack --project . --file examples/capsule_failures/unknown_identifier.lean --lines 1:7 --out results/capsules/unknown-identifier
+python -m leancapsule replay results/capsules/unknown-identifier
+python -m leancapsule issue results/capsules/unknown-identifier --out results/capsules/unknown-identifier/issue.md
+```
+
+A newly generated capsule is a local reproduction artifact. Before publication, add classification, provenance, license information, and manual review. Successful `pack` execution does not imply a passed release audit. See the [LeanCapsule artifact format](docs/CAPSULE_FORMAT.md).
+
+### 3. Check the repair workflow without an API
+
+```text
+python src/agent.py solve --file lean_project/Benchmarks/Evaluation18.lean --theorem Eval18.and_swap_eval --condition B --provider mock --mock-candidate "by intro h; exact And.intro h.right h.left"
+```
+
+The `mock` provider only tests patching, compilation, and saving. Its candidate is supplied by the user and **is not a model experiment result**. Targets may use `-- PROOF_START` / `-- PROOF_END` markers or a unique `sorry` placeholder inside the target theorem. Successful files go to `results/solutions/`; the original file remains unchanged.
+
+## Connecting real models
+
+The [model API guide](docs/API_GUIDE.md) covers DeepSeek V4 Pro/Flash, OpenAI GPT, environment variables, PowerShell / Git Bash, the local HTTP interface, and troubleshooting.
+
+The built-in `openai_compatible` provider supports both **Chat Completions** and the **Responses API**. Responses mode is selected with `--wire-api responses`; reasoning effort and response storage are explicit controls. The model name, endpoint, and key must still belong to the same service.
+
+### DeepSeek
+
+```text
+python src/agent.py solve --file lean_project/Benchmarks/Evaluation18.lean --theorem Eval18.and_swap_eval --condition B --provider openai_compatible --api-url "https://api.deepseek.com/chat/completions" --model deepseek-v4-pro --temperature 0 --max-tokens 12000 --api-key-prompt --max-rounds 3 --timeout 60
+```
+
+### OpenAI GPT
+
+```text
+python src/agent.py solve --file lean_project/Benchmarks/Evaluation18.lean --theorem Eval18.and_swap_eval --condition B --provider openai_compatible --api-url "https://api.openai.com/v1/chat/completions" --model gpt-4.1 --temperature 0 --max-tokens 4000 --api-key-prompt --max-rounds 3 --timeout 60
+```
+
+Key input is hidden; after reading it, the CLI displays only its length and last four characters. Never put a full key in scripts, a README, commit messages, or issues. Real API calls may incur charges.
+
+For DeepSeek Flash, change the model to `deepseek-v4-flash`. GPT-4.1 is a compatibility example for the current request structure, not a recommendation of the latest model; do not assume GPT-5 variants accept identical parameters. The examples use different output budgets and are not an equal-budget comparison. DeepSeek ignores temperature in thinking mode; see the API guide for restrictions and official references.
+
+Other interfaces:
+
+- **Command provider:** use `--provider command --provider-command ...` to connect a custom generation program. Input/output conventions are in the API guide.
+- **Local HTTP API:** run `python src/api_server.py --host 127.0.0.1 --port 8765` and send JSON configuration to `POST /solve`. This is not an authenticated public service; use it only in a trusted local environment.
+
+### Diagnosing failures
+
+- `provider_error` means the request did not produce a candidate for Lean compilation. Check the endpoint, model, key, quota, or network.
+- Compiler diagnostics such as `diagnostic.category = syntax/type/goal` mean a candidate reached compilation; they do not by themselves indicate a broken API.
+- `compile_ok: false` alone does not mean the API is broken; read `diagnostic` as well.
+- Candidate normalization removes Markdown code fences before compilation, including fences in historical cached candidates.
+
+Single-problem candidates, model usage, cache hits, and compiler diagnostics are recorded in `results/agent_runs.jsonl`. Successful proofs go to `results/solutions/`; the last candidate after persistent failure goes to `results/solutions/failures/`.
+
+## Experimental design
+
+The frozen evaluation set is [Evaluation18.lean](lean_project/Benchmarks/Evaluation18.lean); problem IDs, tags, and difficulty are in the [benchmark manifest](benchmarks/manifest.json). **18 distinct problems × 3 conditions = 54 task–condition pairs**, not 54 independent problems.
+
+| Condition | Context visible to the model | Research question |
+| --- | --- | --- |
+| **A: Problem** | The theorem and target local code, without previous diagnostics or retrieved examples | What can baseline generation achieve with the same round budget? |
+| **B: Problem + feedback** | A, plus bounded compiler diagnostics from the previous round | Can feedback help repair the preceding candidate? |
+| **C: Problem + feedback + retrieval** | B, plus the text of the top three local examples | Are related examples worth their extra token cost beyond feedback alone? |
+
+Model settings, output budget, compiler, timeout, problem order, and the three-round limit are held constant across conditions; only prompt context changes. A can generate multiple times but does not read previous diagnostics. B/C have no previous-round feedback on their first attempt.
+
+Evaluation does not use a runtime answer table. Retrieval checks for examples with declarations identical to evaluation problems; similar but non-identical propositions still require manual review. **Text deduplication does not eliminate every form of semantic leakage.** Here, `pass@3` means the proportion of tasks with at least one success within three rounds, not an unbiased pass@k estimate from independent samples. See the [experimental protocol](docs/methodology.md).
+
+### AxProverBase Part 1 + Part 2 paired experiment
+
+The separate FATE-M experiment compares Part 1's AxProverBase `ExperienceProcessor` baseline with Part 2's `MemorylessProcessor` plus deterministic `CapsuleFeedback`. Both conditions reuse the same first-round candidate for each of 25 problems and freeze `gpt-5.6-sol`, the AI4Math `yxai` Responses endpoint, budgets, and candidate policy. Both solved 25/25; total rounds decreased from 39 to 36, compilation errors from 14 to 11, LLM calls from 79 to 36, and tokens from 656,657 to 274,742. Capsule processing itself made zero LLM and compiler calls. See the [Part 2 design](docs/part2_capsule_feedback.md) and [reviewed result handoff](results/handoff/part12-live-20260828-corrected/README.md).
+
+## Pilot results
+
+These results come from the published pilot `pilot-20260826T122354Z-d628742d`, not a new experiment run for this README update. Configuration: `deepseek-v4-pro`, requested temperature 0, maximum output 12,000 tokens, and at most three rounds.
+
+| Condition | Tasks | pass@1 | pass@3 | Mean rounds | Mean total tokens / task |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| A: Problem | 18 | 18/18 (100.0%) | 18/18 (100.0%) | 1.000 | 1,750.4 |
+| B: Problem + feedback | 18 | 16/18 (88.9%) | 18/18 (100.0%) | 1.111 | 1,841.9 |
+| C: Problem + feedback + retrieval | 18 | 18/18 (100.0%) | 18/18 (100.0%) | 1.000 | 2,906.1 |
+
+Mean total tokens are calculated by summing provider usage over every round of each task, then averaging over the condition's 18 tasks—not by counting only the final successful round.
+
+The release includes **56 per-round records, 54 successful proof files, and zero cache hits**. Token prices were not configured, so monetary cost is `unknown`, not zero.
+
+**How to interpret the results:**
+
+- They provide operational evidence for the real-provider → compilation → proof saving → review and export workflow.
+- A already reaches 18/18 on the first attempt, creating a clear ceiling effect. This batch **does not demonstrate a final success-rate gain from B or C**. C also uses more tokens, so these results do not establish greater efficiency.
+- Eighteen problems, one model, and one batch cannot establish general theorem-proving capability, statistically significant superiority, or state-of-the-art performance. Even 18/18 corresponds to an approximately 82.4%–100.0% Wilson 95% interval.
+- Recompiling final proofs does not guarantee that another call to the same model will produce identical text. Server defaults and generation variability must be disclosed.
+
+**Inspect the evidence:** [full report](published/pilot-20260826T122354Z-d628742d/REPORT.md) · [sanitized per-round traces](published/pilot-20260826T122354Z-d628742d/real_pilot_runs.sanitized.jsonl) · [successful proofs](published/pilot-20260826T122354Z-d628742d/solutions) · [manual review](published/pilot-20260826T122354Z-d628742d/manual_review.csv) · [handoff manifest](published/pilot-20260826T122354Z-d628742d/handoff.json).
+
+### Run your own formal experiment
+
+See the [real-pilot generation, review, and export guide](docs/REAL_PILOT_GUIDE.md). Run and export a separate batch for each model; do not mix logs from different models, budgets, or runs.
+
+<details>
+<summary>Expand: full pilot and formal release commands (PowerShell)</summary>
+
+Start with the frozen set. This calls a real model and may incur charges. `--fresh` moves old logs, proofs, review sheets, and reports into recoverable `results/archive/` storage and clears the persistent request cache by default:
+
+```powershell
+python src/evaluate.py --provider openai_compatible --api-url "https://api.deepseek.com/chat/completions" --model deepseek-v4-pro --temperature 0 --max-tokens 12000 --api-key-prompt --conditions A,B,C --max-rounds 3 --timeout 60 --fresh
+```
+
+Complete per-task manual review in this batch's `results/manual_review.csv`, then run:
+
+```powershell
+python scripts/validate_pilot.py --runs results/real_pilot_runs.jsonl --require-manual-review
+if ($LASTEXITCODE -ne 0) { throw "Validation failed; release stopped" }
+python src/report.py
+if ($LASTEXITCODE -ne 0) { throw "Report generation failed; export stopped" }
+python scripts/export_pilot.py --out published/deepseek-v4-pro-12000-run01
+```
+
+The export directory must not already exist. Validation checks task coverage, consecutive rounds, configuration consistency, cache hits, and infrastructure errors. Formal reporting also requires manual review and proof artifacts. Do not fill review rows with PASS merely to satisfy validation.
+
+With explicit `--reuse-cache`, results are not a strict fresh experiment: retain the warnings and treat them as a draft. Publish sanitized exports, not raw logs, SQLite databases, or historical archives.
+
+</details>
+
+## LeanCapsule failure gallery
+
+LeanCapsule provides a **failure-reproduction protocol centered on diagnostic consistency**. It retains human-readable error text and a readable diagnostic key with local paths, line/column positions, and unstable identifiers removed. Matching normalized text is an operational reproduction criterion, not a claim of mathematical or program equivalence between files.
+
+The current [gallery](capsules/index.md) contains 24 cases:
+
+| Error family | Cases | Typical issues |
+| --- | ---: | --- |
+| Name / import | 7 | Unknown identifiers, namespaces, or missing imports |
+| Type / application | 5 | Type mismatches, function application, or implicit arguments |
+| Elaboration / instance | 5 | Instance synthesis, metavariables, or coercions |
+| Goal / scope | 7 | Unsolved goals, local context, or scope |
+
+Sources: **Std 14 · Mathlib 4 · project-local 6**. Indexes are available as [JSON](capsules/index.json), [CSV](capsules/index.csv), and [Markdown](capsules/index.md). The [review ledger](capsules/MANUAL_REVIEW.csv) records provenance, semantic checks, and sensitive-content review.
+
+Packaging with `--theorem` attempts a standalone file containing imports, namespaces, and the target theorem. If compilation status or normalized diagnostics change, it falls back to the full file. Validated standalone files then undergo import minimization within a compilation budget; disable this with `--no-minimize-imports`. The `--lines` range records the target and is not a general semantic slicing feature.
+
+### Mathlib environment
+
+Mathlib cases use the separate [mathlib_project](mathlib_project) dependency project. Prepare its pinned dependencies before the first replay:
+
+```powershell
+./scripts/setup_mathlib.ps1
+```
+
+On Linux/macOS:
+
+```bash
+bash scripts/setup_mathlib.sh
+```
+
+Dependencies and precompiled caches are not committed. The Bash setup script retries dependency synchronization and cache downloads up to three times, waiting 5 and 10 seconds between attempts. Before retrying synchronization, it moves incomplete Git package clones with no valid HEAD into `.lake/retry-backups/`; valid repositories, linked packages, and non-Git local dependencies are left intact. Failed attempts retain their error output, and exhausting retries still fails CI. The CI setup step has a 30-minute limit; no certificate checks are disabled.
+
+For Bash setup, `TRACER_SETUP_ATTEMPTS` (1–5) and `TRACER_SETUP_RETRY_DELAY` (0–30 initial seconds) control retries. `MATHLIB_CACHE_DIR` defaults to the project's `.lake/mathlib-cache`, unless explicitly set. These retry settings apply to the Bash entry point, not the PowerShell script. On Windows, use `$env:ELAN_HOME = "$env:USERPROFILE\.elan"`, including the separator before `.elan`. Configure `HTTP_PROXY` / `HTTPS_PROXY` only if you need a local proxy.
+
+Without network access or prepared Mathlib dependencies, start with Std and project-local cases. This does not validate the Mathlib cases. The default replay timeout is 180 seconds.
+
+## Tests and quality checks
+
+These checks do not call paid model APIs, but end-to-end tests require a real Lean toolchain:
+
+```text
+lake build
+python scripts/run_ci_tests.py
 python -m leancapsule audit capsules
-python -m leancapsule issue capsules/std/unknown-identifier --out issue.md
+```
+
+After preparing Mathlib dependencies, replay the full gallery:
+
+```text
+python -m leancapsule verify capsules
+```
+
+To regenerate the index:
+
+```text
 python -m leancapsule gallery capsules --out capsules/index.json
 ```
 
-所有命令都输出机器可读 JSON；`replay`、`verify`、`audit` 和 `gallery` 会用进程退出码表示是否通过。Mathlib 冷启动可能需要较长时间，因此回放默认超时为 180 秒。
+The [CI workflow](.github/workflows/ci.yml) installs the toolchain, builds Lean, runs Python checks and tests, audits releases, prepares Mathlib dependencies, and replays the full gallery. Its badge links to actual Actions runs instead of displaying a fixed “all passed” claim.
 
-使用 `--theorem` 时，工具会先尝试保留 imports、namespace 和目标定理的 standalone 文件；如果编译结果与原始诊断不一致，就自动退回完整文件。standalone 成功后会在固定编译预算内逐个尝试删除 imports，也可以使用 `--no-minimize-imports` 关闭。
+Keep these checks distinct:
 
-## 公开失败 gallery
+- `audit` checks layout, schema, provenance and licenses, sensitive information, incomplete proofs, and the review ledger. It **does not replace compilation replay**.
+- `verify` checks whether expected failures reproduce. It **does not replace real-model evaluation**.
+- `validate_pilot.py` and review records check experimental deliverables. They **do not replace substantive inspection of mathematical assumptions and example leakage**.
 
-仓库当前包含 24 个可回放 capsule，覆盖四类失败：`Name / import`、`Type / application`、`Elaboration / instance` 和 `Goal / scope`，每类至少 3 个；来源覆盖 Std、Mathlib 和 project-local，每类来源至少 4 个。`capsules/index.json`、`capsules/index.csv` 和 `capsules/index.md` 是由 CLI 生成的三种 gallery 索引，`capsules/MANUAL_REVIEW.csv` 记录逐案例的语义、来源和敏感内容复核结论。
+## Safety and scope
 
-发布审计会检查必需文件、manifest、冻结分类、来源许可、绝对本机路径、疑似敏感凭据、成功案例中的未完成证明以及复核台账完整性。CI 会在构建和全量回放前强制运行该审计。
+- **Not an operating-system sandbox.** Temporary HOME/TMP/APPDATA directories, minimal environment variables, and candidate policies are defense layers. Run untrusted projects or Lean code in a container, VM, or isolated low-privilege environment.
+- **Local repair only.** The Agent must not rewrite imports or theorem headers. Candidates containing `sorry`, `admit`, `sorryAx`, unfinished-proof warnings, unsafe declarations, or certain explicit native-execution constructs are rejected. D01 verifies that an `unsafe inductive` construction of `False` is rejected before Agent, AxProverBase, Capsule pack, replay, or audit can compile it; this is a security regression, not a fourth A/B/C condition. Text rules cannot be assumed to detect every Lean metaprogramming construct.
+- **Separate credentials from releases.** The provider restricts cross-origin redirects and sanitizes errors; keys are not experiment-record fields. Still inspect exports and send keys only to trusted providers.
+- **Readable comparisons and caching.** Diagnostic comparisons and request caching use normalized readable text, without digest or fingerprint computation. Cache reuse is for local debugging, not independent real sampling.
+- **Extraction is not global minimization.** Full-file fallback and explicit local-file manifests are not arbitrary multi-file program slicing. Diagnostic consistency does not guarantee preservation of every contextual meaning.
+- **Implemented infrastructure, unproven generalization.** The toolkit and published pilot do not replace larger, harder, multi-model, repeated experiments. The current retriever is not a learned premise-selection model.
 
-Mathlib 案例使用独立的 `mathlib_project/` 依赖工程。首次回放前请执行：
+## Documentation and repository map
 
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\setup_mathlib.ps1
-```
-
-`-ExecutionPolicy Bypass` 只应用于这一个子进程，不修改系统策略。Linux/macOS 可执行 `bash scripts/setup_mathlib.sh`。两个脚本都会设置稳定的 Mathlib 缓存目录，并在 `lake` 返回非零退出码时失败。该步骤会按 `mathlib_project/lakefile.lean` 中的固定版本下载依赖和预编译缓存；依赖缓存不纳入仓库。没有网络或未准备缓存时，Std 与 project-local 案例仍可独立回放，Mathlib 案例会明确报告缺少依赖环境。
-
-## 证明修复 Agent
-
-目标文件可以包含 `-- PROOF_START` / `-- PROOF_END` 标记，也可以包含唯一的 `sorry` 占位符。原文件不会被覆盖，成功的隔离证明会保存到 `results/solutions/`。
-
-```powershell
-python src/agent.py solve `
-  --file lean_project/Benchmarks/Evaluation18.lean `
-  --theorem Eval18.and_swap_eval `
-  --condition B `
-  --provider mock `
-  --mock-candidate "by intro h; exact And.intro h.right h.left"
-```
-
-## AxProverBase CapsuleFeedback（Part 2）
-
-`leancapsule.feedback.CapsuleFeedback` 可以直接消费 AxProverBase 已有的 Builder 返回值，生成错误类别、稳定指纹、重复次数、诊断漂移和有界历史。该步骤不会再次运行 Lean，也不会调用 LLM。
-
-```python
-from leancapsule.feedback import CapsuleFeedback
-
-capsule = CapsuleFeedback()
-build_success, message = await check_lean_file(...)
-feedback = capsule.observe_ax((build_success, message), round_no=1)
-```
-
-Part 1/2/3 中 AxProverBase 涉及的模型调用统一冻结为 AI4Math `yxai` 中转站：Ax/LangChain 模型名 `openai:gpt-5.6-sol`，模型 ID `gpt-5.6-sol`，`base_url=https://yxai.chat/v1`，并强制使用 Responses API、`reasoning.effort=high` 和 `store=false`。具体接入步骤、JSON CLI 和验收标准见 [`docs/part2_capsule_feedback.md`](docs/part2_capsule_feedback.md)。
-
-Part 2 有独立的 GitHub Actions workflow：`.github/workflows/part2.yml`。它在 `leiteng` 分支相关文件发生变化时自动运行 Ubuntu 专项测试，再执行 Lean build 和完整 Python 回归；整个 workflow 不需要模型 API Key。
-
-真实 Ax 接入使用 `python -m leancapsule.ax_runner`，它包裹固定 AxProverBase 的原 Builder，不新增 Lean 编译，并强制使用 `MemorylessProcessor`、关闭最终 summary。安装、环境变量、遥测和配对检查命令见 [`docs/part2_capsule_feedback.md`](docs/part2_capsule_feedback.md)。
-
-## Part 3 Raw/Capsule 对比
-
-Part 3 在同一批 FATE-M 25 题上固定 `MemorylessProcessor`，交错运行 Raw（原始 Ax `BuildFailedFeedback`）和 Capsule（确定性 `CapsuleFeedback`），并复用完全相同的首轮候选。完整协议、复现命令、严格门禁和结果解释见 [`docs/part3_raw_capsule_experiment.md`](docs/part3_raw_capsule_experiment.md)。本次 pilot 的 Raw/Capsule 最终成功数分别为 `21/25` 和 `19/25`；这是一次性描述性比较，不应解释为通用结论。正式交接文件位于 `results/handoff/part3-minimal/`。
-
-## 直接输入 API 配置
-
-单次运行可以在命令行输入接口地址、模型，并通过安全提示输入密钥。输入时终端不会显示密钥；读取完成后只确认成功，不显示长度、末四位或任何密钥字符。完整密钥只存在于当前进程内，不写入日志和缓存：
-
-```powershell
-python src/agent.py solve `
-  --file input.lean `
-  --theorem Demo.target `
-  --condition B `
-  --provider openai_compatible `
-  --api-url "https://example.invalid/v1/chat/completions" `
-  --model "your-model" `
-  --api-key-prompt
-```
-
-AI4Math `yxai` 中转站使用 Responses API。例如：
-
-只检查 Key、模型名和 Responses 接口是否可用，可运行一次最小探测；Key 会在独立提示中隐藏输入，不保存原始响应：
-
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\probe_yxai_api.ps1
-```
-
-要用两次请求同时验证“直接 Agent → Lean”和“固定 AxProverBase → LangChain”两条真实路径，可先在当前 Python 环境安装 `requirements-axprover-part2.txt`，再运行：
-
-```powershell
-python -m pip install -r .\requirements-axprover-part2.txt
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\run_live_yxai_smoke.ps1
-```
-
-该入口只输出脱敏状态与 token 数；临时缓存、候选和原始响应会在结束时清理。正式 54 项 A/B/C 实验仍应使用 `run_all.ps1`。
-
-执行单题证明修复：
-
-```powershell
-python src/agent.py solve `
-  --file lean_project/Benchmarks/Evaluation18.lean `
-  --theorem Eval18.and_swap_eval `
-  --condition B `
-  --provider openai_compatible `
-  --api-url "https://yxai.chat/v1" `
-  --model "gpt-5.6-sol" `
-  --wire-api responses `
-  --reasoning-effort high `
-  --disable-response-storage `
-  --max-tokens 20000 `
-  --api-key-prompt `
-  --max-rounds 3
-```
-
-模型名称必须替换为账户实际可用的名称。远程 provider 必须使用 HTTPS，认证头只允许跟随同源重定向；错误响应只读取有界的结构化消息并在日志前脱敏。模型返回值只有在整个响应由单个 Markdown `lean`/`lean4`/`text` 代码围栏包裹时才移除围栏，Lean 字符串内部或带额外说明的反引号不会被误删；旧缓存候选遵循相同规则。
-
-模型候选只允许局部证明项。`run_tac` 等元编程执行入口、`#eval` 和额外顶层命令会在调用 Lean 前被拒绝；Lean 子进程使用不含 `LEAN_PROOF_API_KEY`、token、cookie 或其他父进程变量的最小环境和临时 HOME。该边界保护冻结基准上的模型候选，但不是通用操作系统容器：项目源文件、导入模块和自定义 tactic 本身仍必须可信。
-
-### 如何判断失败位置
-
-- 出现 `provider_error`：请求尚未进入 Lean 编译阶段，应检查接口地址、密钥、模型名、额度或代理。
-- 出现 `diagnostic.category = syntax/type/goal`：模型请求已经成功，失败来自候选证明的 Lean 编译结果。
-- `compile_ok: false` 本身不代表 API 损坏；应同时阅读 `diagnostic`。
-- 每轮详细候选、缓存命中、模型 usage 和编译诊断记录在 `results/agent_runs.jsonl`。
-- 成功证明保存到 `results/solutions/`；持续失败的最后候选保存到 `results/solutions/failures/`。
-
-## 正式 A/B/C 实验
-
-完整实验运行冻结的 `18` 道题和 `A/B/C` 三个条件，共 `54` 个任务。请在专用 PowerShell 会话中固定以下配置；`run_all.ps1` 会把 Responses base URL 规范化为 `/responses` 请求地址：
-
-D 类是独立的安全对抗回归类别，不是第四种 Agent 条件。当前 D01 覆盖 `unsafe inductive` 绕过 positivity 检查并构造 `False` 的候选，要求原 TRACER 与 AxProverBase 的缓存/生成候选都在 Lean 编译前拒绝；详见 [`docs/security_type_d.md`](docs/security_type_d.md)。
-
-```powershell
-$env:LEAN_PROOF_API_URL = "https://yxai.chat/v1"
-$env:LEAN_PROOF_MODEL = "gpt-5.6-sol"
-$env:LEAN_PROOF_WIRE_API = "responses"
-$env:LEAN_PROOF_REASONING_EFFORT = "high"
-$env:LEAN_PROOF_DISABLE_RESPONSE_STORAGE = "true"
-$env:LEAN_PROOF_TEMPERATURE = "0"
-$env:LEAN_PROOF_MAX_TOKENS = "800"
-
-$secureKey = Read-Host "API Key" -AsSecureString
-$keyPtr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureKey)
-try {
-  $env:LEAN_PROOF_API_KEY = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($keyPtr)
-}
-finally {
-  [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($keyPtr)
-}
-
-try {
-  powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\run_all.ps1 `
-    -ApiUrl $env:LEAN_PROOF_API_URL `
-    -Model $env:LEAN_PROOF_MODEL `
-    -WireApi responses `
-    -ReasoningEffort high `
-    -Temperature 0 `
-    -MaxTokens 800
-}
-finally {
-  Remove-Item Env:LEAN_PROOF_API_KEY -ErrorAction SilentlyContinue
-  Remove-Variable secureKey,keyPtr -ErrorAction SilentlyContinue
-}
-```
-
-`run_all.ps1` 先执行 `lake build` 和 Python 测试，再让 `evaluate.py --fresh` 归档旧实验状态并使用空请求缓存运行。运行条件 C 前会检查检索示例与 18 个冻结声明是否相同（允许变量改名）；发现重合会在归档旧实验或调用 provider 前终止。默认严格模式不允许新实验出现缓存命中；`-ReuseCache` 仅用于调试或成本受限的复跑，不得称为严格 fresh pilot。实验执行完成后会校验 54 个任务、轮次、单一 provider 配置、候选安全策略、provider/任务错误和缓存状态，然后生成明确标为未复核的草稿报告。
-
-真实 Key 只应通过安全提示或进程环境变量提供。不要把邮件附件 `auth.json` 复制进仓库、提交到 Git，或在命令行参数和日志中粘贴 Key；仓库已显式忽略所有 `auth.json`。
-
-人工逐项填写 `results/manual_review.csv` 后，执行最终门禁和报告：
-
-```powershell
-python scripts/validate_pilot.py --require-manual-review
-python src/report.py
-python scripts/export_pilot.py --out results/handoff/pilot-reviewed
-```
-
-不得批量填充或推断人工复核结果。每个成功证明的 `kernel_pass`、`inappropriate_assumption`、`leakage_risk` 必须填写 `yes` 或 `no`，并写明 `reviewer_note`；正式结果只接受 `kernel_pass=yes`、`inappropriate_assumption=no`、`leakage_risk=no`。导出命令在复核缺失、实验不完整、严格运行包含缓存命中或检测到疑似凭据时拒绝生成工件。
-
-运行日志、请求缓存、solutions、归档和 handoff 目录默认被 `.gitignore` 排除。`real_pilot_runs.jsonl` 还可能包含本机绝对路径，不应直接提交；`export_pilot.py` 会结构化清理仓库目录、用户目录和临时目录路径，并且不会复制 SQLite 缓存。检查导出目录后，如确实要通过 Git 交接，请使用 `git add -f results/handoff/pilot-reviewed` 显式选择该目录。更完整的文件说明见 [`results/README.md`](results/README.md)。
-
-也可以使用本地 HTTP 接口：
-
-```powershell
-python src/api_server.py --host 127.0.0.1 --port 8765
-```
-
-向 `POST /solve` 发送 JSON，字段包括 `file`、`theorem`、`condition`、`api_url`、`api_key` 和 `model`。服务默认只监听本机，请勿直接暴露到公网。请求体不会写入服务日志，且限制为 64 KiB；异常返回会移除请求中的密钥。
-
-PowerShell 请求示例：
-
-```powershell
-$body = @{
-  file = "lean_project/Benchmarks/Evaluation18.lean"
-  theorem = "Eval18.and_swap_eval"
-  condition = "B"
-  api_url = "https://example.invalid/v1/chat/completions"
-  api_key = "在本地粘贴密钥"
-  model = "your-model"
-  max_rounds = 3
-} | ConvertTo-Json
-Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8765/solve -ContentType "application/json" -Body $body
-```
-
-## 仓库结构
+| Goal | Start here |
+| --- | --- |
+| Configure DeepSeek, GPT, or a custom provider | [API guide](docs/API_GUIDE.md) |
+| Run, review, and export real experiments | [Pilot guide](docs/REAL_PILOT_GUIDE.md) |
+| Understand condition controls and validity constraints | [Methodology](docs/methodology.md) |
+| Look up per-round record fields | [JSONL format](docs/jsonl_schema.md) |
+| Create publicly shareable failure artifacts | [Artifact format](docs/CAPSULE_FORMAT.md) and [case contribution guide](docs/CONTRIBUTING_CAPSULES.md) |
+| Run or inspect the AxProverBase Part 1 + Part 2 experiment | [Part 1 guide](baseline/README.md), [Part 2 design](docs/part2_capsule_feedback.md), and [result handoff](results/handoff/part12-live-20260828-corrected/README.md) |
+| Inspect the D01 pre-compilation security gate | [Type D security regression](docs/security_type_d.md) |
+| Inspect published experiments and proofs | [Pilot release](published/pilot-20260826T122354Z-d628742d) |
+| Check current status and past changes | [PROGRESS](PROGRESS.md) and [CHANGELOG](CHANGELOG.md) |
 
 ```text
-src/leancapsule/       capsule 的打包、回放、验收和 issue 渲染
-src/agent.py           编译反馈证明修复 Agent
-src/api_server.py      本地 HTTP API
-capsule_schema/        manifest 结构说明
-capsules/               可公开回放的示例工件
-examples/               检索示例与失败输入
-lean_project/           Lean 测试项目
-tests/                  Python 自动化测试
-scripts/                环境准备与复现实用脚本
-docs/                   方法、格式和贡献说明
-PROGRESS.md             唯一的当前工作进度记录
+src/agent.py           Proof repair loop and single-problem CLI
+src/provider.py        Model interface and candidate parsing
+src/compiler.py        Lean compilation and local proof patching
+src/retriever.py       Local example retrieval and overlap checks
+src/leancapsule/       Packaging, extraction, replay, audit, and issues
+capsule_schema/        Capsule manifest schema
+capsules/              Public failures, indexes, and review ledger
+examples/              Local retrieval examples and failing inputs
+benchmarks/            Frozen problem metadata
+lean_project/          Lean problems and local-dependency cases
+mathlib_project/       Separate Mathlib dependency project
+prompts/               A/B/C prompt templates
+scripts/               Dependency setup, tests, pilot validation, and export
+baseline/              AxProverBase Part 1 and paired Part 2 experiment runners
+configs/               Frozen AxProverBase model and memory configurations
+tests/                 Automated tests
+results/               Local run data and reports
+published/             Reviewed, sanitized experimental releases
+docs/                  Usage guides and research methodology
 ```
 
-## 设计边界
+## Contributing and future research
 
-- capsule 核心不依赖模型或 API；Agent 只是可选消费者。
-- 当前支持经过编译验证的 theorem standalone 和完整文件 fallback；多文件依赖切片和数学意义上的全局最小化尚未承诺。
-- 诊断比较使用可读的规范化文本 `diagnostic_key`，并保留原始诊断供人工审计。
-- API 密钥不进入 JSONL、SQLite、候选文件、manifest 或错误响应。
-- Provider 返回的 Markdown 代码围栏会在解析边界和编译边界各清洗一次，兼容历史缓存。
-- 仓库中的实验结果不能替代正式的模型对比实验；正式实验必须记录模型配置、token、延迟和人工复核。
+Contributions of reproducible failures, tests, diagnostic improvements, and model integrations are welcome. Read [CONTRIBUTING](CONTRIBUTING.md) first, and include provenance, licensing, toolchain information, expected results, and reproduction steps for new cases.
 
-## 贡献
+Future research directions include harder and broader benchmarks, cross-model and repeated-run comparisons, retrieval cost–benefit analysis, adversarial candidate tests, and stronger execution isolation. These are directions to investigate, not completed capabilities or performance promises.
 
-请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md) 和 [docs/CAPSULE_FORMAT.md](docs/CAPSULE_FORMAT.md)，为每个公开 capsule 补充来源、许可、预期诊断和回放结果。
+For genuinely shared work, include `Co-authored-by: Name <email>` in the commit message. An @mention in a PR description does not replace commit co-authorship.
+
+## Citation and license
+
+For research or teaching use, cite [CITATION.cff](CITATION.cff) and identify the actual version and experiment batch. This is a software citation, not a claim of an associated peer-reviewed paper or DOI.
+
+This project is licensed under the [MIT License](LICENSE). Public cases also record their respective provenance and licenses in their capsule metadata.
+
+### Acknowledgments
+
+We gratefully acknowledge [SJTU AI4Math Summer School 2026](https://sjtu-ai4math.github.io/summer-school/2026/) for providing a platform for learning and exchanging ideas at the intersection of artificial intelligence and mathematics. We thank the organizers, instructors, and participants for fostering an open and collaborative research environment.

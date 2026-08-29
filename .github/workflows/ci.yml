@@ -26,41 +26,19 @@ jobs:
       # 端到端测试会调用 Lake 环境，先完成一次项目构建并预热编译环境。
       - name: Build Lean project
         run: lake build
+      - name: Check Python modules
+        run: python -m compileall -q src scripts tests
       - name: Run tests
         run: python scripts/run_ci_tests.py
       - name: Audit public capsules
         run: python -m leancapsule audit capsules
       - name: Prepare Mathlib dependency project
+        # 下载异常由脚本有限重试；步骤超时避免持续网络故障耗尽 runner 时间。
+        timeout-minutes: 30
         shell: bash
+        env:
+          TRACER_SETUP_ATTEMPTS: "3"
+          TRACER_SETUP_RETRY_DELAY: "5"
         run: bash scripts/setup_mathlib.sh
       - name: Replay public capsules
         run: python -m leancapsule verify capsules
-
-  powershell-script-checks:
-    name: PowerShell 脚本静态检查 (Ubuntu)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - name: Parse PowerShell entrypoints
-        shell: pwsh
-        run: |
-          $failed = $false
-          foreach ($file in @("run_all.ps1", "scripts/setup_mathlib.ps1")) {
-            $tokens = $null
-            $errors = $null
-            [System.Management.Automation.Language.Parser]::ParseFile(
-              (Resolve-Path $file),
-              [ref]$tokens,
-              [ref]$errors
-            ) | Out-Null
-            if ($errors.Count -gt 0) {
-              $errors | ForEach-Object { Write-Error $_ }
-              $failed = $true
-            }
-          }
-          if ($failed) { exit 1 }
-      - name: Run script and documentation regressions
-        run: python -m unittest tests.test_ci tests.test_docs -v

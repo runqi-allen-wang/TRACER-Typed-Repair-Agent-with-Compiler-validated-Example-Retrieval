@@ -36,14 +36,12 @@ class RequestCache:
         ).fetchone()
         if row is None:
             return None
-        usage = json.loads(row[1])
-        return Generation(row[0], usage if isinstance(usage, dict) else {}, row[2])
+        return Generation(row[0], json.loads(row[1]), row[2])
 
     def put(self, request_text: str, generation: Generation) -> None:
-        usage = generation.usage if isinstance(generation.usage, dict) else {}
         self.connection.execute(
             "INSERT OR REPLACE INTO requests(request_text,candidate,usage_json,provider,created_at) VALUES(?,?,?,?,?)",
-            (request_text, generation.candidate, json.dumps(usage, ensure_ascii=False), generation.provider, time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())),
+            (request_text, generation.candidate, json.dumps(generation.usage, ensure_ascii=False), generation.provider, time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())),
         )
         self.connection.commit()
 

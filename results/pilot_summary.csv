@@ -1,4 +1,4 @@
 ﻿condition,tasks,pass_at_1,pass_at_1_rate,pass_at_1_wilson_low,pass_at_1_wilson_high,pass_at_3,pass_at_3_rate,pass_at_3_wilson_low,pass_at_3_wilson_high,avg_rounds,avg_compile_ms,avg_prompt_tokens,avg_completion_tokens,avg_total_tokens,avg_cost_usd
-A,18,17,0.9444,0.7424,0.9901,18,1.0,0.8241,1.0,1.056,2724.7,64.1,318.0,382.1,unknown
-B,18,17,0.9444,0.7424,0.9901,18,1.0,0.8241,1.0,1.056,2375.5,71.8,250.1,321.8,unknown
-C,18,18,1.0,0.8241,1.0,18,1.0,0.8241,1.0,1.0,2350.7,201.3,135.3,336.6,unknown
+A,18,18,1.0,0.8241,1.0,18,1.0,0.8241,1.0,1.0,1416.5,200.3,1550.1,1750.4,unknown
+B,18,16,0.8889,0.672,0.969,18,1.0,0.8241,1.0,1.111,1107.7,236.6,1605.3,1841.9,unknown
+C,18,18,1.0,0.8241,1.0,18,1.0,0.8241,1.0,1.0,1065.3,387.6,2518.4,2906.1,unknown

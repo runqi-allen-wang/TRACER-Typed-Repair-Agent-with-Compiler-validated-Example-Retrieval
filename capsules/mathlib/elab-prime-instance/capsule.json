@@ -9,7 +9,7 @@
   "environment": {
     "lean_toolchain": "leanprover/lean4:v4.32.0",
     "lake_manifest_present": true,
-    "lakefile_present": true,
+    "lakefile_present": false,
     "local_files": [],
     "dependency_project": "../../../mathlib_project"
   },

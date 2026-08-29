@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import getpass
 import json
 import shutil
 import sys
@@ -194,6 +195,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Run real Lean proof-repair pilot")
     parser.add_argument("--provider", choices=["command", "openai_compatible"], required=True)
     parser.add_argument("--provider-command")
+    parser.add_argument("--api-url", help="本次运行使用的 OpenAI 兼容接口地址")
+    parser.add_argument("--model", help="本次运行使用的模型名称")
+    parser.add_argument("--temperature", type=float, help="采样温度")
+    parser.add_argument("--max-tokens", type=int, help="单次最大输出 token")
+    parser.add_argument("--api-key-prompt", action="store_true", help="安全输入 API 密钥，不回显且不写入日志")
+    parser.add_argument("--api-key-stdin", action="store_true", help="从标准输入读取 API 密钥，不写入日志")
     parser.add_argument("--conditions", default="A,B,C")
     parser.add_argument("--max-rounds", type=int, default=3)
     parser.add_argument("--timeout", type=float, default=20.0)
@@ -216,7 +223,25 @@ def main() -> int:
         raise SystemExit("--max-rounds 必须在 1 到 3 之间")
     if args.reuse_cache and not args.fresh:
         raise SystemExit("--reuse-cache 只能与 --fresh 一起使用")
-    provider = build_provider(args.provider, args.provider_command)
+    api_key = None
+    if args.api_key_prompt:
+        api_key = getpass.getpass("API key（不会回显）：").strip()
+        if not api_key:
+            raise SystemExit("API key 不能为空")
+        print("已读取 API key。", file=sys.stderr)
+    elif args.api_key_stdin:
+        api_key = sys.stdin.read().strip()
+        if not api_key:
+            raise SystemExit("API key 不能为空")
+    provider = build_provider(
+        args.provider,
+        args.provider_command,
+        api_url=args.api_url,
+        api_key=api_key,
+        model=args.model,
+        temperature=args.temperature,
+        max_tokens=args.max_tokens,
+    )
     if "C" in conditions:
         validate_retrieval_corpus()
     if args.fresh:

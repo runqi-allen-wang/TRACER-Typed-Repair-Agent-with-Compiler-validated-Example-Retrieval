@@ -1,0 +1,264 @@
+{
+  "format": "tracer-pilot-handoff-v1",
+  "git_revision": "958ff504adeada4b627d2fd14030e8a4f6cc95d1",
+  "task_condition_pairs": 54,
+  "records": 56,
+  "files": [
+    {
+      "path": "benchmark_manifest.json",
+      "size_bytes": 3661
+    },
+    {
+      "path": "manual_review.csv",
+      "size_bytes": 7476
+    },
+    {
+      "path": "pass_at_1.svg",
+      "size_bytes": 983
+    },
+    {
+      "path": "pass_at_3.svg",
+      "size_bytes": 983
+    },
+    {
+      "path": "pilot_failure_types.csv",
+      "size_bytes": 35
+    },
+    {
+      "path": "pilot_report.json",
+      "size_bytes": 10101
+    },
+    {
+      "path": "pilot_summary.csv",
+      "size_bytes": 494
+    },
+    {
+      "path": "pilot_topic_summary.csv",
+      "size_bytes": 1176
+    },
+    {
+      "path": "real_pilot_runs.sanitized.jsonl",
+      "size_bytes": 97711
+    },
+    {
+      "path": "REPORT.md",
+      "size_bytes": 1326
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.and_assoc_eval.lean",
+      "size_bytes": 195
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.and_swap_eval.lean",
+      "size_bytes": 161
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.bool_cases_eval.lean",
+      "size_bytes": 160
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.eq_transitive_eval.lean",
+      "size_bytes": 189
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.function_congruent_eval.lean",
+      "size_bytes": 198
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.identity_application_eval.lean",
+      "size_bytes": 160
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.implies_self_eval.lean",
+      "size_bytes": 138
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.nat_add_comm_eval.lean",
+      "size_bytes": 151
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.nat_add_zero_eval.lean",
+      "size_bytes": 132
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.nat_le_transitive_eval.lean",
+      "size_bytes": 172
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.nat_lt_succ_self_eval.lean",
+      "size_bytes": 156
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.nat_mul_zero_eval.lean",
+      "size_bytes": 143
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.nat_succ_add_eval.lean",
+      "size_bytes": 236
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.nat_succ_ne_zero_eval.lean",
+      "size_bytes": 158
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.nat_zero_add_eval.lean",
+      "size_bytes": 143
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.not_not_intro_eval.lean",
+      "size_bytes": 153
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.or_assoc_eval.lean",
+      "size_bytes": 355
+    },
+    {
+      "path": "solutions/A/Evaluation18__Eval18.or_swap_eval.lean",
+      "size_bytes": 196
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.and_assoc_eval.lean",
+      "size_bytes": 195
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.and_swap_eval.lean",
+      "size_bytes": 161
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.bool_cases_eval.lean",
+      "size_bytes": 196
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.eq_transitive_eval.lean",
+      "size_bytes": 189
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.function_congruent_eval.lean",
+      "size_bytes": 187
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.identity_application_eval.lean",
+      "size_bytes": 160
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.implies_self_eval.lean",
+      "size_bytes": 138
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.nat_add_comm_eval.lean",
+      "size_bytes": 151
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.nat_add_zero_eval.lean",
+      "size_bytes": 132
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.nat_le_transitive_eval.lean",
+      "size_bytes": 191
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.nat_lt_succ_self_eval.lean",
+      "size_bytes": 156
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.nat_mul_zero_eval.lean",
+      "size_bytes": 143
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.nat_succ_add_eval.lean",
+      "size_bytes": 171
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.nat_succ_ne_zero_eval.lean",
+      "size_bytes": 166
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.nat_zero_add_eval.lean",
+      "size_bytes": 143
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.not_not_intro_eval.lean",
+      "size_bytes": 153
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.or_assoc_eval.lean",
+      "size_bytes": 349
+    },
+    {
+      "path": "solutions/B/Evaluation18__Eval18.or_swap_eval.lean",
+      "size_bytes": 217
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.and_assoc_eval.lean",
+      "size_bytes": 212
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.and_swap_eval.lean",
+      "size_bytes": 168
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.bool_cases_eval.lean",
+      "size_bytes": 177
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.eq_transitive_eval.lean",
+      "size_bytes": 204
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.function_congruent_eval.lean",
+      "size_bytes": 205
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.identity_application_eval.lean",
+      "size_bytes": 160
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.implies_self_eval.lean",
+      "size_bytes": 138
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.nat_add_comm_eval.lean",
+      "size_bytes": 151
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.nat_add_zero_eval.lean",
+      "size_bytes": 152
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.nat_le_transitive_eval.lean",
+      "size_bytes": 195
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.nat_lt_succ_self_eval.lean",
+      "size_bytes": 156
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.nat_mul_zero_eval.lean",
+      "size_bytes": 143
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.nat_succ_add_eval.lean",
+      "size_bytes": 180
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.nat_succ_ne_zero_eval.lean",
+      "size_bytes": 167
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.nat_zero_add_eval.lean",
+      "size_bytes": 143
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.not_not_intro_eval.lean",
+      "size_bytes": 153
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.or_assoc_eval.lean",
+      "size_bytes": 315
+    },
+    {
+      "path": "solutions/C/Evaluation18__Eval18.or_swap_eval.lean",
+      "size_bytes": 224
+    }
+  ]
+}

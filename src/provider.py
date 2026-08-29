@@ -3,158 +3,59 @@
 from __future__ import annotations
 
 import json
-import ipaddress
 import os
 import re
 import subprocess
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass, field
 
 
-MAX_PROVIDER_RESPONSE_BYTES = 4 * 1024 * 1024
-MAX_PROVIDER_ERROR_BYTES = 8 * 1024
-SENSITIVE_ENV_NAME_RE = re.compile(
-    r"(?:API[_-]?KEY|TOKEN|SECRET|PASSWORD|AUTHORIZATION|CREDENTIAL|COOKIE|SESSION)",
-    re.IGNORECASE,
-)
-BEARER_RE = re.compile(r"\bBearer\s+[A-Za-z0-9._~+/=-]{6,}", re.IGNORECASE)
-SECRET_ASSIGNMENT_RE = re.compile(
-    r"(?i)((?:api[_ -]?key|authorization|access[_ -]?token|refresh[_ -]?token|id[_ -]?token)"
-    r"\s*[:=]\s*[\"']?)[^\s\"',}]{4,}"
-)
-SECRET_ARGUMENT_RE = re.compile(r"(?i)(--api-key(?:=|\s+))\S+")
-FENCED_CANDIDATE_RE = re.compile(
-    r"\A```(?:lean4?|text)?[ \t]*\r?\n(?P<body>.*)\r?\n```[ \t]*\Z",
-    re.IGNORECASE | re.DOTALL,
+_SECRET_PATTERNS = (
+    re.compile(r"\bBearer\s+[A-Za-z0-9._~+/=-]{12,}", re.IGNORECASE),
+    re.compile(r"\b(?:sk|yi)-[A-Za-z0-9._~+/=-]{12,}", re.IGNORECASE),
+    re.compile(r"(?:api[_ -]?key|authorization|access[_ -]?token|refresh[_ -]?token)\s*[:=]\s*[\"']?[A-Za-z0-9._~+/=-]{12,}", re.IGNORECASE),
 )
 
 
-class ProviderSecurityError(RuntimeError):
-    """Provider 请求违反认证或传输安全边界。"""
+def redact_sensitive_text(value: object) -> str:
+    """脱敏 provider 异常或候选中的认证信息。"""
+
+    text = str(value)
+    for pattern in _SECRET_PATTERNS:
+        text = pattern.sub("[已隐藏的认证信息]", text)
+    return text
 
 
-def _known_secret_values() -> list[str]:
-    return [
-        value
-        for name, value in os.environ.items()
-        if SENSITIVE_ENV_NAME_RE.search(name) and len(value.strip()) >= 8
-    ]
+def _optional_price(name: str) -> float | None:
+    value = os.environ.get(name)
+    return float(value) if value not in (None, "") else None
 
 
-def redact_sensitive_text(text: object, secrets: tuple[str, ...] = ()) -> str:
-    """移除异常、日志和元数据中的已知密钥及常见认证字段。"""
-
-    cleaned = str(text)
-    values = [*secrets, *_known_secret_values()]
-    for secret in sorted({value for value in values if len(value) >= 4}, key=len, reverse=True):
-        cleaned = cleaned.replace(secret, "<redacted>")
-    cleaned = BEARER_RE.sub("Bearer <redacted>", cleaned)
-    cleaned = SECRET_ASSIGNMENT_RE.sub(r"\1<redacted>", cleaned)
-    cleaned = SECRET_ARGUMENT_RE.sub(r"\1<redacted>", cleaned)
-    return cleaned
+def configured_pricing() -> dict[str, float | None]:
+    return {
+        "input_price_per_1k": _optional_price("LEAN_PROOF_INPUT_PRICE_PER_1K"),
+        "output_price_per_1k": _optional_price("LEAN_PROOF_OUTPUT_PRICE_PER_1K"),
+    }
 
 
-def _is_loopback(hostname: str) -> bool:
-    if hostname.lower() == "localhost" or hostname.lower().endswith(".localhost"):
-        return True
-    try:
-        return ipaddress.ip_address(hostname).is_loopback
-    except ValueError:
-        return False
-
-
-def validate_provider_url(url: str) -> urllib.parse.SplitResult:
+def _origin(url: str) -> tuple[str, str, int | None]:
     parsed = urllib.parse.urlsplit(url)
-    if parsed.scheme not in {"http", "https"} or not parsed.hostname:
-        raise ProviderSecurityError("provider URL 必须是有效的 HTTP(S) 地址")
-    try:
-        parsed.port
-    except ValueError as exc:
-        raise ProviderSecurityError("provider URL 端口无效") from exc
-    if parsed.username or parsed.password:
-        raise ProviderSecurityError("provider URL 不能嵌入用户名或密码")
-    if parsed.fragment:
-        raise ProviderSecurityError("provider URL 不能包含 fragment")
-    if any(SENSITIVE_ENV_NAME_RE.search(name) for name, _ in urllib.parse.parse_qsl(parsed.query)):
-        raise ProviderSecurityError("provider 密钥不能放在 URL query 中；请使用独立 API key")
-    if parsed.scheme == "http" and not _is_loopback(parsed.hostname):
-        raise ProviderSecurityError("远程 provider 必须使用 HTTPS；HTTP 仅允许 loopback")
-    return parsed
-
-
-def _origin(url: str) -> tuple[str, str, int]:
-    parsed = validate_provider_url(url)
-    default_port = 443 if parsed.scheme == "https" else 80
-    return parsed.scheme.lower(), parsed.hostname.lower(), parsed.port or default_port
-
-
-def redact_url(url: str) -> str:
-    parsed = validate_provider_url(url)
-    query = urllib.parse.parse_qsl(parsed.query, keep_blank_values=True)
-    safe_query = [
-        (name, "<redacted>" if SENSITIVE_ENV_NAME_RE.search(name) else value)
-        for name, value in query
-    ]
-    return urllib.parse.urlunsplit(
-        (parsed.scheme, parsed.netloc, parsed.path, urllib.parse.urlencode(safe_query), "")
-    )
+    port = parsed.port
+    if port is None:
+        port = 443 if parsed.scheme.lower() == "https" else 80 if parsed.scheme.lower() == "http" else None
+    return parsed.scheme.lower(), (parsed.hostname or "").lower(), port
 
 
 class SameOriginRedirectHandler(urllib.request.HTTPRedirectHandler):
-    """仅允许同源重定向，防止 Authorization 被发送给另一个主机。"""
+    """只允许同来源跳转，防止认证头被转发给其他主机。"""
 
-    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: ANN001
-        target = urllib.parse.urljoin(req.full_url, newurl)
-        if _origin(req.full_url) != _origin(target):
-            raise ProviderSecurityError("拒绝携带认证信息跨源重定向 provider 请求")
-        return super().redirect_request(req, fp, code, msg, headers, target)
-
-
-def _safe_urlopen(request: urllib.request.Request, timeout: float):
-    opener = urllib.request.build_opener(SameOriginRedirectHandler())
-    return opener.open(request, timeout=timeout)
-
-
-def _read_limited(response, limit: int) -> bytes:  # noqa: ANN001
-    declared = response.headers.get("Content-Length") if getattr(response, "headers", None) else None
-    if declared:
-        try:
-            if int(declared) > limit:
-                raise RuntimeError(f"provider 响应超过 {limit} 字节上限")
-        except ValueError:
-            pass
-    data = response.read(limit + 1)
-    if len(data) > limit:
-        raise RuntimeError(f"provider 响应超过 {limit} 字节上限")
-    return data
-
-
-def _provider_error_detail(raw: bytes, reason: object, api_key: str) -> str:
-    """仅提取有界结构化错误消息；非 JSON 正文不进入日志。"""
-
-    detail: object = reason
-    try:
-        body = json.loads(raw.decode("utf-8", errors="replace"))
-    except json.JSONDecodeError:
-        body = None
-    if isinstance(body, dict):
-        error = body.get("error")
-        if isinstance(error, dict) and isinstance(error.get("message"), str):
-            detail = error["message"]
-        elif isinstance(error, str):
-            detail = error
-        elif isinstance(body.get("message"), str):
-            detail = body["message"]
-    return redact_sensitive_text(detail, (api_key,))[:700]
-
-
-def configured_pricing() -> dict[str, float]:
-    return {
-        "input_price_per_1k": float(os.environ.get("LEAN_PROOF_INPUT_PRICE_PER_1K", "0")),
-        "output_price_per_1k": float(os.environ.get("LEAN_PROOF_OUTPUT_PRICE_PER_1K", "0")),
-    }
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        if _origin(req.full_url) != _origin(newurl):
+            raise RuntimeError("Provider 拒绝携带认证信息进行跨来源重定向")
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
 @dataclass
@@ -199,17 +100,11 @@ class CommandProvider(Provider):
             check=False,
         )
         if process.returncode != 0:
-            detail = redact_sensitive_text(process.stderr[-1000:])
-            raise RuntimeError(f"provider command 失败: {detail}")
+            raise RuntimeError(f"provider command 失败: {process.stderr[-1000:]}")
         return parse_generation(process.stdout, self.name)
 
     def metadata(self) -> dict[str, object]:
-        return {
-            "provider": self.name,
-            "command": redact_sensitive_text(self.command),
-            "timeout_s": self.timeout,
-            **configured_pricing(),
-        }
+        return {"provider": self.name, "command": self.command, "timeout_s": self.timeout, **configured_pricing()}
 
 
 class OpenAICompatibleProvider(Provider):
@@ -227,7 +122,11 @@ class OpenAICompatibleProvider(Provider):
         reasoning_effort: str | None = None,
         disable_response_storage: bool = False,
     ) -> None:
-        parsed = validate_provider_url(url)
+        parsed = urllib.parse.urlsplit(url)
+        if parsed.scheme.lower() not in {"http", "https"} or not parsed.hostname:
+            raise ValueError("API URL 必须是有效的 HTTP 或 HTTPS 地址")
+        if parsed.username or parsed.password:
+            raise ValueError("API URL 不能内嵌认证信息")
         inferred_wire_api = "responses" if parsed.path.rstrip("/").endswith("/responses") else "chat_completions"
         self.wire_api = (wire_api or inferred_wire_api).strip().lower()
         if self.wire_api not in {"chat_completions", "responses"}:
@@ -244,7 +143,6 @@ class OpenAICompatibleProvider(Provider):
                     "",
                 )
             )
-        validate_provider_url(normalized_url)
         if reasoning_effort is not None and reasoning_effort not in {"minimal", "low", "medium", "high"}:
             raise ValueError("reasoning_effort must be minimal, low, medium, or high")
         self.url = normalized_url
@@ -285,24 +183,27 @@ class OpenAICompatibleProvider(Provider):
             headers={"Content-Type": "application/json", "Authorization": f"Bearer {self.api_key}"},
             method="POST",
         )
-        try:
-            with _safe_urlopen(request, timeout=90) as response:
-                body = json.loads(_read_limited(response, MAX_PROVIDER_RESPONSE_BYTES).decode("utf-8"))
-        except urllib.error.HTTPError as exc:
-            response_body = exc.read(MAX_PROVIDER_ERROR_BYTES + 1)
-            if len(response_body) > MAX_PROVIDER_ERROR_BYTES:
-                response_body = response_body[:MAX_PROVIDER_ERROR_BYTES]
-            detail = _provider_error_detail(response_body, exc.reason, self.api_key)
-            raise RuntimeError(f"HTTP {exc.code} from provider: {detail}") from exc
-        generation = parse_generation(json.dumps(body, ensure_ascii=False), self.name)
-        if self.api_key and self.api_key in generation.candidate:
-            raise ProviderSecurityError("provider 响应包含认证密钥，已拒绝记录候选")
-        return generation
+        opener = urllib.request.build_opener(SameOriginRedirectHandler())
+        for attempt in range(3):
+            try:
+                with opener.open(request, timeout=90) as response:
+                    body = json.loads(response.read().decode("utf-8"))
+                break
+            except urllib.error.HTTPError as exc:
+                response_body = exc.read().decode("utf-8", errors="replace").strip()
+                detail = response_body[:2000] if response_body else str(exc.reason)
+                detail = detail.replace(self.api_key, "[已隐藏的 API 密钥]")
+                raise RuntimeError(f"HTTP {exc.code} from provider: {detail}") from exc
+            except (urllib.error.URLError, TimeoutError):
+                if attempt == 2:
+                    raise
+                time.sleep(0.5 * (attempt + 1))
+        return parse_generation(json.dumps(body, ensure_ascii=False), self.name)
 
     def metadata(self) -> dict[str, object]:
         return {
             "provider": self.name,
-            "url": redact_url(self.url),
+            "url": self.url,
             "model": self.model,
             "wire_api": self.wire_api,
             "use_responses_api": self.wire_api == "responses",
@@ -311,8 +212,6 @@ class OpenAICompatibleProvider(Provider):
             "reasoning_effort": self.reasoning_effort,
             "disable_response_storage": self.disable_response_storage,
             "store": not self.disable_response_storage,
-            "redirect_policy": "same_origin_only",
-            "max_response_bytes": MAX_PROVIDER_RESPONSE_BYTES,
             **configured_pricing(),
         }
 
@@ -333,10 +232,10 @@ class MockProvider(Provider):
 
 
 def clean_candidate(text: str) -> str:
-    """仅移除完整包裹响应的单个 Markdown 围栏，不扫描 Lean 字符串内部。"""
+    """提取模型输出中的 Lean 代码，兼容常见 Markdown 代码围栏。"""
     candidate = text.strip()
-    fenced = FENCED_CANDIDATE_RE.fullmatch(candidate)
-    return (fenced.group("body") if fenced else candidate).strip()
+    fenced = re.search(r"```(?:lean4?|text)?\s*\n?(.*?)```", candidate, flags=re.IGNORECASE | re.DOTALL)
+    return (fenced.group(1) if fenced else candidate).strip()
 
 
 def parse_generation(text: str, provider_name: str) -> Generation:

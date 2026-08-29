@@ -57,18 +57,23 @@ def safe_name(value: str) -> str:
     return re.sub(r"[^A-Za-z0-9_.-]+", "_", value)
 
 
-def canonical_request(prompt: str, condition: str, provider_metadata: dict[str, object]) -> str:
+def public_source_path(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(ROOT)).replace("\\", "/")
+    except ValueError:
+        return path.name
+
+
+def canonical_request(prompt: str, condition: str, provider_metadata: dict[str, object], round_no: int = 1) -> str:
     return json.dumps(
-        {"prompt": prompt, "condition": condition, "provider": provider_metadata},
+        {"prompt": prompt, "condition": condition, "round": round_no, "provider": provider_metadata},
         ensure_ascii=False,
         sort_keys=True,
         separators=(",", ":"),
     )
 
 
-def estimate_cost(usage: object, provider_metadata: dict[str, object]) -> float | None:
-    if not isinstance(usage, dict):
-        return None
+def estimate_cost(usage: dict[str, int], provider_metadata: dict[str, object]) -> float | None:
     input_tokens = usage.get("prompt_tokens", usage.get("input_tokens", 0))
     output_tokens = usage.get("completion_tokens", usage.get("output_tokens", 0))
     input_price = provider_metadata.get("input_price_per_1k", 0)
@@ -86,16 +91,6 @@ def append_jsonl(path: Path, record: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(record, ensure_ascii=False) + "\n")
-
-
-def prompt_api_key() -> str:
-    """从终端读取密钥，只确认读取成功，不显示长度或任何字符。"""
-
-    api_key = getpass.getpass("API key（不会回显）：").strip()
-    if not api_key:
-        raise ValueError("API key 不能为空")
-    print("已读取 API key。", file=sys.stderr)
-    return api_key
 
 
 def solve_problem(
@@ -126,11 +121,9 @@ def solve_problem(
     if condition == "C":
         leaks = find_retrieval_leaks([(theorem_name, theorem_scope(source, theorem_name))], examples)
         if leaks:
-            paths = sorted({item["example_path"] for item in leaks})
-            raise ValueError(f"条件 C 检索语料与目标定理声明重合: {paths}")
+            raise ValueError("条件 C 检索语料与目标定理声明重合")
     feedback: dict = {"category": "no_feedback", "feedback": "暂无编译反馈。"}
     run_id = str(uuid.uuid4())
-    experiment_id = experiment_id or run_id
     provider_metadata = provider.metadata() if hasattr(provider, "metadata") else {"provider": provider.name}
     problem_id = benchmark_id or safe_name(source_path.stem + "__" + theorem_name)
     last_candidate = ""
@@ -144,7 +137,7 @@ def solve_problem(
             if condition == "C":
                 retrieved = retrieve(theorem_name + " " + theorem_scope(source, theorem_name), examples, top_k=3)
             prompt = prompt_for(source, theorem_name, condition, feedback, retrieved)
-            request_text = canonical_request(prompt, condition, provider_metadata)
+            request_text = canonical_request(prompt, condition, provider_metadata, round_no)
             generation: Generation | None = None if request_text in used_requests else cache.get(request_text)
             used_requests.add(request_text)
             cache_hit = generation is not None
@@ -156,8 +149,8 @@ def solve_problem(
                 except Exception as exc:
                     provider_error = redact_sensitive_text(exc)
                     generation = Generation("", {}, provider.name, {"error": provider_error})
-            usage = generation.usage if isinstance(generation.usage, dict) else {}
             # 也清洗缓存中的旧候选，避免历史 Markdown 围栏继续导致语法错误。
+            usage = generation.usage if isinstance(generation.usage, dict) else {}
             candidate = clean_candidate(generation.candidate)
             candidate_contains_secret = redact_sensitive_text(candidate) != candidate
             if candidate_contains_secret:
@@ -169,13 +162,7 @@ def solve_problem(
                 compile_ms = 0.0
                 raw_diagnostics = provider_error
             elif candidate_contains_secret:
-                diagnostic = {
-                    "category": "sensitive_candidate",
-                    "summary": "provider 候选疑似包含认证信息，已拒绝记录和编译",
-                    "feedback": "不要在候选中返回 API key、token 或 Authorization 内容。",
-                    "errors": [],
-                    "truncated": False,
-                }
+                diagnostic = {"category": "sensitive_candidate", "summary": "候选疑似包含认证信息，已拒绝记录和编译", "feedback": "不要在候选中返回 API key、token 或 Authorization 内容。", "errors": [], "truncated": False}
                 compile_ok = False
                 compile_ms = 0.0
                 raw_diagnostics = diagnostic["summary"]
@@ -185,13 +172,7 @@ def solve_problem(
                 compile_ms = 0.0
                 raw_diagnostics = diagnostic["summary"]
             elif safety_violation := candidate_safety_violation(candidate):
-                diagnostic = {
-                    "category": "unsafe_candidate",
-                    "summary": safety_violation,
-                    "feedback": "只允许局部证明项；不能使用 unsafe 声明、run_tac、元编程入口或注入额外命令。",
-                    "errors": [],
-                    "truncated": False,
-                }
+                diagnostic = {"category": "unsafe_candidate", "summary": safety_violation, "feedback": "只允许局部证明项；不能使用 unsafe 声明、元编程入口或注入额外命令。", "errors": [], "truncated": False}
                 compile_ok = False
                 compile_ms = 0.0
                 raw_diagnostics = safety_violation
@@ -207,29 +188,30 @@ def solve_problem(
                     raw_diagnostics = compiled.diagnostics
                     if compiled.ok and diagnostics_use_sorry(raw_diagnostics):
                         compile_ok = False
-                        diagnostic = {
-                            "category": "placeholder_candidate",
-                            "summary": "Lean 报告目标声明使用了 sorry",
-                            "feedback": "不能使用 sorryAx 或任何可生成 sorry 的定义，请给出可由内核完整检查的证明。",
-                            "errors": [],
-                            "truncated": False,
-                        }
+                        diagnostic = {"category": "incomplete_proof", "summary": "目标证明依赖未完成证明公理", "feedback": "不得使用未完成证明公理，请生成可由内核独立检查的证明。", "errors": [], "truncated": False}
                     else:
                         compile_ok = compiled.ok
                         diagnostic = normalize_diagnostics(raw_diagnostics, returncode=compiled.returncode, timed_out=compiled.timed_out)
                 except Exception as exc:
-                    diagnostic = {"category": "patch_error", "summary": str(exc)[:700], "feedback": "无法定位或补丁化目标证明区域，请检查定理名和占位符。", "errors": [], "truncated": len(str(exc)) > 700}
+                    security_rejection = "禁止的本机执行构造" in str(exc)
+                    diagnostic = {
+                        "category": "candidate_security" if security_rejection else "patch_error",
+                        "summary": str(exc)[:700],
+                        "feedback": "候选触发本机执行安全策略，请只使用纯证明项和受信任 tactic。" if security_rejection else "无法定位或补丁化目标证明区域，请检查定理名和占位符。",
+                        "errors": [],
+                        "truncated": len(str(exc)) > 700,
+                    }
                     compile_ok = False
                     compile_ms = 0.0
                     raw_diagnostics = str(exc)
             record = {
-                "experiment_id": experiment_id,
                 "run_id": run_id,
+                "experiment_id": experiment_id,
                 "problem_id": problem_id,
                 "benchmark_id": benchmark_id,
                 "tags": tags or [],
                 "difficulty": difficulty,
-                "source_file": str(source_path),
+                "source_file": public_source_path(source_path),
                 "theorem": theorem_name,
                 "condition": condition,
                 "round": round_no,
@@ -304,7 +286,9 @@ def main() -> int:
     if args.command == "solve":
         api_key = None
         if args.api_key_prompt:
-            api_key = prompt_api_key()
+            api_key = getpass.getpass("API key（不会回显）：").strip()
+            suffix = api_key[-4:] if len(api_key) >= 4 else "不足四位"
+            print(f"已读取 API key：长度={len(api_key)}，末四位={suffix}", file=sys.stderr)
         elif args.api_key_stdin:
             api_key = sys.stdin.read().strip()
         provider = build_provider(

@@ -16,6 +16,7 @@ from baseline.run_part2 import (  # noqa: E402
     _contract_from_config,
     extract_record,
     main as run_part2_main,
+    prepare_run_artifacts,
     validate_inputs,
 )
 from scripts.prepare_part2_first_round_cache import prepare_cache  # noqa: E402
@@ -29,7 +30,17 @@ def record(
     return {
         "condition": condition,
         "task_id": task_id,
+        "target": "FATEM/1.lean:target",
+        "module": "FATEM/1.lean",
+        "theorem": "target",
+        "path": str(Path("FATEM/1.lean")),
+        "memory_mode": "capsule_feedback" if condition == "capsule" else "self_managed",
+        "memory_processor": "MemorylessProcessor" if condition == "capsule" else None,
+        "axproverbase_commit": "06dfadc9ab439755af5efcfe0add95bfef2733c7",
         "first_round_candidate": candidate,
+        "first_round_reasoning": "paired",
+        "first_round_imports": [],
+        "first_round_opens": [],
         "model": "openai:gpt-5.6-sol",
         "provider_config": {
             "base_url": "https://yxai.chat/v1",
@@ -107,6 +118,7 @@ class Part2PairingTest(unittest.TestCase):
             ),
             metrics=Metrics(),
             iteration_count=1,
+            approved=True,
         )
         prover = SimpleNamespace(
             _capsule_node_counts={"builder": 1, "shared_first_round": 1},
@@ -143,18 +155,23 @@ class Part2PairingTest(unittest.TestCase):
         baseline["budget"] = dict(contract["budget"])
         self.assertTrue(validate_paired_runs([baseline], [capsule])["ok"])
         self.assertEqual(capsule["calls"]["compiler_calls"], 1)
+        self.assertTrue(capsule["compile_ok"])
         self.assertEqual(capsule["calls"]["memory_calls"], 0)
         self.assertEqual(capsule["calls"]["capsule_llm_calls"], 0)
 
+        state.approved = False
+        failed = extract_record(
+            "FATEM/1.lean:target",
+            state,
+            prover,
+            contract,
+            task_metadata={"id": "fate-001", "module": "FATEM/1.lean", "theorem": "target"},
+        )
+        self.assertFalse(failed["compile_ok"])
+        self.assertIsNone(failed["success_node"])
+
     def test_part2_preflight_rejects_cache_drift_before_live_run(self):
         baseline = record("baseline")
-        baseline.update(
-            {
-                "target": "FATEM/1.lean:target",
-                "module": "FATEM/1.lean",
-                "theorem": "target",
-            }
-        )
         with tempfile.TemporaryDirectory() as temp:
             cache = Path(temp) / "cache.json"
             cache.write_text(
@@ -172,6 +189,29 @@ class Part2PairingTest(unittest.TestCase):
             )
             with self.assertRaisesRegex(ValueError, "cache mismatch"):
                 validate_inputs([baseline], cache)
+
+    def test_part2_preflight_rejects_full_proposal_context_drift(self):
+        baseline = record("baseline")
+        original = {
+            "code": baseline["first_round_candidate"],
+            "reasoning": baseline["first_round_reasoning"],
+            "imports": baseline["first_round_imports"],
+            "opens": baseline["first_round_opens"],
+        }
+        for field, changed in (
+            ("reasoning", "different"),
+            ("imports", ["Mathlib"]),
+            ("opens", ["Classical"]),
+        ):
+            with self.subTest(field=field), tempfile.TemporaryDirectory() as temp:
+                payload = dict(original)
+                payload[field] = changed
+                cache = Path(temp) / "cache.json"
+                cache.write_text(
+                    json.dumps({baseline["target"]: payload}), encoding="utf-8"
+                )
+                with self.assertRaisesRegex(ValueError, f"{field} cache mismatch"):
+                    validate_inputs([baseline], cache)
 
     def test_part2_runner_refuses_nonempty_output_before_live_run(self):
         baseline = record("baseline")
@@ -225,6 +265,7 @@ class Part2PairingTest(unittest.TestCase):
             [
                 {
                     **record("baseline"),
+                    "target": "FATEM/Basic.lean:target",
                     "module": "FATEM/Basic.lean",
                     "theorem": "target",
                     "first_round_reasoning": "cached",
@@ -236,6 +277,12 @@ class Part2PairingTest(unittest.TestCase):
             "theorem target (h : True) : True := by exact h",
         )
 
+    def test_empty_first_round_reasoning_is_preserved_exactly(self):
+        baseline = record("baseline")
+        baseline["first_round_reasoning"] = ""
+        cache = prepare_cache([baseline])
+        self.assertEqual(cache["FATEM.1:target"]["reasoning"], "")
+
     def test_strict_pairing_accepts_identical_first_candidate_and_contract(self):
         report = validate_paired_runs([record("baseline")], [record("capsule")])
         self.assertTrue(report["ok"], report["errors"])
@@ -245,6 +292,13 @@ class Part2PairingTest(unittest.TestCase):
     def test_strict_pairing_rejects_candidate_model_budget_and_memory_drift(self):
         baseline = record("baseline")
         capsule = record("capsule", candidate="by trivial")
+        capsule["target"] = "FATEM/2.lean:other"
+        capsule["module"] = "FATEM/2.lean"
+        capsule["theorem"] = "other"
+        capsule["path"] = str(Path("FATEM/2.lean"))
+        capsule["axproverbase_commit"] = "wrong"
+        capsule["first_round_reasoning"] = "different"
+        capsule["first_round_imports"] = ["Mathlib"]
         capsule["model"] = "openai:other"
         capsule["budget"] = {"max_llm_calls": 51}
         capsule["candidate_policy"] = {"version": "tracer-candidate-v1"}
@@ -256,6 +310,12 @@ class Part2PairingTest(unittest.TestCase):
         self.assertFalse(report["ok"])
         joined = "\n".join(report["errors"])
         self.assertIn("first_round_candidate mismatch", joined)
+        self.assertIn("paired target mismatch", joined)
+        self.assertIn("paired module mismatch", joined)
+        self.assertIn("paired theorem mismatch", joined)
+        self.assertIn("first_round_reasoning mismatch", joined)
+        self.assertIn("first_round_imports mismatch", joined)
+        self.assertIn("both conditions must use AxProverBase", joined)
         self.assertIn("model mismatch", joined)
         self.assertIn("paired budgets do not match", joined)
         self.assertIn("candidate security policies do not match", joined)
@@ -263,6 +323,52 @@ class Part2PairingTest(unittest.TestCase):
         self.assertIn("disable response storage", joined)
         self.assertIn("reasoning effort high", joined)
         self.assertIn("memory_calls must be 0", joined)
+
+    def test_formal_runner_requires_fresh_auxiliary_artifacts(self):
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            output = base / "capsule.jsonl"
+            metrics = base / "metrics.jsonl"
+            state = base / "state"
+            state.mkdir()
+            state_file = state / ("a" * 24 + ".json")
+            output.write_text("old output\n", encoding="utf-8")
+            metrics.write_text("old metrics\n", encoding="utf-8")
+            state_file.write_text("{}\n", encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "contaminate a fresh run"):
+                prepare_run_artifacts(
+                    output,
+                    state_dir=state,
+                    metrics_path=metrics,
+                    overwrite=False,
+                )
+
+            prepare_run_artifacts(
+                output,
+                state_dir=state,
+                metrics_path=metrics,
+                overwrite=True,
+            )
+            self.assertEqual(output.read_text(encoding="utf-8"), "")
+            self.assertEqual(metrics.read_text(encoding="utf-8"), "")
+            self.assertFalse(state_file.exists())
+
+    def test_formal_runner_never_removes_unknown_state_entries(self):
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            state = base / "state"
+            state.mkdir()
+            unknown = state / "notes.txt"
+            unknown.write_text("keep", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "dedicated state directory"):
+                prepare_run_artifacts(
+                    base / "capsule.jsonl",
+                    state_dir=state,
+                    metrics_path=base / "metrics.jsonl",
+                    overwrite=True,
+                )
+            self.assertEqual(unknown.read_text(encoding="utf-8"), "keep")
 
     def test_pairing_cli_writes_a_machine_readable_report(self):
         with tempfile.TemporaryDirectory() as temp:

@@ -1,0 +1,20 @@
+[
+  {"id":"and_swap_eval","title":"交换合取项","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.and_swap_eval","tags":["propositional_logic","and"],"difficulty":"easy"},
+  {"id":"or_swap_eval","title":"交换析取项","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.or_swap_eval","tags":["propositional_logic","or"],"difficulty":"easy"},
+  {"id":"eq_transitive_eval","title":"等式传递性","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.eq_transitive_eval","tags":["equality"],"difficulty":"easy"},
+  {"id":"function_congruent_eval","title":"函数保持等式","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.function_congruent_eval","tags":["equality","functions"],"difficulty":"easy"},
+  {"id":"nat_add_zero_eval","title":"自然数右加零","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.nat_add_zero_eval","tags":["natural_numbers","rewriting"],"difficulty":"easy"},
+  {"id":"nat_zero_add_eval","title":"自然数左加零","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.nat_zero_add_eval","tags":["natural_numbers","rewriting"],"difficulty":"easy"},
+  {"id":"nat_succ_ne_zero_eval","title":"后继不为零","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.nat_succ_ne_zero_eval","tags":["natural_numbers","cases"],"difficulty":"easy"},
+  {"id":"nat_le_transitive_eval","title":"小于等于传递性","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.nat_le_transitive_eval","tags":["natural_numbers","relations"],"difficulty":"easy"},
+  {"id":"bool_cases_eval","title":"布尔值分类","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.bool_cases_eval","tags":["inductive_types","cases"],"difficulty":"easy"},
+  {"id":"identity_application_eval","title":"恒等函数应用","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.identity_application_eval","tags":["functions","reduction"],"difficulty":"easy"},
+  {"id":"and_assoc_eval","title":"合取结合律","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.and_assoc_eval","tags":["propositional_logic","and"],"difficulty":"easy"},
+  {"id":"or_assoc_eval","title":"析取结合律","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.or_assoc_eval","tags":["propositional_logic","or"],"difficulty":"easy"},
+  {"id":"not_not_intro_eval","title":"双重否定引入","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.not_not_intro_eval","tags":["propositional_logic","negation"],"difficulty":"easy"},
+  {"id":"nat_succ_add_eval","title":"后继与加法","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.nat_succ_add_eval","tags":["natural_numbers","rewriting"],"difficulty":"easy"},
+  {"id":"nat_add_comm_eval","title":"自然数加法交换律","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.nat_add_comm_eval","tags":["natural_numbers","algebra"],"difficulty":"easy"},
+  {"id":"nat_mul_zero_eval","title":"自然数乘零","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.nat_mul_zero_eval","tags":["natural_numbers","rewriting"],"difficulty":"easy"},
+  {"id":"nat_lt_succ_self_eval","title":"小于后继","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.nat_lt_succ_self_eval","tags":["natural_numbers","relations"],"difficulty":"easy"},
+  {"id":"implies_self_eval","title":"蕴含自反","file":"lean_project/Benchmarks/Evaluation18.lean","theorem":"Eval18.implies_self_eval","tags":["propositional_logic","introduction"],"difficulty":"easy"}
+]

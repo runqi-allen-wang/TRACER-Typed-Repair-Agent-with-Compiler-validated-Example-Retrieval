@@ -155,6 +155,7 @@ class Part1BaselineIntegrationTest(unittest.TestCase):
             item=SimpleNamespace(location=location, is_proven=True),
             metrics=Metrics(),
             iteration_count=1,
+            approved=True,
         )
         contract = {
             "model": "openai:gpt-5.6-sol",
@@ -192,10 +193,23 @@ class Part1BaselineIntegrationTest(unittest.TestCase):
         self.assertEqual(record["calls"]["reviewer_calls"], 1)
         self.assertEqual(record["calls"]["memory_calls"], 1)
         self.assertEqual(record["calls"]["compiler_calls"], 1)
+        self.assertTrue(record["compile_ok"])
         self.assertEqual(record["candidate_policy"]["version"], "tracer-candidate-v2")
         self.assertIsNone(record["estimated_cost_usd"])
         cache = prepare_cache([record])
         self.assertEqual(cache["FATEM.1:target"]["code"], proposal.code)
+
+        state.approved = False
+        failed = extract_record(
+            "FATEM/1.lean:target",
+            state,
+            {"prompt": 100, "completion": 20, "calls": 3},
+            {"input_usd_per_1k": None, "output_usd_per_1k": None},
+            contract,
+            task_metadata={"id": "fate01", "module": "FATEM/1.lean", "theorem": "target"},
+        )
+        self.assertFalse(failed["compile_ok"])
+        self.assertIsNone(failed["success_node"])
 
     def test_part1_safety_gate_rejects_d01_before_builder(self):
         class FakeBuildFailedFeedback:

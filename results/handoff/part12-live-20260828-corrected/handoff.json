@@ -1,0 +1,35 @@
+{
+  "format": "tracer-part12-handoff-v1",
+  "experiment_date": "2026-08-28",
+  "source_revision": "8fdeace98781a672a6a2eeaf4e398890e139f16a",
+  "benchmark": "FATE-M",
+  "paired_problems": 25,
+  "pairing_ok": true,
+  "files": [
+    {
+      "path": "baseline-full.jsonl",
+      "bytes": 55615,
+      "sha256": "7797d1917313061b01f2440cac88a82b796daaa032898eea0418fef4e1c2f5ce"
+    },
+    {
+      "path": "capsule-full.jsonl",
+      "bytes": 62354,
+      "sha256": "2ba4c58ef2098fad6b4500f9a0a8c9151947b5d3e04a8ecf90b1c73de9f1d944"
+    },
+    {
+      "path": "part2-first-round-full.json",
+      "bytes": 17986,
+      "sha256": "892ff5eeb8cea2ea642f0047035ae02ed0780508250bef095e7f706bd31d8740"
+    },
+    {
+      "path": "capsule-metrics-full.jsonl",
+      "bytes": 39096,
+      "sha256": "6fc87d64f8833b3c31d9664d2d6d907a82fff7eb1222eb3184104b61a457d7ee"
+    },
+    {
+      "path": "pairing-full.json",
+      "bytes": 21650,
+      "sha256": "c2ef2ab3d667c862cda87719d9de3200fbcd5480e4917a9c46990b4beb8780b3"
+    }
+  ]
+}

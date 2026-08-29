@@ -5,9 +5,7 @@
 *.jsonl text eol=lf
 *.md text eol=lf
 *.sh text eol=lf
-*.svg text eol=lf
 *.yml text eol=lf
 *.yaml text eol=lf
 *.ps1 text eol=crlf
 *.csv text eol=lf
-*.sqlite3 binary

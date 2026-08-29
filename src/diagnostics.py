@@ -61,16 +61,6 @@ def normalize_diagnostics(
             "truncated": False,
         }
 
-    if returncode is None:
-        summary = next((line.strip() for line in text.splitlines() if line.strip()), "Lean 编译器不可用。")
-        return {
-            "category": "compiler_unavailable",
-            "summary": summary[:700],
-            "errors": [],
-            "feedback": f"类别=compiler_unavailable；摘要={summary[:700]}"[:max_chars],
-            "truncated": len(summary) > 700,
-        }
-
     errors: list[dict[str, str]] = []
     loose_lines: list[str] = []
     for raw_line in text.splitlines():
@@ -95,8 +85,6 @@ def normalize_diagnostics(
         summary = "; ".join(f"{item['category']}: {item['message']}" for item in errors[:2])
     elif loose_lines:
         summary = loose_lines[0]
-    elif returncode:
-        summary = "Lean 编译失败，但没有返回结构化错误。"
     else:
         summary = "Lean 编译通过。"
     feedback = f"类别={category}；摘要={summary[:700]}"

@@ -336,17 +336,45 @@ def validate_inputs(
     for row_no, row in enumerate(rows, start=1):
         task_id = str(row.get("task_id") or "")
         target = str(row.get("target") or "")
+        module = str(row.get("module") or "")
+        theorem = str(row.get("theorem") or "")
         candidate = str(row.get("first_round_candidate") or "")
-        if not task_id or not target or not candidate.strip():
+        reasoning = row.get("first_round_reasoning")
+        imports = row.get("first_round_imports")
+        opens = row.get("first_round_opens")
+        if not task_id or not target or not module or not theorem or not candidate.strip():
             raise ValueError(
-                f"baseline row {row_no} requires task_id, target, and first_round_candidate"
+                f"baseline row {row_no} requires task_id, target, module, theorem, "
+                "and first_round_candidate"
+            )
+        if target != f"{module}:{theorem}":
+            raise ValueError(f"baseline row {row_no} target does not match module/theorem")
+        if not isinstance(reasoning, str):
+            raise ValueError(f"baseline row {row_no} first_round_reasoning must be a string")
+        if isinstance(imports, str) or not isinstance(imports, list):
+            raise ValueError(f"baseline row {row_no} first_round_imports must be a list")
+        if isinstance(opens, str) or not isinstance(opens, list):
+            raise ValueError(f"baseline row {row_no} first_round_opens must be a list")
+        if not all(isinstance(item, str) for item in imports):
+            raise ValueError(
+                f"baseline row {row_no} first_round_imports entries must be strings"
+            )
+        if not all(isinstance(item, str) for item in opens):
+            raise ValueError(
+                f"baseline row {row_no} first_round_opens entries must be strings"
             )
         if task_id in seen:
             raise ValueError(f"duplicate baseline task_id: {task_id}")
         seen.add(task_id)
         cached = cache.get(target)
         if cached["code"] != candidate:
-            raise ValueError(f"first-round candidate cache mismatch for {target}")
+            raise ValueError(f"first-round code cache mismatch for {target}")
+        if cached["reasoning"] != reasoning:
+            raise ValueError(f"first-round reasoning cache mismatch for {target}")
+        if cached["imports"] != imports:
+            raise ValueError(f"first-round imports cache mismatch for {target}")
+        if cached["opens"] != opens:
+            raise ValueError(f"first-round opens cache mismatch for {target}")
     return rows
 
 
@@ -358,7 +386,7 @@ def prepare_run_artifacts(
     overwrite: bool,
     protected_paths: tuple[Path, ...] = (),
 ) -> None:
-    """Require a fresh run and reset only known experiment artifacts."""
+    """Require a fresh formal run and reset only known experiment artifacts."""
 
     output_resolved = output_path.resolve()
     metrics_resolved = metrics_path.resolve() if metrics_path is not None else None

@@ -11,12 +11,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-# 直接执行 `python scripts/run_ci_tests.py` 时，Python 只会自动把
-# scripts/ 放入模块搜索路径；显式加入仓库根目录，确保测试可以导入
-# scripts.export_pilot 等项目模块，并与 `python -m unittest` 行为一致。
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
-
 
 def main() -> int:
     suite = unittest.defaultTestLoader.discover(str(ROOT / "tests"))
