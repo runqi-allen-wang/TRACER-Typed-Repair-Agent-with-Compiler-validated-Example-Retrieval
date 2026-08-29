@@ -23,6 +23,7 @@ The project offers two complementary workflows: reproduce an error with LeanCaps
 Available artifacts:
 
 - **24 public failure capsules**, spanning four error families and Std, Mathlib, and project-local dependencies.
+- **A 12-core / 4-challenge feasibility experiment** whose 16 cases preserve normalized diagnostics and replay in clean temporary directories, including project-local multi-file cases.
 - **18 frozen problems × 3 experimental conditions**, with a published real-provider pilot containing 56 per-round records and 54 successful proof files.
 - **An end-to-end workflow** covering a single-problem CLI, local HTTP API, batch evaluation, manual review, report validation, and sanitized export.
 - **A separate repair24 research suite** with retrieval-only, diagnostic-query and failure-context controls; multi-model results are pending. Jump to [research evaluation](#research-evaluation-beyond-the-smoke-test) and [related work](#related-work).
@@ -260,6 +261,8 @@ The current [gallery](capsules/index.md) contains 24 cases:
 
 Sources: **Std 14 · Mathlib 4 · project-local 6**. Indexes are available as [JSON](capsules/index.json), [CSV](capsules/index.csv), and [Markdown](capsules/index.md). The [review ledger](capsules/MANUAL_REVIEW.csv) records provenance, semantic checks, and sensitive-content review.
 
+The separate [12-core / 4-challenge feasibility experiment](docs/CAPSULE_FEASIBILITY.md) checks a balanced four-taxonomy × three-context core matrix and four harder cases. All 16 cases preserved the full ordered normalized diagnostics and replayed after copying into fresh temporary directories. Project-local imports are copied as a bounded source closure and rebuilt from source before replay; compiled `.olean`/`.ilean` artifacts are not packaged.
+
 Packaging with `--theorem` attempts a standalone file containing imports, namespaces, and the target theorem. If compilation status or normalized diagnostics change, it falls back to the full file. Validated standalone files then undergo import minimization within a compilation budget; disable this with `--no-minimize-imports`. The `--lines` range records the target and is not a general semantic slicing feature.
 
 ### Mathlib environment
@@ -288,6 +291,7 @@ These checks do not call paid model APIs, but end-to-end tests require a real Le
 
 ```text
 lake build
+python scripts/run_capsule_feasibility.py
 python scripts/run_ci_tests.py
 python -m leancapsule audit capsules
 ```
@@ -332,6 +336,7 @@ Keep these checks distinct:
 | Create publicly shareable failure artifacts | [Artifact format](docs/CAPSULE_FORMAT.md) and [case contribution guide](docs/CONTRIBUTING_CAPSULES.md) |
 | Run or inspect the AxProverBase Part 1 + Part 2 experiment | [Part 1 guide](baseline/README.md), [Part 2 design](docs/part2_capsule_feedback.md), and [result handoff](results/handoff/part12-live-20260828-corrected/README.md) |
 | Inspect the D01 pre-compilation security gate | [Type D security regression](docs/security_type_d.md) |
+| Inspect the 12-core / 4-challenge clean-replay experiment | [Capsule feasibility report](docs/CAPSULE_FEASIBILITY.md) |
 | Inspect published experiments and proofs | [Pilot release](published/pilot-20260826T122354Z-d628742d) |
 | Check current status and past changes | [PROGRESS](PROGRESS.md) and [CHANGELOG](CHANGELOG.md) |
 

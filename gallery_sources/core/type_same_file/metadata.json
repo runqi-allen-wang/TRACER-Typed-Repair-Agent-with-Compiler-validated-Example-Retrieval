@@ -1,0 +1,13 @@
+{
+  "case_id": "type_same_file",
+  "order": 6,
+  "challenge_type": "same-file type dependency",
+  "correct_file": "Correct.lean",
+  "error_file": "Error.lean",
+  "theorem": "core_type_same_file",
+  "mutation": "Pass Bool to a same-file Nat helper.",
+  "expected_failure": "Lean reports an application type mismatch.",
+  "taxonomy": "Type / application",
+  "source_kind": "std",
+  "evaluation_set": "core"
+}

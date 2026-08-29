@@ -1,0 +1,13 @@
+{
+  "case_id": "elab_standalone",
+  "order": 3,
+  "challenge_type": "standalone instance failure",
+  "correct_file": "Correct.lean",
+  "error_file": "Error.lean",
+  "theorem": "core_elab_standalone",
+  "mutation": "Request ToString for a function instead of Nat.",
+  "expected_failure": "Lean cannot synthesize a ToString instance for the function type.",
+  "taxonomy": "Elaboration / instance",
+  "source_kind": "std",
+  "evaluation_set": "core"
+}

@@ -55,17 +55,17 @@ run_with_retry() {
     if [[ "$label" == "依赖同步" ]]; then
       recover_incomplete_packages || return $?
     fi
-    echo "$label：第 $attempt/$MAX_ATTEMPTS 次尝试"
+    echo "${label}：第 $attempt/$MAX_ATTEMPTS 次尝试"
     if "$@"; then
       return 0
     else
       status=$?
     fi
     if ((attempt == MAX_ATTEMPTS)); then
-      echo "$label 重试耗尽，退出码：$status；请检查网络或上方错误，不会跳过验证。" >&2
+      echo "$label 重试耗尽，退出码：${status}；请检查网络或上方错误，不会跳过验证。" >&2
       return "$status"
     fi
-    echo "$label 失败（退出码 $status），${delay} 秒后重试..." >&2
+    echo "$label 失败（退出码 ${status}），${delay} 秒后重试..." >&2
     sleep "$delay"
     delay=$((delay * 2))
     if ((delay > 60)); then delay=60; fi

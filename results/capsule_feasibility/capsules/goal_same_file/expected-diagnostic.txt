@@ -1,0 +1,6 @@
+Error.lean:5:70: error: unsolved goals
+case hq
+p q : Prop
+hp : p
+hq : q
+⊢ q

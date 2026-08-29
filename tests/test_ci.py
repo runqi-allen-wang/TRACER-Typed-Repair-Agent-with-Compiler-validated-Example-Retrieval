@@ -24,6 +24,13 @@ class ContinuousIntegrationTest(unittest.TestCase):
         workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
         self.assertLess(workflow.index("- name: Build Lean project"), workflow.index("- name: Run tests"))
 
+    def test_capsule_feasibility_gate_runs_in_ci(self):
+        workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+        gate = "- name: Run Capsule feasibility gate"
+        self.assertIn(gate, workflow)
+        self.assertIn("run: python scripts/run_capsule_feasibility.py", workflow)
+        self.assertLess(workflow.index("- name: Build Lean project"), workflow.index(gate))
+
     def test_lean_action_only_installs_toolchain(self):
         workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
         install_block = workflow.split("- name: Install Lean", 1)[1].split(

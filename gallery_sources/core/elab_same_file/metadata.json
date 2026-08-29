@@ -1,0 +1,13 @@
+{
+  "case_id": "elab_same_file",
+  "order": 7,
+  "challenge_type": "same-file instance dependency",
+  "correct_file": "Correct.lean",
+  "error_file": "Error.lean",
+  "theorem": "core_elab_same_file",
+  "mutation": "Use Bool where only a same-file Nat instance exists.",
+  "expected_failure": "Lean cannot synthesize CoreMarked Bool.",
+  "taxonomy": "Elaboration / instance",
+  "source_kind": "std",
+  "evaluation_set": "core"
+}

@@ -1,0 +1,6 @@
+{"version": "1.2.0",
+ "packagesDir": ".lake/packages",
+ "packages": [],
+ "name": "core_name_project_local",
+ "lakeDir": ".lake",
+ "fixedToolchain": false}

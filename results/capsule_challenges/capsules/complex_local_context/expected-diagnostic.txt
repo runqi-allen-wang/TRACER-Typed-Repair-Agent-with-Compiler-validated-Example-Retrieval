@@ -1,0 +1,7 @@
+Error.lean:7:2: error: Type mismatch
+  x
+has type
+  α
+of sort `Type` but is expected to have type
+  Coe.coe x = 0
+of sort `Prop`

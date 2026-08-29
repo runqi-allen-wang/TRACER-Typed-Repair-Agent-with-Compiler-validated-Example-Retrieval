@@ -1,0 +1,6 @@
+{"version": "1.2.0",
+ "packagesDir": ".lake/packages",
+ "packages": [],
+ "name": "capsule_challenge_multifile",
+ "lakeDir": ".lake",
+ "fixedToolchain": false}

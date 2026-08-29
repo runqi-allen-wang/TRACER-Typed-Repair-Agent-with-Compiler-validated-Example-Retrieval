@@ -1,0 +1,6 @@
+name = "core_name_project_local"
+version = "0.1.0"
+defaultTargets = ["CoreName"]
+
+[[lean_lib]]
+name = "CoreName"

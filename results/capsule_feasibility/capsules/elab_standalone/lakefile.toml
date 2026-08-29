@@ -1,0 +1,7 @@
+name = "tracer"
+version = "0.1.0"
+defaultTargets = ["Evaluation18"]
+
+[[lean_lib]]
+name = "Evaluation18"
+srcDir = "lean_project/Benchmarks"

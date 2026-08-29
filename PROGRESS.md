@@ -23,6 +23,8 @@
 - 新增 Capsule 回放/源码缩减指标、跨环境记录合并、人工定位计时及待复核标记。失败上下文来自已公开 Capsule，不伪造模型轨迹。
 - 更新双语 README，增加研究协议及 8 项相关工作（MathForm、APOLLO、Baldur、LeanDojo、LeanAgent、Lean Copilot、miniF2F、Delta Debugging）；不宣称首创反馈修复或已测得增益。
 - 集成测试发现并修复路径脱敏将 HTTPS 的 s:// 误判为 Windows 路径的问题；修复原始 Mathlib 案例度量时未使用依赖项目的问题。
+- 修复多文件 Capsule 的干净环境回放：按本地 Lean import 闭包复制源码与顶层库入口，在隔离环境中先执行限定的 `lake build` 目标再回放；不再依赖或打包本机生成的 `.olean` / `.ilean` 文件。
+- 新增 12 core + 4 challenge 可行性实验。core 按 4 类错误 × 3 类上下文覆盖并作为硬门槛；当前 core 12/12、challenge 4/4、全部 16/16 均保持诊断键和完整有序规范化诊断，并在全新临时目录回放成功。
 - 修复 Bash Mathlib 安装遇到临时网络错误就立即退出的问题：依赖同步与缓存下载有限重试，残缺传递依赖备份后重试，保留原始错误并在耗尽后失败；CI 设置 30 分钟安装步骤上限。同步中英文 README，未改 PowerShell 入口或依赖固定版本。
 - 新增中英文双版 README：默认首页 `README.md` 使用英文，`README.zh-CN.md` 保留完整中文，两版顶部相互链接；命令、实验数据和证据链接一致，许可说明同步为仓库现有 MIT License。
 - 重构 README 为研究工具首页：补充项目价值、可核查设计贡献、双入口架构图、适用场景、真实 pilot 结果及证据链接；明确无训练、失败回放与成功证明的区别，以及实验结论和许可边界。
@@ -61,6 +63,7 @@
 
 ## 当前验证状态
 
+- `python scripts/run_capsule_feasibility.py`：core 硬门槛 12/12，challenge 干净回放 4/4，全部案例诊断键、完整有序规范化诊断和干净回放 16/16；core standalone/fallback 为 5/7，challenge 为 2/2。
 - `leancapsule verify capsules`：24/24 通过（Std 14、Mathlib 4、project-local 6）。
 - `leancapsule gallery capsules --out capsules/index.json`：通过；四类 taxonomy 均不少于 3 个，三类来源均不少于 4 个。
 - `leancapsule audit capsules`：24/24 通过，无发布审计错误。
@@ -69,6 +72,7 @@
 - Windows 首次度量：24 案例 × 2 次，共 47/48 匹配；mathlib/elab-prime-instance 首次 60 秒超时，第二次通过。修正原文件 Mathlib 项目选择后，独立热缓存复测 24/24；23 对原始/精简源码诊断匹配，行数与字节缩减中位数均为 0。两批原始记录均保留于 results/research-capsule-windows-20260828 和 results/research-capsule-windows-warm-20260828。
 - 新的 Windows/Linux 比较已取得两套不同 OS 的实际记录，均为同一物理机上的本地/WSL2 环境，非独立硬件或 macOS 验证。23 对原文诊断在两端均匹配，现有 gallery 的精简率中位数仍为 0。准备、缓存和背景进程未作严格性能控制，不从耗时差推导 OS 加速收益；人工计时暂停，多模型仅完成一次 B 组预跑。
 - 本轮只读核对：DeepSeek 原批次 48 任务、69 请求、39 成功文件，轨迹校验 0 错误；上游 corrected FATE-M 首轮严格配对 25/25。上游曾完成的 Ubuntu CI 属于历史版本，本地合并补丁尚未推送，不能据此声称新的远程 CI 已通过。
+- Capsule 专项验证覆盖多文件依赖预构建、12 core + 4 challenge 矩阵、CI 硬门槛及 Bash 重试变量边界；合并后的当前测试结果以本节记录和最新 CI 为准，不沿用合并前的固定测试总数。
 - 本次网络故障测试使用命令替身，不等于已完成真实冷启动下载或远程 CI 验收；修复仍在本地，推送后需查看新的 Actions 结果。
 - 双语文档回归检查覆盖语言导航、运行命令一致性、旧 pilot 数字与证据链接、研究协议及相关工作入口；不再把新增章节数量写死。
 - Mathlib 回放在准备 `mathlib_project` 依赖缓存后通过；缓存目录不提交到仓库。
@@ -76,8 +80,10 @@
 ## 明确边界
 
 - capsule gallery 验收的是失败复现协议，不等同于真实模型 A/B/C 实验；模型实验需另行配置 provider、冻结模型参数并记录 token、延迟和编译次数。
-- 多文件依赖目前采用完整文件 fallback 与显式本地文件清单，不承诺任意项目的程序切片。
+- 多文件依赖目前按可解析的本地 Lean import 闭包与顶层 Lake 构建目标打包，仍不承诺任意 Lake 项目的程序切片、非 Lean 构建步骤或动态依赖都可自动迁移。
 - 已有 54 任务 pilot 及其人工复核不改写；新矩阵的人工复核表必须另行逐题填写，不能将旧复核转移为新实验验收。
 - 预跑已由用户在本地完成；本次 v2 修复没有新增 API 调用、没有改写原始结果、没有提交或推送。864 任务仍只是计划；没有跨 OS 性能收益、反馈/检索增益、失败复用收益或人工时间节省证据。下一批需独立目录与重新确认预算，不自动续用本次余额；修订发生在观察预跑之后，不能冒充原批次预注册设计。
+- `manual_review.csv` 的 54 条人工复核仍必须由研究者逐条填写；系统不会自动伪造 kernel_pass、假设合理性或泄漏风险结论。
+- 本次代码迁移没有伪造真实 provider 轨迹；若 `results/real_pilot_runs.jsonl` 尚未由真实 provider 生成，严格校验和导出会明确拒绝，不能把 smoke/mock 记录冒充正式实验。
 - 本地编译隔离是环境清理和候选策略防护，不等同于操作系统级沙箱；运行不受信任项目时仍应使用容器或独立低权限环境。
 - Part 1/2 的 25 题结果是单模型、单批次运行证据，不能据此声称统计显著优势或通用定理证明能力；Part 3 仍需正式统计解释与更大规模重复实验。

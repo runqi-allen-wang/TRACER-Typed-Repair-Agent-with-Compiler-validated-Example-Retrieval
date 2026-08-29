@@ -1,0 +1,15 @@
+{
+  "case_id": "elab_project_local",
+  "order": 11,
+  "challenge_type": "project-local instance dependency",
+  "correct_file": "Correct.lean",
+  "error_file": "Error.lean",
+  "project_root": ".",
+  "theorem": "core_elab_project_local",
+  "mutation": "Use Bool where the imported module only defines ProjectMarked Nat.",
+  "expected_failure": "Lean cannot synthesize ProjectMarked Bool.",
+  "setup_command": ["lake", "build"],
+  "taxonomy": "Elaboration / instance",
+  "source_kind": "project_local",
+  "evaluation_set": "core"
+}

@@ -1,0 +1,6 @@
+Error.lean:6:2: error: Tactic `rfl` failed: The left-hand side
+  localBump 1
+is not definitionally equal to the right-hand side
+  3
+
+⊢ localBump 1 = 3

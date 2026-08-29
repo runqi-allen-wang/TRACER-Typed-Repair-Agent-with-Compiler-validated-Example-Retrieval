@@ -1,0 +1,13 @@
+{
+  "case_id": "type_standalone",
+  "order": 2,
+  "challenge_type": "standalone type failure",
+  "correct_file": "Correct.lean",
+  "error_file": "Error.lean",
+  "theorem": "core_type_standalone",
+  "mutation": "Supply a Bool equality proof for a Nat equality goal.",
+  "expected_failure": "Lean reports a stable proof-term type mismatch.",
+  "taxonomy": "Type / application",
+  "source_kind": "std",
+  "evaluation_set": "core"
+}

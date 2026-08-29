@@ -1,0 +1,15 @@
+{
+  "case_id": "type_project_local",
+  "order": 10,
+  "challenge_type": "project-local type dependency",
+  "correct_file": "Correct.lean",
+  "error_file": "Error.lean",
+  "project_root": ".",
+  "theorem": "core_type_project_local",
+  "mutation": "Pass Bool to a Nat function exported by CoreType.Helper.",
+  "expected_failure": "Lean reports an application type mismatch after building the local library.",
+  "setup_command": ["lake", "build"],
+  "taxonomy": "Type / application",
+  "source_kind": "project_local",
+  "evaluation_set": "core"
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "name_standalone",
+  "order": 1,
+  "challenge_type": "standalone name failure",
+  "correct_file": "Correct.lean",
+  "error_file": "Error.lean",
+  "theorem": "core_name_standalone",
+  "mutation": "Misspell Nat.succ as Nat.succx.",
+  "expected_failure": "Lean reports an unknown constant in an independent theorem.",
+  "taxonomy": "Name / import",
+  "source_kind": "std",
+  "evaluation_set": "core"
+}
