@@ -70,7 +70,7 @@ finally {
 
 ## 实际结果（合并最新 main 后）
 
-此前 2026-08-28 的 `results/handoff/part3-minimal/` 和随后 `07301eb` 批次的 `results/handoff/part3-after-main-20260829/` 均保留为历史工件。本节报告在 `leiteng` 合并最新 `origin/main@90ba62b` 后重新执行的批次（2026-08-29）；正式交接包位于 [`results/handoff/part3-after-main-90ba62b-20260829/`](../results/handoff/part3-after-main-90ba62b-20260829/)。25/25 对齐，配对门禁通过，`errors.jsonl` 为空。共享首轮候选中 16 题首轮成功，9 题首轮失败；后续修复指标应主要看这 9 题：
+此前 2026-08-28 的 `results/handoff/part3-minimal/` 和随后 `07301eb` 批次的 `results/handoff/part3-after-main-20260829/` 均保留为历史工件。本节报告在 `leiteng` 合并 `origin/main@90ba62b` 后重新执行的批次（2026-08-29），其交接清单中的 `source_revision` 为 `53bc501`；之后 `origin/main@37f12de` 仅加入交接协议、校验器和 CI，并以 `23ec5a3` 合入当前 `leiteng`，未改变运行逻辑，也未伪造新的模型轨迹。正式交接包位于 [`results/handoff/part3-after-main-90ba62b-20260829/`](../results/handoff/part3-after-main-90ba62b-20260829/)。25/25 对齐，配对门禁通过，`errors.jsonl` 为空。共享首轮候选中 16 题首轮成功，9 题首轮失败；后续修复指标应主要看这 9 题：
 
 | 指标 | Raw | Capsule | Capsule - Raw |
 | --- | ---: | ---: | ---: |

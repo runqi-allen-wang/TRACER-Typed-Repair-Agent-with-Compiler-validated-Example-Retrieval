@@ -2,6 +2,11 @@
 
 本文件记录影响安全性、实验可复现性、Lean 编译边界和公开发布的补丁。它与 `PROGRESS.md` 的职责不同：`PROGRESS.md` 描述当前状态，本文按提交批次记录变更原因、影响范围和验证证据。
 
+## 2026-08-29 — 吸收最新 main 的 Stage 3 交接工作流
+
+- 远端 main 在 Part 3 运行后合入 PR #15（`37f12de`）；`leiteng` 随后以 `23ec5a3` 合并，新增 `docs/part3_experiment_handoff.md`、`scripts/validate_part3_handoff.py` 和 `.github/workflows/part3.yml`，并同步双语 README 入口。
+- 新校验器在当前工作区通过，检查的是已提交的 Part 1/2 corrected handoff，不调用模型 API。此前 Part 3 Raw/Capsule 轨迹仍准确标注运行源版本 `53bc501`，不把后续文档/CI 合并误报成新的实验运行。
+
 ## 2026-08-29 — 合并最新 main 并重跑 Part 3
 
 - 在 `leiteng` 合并 `origin/main@90ba62b`，当前 HEAD 为 `53bc501`；保留 Part 1/2、D01、Capsule challenge 和 CI 改动，并在合并后的代码状态上重新运行 Part 3。
