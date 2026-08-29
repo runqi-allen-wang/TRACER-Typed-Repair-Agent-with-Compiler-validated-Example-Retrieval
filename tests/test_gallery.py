@@ -50,7 +50,7 @@ class GalleryTest(unittest.TestCase):
                 if path.exists():
                     path.unlink()
 
-    def test_audit_rejects_type_d_unsafe_inductive(self):
+    def test_audit_rejects_sp1_unsafe_inductive(self):
         with tempfile.TemporaryDirectory() as temp:
             gallery = Path(temp) / "capsules"
             shutil.copytree(ROOT / "capsules", gallery)

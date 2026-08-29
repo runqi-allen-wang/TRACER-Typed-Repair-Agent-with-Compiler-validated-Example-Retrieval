@@ -30,7 +30,7 @@ jobs:
         run: python -m compileall -q src scripts tests
       # 12 个 core 案例是硬门槛；同时保留 4 个 challenge 的真实回放结果。
       - name: Run Capsule feasibility gate
-        run: python scripts/run_capsule_feasibility.py
+        run: python scripts/run_capsule_feasibility.py --verify-only
       - name: Run tests
         run: python scripts/run_ci_tests.py
       - name: Audit public capsules

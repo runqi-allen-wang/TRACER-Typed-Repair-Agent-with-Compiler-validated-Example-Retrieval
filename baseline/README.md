@@ -33,7 +33,7 @@ metrics 或 token usage。直接解析该 JSON 会丢失 Part 2 配对所需信�
 - `run_batch.py`：逐题调用 `run_api.py`，任一题异常时返回非零退出码。
 
 真实 runner 还会在 Ax Builder 前执行仓库的 `tracer-candidate-v2` 安全门禁，拒绝
-`unsafe` 声明、占位证明、额外声明和元编程执行入口；D01 类型候选不会进入 Lean。
+`unsafe` 声明、占位证明、额外声明和元编程执行入口；SP-1 安全策略候选不会进入 Lean。
 
 ## 本地运行
 

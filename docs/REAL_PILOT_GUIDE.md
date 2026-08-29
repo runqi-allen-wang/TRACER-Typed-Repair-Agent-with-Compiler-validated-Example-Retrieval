@@ -7,7 +7,7 @@
 在 PowerShell 中进入仓库根目录：
 
 ```powershell
-cd "C:\Users\王润祺\Desktop\LeanProofRepairAgent-整理版\TRACER"
+Set-Location -LiteralPath "<你的 TRACER 仓库目录>"
 python -m pip install -r requirements.txt
 $env:ELAN_HOME = Join-Path $env:USERPROFILE ".elan"
 lake build

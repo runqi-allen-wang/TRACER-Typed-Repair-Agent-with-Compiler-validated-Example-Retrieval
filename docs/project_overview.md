@@ -1,35 +1,37 @@
 # 项目概览
 
-TRACER（Typed Repair Agent with Compiler-validated Example Retrieval）是面向 Lean 4 局部证明修复的工程与评测框架。它把模型生成、编译器反馈、本地示例检索、持久缓存和可追踪评测连接成同一条受控链路。
+TRACER（Typed Repair Agent with Compiler-validated Example Retrieval）是 Lean 4 局部证明修复、失败复现与实验审计工具箱。它不训练模型，而是在推理阶段连接模型候选、Lean 编译反馈、本地示例检索、受控重试和可追踪结果。
 
-## 核心组件
+## 三条工作流
 
-1. `src/agent.py`：实现 provider 驱动的求解 CLI 和有限轮反馈循环。
-2. `src/compiler.py`：隔离源文件补丁，并选择目标文件所属的 Lean/Lake 环境。
-3. `src/provider.py`：支持 OpenAI 兼容接口、命令行 provider 和测试专用 mock；统一清洗模型代码围栏。
-4. `src/retriever.py`：为条件 C 提供本地示例上下文。
-5. `src/cache.py`：使用 SQLite 持久保存精确请求与候选结果。
-6. `src/evaluate.py`：运行冻结的 18 题三条件 pilot。
-7. `src/report.py`：计算通过率、Wilson 区间、token/成本汇总和题型分析。
-8. `src/leancapsule/`：打包、回放和发布审计可复现的 Lean 失败工件。
-9. `CHANGELOG.md`：记录影响安全、实验协议和发布审计的补丁。
+1. **Agent 修复**：`src/agent.py`、`compiler.py`、`provider.py` 与 `retriever.py` 组成最多三轮的局部修复环；原文件不被覆盖，成功证明和逐轮记录分别落盘。
+2. **LeanCapsule 复现**：`src/leancapsule/` 负责定理抽取、full-file fallback、有界 import 精简、回放、gallery、issue 文本和发布审计。
+3. **研究评测**：旧 18×3 pilot、repair24 六臂 runner、AxProverBase Part 1/2 配对入口和 Capsule 价值测量彼此隔离，不能混合日志或结论。
 
-## 当前验证状态
+## 命名约定
 
-- 18 个 benchmark 任务对应 18 个 Lean 定理声明。
-- 49 项单元、端到端与文档一致性测试通过。
-- 成功候选会保存为可独立再次编译的隔离文件。
-- 修复过程中原始 benchmark 源文件保持不变。
-- OpenAI 兼容 provider 的错误正文、非敏感配置、usage 和 Lean 诊断均可追踪。
-- 仓库不内置正式模型 pilot 结论；配置真实 provider 并完成复核后才能形成实验结果。
+- 已发布 smoke pilot 使用 P-A/P-B/P-C 表示历史 A/B/C 条件。
+- repair24 公开显示为 R-A～R-F；存储值保持 `A/B/C/D/C_dynamic/C_failure`。
+- SP-n 表示非实验性的 Security Policy 回归；当前案例为 SP-1。
 
-## 可复现实验
+## 当前可核查工件
 
-```powershell
-python -m unittest discover -s tests -v
+- 18 个冻结 smoke 题与已发布 54 个题目×条件成功证明。
+- 24 个公开失败 Capsule 及其索引和人工复核台账。
+- 12-core / 4-challenge 可行性结果：core 12/12，challenge 干净回放 4/4。
+- FATE-M 25 题 Part 1/2 corrected 配对 handoff。
+- repair24 题库、六臂 runner 和离线门禁；完整多模型结果尚未完成。
+
+证据与未完成事项以 [当前进度](../PROGRESS.md) 为准；历史改动见 [补丁记录](../CHANGELOG.md)。
+
+## 无付费调用的复验
+
+```text
 lake build
-python src/evaluate.py --provider openai_compatible --conditions A,B,C --fresh
-python src/report.py
+python scripts/run_capsule_feasibility.py --verify-only
+python scripts/run_ci_tests.py
+python -m leancapsule audit capsules
+python -m leancapsule verify capsules
 ```
 
-最后两条命令需要真实 provider。发布实验结论时，必须同时提供生成的 JSONL 轨迹、汇总结果和填写完成的 `results/manual_review.csv`。
+最后一项需先准备固定的 Mathlib 依赖。上述命令不产生模型实验结果，也不能代替成功证明的人工数学复核。

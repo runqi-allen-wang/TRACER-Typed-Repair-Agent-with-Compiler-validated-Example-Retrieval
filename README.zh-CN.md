@@ -26,7 +26,7 @@ TRACER 是面向 **Lean 4 形式化证明的修复、复现与评测研究工具
 - **12 core + 4 challenge 可行性实验**：16 个案例均保留规范化诊断并在干净临时目录回放成功，包含项目本地多文件案例。
 - **18 道冻结题 × 3 个实验条件**：已发布一批真实 provider pilot，包含 56 条逐轮记录和 54 个成功证明文件。
 - **完整操作链**：单题 CLI、本地 HTTP API、批量评测、人工复核、报告校验与脱敏导出。
-- **独立 repair24 研究套件**：提供仅检索、动态查询与失败上下文对照，多模型结果待测。跳转至 [研究评测](#超越-smoke-test-的研究评测) 和 [相关工作](#相关工作)。
+- **独立 repair24 研究套件**：提供仅检索、动态查询与失败上下文对照；runner 与离线检查已实现，完整多模型重复实验待测。跳转至 [研究评测](#超越-smoke-test-的研究评测) 和 [相关工作](#相关工作)。
 
 实验范围及结论限制见下文，不将上述数量视为通用证明能力或性能领先的证据。
 
@@ -289,7 +289,7 @@ Bash 入口可通过 `TRACER_SETUP_ATTEMPTS`（1–5 次）和 `TRACER_SETUP_RET
 
 ```text
 lake build
-python scripts/run_capsule_feasibility.py
+python scripts/run_capsule_feasibility.py --verify-only
 python scripts/run_ci_tests.py
 python -m leancapsule audit capsules
 ```
@@ -317,7 +317,7 @@ python -m leancapsule gallery capsules --out capsules/index.json
 ## 安全与能力边界
 
 - **不是操作系统沙箱。** 临时 HOME/TMP/APPDATA、最小环境变量和候选策略只提供防护层。运行不受信任的项目或 Lean 代码，应使用容器、虚拟机或独立低权限环境。
-- **限制局部修复。** Agent 不应改写题目 imports 或定理头；候选中的 `sorry`、`admit`、`sorryAx`、未完成证明警告、unsafe 声明和部分显式本机执行构造会被拒绝。D01 验证通过 `unsafe inductive` 构造 `False` 的候选会在 Agent、AxProverBase、Capsule pack、replay 和 audit 编译前被拒绝；它是安全回归，不是 A/B/C 的第四种条件，也不是研究矩阵中“只检索、不反馈”的 D 组。不承诺任意 Lean 元编程构造都能由文本规则识别。
+- **限制局部修复。** Agent 不应改写题目 imports 或定理头；候选中的 `sorry`、`admit`、`sorryAx`、未完成证明警告、unsafe 声明和部分显式本机执行构造会被拒绝。SP-1 验证通过 `unsafe inductive` 构造 `False` 的候选会在 Agent、AxProverBase、Capsule pack、replay 和 audit 编译前被拒绝。SP 表示非实验性的安全策略，因此不会与研究矩阵中的 R-D 研究臂混淆。不承诺任意 Lean 元编程构造都能由文本规则识别。
 - **凭据与发布分离。** Provider 限制跨来源重定向并对错误文本脱敏；密钥不作为实验记录字段写入。发布前仍应检查导出内容，并只向可信 provider 发送密钥。
 - **透明的比较与缓存。** 诊断比较和请求缓存使用可读的规范化文本，不引入摘要或指纹计算；缓存用于本地调试复用，不充当独立真实采样。
 - **抽取不是全局最小化。** 完整文件 fallback 与显式本地文件清单不等于任意多文件项目的程序切片；诊断一致也不保证保留所有上下文语义。
@@ -332,8 +332,8 @@ python -m leancapsule gallery capsules --out capsules/index.json
 | 理解条件控制和有效性约束 | [方法设计](docs/methodology.md) |
 | 查阅逐轮记录字段 | [JSONL 格式](docs/jsonl_schema.md) |
 | 创建可公开分享的失败工件 | [工件格式](docs/CAPSULE_FORMAT.md)与[案例贡献指南](docs/CONTRIBUTING_CAPSULES.md) |
-| 运行或检查 AxProverBase Part 1 + Part 2 实验 | [Part 1 指南](baseline/README.md)、[Part 2 设计](docs/part2_capsule_feedback.md)、[Part 3 交接清单](docs/part3_experiment_handoff.md)与[结果交接包](results/handoff/part12-live-20260828-corrected/README.md) |
-| 查看 D01 编译前安全门禁 | [D 类安全回归](docs/security_type_d.md) |
+| 运行或检查 AxProverBase Part 1 + Part 2 实验 | [Part 1 指南](baseline/README.md)、[Part 2 设计](docs/part2_capsule_feedback.md)、[Part 3 后续清单](docs/part3_experiment_handoff.md)与[结果交接包](results/handoff/part12-live-20260828-corrected/README.md) |
+| 查看 SP-1 编译前安全门禁 | [安全策略回归](docs/security_policy.md) |
 | 查看 12 core + 4 challenge 干净回放实验 | [Capsule 可行性报告](docs/CAPSULE_FEASIBILITY.md) |
 | 查看已发布实验与证明 | [Pilot 交付目录](published/pilot-20260826T122354Z-d628742d) |
 | 查看当前状态与历史改动 | [PROGRESS](PROGRESS.md)与[CHANGELOG](CHANGELOG.md) |
@@ -350,7 +350,7 @@ examples/              本地检索示例及失败输入
 benchmarks/            冻结题目元数据
 lean_project/          Lean 题目与本地依赖案例
 mathlib_project/       独立 Mathlib 依赖工程
-prompts/               A/B/C 提示模板
+prompts/               A/B/C/D 上下文策略提示模板
 scripts/               依赖准备、测试、pilot 校验与导出
 baseline/              AxProverBase Part 1 与配对 Part 2 实验 runner
 configs/               冻结的 AxProverBase 模型与 memory 配置
@@ -362,22 +362,24 @@ docs/                  使用说明与研究方法
 
 ## 超越 smoke test 的研究评测
 
-**预跑观察（2026-08-28，旧严格警告协议）：** B 组单次运行中，DeepSeek Flash 三轮内通过 20/24，Pro 通过 19/24，两者首轮均为 18/24。39 个成功文件均独立复编译通过。69 次请求没有基础设施错误，按记录价格估算合计 $1.2260，并非实际账单。这些仍在本地、尚未发布的观察不能证明模型排名或反馈/检索增益。
+**历史本地预跑说明（2026-08-28，旧严格警告协议）：** 先前本地审计记录称，DeepSeek Flash 与 Pro 在一次仅 R-B（存储 arm 为 `B`）、单重复预跑中，三轮内分别通过 20/24 和 19/24，首轮均为 18/24；另记录 39 个成功文件已独立复编译、共 69 次请求、无基础设施错误，按当时价格估算总成本约 $1.2260（不是供应商账单）。本源码导出版**未包含原始轨迹与证明目录**，因此目前无法仅凭仓库独立核验这些数字；它们不是已发布结果，也不能证明模型排名或反馈/检索增益。
 
 审计发现 21 次输出额度截断且没有最终证明、3 个有效候选仅因 linter 被拒绝，以及模型混淆“补全尾部”和“替换完整证明”。新运行采用 **`tracer-proof-v2`**：所有组共享完整证明契约，冻结提示模板，单列截断，并分开记录内核验证与无警告状态；未完成证明仍拒绝。历史成绩不变，不能混合协议版本。详见 [审计、证据位置与修订协议](docs/RESEARCH_PROTOCOL.md#4-轨迹与报告)；v2 目前仅完成离线验证。
 
 保留原有 18 题与已发布 A/B/C pilot，作为**工程 smoke test**，不据此声称普遍领先。新增 [repair24-v1](benchmarks/repair24/manifest.json)：24 道人工构造修复题，覆盖递归列表、量词、函数、Option 与递归自然数；每题有真实错误证明和单独验证的参考修复。结构难度是设计目标，上述有限预跑不能证明泛化能力。
 
-| 组 | 编译反馈 | 检索示例 | 查询 |
-| --- | --- | --- | --- |
-| A | 无 | 无 | — |
-| B | 有 | 无 | — |
-| C | 有 | 有 | 固定 |
-| D | 无 | 有 | 固定 |
-| C_dynamic | 有 | 有 | 根据错误、类型和目标更新 |
-| C_failure | 有 | 有，并附失败 Capsule 上下文 | 同 C_dynamic 策略 |
+为避免混淆不同层级的标签，公开文档统一使用以下显示名。已有存储字段保持不变，以兼容历史本地目录与工具。
 
-A/D 仍编译以判断停止，但诊断不回传生成器。两个新增消融组分别研究查询变化和失败复用，不悄悄改变旧 C 条件。所有组都不更新模型权重。
+| 显示组 | 存储 `arm` | Prompt 策略 | 编译反馈 | 检索示例 | 查询方式 |
+| --- | --- | --- | --- | --- | --- |
+| R-A | `A` | A | 无 | 无 | — |
+| R-B | `B` | B | 有 | 无 | — |
+| R-C | `C` | C | 有 | 有 | 固定 |
+| R-D | `D` | D | 无 | 有 | 固定 |
+| R-E | `C_dynamic` | C | 有 | 有 | 根据错误、类型和目标更新 |
+| R-F | `C_failure` | C | 有 | 有，并追加失败 Capsule 上下文 | 与 R-E 相同 |
+
+R-A/R-D 仍会编译以判断是否停止，但诊断不返回给生成器。R-E/R-F 分别隔离查询自适应与失败复用，不静默改写 R-C。`SP-1` 是安全策略回归，不是第七个研究组。模型权重始终不更新。
 
 [研究运行器](src/research.py) 保存可读输入快照、随机化任务顺序、禁用请求缓存、记录完整 prompt/usage，并独立重编译成功文件。支持多模型及重复运行，报告门禁拒绝不完整或混合轨迹。未知费用仍标未知，人工复核与自动检查分开。
 
@@ -388,13 +390,15 @@ python src/research.py plan --config experiments/research.example.json
 
 示例计划为 **864 个任务，最多 2,592 次逻辑生成**：24 题 × 2 模型 × 3 重复 × 6 组。上述命令不调用模型 API。实际付费运行前，替换示例模型名并核对预算，详见 [研究协议与操作命令](docs/RESEARCH_PROTOCOL.md)。
 
-提供待核准的 DeepSeek [Flash/Pro 预跑配置](experiments/research.deepseek.preflight.json)（48 个 B 组任务）及[完整矩阵](experiments/research.deepseek.json)。付费 CLI 必须明确调用次数和保守费用预留上限，密钥隐藏输入且只留内存，禁止自动 HTTP 重试。这不是供应商硬账单上限。两模型显式固定思考模式；DeepSeek 在该模式下忽略温度参数。没有实际轨迹前，不宣称产生新付费实验结果。
+提供待核准的 DeepSeek [Flash/Pro 预跑配置](experiments/research.deepseek.preflight.json)（48 个 R-B 任务，存储 arm 为 `B`）及[完整矩阵](experiments/research.deepseek.json)。付费 CLI 必须明确调用次数和保守费用预留上限，密钥隐藏输入且只留内存，禁止自动 HTTP 重试。这不是供应商硬账单上限。两模型显式固定思考模式；DeepSeek 在该模式下忽略温度参数。没有实际轨迹前，不宣称产生新付费实验结果。
 
-[真人研究入口](src/human_study.py) 提供 8 对经编译验证的合成上下文/精简材料、互补参与者分组、开始计时后才显示源码、放弃/超时记录及独立复核记录。原 gallery 的 23 对映射源码完全一致，不能用阅读时间验证源码精简收益。新材料仅用于**合成可行性预研究**，不代表自然发生的项目缺陷。计时必须由真人产生，AI 不能替代；参与前请勿阅读材料或评审答案。
+[真人研究入口](src/human_study.py) 可生成 8 对经编译验证的合成长上下文/精简材料，并支持互补参与者分组、开始计时后才显示源码、放弃/超时记录及独立复核记录。本导出版没有参与者回答或人工计时结果。原 gallery 的 23 对映射源码完全一致，不能用阅读时间验证源码精简收益。生成材料只用于**合成可行性预研究**，不代表自然发生的项目缺陷。计时必须由真人产生，AI 不能替代；参与前请勿查看生成材料或评审答案。
 
 [Capsule 度量工具](src/capsule_metrics.py) 分别测量回放一致率、源码缩减和人工定位时间。跨环境结论需要独立环境的真实记录，改标签不算换环境；人工计时需要参与者和定位结果复核。评测工具已实现，**多模型增益、跨环境收益与人工时间节省尚未建立证据**。
 
-本地可复现性检查（2026-08-28）：**Windows 11 与 Ubuntu WSL2 各 48/48 次回放匹配**，使用原生 Lean 4.32.0 和相同 24 个案例。这是同一物理机上的跨 OS 诊断复现，不是独立硬件验收、冷启动基准或性能加速证据。两端均验证 23 对原文，源码缩减中位数仍为零。本地轨迹位置与保留的不完整预检记录见 [PROGRESS.md](PROGRESS.md)。
+历史本地记录曾报告 Windows 11 与 Ubuntu WSL2 在原生 Lean 4.32.0 下，对同一 24 个案例均取得 48/48 回放匹配。本源码导出版未包含这些跨 OS 原始记录，因此目前不能在仓库内独立核验。即使复现，它也只表示同一物理机上的两个操作系统，不是独立硬件验证、严格冷启动基准或加速证据。
+
+[Part 3 清单](docs/part3_experiment_handoff.md) 目前只校验已有的 corrected Part 1/2 handoff；仓库没有单独的 Part 3 模型运行或新增结果。
 
 ## 相关工作
 

@@ -5,11 +5,11 @@
 | 字段 | 类型 | 含义 |
 | --- | --- | --- |
 | `run_id` | string | 一次 solve 调用的标识 |
-| `experiment_id` | string 或 null | 一整批 A/B/C 运行的批次标识；报告按此字段隔离 |
+| `experiment_id` | string 或 null | 一整批运行的批次标识；报告按此字段隔离 |
 | `benchmark_id` | string 或 null | 冻结清单中的题目标识 |
 | `problem_id` | string | Agent 使用的稳定题目键 |
 | `theorem` | string | 完全限定的 Lean 定理名 |
-| `condition` | string | Prompt 条件 `A`、`B`、`C` 或 `D`；动态检索由独立字段标识 |
+| `condition` | string | 实际 Prompt 上下文策略 `A`、`B`、`C` 或 `D`；研究报告另用 `arm` 区分 R-A 至 R-F |
 | `round` | integer | 从 1 开始的修复轮次 |
 | `candidate` | string | 清洗传输格式后的局部 Lean 证明项 |
 | `provider` | string | Provider 名称 |
@@ -21,7 +21,7 @@
 | `usage` | object | Provider 报告的输入、输出和总 token |
 | `estimated_cost_usd` | number 或 null | 根据可选价格配置估算的成本；未配置价格时为 null，不解释为零成本 |
 | `cache_hit` | boolean | 本轮是否由 SQLite 精确请求缓存提供 |
-| `retrieved_examples` | array | 条件 C 实际加入 prompt 的示例 |
+| `retrieved_examples` | array | C 或 D 策略实际加入 prompt 的示例；没有检索时为空数组 |
 | `prompt_chars` | integer | Prompt 字符数 |
 | `compile_ok` | boolean | 该批协议下是否成功；旧严格警告口径不可按新口径重写 |
 | `kernel_pass` | boolean 或 null | 新协议下隔离证明是否通过 Lean 及未完成证明检查；未编译时 null |

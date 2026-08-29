@@ -42,7 +42,7 @@ try {
       if ($LASTEXITCODE -ne 0) { throw "Mathlib 缓存和源码构建均失败，退出码：$LASTEXITCODE" }
     }
   }
-  # cache get 产生的归档文件可能带只读属性；Lake 后续需要写入 setup/hash 文件。
+  # cache get 产生的归档文件可能带只读属性；Lake 后续需要写入内部状态文件。
   Clear-ReadOnlyFiles (Join-Path $resolved ".lake")
   Write-Host "Mathlib 环境准备完成。"
 }

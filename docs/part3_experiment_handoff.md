@@ -1,8 +1,8 @@
-# Part 3：配对实验交接与验收清单
+# Part 3：配对实验后续交接与验收清单（尚未执行新实验）
 
 本文件把 Part 1 的 AxProverBase baseline、Part 2 的 CapsuleFeedback 接入，以及
 `results/handoff/part12-live-20260828-corrected/` 中的正式配对结果整理成一个可复查的
-Stage 3 工作流。它不新增一套独立实验目录，也不把 `Evaluation18` smoke 结果当作正式证据。
+Stage 3 工作流。它是一份后续执行清单，不是新的 Part 3 实验结果；不会新增独立实验目录，也不把 `Evaluation18` smoke 结果当作正式证据。
 
 ## Stage 3 问题定义
 
@@ -97,6 +97,6 @@ python scripts/validate_part2_pairing.py \
 
 ## 后续扩展
 
-下一轮 Part 3 应新建独立结果目录，保留 `plan.json`、manifest hash、配置快照、首轮候选缓存、
+下一轮 Part 3 应新建独立结果目录，保留 `plan.json`、manifest 与配置的可读原文快照、首轮候选缓存、
 raw JSONL、配对报告、人工复核表和导出清单。若扩大到多模型或重复运行，比较应按 task id 聚类，
 不能把重复运行当作更多独立 theorem。

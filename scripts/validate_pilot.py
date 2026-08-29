@@ -21,6 +21,11 @@ EXPECTED_CANDIDATE_POLICY = {
     "unsafe_declarations": "blocked",
     "environment": "minimal",
 }
+LEGACY_PUBLISHED_POLICY = {
+    "version": "tracer-candidate-v1",
+    "meta_execution": "blocked",
+    "environment": "minimal",
+}
 
 
 def load_runs(path: Path) -> list[dict]:
@@ -45,7 +50,12 @@ def expected_pairs(manifest_path: Path) -> set[tuple[str, str]]:
     return {(condition, task["id"]) for condition in CONDITIONS for task in tasks}
 
 
-def validate_runs(rows: list[dict], expected: set[tuple[str, str]], allow_cache_hits: bool) -> list[str]:
+def validate_runs(
+    rows: list[dict],
+    expected: set[tuple[str, str]],
+    allow_cache_hits: bool,
+    allow_legacy_candidate_policy: bool = False,
+) -> list[str]:
     errors: list[str] = []
     groups: dict[tuple[str, str], list[dict]] = defaultdict(list)
     for row in rows:
@@ -111,7 +121,10 @@ def validate_runs(rows: list[dict], expected: set[tuple[str, str]], allow_cache_
         for row in rows
     }
     expected_policy = json.dumps(EXPECTED_CANDIDATE_POLICY, ensure_ascii=True, sort_keys=True)
-    if policies != {expected_policy}:
+    accepted_policies = {expected_policy}
+    if allow_legacy_candidate_policy:
+        accepted_policies.add(json.dumps(LEGACY_PUBLISHED_POLICY, ensure_ascii=True, sort_keys=True))
+    if len(policies) != 1 or not policies.issubset(accepted_policies):
         errors.append("run log does not consistently use the current candidate security policy")
     experiment_ids = {str(row.get("experiment_id") or "") for row in rows}
     if "" in experiment_ids:
@@ -167,13 +180,23 @@ def main() -> int:
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     parser.add_argument("--review", type=Path, default=DEFAULT_REVIEW)
     parser.add_argument("--allow-cache-hits", action="store_true")
+    parser.add_argument(
+        "--allow-legacy-candidate-policy",
+        action="store_true",
+        help="只用于复核已发布的 v1 历史批次；新实验不得使用。",
+    )
     parser.add_argument("--require-manual-review", action="store_true")
     args = parser.parse_args()
 
     try:
         rows = load_runs(args.runs)
         expected = expected_pairs(args.manifest)
-        errors = validate_runs(rows, expected, args.allow_cache_hits)
+        errors = validate_runs(
+            rows,
+            expected,
+            args.allow_cache_hits,
+            allow_legacy_candidate_policy=args.allow_legacy_candidate_policy,
+        )
         if args.require_manual_review:
             errors.extend(validate_review(args.review, expected, rows))
     except (OSError, ValueError, KeyError) as exc:

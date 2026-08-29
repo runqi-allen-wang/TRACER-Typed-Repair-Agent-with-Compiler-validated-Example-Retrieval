@@ -10,17 +10,18 @@ ROOT = Path(__file__).resolve().parents[1]
 class DocumentationConsistencyTest(unittest.TestCase):
     """防止公开文档与当前 API 和候选处理行为再次脱节。"""
 
-    def test_security_type_d_is_a_precompile_gate_not_an_agent_condition(self):
-        document = (ROOT / "docs" / "security_type_d.md").read_text(encoding="utf-8")
+    def test_security_policy_is_a_precompile_gate_not_an_agent_condition(self):
+        document = (ROOT / "docs" / "security_policy.md").read_text(encoding="utf-8")
         manifest = json.loads(
             (ROOT / "benchmarks" / "security" / "manifest.json").read_text(encoding="utf-8")
         )
-        self.assertIn("不是 A/B/C 证明实验中的第四种 Agent 条件", document)
+        self.assertIn("不是证明实验条件", document)
         self.assertIn("reject_before_compile", document)
         self.assertIn("AxProverBase", document)
         self.assertIn("tracer-candidate-v2", document)
         self.assertTrue(manifest)
-        self.assertTrue(all(case["type"] == "D" for case in manifest))
+        self.assertTrue(all(case["id"].startswith("SP-") for case in manifest))
+        self.assertTrue(all(case["type"] == "security_policy" for case in manifest))
 
     def test_part2_freezes_yxai_responses_and_reuses_ax_build_result(self):
         part2 = (ROOT / "docs" / "part2_capsule_feedback.md").read_text(encoding="utf-8")
@@ -88,6 +89,8 @@ class DocumentationConsistencyTest(unittest.TestCase):
                 self.assertIn("docs/RELATED_WORK.md", readme)
                 self.assertIn("C_dynamic", readme)
                 self.assertIn("C_failure", readme)
+                for label in ("R-A", "R-B", "R-C", "R-D", "R-E", "R-F", "SP-1"):
+                    self.assertIn(label, readme)
 
     def test_readme_commands_match_between_languages(self):
         # 仅比较执行命令；图中标签、目录注释和报错提示允许翻译。

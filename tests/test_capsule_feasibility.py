@@ -54,6 +54,10 @@ class CapsuleFeasibilityTest(unittest.TestCase):
             failed[field] = False
             self.assertFalse(feasibility.core_case_passed(failed), field)
 
+    def test_ci_uses_non_mutating_feasibility_check(self):
+        workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+        self.assertIn("python scripts/run_capsule_feasibility.py --verify-only", workflow)
+
 
 if __name__ == "__main__":
     unittest.main()

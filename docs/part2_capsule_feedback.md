@@ -41,7 +41,7 @@ next Proposer
 3. **Ax 接线（已实现）**：`leancapsule.ax_integration` 包裹固定 commit 的原 `_builder_node`，转换其返回的 `BuildFailedFeedback`/`SorriesGoalStateFeedback`，不再次调用 `check_lean_file`；每个 theorem 使用独立且有界的 session。
 4. **配对门禁（已实现并完成正式运行）**：`scripts/validate_part2_pairing.py` 严格检查两组题目身份、Ax commit、完整首轮 Proposal（code/reasoning/imports/opens）、模型、endpoint、Responses wire API、响应存储、推理强度、预算和题集一致，并要求 Capsule 的 Memory/额外编译/额外 LLM 调用为零。FATE-M 25 题修正版正式结果与配对报告位于 `results/handoff/part12-live-20260828-corrected/`。
 5. **正式 Part 3 准备（已实现）**：JSONL 遥测包含 feedback_text、repeat count、drift kind、feedback chars、Builder/CapsuleFeedback 耗时、固定模型、Proposer/Reviewer 的真实 `LLMClient.ainvoke` 次数、token、tool calls 和零额外调用声明。provider 未返回价格时成本保持 `null`。
-6. **D 类候选安全门禁（已实现）**：缓存和后续 LLM 的完整 theorem 都在 Builder 前检查 `unsafe`、占位符、额外声明、目标名和声明头；Builder 入口再次校验。配对门禁要求 Part 1/Part 2 都记录 `tracer-candidate-v2`。
+6. **SP 候选安全门禁（已实现）**：缓存和后续 LLM 的完整 theorem 都在 Builder 前检查 `unsafe`、占位符、额外声明、目标名和声明头；Builder 入口再次校验。配对门禁要求 Part 1/Part 2 都记录 `tracer-candidate-v2`。
 
 ## Python 接口
 
@@ -147,7 +147,7 @@ python .\scripts\validate_part2_pairing.py `
 - Ax 接线后的 trace 中，每轮至多执行原 Builder 自带的一次 `check_lean_file`；CapsuleFeedback 增加的编译次数恒为 0，处理耗时单独记录。
 - `feedback_counts`、history、prompt 和驻留 theorem session 均有上限；未知状态 schema 会被拒绝。
 - 固定 Ax commit 的源码契约和真实 Python 消息类型在 Ubuntu workflow 中独立验证。
-- D01 `unsafe inductive` 构造 `False` 在共享缓存、后续 ProposalMessage 和 Builder 三个入口均于 Lean 编译前拒绝。
+- SP-1 `unsafe inductive` 构造 `False` 在共享缓存、后续 ProposalMessage 和 Builder 三个入口均于 Lean 编译前拒绝。
 
 ## GitHub Actions 验证
 

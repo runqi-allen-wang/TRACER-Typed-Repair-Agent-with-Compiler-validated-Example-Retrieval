@@ -67,8 +67,17 @@ def reject_secrets(value: Any, location: str = "root") -> None:
 
 
 def git_revision() -> str:
-    result = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, encoding="utf-8", errors="replace", check=False)
-    return result.stdout.strip() if result.returncode == 0 else "unknown"
+    if not (ROOT / ".git").exists():
+        return "unavailable (source export without repository metadata)"
+    result = subprocess.run(
+        ["git", "-C", str(ROOT), "rev-parse", "HEAD"],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        check=False,
+    )
+    return result.stdout.strip() if result.returncode == 0 else "unavailable"
 
 
 def validate_artifacts(rows: list[dict]) -> list[str]:
