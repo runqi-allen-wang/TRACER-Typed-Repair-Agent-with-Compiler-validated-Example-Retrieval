@@ -19,7 +19,7 @@
 重要限制：
 
 - Chat 模式地址应为完整端点；Responses 模式显式传 `--wire-api responses` 时可给 `/v1` base URL，provider 会追加 `/responses`。不要粘贴 Markdown 的 `[网址](网址)` 包装。
-- `--reasoning-effort` 仅用于 Responses；`--disable-response-storage` 会发送 `store=false`。不要假设所有兼容服务都支持这些字段。
+- `--reasoning-effort` 根据协议分别传入 Responses 的 `reasoning.effort` 或兼容 Chat 接口的 `reasoning_effort`；`--disable-response-storage` 会发送 `store=false`。不要假设所有兼容服务都支持这些字段。
 - 不能把示例模型名任意替换为其他模型。部分模型需要不同输出预算字段或不接受温度参数；应先核对对应协议。Chat 模式仍使用 `max_tokens`，Responses 模式使用 `max_output_tokens`。
 - 需要其他协议时，可实现 `--provider command` 适配器：标准输入接收 `{"prompt":"..."}`，标准输出返回 `{"candidate":"by ...","usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2}}`。诊断写标准错误；不得把密钥写入命令字符串、候选或日志。当前命令 provider 默认超时为 60 秒。
 - 只把密钥发送给你确认可信的服务商；第三方兼容服务不等同于 OpenAI 官方服务。账号订阅或网页能使用某模型，不足以证明该 API 账号能调用同名模型。
@@ -96,7 +96,7 @@ python src/agent.py solve --file lean_project/Benchmarks/Evaluation18.lean --the
 | `--temperature` | `LEAN_PROOF_TEMPERATURE` | `0`，是否生效由服务端决定 |
 | `--max-tokens` | `LEAN_PROOF_MAX_TOKENS` | `800`，不建议直接用作推理模型完整评测预算 |
 | `--wire-api` | `LEAN_PROOF_WIRE_API` | 根据 URL 推断，建议 Responses 实验显式指定 |
-| `--reasoning-effort` | `LEAN_PROOF_REASONING_EFFORT` | 未设置；仅 Responses 使用 |
+| `--reasoning-effort` | `LEAN_PROOF_REASONING_EFFORT` | 未设置；必须与所选接口支持的参数一致 |
 | `--disable-response-storage` | `LEAN_PROOF_DISABLE_RESPONSE_STORAGE` | `false`；隐私敏感实验应显式关闭存储 |
 | `--api-key-prompt` / `--api-key-stdin` | `LEAN_PROOF_API_KEY` | 必须安全提供一种密钥来源 |
 
@@ -175,7 +175,23 @@ try {
 | 网络超时 | 检查网络/代理及服务状态；提高 Lean 的 `--timeout` 不会延长 API 等待 |
 | `compile_ok: false` 且 `diagnostic.category` 为 `syntax/type/goal` | 检查 Lean 候选与诊断，不等于 API 密钥错误 |
 | `provider_error` | 查看该字段的脱敏错误；尚不能形成有效编译反馈 |
+| `generation_truncated` | 服务端 `finish_reason=length`；不是 Key 错误。可能推理已用尽输出额度；不编译截断片段，计入一次轮次和费用，不自动加预算 |
+| `kernel_pass=true`、`warning_free=false` | 新协议下证明已通过，但存在普通警告；与未完成证明警告不同 |
 | C 条件语料重合 | 修正评测题与检索例子的泄漏，不要绕过预检 |
 | 单题缓存命中 | 此次不一定发出新请求；正式实验使用 `evaluate.py --fresh`，不要加 `--reuse-cache` |
 
 单题轨迹在 `results/agent_runs.jsonl`，正式实验轨迹在 `results/real_pilot_runs.jsonl`。只分享经过 `scripts/export_pilot.py` 导出的材料，不强制上传原始日志或 SQLite。
+
+## 9. 新修复集的多模型研究
+
+48 任务预跑已完成，结果与审计见 [研究协议第 4 节](RESEARCH_PROTOCOL.md#4-轨迹与报告)。现行代码使用 v2 完整证明替换契约，分开记录生成截断、Lean 验证和普通警告；不改写已完成批次。下列命令只是启动示例，不代表需要重跑，也不构成对下一批费用的授权。
+
+旧 18 题 pilot 保持不变；repair24 新研究使用独立 `research.py`。已提供 DeepSeek Flash/Pro 的 48 任务 B 组预跑配置，以及 864 任务完整矩阵。详见 [研究协议](RESEARCH_PROTOCOL.md)。
+
+用户确认付费预算后，预跑命令为：
+
+```powershell
+python src/research.py run --config experiments/research.deepseek.preflight.json --out results/research-deepseek-preflight-001 --api-key-prompt --max-calls 144 --max-reserved-usd 5
+```
+
+只询问一次 DeepSeek Key，不回显、不显示后缀、不写文件或环境变量；必须在交互终端运行。预算按配置的峰时、全部输入未命中价格保守预留，未必接近账单；达到次数/预留上限或遇到基础设施错误即停止，不自动重试可能已经计费的请求。`--max-reserved-usd` 不是供应商硬消费限额。新配置显式开启 thinking 和 high effort，DeepSeek 在此模式忽略 temperature；日志记录该事实对应的参数。预跑不能并入正式重复实验，后者需要另行批准预算和新目录。

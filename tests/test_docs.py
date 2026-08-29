@@ -84,15 +84,18 @@ class DocumentationConsistencyTest(unittest.TestCase):
         for name, readme in readmes.items():
             with self.subTest(language=name):
                 self.assertIn("](TRACER.png)", readme)
-                self.assertEqual(14, len(re.findall(r"^## ", readme, re.MULTILINE)))
+                self.assertIn("docs/RESEARCH_PROTOCOL.md", readme)
+                self.assertIn("docs/RELATED_WORK.md", readme)
+                self.assertIn("C_dynamic", readme)
+                self.assertIn("C_failure", readme)
 
     def test_readme_commands_match_between_languages(self):
         # 仅比较执行命令；图中标签、目录注释和报错提示允许翻译。
         commands = []
         for name, readme in self.readmes().items():
-            blocks = re.findall(r"^```[^\n]*\n(.*?)^```", readme, re.MULTILINE | re.DOTALL)
+            blocks = [match[1] for match in re.findall(r"^(```|~~~)[^\n]*\n(.*?)^\1", readme, re.MULTILINE | re.DOTALL)]
             with self.subTest(language=name):
-                self.assertEqual(17, len(blocks))
+                self.assertGreaterEqual(len(blocks), 18)
             commands.append([
                 line for block in blocks for line in block.splitlines()
                 if line.startswith(("python ", "lake ", "git ", "cd ", "$env:", "./scripts/", "bash "))

@@ -491,9 +491,10 @@ def compile_candidate(
         try:
             project_root = find_project_root(source_path)
             environment = lean_subprocess_environment(project_root, Path(temp_dir) / "home")
-            command = ["lake", "env", "lean", "-DwarningAsError=true", str(temp_path)] if project_root else _direct_lean_command(temp_path)
+            # 普通风格警告不否定证明；未完成证明仍由下面的诊断检查拒绝。
+            command = ["lake", "env", "lean", "-DwarningAsError=false", str(temp_path)] if project_root else _direct_lean_command(temp_path)
             if not project_root:
-                command.insert(-1, "-DwarningAsError=true")
+                command.insert(-1, "-DwarningAsError=false")
             process = subprocess.run(
                 command,
                 cwd=project_root or source_path.parent,

@@ -1,4 +1,3 @@
-题目：{problem_title}
 定理：{theorem}
 上一轮 Lean 诊断：{feedback}
 本地相似示例：{examples}

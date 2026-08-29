@@ -10,6 +10,9 @@ results/agent_runs.jsonl
 results/requests.sqlite3
 results/solutions/
 /results/archive/
+/results/research*/
+/results/human-*/
+/experiments/*.local.json
 results/handoff/
 results/work/
 baseline/.baseline_cache.json

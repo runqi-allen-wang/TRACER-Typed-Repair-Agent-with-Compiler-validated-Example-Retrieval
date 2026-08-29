@@ -287,7 +287,8 @@ class Part2PairingTest(unittest.TestCase):
         report = validate_paired_runs([record("baseline")], [record("capsule")])
         self.assertTrue(report["ok"], report["errors"])
         self.assertEqual(report["pair_count"], 1)
-        self.assertEqual(len(report["pairs"][0]["candidate_sha256"]), 64)
+        self.assertTrue(report["pairs"][0]["first_round_candidate_equal"])
+        self.assertTrue(report["pairs"][0]["first_round_proposal_equal"])
 
     def test_strict_pairing_rejects_candidate_model_budget_and_memory_drift(self):
         baseline = record("baseline")
@@ -331,7 +332,7 @@ class Part2PairingTest(unittest.TestCase):
             metrics = base / "metrics.jsonl"
             state = base / "state"
             state.mkdir()
-            state_file = state / ("a" * 24 + ".json")
+            state_file = state / "session-00000000-0000-4000-8000-000000000000.json"
             output.write_text("old output\n", encoding="utf-8")
             metrics.write_text("old metrics\n", encoding="utf-8")
             state_file.write_text("{}\n", encoding="utf-8")

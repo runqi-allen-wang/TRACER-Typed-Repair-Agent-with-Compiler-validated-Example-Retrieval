@@ -18,17 +18,17 @@ from leancapsule.feedback import (  # noqa: E402
     YXAI_REASONING_EFFORT,
     YXAI_STORE_RESPONSES,
     YXAI_WIRE_API,
-    stable_feedback_fingerprint,
+    normalized_feedback_text,
 )
 
 
 class CapsuleFeedbackTest(unittest.TestCase):
-    def test_fingerprint_ignores_path_location_and_metavariable_noise(self):
+    def test_feedback_text_ignores_path_location_and_metavariable_noise(self):
         left = "C:\\tmp\\tmp_Demo_ab12.lean:2:4: error: type mismatch for ?m.123"
         right = "/tmp/tmp_Demo_cd34.lean:20:8: error: type mismatch for ?m.987"
         self.assertEqual(
-            stable_feedback_fingerprint("type_mismatch", left),
-            stable_feedback_fingerprint("type_mismatch", right),
+            normalized_feedback_text("type_mismatch", left),
+            normalized_feedback_text("type_mismatch", right),
         )
 
     def test_repeats_and_drift_are_tracked(self):
@@ -70,15 +70,15 @@ class CapsuleFeedbackTest(unittest.TestCase):
         run.assert_not_called()
 
     def test_state_and_prompt_are_bounded(self):
-        formatter = CapsuleFeedback(history_limit=2, max_feedback_chars=400, fingerprint_limit=8)
+        formatter = CapsuleFeedback(history_limit=2, max_feedback_chars=400, feedback_limit=8)
         for round_no in range(1, 101):
             formatter.observe_ax((False, f"Demo.lean:{round_no}:1: error: unknown identifier `x{round_no}`"))
         state = formatter.export_state()
         self.assertEqual(len(state["history"]), 2)
-        self.assertLessEqual(len(state["fingerprint_counts"]), 8)
+        self.assertLessEqual(len(state["feedback_counts"]), 8)
         self.assertLess(len(json.dumps(state)), 5000)
         restored = CapsuleFeedback.from_state(
-            state, history_limit=2, max_feedback_chars=400, fingerprint_limit=8
+            state, history_limit=2, max_feedback_chars=400, feedback_limit=8
         )
         result = restored.observe_ax((True, "Build successful"), round_no=101)
         self.assertLessEqual(len(result["prompt_feedback"]), 400)

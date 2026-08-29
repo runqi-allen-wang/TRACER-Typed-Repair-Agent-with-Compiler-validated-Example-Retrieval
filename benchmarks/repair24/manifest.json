@@ -1,0 +1,273 @@
+{
+  "version": "repair24-v1",
+  "status": "frozen-authored",
+  "license": "MIT",
+  "lean_toolchain": "leanprover/lean4:v4.32.0",
+  "description": "人工构造的结构化修复集；难度设计高于 smoke，但真实模型难度待测。运行时不读取测试参考证明。",
+  "problems": [
+    {
+      "id": "stitch_assoc",
+      "file": "tasks/stitch_assoc.lean",
+      "theorem": "Repair24.stitch_assoc",
+      "tags": [
+        "recursive_lists"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "type_mismatch",
+      "source_text": "import Std\n\nnamespace Repair24\n\ndef stitch {α : Type} : List α → List α → List α\n  | [], ys => ys\n  | x :: xs, ys => x :: stitch xs ys\n\ntheorem stitch_assoc (xs ys zs : List Nat) : stitch (stitch xs ys) zs = stitch xs (stitch ys zs) :=\n  -- PROOF_START\n  by\n  exact List.append_assoc xs ys zs\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "map_stitch",
+      "file": "tasks/map_stitch.lean",
+      "theorem": "Repair24.map_stitch",
+      "tags": [
+        "recursive_lists"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "unknown_identifier",
+      "source_text": "import Std\n\nnamespace Repair24\n\ndef stitch {α : Type} : List α → List α → List α\n  | [], ys => ys\n  | x :: xs, ys => x :: stitch xs ys\n\ndef transform {α β : Type} (f : α → β) : List α → List β\n  | [] => []\n  | x :: xs => f x :: transform f xs\n\ntheorem map_stitch (f : Nat → Nat) (xs ys : List Nat) : transform f (stitch xs ys) = stitch (transform f xs) (transform f ys) :=\n  -- PROOF_START\n  by\n  rw [transform_stitch]\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "size_stitch",
+      "file": "tasks/size_stitch.lean",
+      "theorem": "Repair24.size_stitch",
+      "tags": [
+        "recursive_lists"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "unsolved_goals",
+      "source_text": "import Std\n\nnamespace Repair24\n\ndef stitch {α : Type} : List α → List α → List α\n  | [], ys => ys\n  | x :: xs, ys => x :: stitch xs ys\n\ndef size {α : Type} : List α → Nat\n  | [] => 0\n  | _ :: xs => size xs + 1\n\ntheorem size_stitch (xs ys : List Nat) : size (stitch xs ys) = size xs + size ys :=\n  -- PROOF_START\n  by\n  induction xs with\n  | nil => simp [stitch, size]\n  | cons x xs ih => simp only [stitch, size]\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "map_comp",
+      "file": "tasks/map_comp.lean",
+      "theorem": "Repair24.map_comp",
+      "tags": [
+        "recursive_lists"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "type_mismatch",
+      "source_text": "import Std\n\nnamespace Repair24\n\ndef transform {α β : Type} (f : α → β) : List α → List β\n  | [] => []\n  | x :: xs => f x :: transform f xs\n\ntheorem map_comp (f g : Nat → Nat) (xs : List Nat) : transform g (transform f xs) = transform (fun x => g (f x)) xs :=\n  -- PROOF_START\n  by\n  rfl\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "fold_stitch",
+      "file": "tasks/fold_stitch.lean",
+      "theorem": "Repair24.fold_stitch",
+      "tags": [
+        "recursive_lists"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "type_mismatch",
+      "source_text": "import Std\n\nnamespace Repair24\n\ndef stitch {α : Type} : List α → List α → List α\n  | [], ys => ys\n  | x :: xs, ys => x :: stitch xs ys\n\ndef fold {α β : Type} (f : β → α → β) : β → List α → β\n  | z, [] => z\n  | z, x :: xs => fold f (f z x) xs\n\ntheorem fold_stitch (f : Nat → Nat → Nat) (xs ys : List Nat) (z : Nat) : fold f z (stitch xs ys) = fold f (fold f z xs) ys :=\n  -- PROOF_START\n  by\n  induction xs with\n  | nil => rfl\n  | cons x xs ih => exact ih\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "size_map",
+      "file": "tasks/size_map.lean",
+      "theorem": "Repair24.size_map",
+      "tags": [
+        "recursive_lists"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "unknown_identifier",
+      "source_text": "import Std\n\nnamespace Repair24\n\ndef transform {α β : Type} (f : α → β) : List α → List β\n  | [] => []\n  | x :: xs => f x :: transform f xs\n\ndef size {α : Type} : List α → Nat\n  | [] => 0\n  | _ :: xs => size xs + 1\n\ntheorem size_map (f : Nat → Nat) (xs : List Nat) : size (transform f xs) = size xs :=\n  -- PROOF_START\n  by\n  exact size_transform f xs\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "forall_and",
+      "file": "tasks/forall_and.lean",
+      "theorem": "Repair24.forall_and",
+      "tags": [
+        "quantifiers"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "type_mismatch",
+      "source_text": "import Std\n\nnamespace Repair24\n\n\n\ntheorem forall_and (P Q : Nat → Prop) : (∀ x, P x ∧ Q x) ↔ (∀ x, P x) ∧ (∀ x, Q x) :=\n  -- PROOF_START\n  by\n  constructor\n  · intro h; exact h\n  · intro h; exact h\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "exists_or",
+      "file": "tasks/exists_or.lean",
+      "theorem": "Repair24.exists_or",
+      "tags": [
+        "quantifiers"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "type_mismatch",
+      "source_text": "import Std\n\nnamespace Repair24\n\n\n\ntheorem exists_or (P Q : Nat → Prop) : (∃ x, P x ∨ Q x) ↔ (∃ x, P x) ∨ (∃ x, Q x) :=\n  -- PROOF_START\n  by\n  constructor\n  · intro h; rcases h with ⟨x, hx⟩; exact Or.inl ⟨x, hx⟩\n  · intro h; exact h\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "exists_and",
+      "file": "tasks/exists_and.lean",
+      "theorem": "Repair24.exists_and",
+      "tags": [
+        "quantifiers"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "unsolved_goals",
+      "source_text": "import Std\n\nnamespace Repair24\n\n\n\ntheorem exists_and (P : Nat → Prop) (Q : Prop) : (∃ x, P x ∧ Q) ↔ (∃ x, P x) ∧ Q :=\n  -- PROOF_START\n  by\n  constructor\n  · rintro ⟨x, hp, hq⟩; exact ⟨⟨x, hp⟩, hq⟩\n  · intro h\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "not_exists",
+      "file": "tasks/not_exists.lean",
+      "theorem": "Repair24.not_exists",
+      "tags": [
+        "quantifiers"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "type_mismatch",
+      "source_text": "import Std\n\nnamespace Repair24\n\n\n\ntheorem not_exists (P : Nat → Prop) : (¬ ∃ x, P x) ↔ ∀ x, ¬ P x :=\n  -- PROOF_START\n  by\n  constructor\n  · intro h x hx; exact h hx\n  · intro h hx; exact h hx\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "injective_comp",
+      "file": "tasks/injective_comp.lean",
+      "theorem": "Repair24.injective_comp",
+      "tags": [
+        "functions"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "type_mismatch",
+      "source_text": "import Std\n\nnamespace Repair24\n\n\n\ntheorem injective_comp (f g : Nat → Nat) (hf : ∀ a b, f a = f b → a = b) (hg : ∀ a b, g a = g b → a = b) : ∀ a b, g (f a) = g (f b) → a = b :=\n  -- PROOF_START\n  by\n  intro a b h; exact hg a b h\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "left_inverse",
+      "file": "tasks/left_inverse.lean",
+      "theorem": "Repair24.left_inverse",
+      "tags": [
+        "functions"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "type_mismatch",
+      "source_text": "import Std\n\nnamespace Repair24\n\n\n\ntheorem left_inverse (f g : Nat → Nat) (h : ∀ x, g (f x) = x) : ∀ a b, f a = f b → a = b :=\n  -- PROOF_START\n  by\n  intro a b hab; exact hab\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "surjective_comp",
+      "file": "tasks/surjective_comp.lean",
+      "theorem": "Repair24.surjective_comp",
+      "tags": [
+        "functions"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "type_mismatch",
+      "source_text": "import Std\n\nnamespace Repair24\n\n\n\ntheorem surjective_comp (f g : Nat → Nat) (hf : ∀ y, ∃ x, f x = y) (hg : ∀ y, ∃ x, g x = y) : ∀ y, ∃ x, g (f x) = y :=\n  -- PROOF_START\n  by\n  intro y; exact hg y\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "right_inverse",
+      "file": "tasks/right_inverse.lean",
+      "theorem": "Repair24.right_inverse",
+      "tags": [
+        "functions"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "type_mismatch",
+      "source_text": "import Std\n\nnamespace Repair24\n\n\n\ntheorem right_inverse (f g : Nat → Nat) (h : ∀ y, f (g y) = y) : ∀ y, ∃ x, f x = y :=\n  -- PROOF_START\n  by\n  intro y; exact ⟨y, h y⟩\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "omap_comp",
+      "file": "tasks/omap_comp.lean",
+      "theorem": "Repair24.omap_comp",
+      "tags": [
+        "options"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "type_mismatch",
+      "source_text": "import Std\n\nnamespace Repair24\n\ndef omap {α β : Type} (f : α → β) : Option α → Option β\n  | none => none\n  | some x => some (f x)\n\ntheorem omap_comp (f g : Nat → Nat) (x : Option Nat) : omap g (omap f x) = omap (fun n => g (f n)) x :=\n  -- PROOF_START\n  by\n  rfl\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "obind_assoc",
+      "file": "tasks/obind_assoc.lean",
+      "theorem": "Repair24.obind_assoc",
+      "tags": [
+        "options"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "type_mismatch",
+      "source_text": "import Std\n\nnamespace Repair24\n\ndef obind {α β : Type} : Option α → (α → Option β) → Option β\n  | none, _ => none\n  | some x, f => f x\n\ntheorem obind_assoc (x : Option Nat) (f g : Nat → Option Nat) : obind (obind x f) g = obind x (fun n => obind (f n) g) :=\n  -- PROOF_START\n  by\n  cases x with\n  | none => rfl\n  | some n => exact Eq.refl n\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "omap_bind",
+      "file": "tasks/omap_bind.lean",
+      "theorem": "Repair24.omap_bind",
+      "tags": [
+        "options"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "unknown_identifier",
+      "source_text": "import Std\n\nnamespace Repair24\n\ndef omap {α β : Type} (f : α → β) : Option α → Option β\n  | none => none\n  | some x => some (f x)\n\ndef obind {α β : Type} : Option α → (α → Option β) → Option β\n  | none, _ => none\n  | some x, f => f x\n\ntheorem omap_bind (x : Option Nat) (f : Nat → Option Nat) (g : Nat → Nat) : omap g (obind x f) = obind x (fun n => omap g (f n)) :=\n  -- PROOF_START\n  by\n  exact omap_obind x f g\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "omap_identity",
+      "file": "tasks/omap_identity.lean",
+      "theorem": "Repair24.omap_identity",
+      "tags": [
+        "options"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "unsolved_goals",
+      "source_text": "import Std\n\nnamespace Repair24\n\ndef omap {α β : Type} (f : α → β) : Option α → Option β\n  | none => none\n  | some x => some (f x)\n\ntheorem omap_identity (x : Option Nat) : omap (fun n => n) x = x :=\n  -- PROOF_START\n  by\n  cases x with\n  | none => rfl\n  | some n => skip\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "double_add",
+      "file": "tasks/double_add.lean",
+      "theorem": "Repair24.double_add",
+      "tags": [
+        "recursive_nat"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "type_mismatch",
+      "source_text": "import Std\n\nnamespace Repair24\n\ndef double : Nat → Nat\n  | 0 => 0\n  | n + 1 => double n + 2\n\ntheorem double_add (a b : Nat) : double (a + b) = double a + double b :=\n  -- PROOF_START\n  by\n  rfl\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "double_value",
+      "file": "tasks/double_value.lean",
+      "theorem": "Repair24.double_value",
+      "tags": [
+        "recursive_nat"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "unknown_identifier",
+      "source_text": "import Std\n\nnamespace Repair24\n\ndef double : Nat → Nat\n  | 0 => 0\n  | n + 1 => double n + 2\n\ntheorem double_value (n : Nat) : double n = n + n :=\n  -- PROOF_START\n  by\n  exact double_eq_add n\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "scale_add",
+      "file": "tasks/scale_add.lean",
+      "theorem": "Repair24.scale_add",
+      "tags": [
+        "recursive_nat"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "unsolved_goals",
+      "source_text": "import Std\n\nnamespace Repair24\n\ndef scale (a : Nat) : Nat → Nat\n  | 0 => 0\n  | n + 1 => scale a n + a\n\ntheorem scale_add (a m n : Nat) : scale a (m + n) = scale a m + scale a n :=\n  -- PROOF_START\n  by\n  induction n with\n  | zero => simp [scale]\n  | succ n ih => simp only [Nat.add_succ, scale]\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "scale_value",
+      "file": "tasks/scale_value.lean",
+      "theorem": "Repair24.scale_value",
+      "tags": [
+        "recursive_nat"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "type_mismatch",
+      "source_text": "import Std\n\nnamespace Repair24\n\ndef scale (a : Nat) : Nat → Nat\n  | 0 => 0\n  | n + 1 => scale a n + a\n\ntheorem scale_value (a n : Nat) : scale a n = a * n :=\n  -- PROOF_START\n  by\n  induction n with\n  | zero => rfl\n  | succ n ih => exact ih\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "tri_lower",
+      "file": "tasks/tri_lower.lean",
+      "theorem": "Repair24.tri_lower",
+      "tags": [
+        "recursive_nat"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "type_mismatch",
+      "source_text": "import Std\n\nnamespace Repair24\n\ndef tri : Nat → Nat\n  | 0 => 0\n  | n + 1 => tri n + (n + 1)\n\ntheorem tri_lower (n : Nat) : n ≤ tri n :=\n  -- PROOF_START\n  by\n  induction n with\n  | zero => exact Nat.le_refl 0\n  | succ n ih => exact ih\n  -- PROOF_END\n\nend Repair24\n"
+    },
+    {
+      "id": "double_even",
+      "file": "tasks/double_even.lean",
+      "theorem": "Repair24.double_even",
+      "tags": [
+        "recursive_nat"
+      ],
+      "difficulty": "structural-repair",
+      "expected_error": "type_mismatch",
+      "source_text": "import Std\n\nnamespace Repair24\n\ndef double : Nat → Nat\n  | 0 => 0\n  | n + 1 => double n + 2\n\ntheorem double_even (n : Nat) : ∃ k, double n = k + k :=\n  -- PROOF_START\n  by\n  exact ⟨n, rfl⟩\n  -- PROOF_END\n\nend Repair24\n"
+    }
+  ]
+}

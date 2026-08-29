@@ -106,7 +106,10 @@ class Part3IntegrationTest(unittest.TestCase):
             self.assertEqual(event["capsule_llm_calls"], 0)
             self.assertEqual(event["capsule_compiler_calls"], 0)
             self.assertEqual(event["memory_llm_calls"], 0)
-            self.assertNotIn(original.error_output, metrics.read_text(encoding="utf-8"))
+            metrics_text = metrics.read_text(encoding="utf-8")
+            self.assertIn('"feedback_mode":"raw"', metrics_text)
+            self.assertIn('"builder_result_reused":false', metrics_text)
+            self.assertNotIn("secret-token", metrics_text)
 
     def test_raw_tracker_counts_repeats_without_formatting_feedback(self):
         tracker = RawFeedbackTracker()

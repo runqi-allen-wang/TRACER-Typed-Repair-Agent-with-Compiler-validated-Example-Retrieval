@@ -6,7 +6,6 @@ sit between AxProverBase's builder and proposer and reuse the builder's result.
 
 from __future__ import annotations
 
-import hashlib
 import json
 import re
 from collections import OrderedDict
@@ -21,7 +20,7 @@ except ModuleNotFoundError as exc:
     from src.diagnostics import normalize_diagnostics
 
 
-SCHEMA_VERSION = "capsule-feedback.v0.1"
+SCHEMA_VERSION = "capsule-feedback.readable.v0.2"
 SUPPORTED_STATE_SCHEMA_VERSIONS = frozenset({SCHEMA_VERSION})
 AXPROVERBASE_COMMIT = "06dfadc9ab439755af5efcfe0add95bfef2733c7"
 YXAI_MODEL_ID = "gpt-5.6-sol"
@@ -82,8 +81,8 @@ def _coerce_bool(value: object, default: bool = False) -> bool:
     return default
 
 
-def stable_feedback_fingerprint(category: str, diagnostic_text: str, goal_state: str = "") -> str:
-    """Return a stable digest over the full normalized error and goal context."""
+def normalized_feedback_text(category: str, diagnostic_text: str, goal_state: str = "") -> str:
+    """直接比较脱敏后的有界诊断和目标文本，不生成派生摘要。"""
 
     payload = {
         "category": str(category),
@@ -91,7 +90,7 @@ def stable_feedback_fingerprint(category: str, diagnostic_text: str, goal_state:
         "goal_state": _redact_and_normalize(goal_state),
     }
     canonical = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:16]
+    return canonical
 
 
 def _read_field(value: object, name: str, default: object = None) -> object:
@@ -108,21 +107,21 @@ class CapsuleFeedback:
         *,
         history_limit: int = 4,
         max_feedback_chars: int = 1600,
-        fingerprint_limit: int = 64,
+        feedback_limit: int = 64,
         state: Mapping[str, Any] | None = None,
     ) -> None:
         self.history_limit = _bounded_int(history_limit, 4, minimum=1, maximum=20)
         self.max_feedback_chars = _bounded_int(max_feedback_chars, 1600, minimum=320, maximum=12000)
-        self.fingerprint_limit = _bounded_int(fingerprint_limit, 64, minimum=4, maximum=1000)
+        self.feedback_limit = _bounded_int(feedback_limit, 64, minimum=4, maximum=1000)
         state = state or {}
         state_version = state.get("schema_version")
         if state_version is not None and state_version not in SUPPORTED_STATE_SCHEMA_VERSIONS:
             raise ValueError(f"unsupported CapsuleFeedback state schema: {state_version}")
         self._attempt_count = _bounded_int(state.get("attempt_count"), 0, minimum=0, maximum=1_000_000)
-        counts = state.get("fingerprint_counts", {})
-        bounded_counts = list(counts.items())[-self.fingerprint_limit :] if isinstance(counts, Mapping) else []
-        self._fingerprint_counts: OrderedDict[str, int] = OrderedDict(
-            (str(key)[:64], _bounded_int(count, 0, minimum=0, maximum=1_000_000))
+        counts = state.get("feedback_counts", {})
+        bounded_counts = list(counts.items())[-self.feedback_limit :] if isinstance(counts, Mapping) else []
+        self._feedback_counts: OrderedDict[str, int] = OrderedDict(
+            (str(key), _bounded_int(count, 0, minimum=0, maximum=1_000_000))
             for key, count in bounded_counts
         )
         history = state.get("history", [])
@@ -136,12 +135,12 @@ class CapsuleFeedback:
         *,
         history_limit: int = 4,
         max_feedback_chars: int = 1600,
-        fingerprint_limit: int = 64,
+        feedback_limit: int = 64,
     ) -> "CapsuleFeedback":
         return cls(
             history_limit=history_limit,
             max_feedback_chars=max_feedback_chars,
-            fingerprint_limit=fingerprint_limit,
+            feedback_limit=feedback_limit,
             state=state,
         )
 
@@ -151,7 +150,7 @@ class CapsuleFeedback:
             "round": _bounded_int(item.get("round"), 1, minimum=1, maximum=1_000_000),
             "compile_ok": _coerce_bool(item.get("compile_ok", False)),
             "category": str(item.get("category", "compile_error"))[:80],
-            "fingerprint": str(item.get("fingerprint", ""))[:64],
+            "feedback_text": str(item.get("feedback_text", "")),
             "repeat_count": _bounded_int(item.get("repeat_count"), 1, minimum=1, maximum=1_000_000),
             "consecutive_repeat_count": _bounded_int(
                 item.get("consecutive_repeat_count"), 1, minimum=1, maximum=1_000_000
@@ -166,7 +165,7 @@ class CapsuleFeedback:
         return {
             "schema_version": SCHEMA_VERSION,
             "attempt_count": self._attempt_count,
-            "fingerprint_counts": dict(self._fingerprint_counts),
+            "feedback_counts": dict(self._feedback_counts),
             "history": [dict(item) for item in self._history],
         }
 
@@ -201,12 +200,12 @@ class CapsuleFeedback:
         if not summary:
             summary = "Lean build succeeded." if compile_ok else "Lean build failed without diagnostic text."
 
-        fingerprint = stable_feedback_fingerprint(category, diagnostic_text, goal_state)
-        repeat_count = self._fingerprint_counts.get(fingerprint, 0) + 1
-        self._fingerprint_counts[fingerprint] = repeat_count
-        self._fingerprint_counts.move_to_end(fingerprint)
-        while len(self._fingerprint_counts) > self.fingerprint_limit:
-            self._fingerprint_counts.popitem(last=False)
+        feedback_text = normalized_feedback_text(category, diagnostic_text, goal_state)
+        repeat_count = self._feedback_counts.get(feedback_text, 0) + 1
+        self._feedback_counts[feedback_text] = repeat_count
+        self._feedback_counts.move_to_end(feedback_text)
+        while len(self._feedback_counts) > self.feedback_limit:
+            self._feedback_counts.popitem(last=False)
         previous = self._history[-1] if self._history else None
 
         if previous is None:
@@ -215,24 +214,24 @@ class CapsuleFeedback:
             drift_kind = "resolved"
         elif not compile_ok and previous["compile_ok"]:
             drift_kind = "regressed"
-        elif fingerprint == previous["fingerprint"]:
+        elif feedback_text == previous["feedback_text"]:
             drift_kind = "none"
         elif category != previous["category"]:
             drift_kind = "category_changed"
         else:
-            drift_kind = "fingerprint_changed"
+            drift_kind = "diagnostic_changed"
 
         consecutive_repeat_count = (
             previous["consecutive_repeat_count"] + 1
-            if previous is not None and fingerprint == previous["fingerprint"]
+            if previous is not None and feedback_text == previous["feedback_text"]
             else 1
         )
-        diagnostic_drift = drift_kind in {"regressed", "category_changed", "fingerprint_changed"}
+        diagnostic_drift = drift_kind in {"regressed", "category_changed", "diagnostic_changed"}
         entry = {
             "round": round_no,
             "compile_ok": bool(compile_ok),
             "category": category,
-            "fingerprint": fingerprint,
+            "feedback_text": feedback_text,
             "repeat_count": repeat_count,
             "consecutive_repeat_count": consecutive_repeat_count,
             "drift_kind": drift_kind,
@@ -297,7 +296,6 @@ class CapsuleFeedback:
         lines = [
             "CAPSULE FEEDBACK (deterministic; no extra Lean build or LLM call)",
             f"category={current['category']}",
-            f"fingerprint={current['fingerprint']}",
             f"repeat_count={current['repeat_count']}",
             f"consecutive_repeat_count={current['consecutive_repeat_count']}",
             f"drift={current['drift_kind']}",
@@ -306,7 +304,7 @@ class CapsuleFeedback:
         ]
         for item in history:
             lines.append(
-                "- round={round} category={category} fingerprint={fingerprint} "
+                "- round={round} category={category} "
                 "repeat={repeat_count} drift={drift_kind} summary={summary}".format(**item)
             )
         return "\n".join(lines)[: self.max_feedback_chars].rstrip()

@@ -36,6 +36,7 @@ class CapsuleTest(unittest.TestCase):
                 [sys.executable, "-m", module, "--help"],
                 cwd=ROOT,
                 text=True,
+                encoding="utf-8",
                 capture_output=True,
                 check=False,
             )
@@ -48,6 +49,7 @@ class CapsuleTest(unittest.TestCase):
             ],
             cwd=ROOT,
             text=True,
+            encoding="utf-8",
             capture_output=True,
             check=False,
         )

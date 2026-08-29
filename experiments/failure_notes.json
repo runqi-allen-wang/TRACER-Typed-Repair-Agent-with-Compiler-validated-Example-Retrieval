@@ -1,0 +1,37 @@
+{
+  "version": "capsule-reuse-v1",
+  "license": "MIT",
+  "provenance": "来自仓库已公开的 Capsule；这些不是新模型生成轨迹。配对固定成功示例，额外提供失败上下文，不改变检索排序。",
+  "examples": [
+    {
+      "path": "and_swap.lean",
+      "source_text": "-- tags: propositional_logic and\nexample (p q : Prop) : p ∧ q → p ∨ q := by\n  intro h\n  exact Or.inl h.left\n",
+      "capsule": "std/type-application",
+      "failure_context": "可复用失败案例 std/type-application（失败代码，不能直接作为证明）：\nimport Std\n\ndef only_nat (n : Nat) : Nat := n\nexample : Nat := only_nat True\n\n预期诊断：type_mismatch: Application type mismatch: The argument\n此案例只用于提示常见失败模式；请仍针对当前目标构造完整证明。"
+    },
+    {
+      "path": "equality.lean",
+      "source_text": "-- tags: equality functions\nexample {α : Type} {a b c : α} : a = b → b = c → c = a := by\n  intro hab hbc\n  exact (Eq.trans hab hbc).symm\n\nexample {α β : Type} (f : α → β) {a b : α} : a = b → f b = f a := by\n  intro hab\n  cases hab\n  rfl\n",
+      "capsule": "std/type-application",
+      "failure_context": "可复用失败案例 std/type-application（失败代码，不能直接作为证明）：\nimport Std\n\ndef only_nat (n : Nat) : Nat := n\nexample : Nat := only_nat True\n\n预期诊断：type_mismatch: Application type mismatch: The argument\n此案例只用于提示常见失败模式；请仍针对当前目标构造完整证明。"
+    },
+    {
+      "path": "natural_numbers.lean",
+      "source_text": "-- tags: natural_numbers rewriting relations\nexample (n : Nat) : n ≤ Nat.succ n := by exact Nat.le_succ n\nexample (n m : Nat) : m + Nat.succ n = Nat.succ (m + n) := by exact Nat.add_succ m n\nexample (n : Nat) : n ≤ Nat.succ n := by exact Nat.le_succ n\n",
+      "capsule": "std/unknown-identifier",
+      "failure_context": "可复用失败案例 std/unknown-identifier（失败代码，不能直接作为证明）：\nimport Std\n\nnamespace CapsuleExamples\n\nexample : True := by\n  exact missing_identifier\n\nend CapsuleExamples\n\n预期诊断：unknown_identifier: Unknown identifier `missing_identifier`\n此案例只用于提示常见失败模式；请仍针对当前目标构造完整证明。"
+    },
+    {
+      "path": "negation.lean",
+      "source_text": "-- tags: propositional_logic negation\nexample (p : Prop) : p ∧ True → p := by\n  intro h\n  exact h.left\n",
+      "capsule": "std/goal-unsolved",
+      "failure_context": "可复用失败案例 std/goal-unsolved（失败代码，不能直接作为证明）：\nimport Std\n\nexample (p : Prop) : p ∧ p := by\n  constructor\n\n预期诊断：unsolved_goals: unsolved goals\n此案例只用于提示常见失败模式；请仍针对当前目标构造完整证明。"
+    },
+    {
+      "path": "or_swap.lean",
+      "source_text": "-- tags: propositional_logic or\nexample (p q : Prop) : p ∨ q → p ∨ q := by\n  intro h\n  exact h\n",
+      "capsule": "std/goal-unsolved",
+      "failure_context": "可复用失败案例 std/goal-unsolved（失败代码，不能直接作为证明）：\nimport Std\n\nexample (p : Prop) : p ∧ p := by\n  constructor\n\n预期诊断：unsolved_goals: unsolved goals\n此案例只用于提示常见失败模式；请仍针对当前目标构造完整证明。"
+    }
+  ]
+}

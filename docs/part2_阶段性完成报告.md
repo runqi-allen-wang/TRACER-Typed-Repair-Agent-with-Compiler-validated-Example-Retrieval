@@ -31,17 +31,17 @@ FATE-M 25 题真实配对实验已经完成：Part 1 与 Part 2 均为 25/25 成
 
 ### 3.1 状态可能无限增长
 
-原实现虽然限制了 prompt 和 history，但 `fingerprint_counts` 会随新错误指纹持续增长。
+原实现虽然限制了 prompt 和 history，但 `feedback_counts` 会随新错误规范化诊断文本持续增长。
 
 现已完成：
 
-- 使用有界 LRU 指纹计数表，默认最多保存 64 个指纹；
-- 允许通过 `fingerprint_limit` 调整，上限为 1000；
+- 使用有界 LRU 规范化诊断文本计数表，默认最多保存 64 个规范化诊断文本；
+- 允许通过 `feedback_limit` 调整，上限为 1000；
 - 导出状态、历史、摘要和 prompt 均有明确上限；
 - 驻留的 theorem session 默认最多 128 个；
-- CLI 增加 `--fingerprint-limit` 参数。
+- CLI 增加 `--feedback-limit` 参数。
 
-使用 100 个不同错误的回归测试验证后，导出状态中的指纹数不会超过配置上限。
+使用 100 个不同错误的回归测试验证后，导出状态中的规范化诊断文本数不会超过配置上限。
 
 ### 3.2 状态版本和输入边界不严格
 
@@ -70,7 +70,7 @@ FATE-M 25 题真实配对实验已经完成：Part 1 与 Part 2 均为 25/25 成
 新增 `CapsuleFeedbackSessions`：
 
 - 使用 Ax 的 `module_path:theorem_name` 作为精确 session key；
-- 每个 theorem 拥有独立指纹、重复次数和历史；
+- 每个 theorem 拥有独立规范化诊断文本、重复次数和历史；
 - session 池使用 LRU 上限；
 - 可通过 `CAPSULE_FEEDBACK_STATE_DIR` 按 theorem 哈希文件持久化；
 - 状态写入采用临时文件替换，避免半写入文件。
@@ -109,7 +109,7 @@ Part 2 runner 会在 Agent 初始化前强制：
 
 - baseline 与 Capsule 题集完全一致；
 - 首轮候选逐字符相同；
-- 候选 SHA-256 可追溯；
+- 通过任务标识与原始首轮候选逐项比对；
 - 两组模型均为 `openai:gpt-5.6-sol`；
 - endpoint 相同且为冻结 endpoint；
 - wire API 均为 Responses、响应存储均关闭、推理强度均为 `high`；
@@ -128,7 +128,7 @@ Part 2 直接包裹实际 `LLMClient.ainvoke`，不再用节点次数冒充模�
 - Memory LLM 请求次数；
 - tool calls；
 - input/output/total tokens；
-- fingerprint、重复次数和连续重复次数；
+- feedback_text、重复次数和连续重复次数；
 - drift kind；
 - 反馈字符数；
 - Builder 总耗时；
@@ -166,7 +166,7 @@ Part 2 直接包裹实际 `LLMClient.ainvoke`，不再用节点次数冒充模�
 - 拒绝 `unsafe`、元编程执行入口、`sorry`/`sorryAx`/`admit`、额外顶层声明和命令注入；
 - 要求目标名称、声明种类和规范化声明头与原 theorem 完全一致；
 - imports/opens 只接受合法的 Lean 限定名，不能通过换行注入命令；
-- 拒绝事件仅记录候选 SHA-256、长度、阶段和原因，不把恶意源码写入遥测；
+- 拒绝事件仅记录随机事件编号、候选长度、阶段和原因，不把恶意源码写入遥测；
 - Part 1/Part 2 配对门禁要求两组逐题使用同一 `tracer-candidate-v2` 策略。
 
 D01 的 `unsafe inductive` 构造 `False` 源码已由 Lean 直接验证为可接受，同时自动测试证明其在缓存、生成和 Builder 三个 Ax 入口均于编译前被拒绝。
@@ -194,7 +194,7 @@ Ax 原 Builder -> 原有 check_lean_file（至多一次）
       v
 CapsuleFeedback.observe_ax（0 次额外编译，0 次 LLM）
       |
-      +-- category / fingerprint
+      +-- category / feedback_text
       +-- repeat / consecutive repeat
       +-- diagnostic drift
       +-- bounded history
@@ -211,7 +211,7 @@ CapsuleFeedback.observe_ax（0 次额外编译，0 次 LLM）
 
 | 文件 | 用途 |
 |---|---|
-| `src/leancapsule/feedback.py` | 有界 CapsuleFeedback 核心、指纹、漂移、脱敏和状态 |
+| `src/leancapsule/feedback.py` | 有界 CapsuleFeedback 核心、规范化诊断文本、漂移、脱敏和状态 |
 | `src/leancapsule/ax_integration.py` | 真实 Ax 消息桥接、session、首轮候选和遥测 |
 | `src/leancapsule/ax_runner.py` | 安装集成后启动 Ax CLI |
 | `src/leancapsule/pairing.py` | 严格配对结果校验 |
@@ -305,3 +305,7 @@ Part 1/2 实现与首批正式配对运行已经完成。复现实验时仍需�
 - Part 2 使用 `configs/axprover_part2_capsule.yaml`，两组结果保留配对门禁要求的 provider、预算和 calls 字段；
 - 真实 `yxai` 调用只通过进程环境配置 `OPENAI_API_KEY`，`auth.json` 不得进入仓库；
 - 当前数据是 25 题、单模型、单批次，不支持统计显著性或通用性能结论；Part 3 需要正式统计分析与更大规模重复实验。
+
+## 当前合并版的状态格式
+
+诊断状态使用 `capsule-feedback.readable.v0.2`，Ax 遥测使用 `ax-capsule-feedback.readable.v0.3`。重复检测以脱敏后的完整规范化诊断文本为键；文件名为随机 `session-<UUID>.json`，文件内保留完整 theorem key，重新载入时严格匹配。旧状态格式拒绝载入，请使用新的空状态目录；历史实验不改写为新格式。首轮配对直接比较 code、reasoning、imports 和 opens，不使用派生摘要。

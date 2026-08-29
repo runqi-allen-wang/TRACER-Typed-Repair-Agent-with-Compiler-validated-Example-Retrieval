@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import csv
-import hashlib
 import json
 from collections.abc import Iterable, Mapping
 from pathlib import Path
@@ -17,7 +16,6 @@ from .feedback import (
     YXAI_STORE_RESPONSES,
     YXAI_WIRE_API,
 )
-from .pairing import candidate_digest, proposal_digest
 
 
 def read_jsonl(path: str | Path) -> list[dict[str, Any]]:
@@ -166,7 +164,9 @@ def _validate_events(task_id: str, row: Mapping[str, Any], mode: str, errors: li
     for event in events:
         if event.get("feedback_mode") != mode:
             errors.append(f"{task_id}: {mode} feedback event has the wrong mode")
-        for field in ("fingerprint", "category", "repeat_count", "round"):
+        if "feedback_text" not in event and "fingerprint" not in event:
+            errors.append(f"{task_id}: {mode} feedback event lacks feedback_text")
+        for field in ("category", "repeat_count", "round"):
             if field not in event:
                 errors.append(f"{task_id}: {mode} feedback event lacks {field}")
         if event.get("capsule_llm_calls") != 0:
@@ -316,8 +316,17 @@ def validate_part3_runs(
                 "module": str(left.get("module") or ""),
                 "theorem": str(left.get("theorem") or ""),
                 "path": str(left.get("path") or ""),
-                "candidate_sha256": candidate_digest(candidate),
-                "proposal_sha256": proposal_digest(left),
+                "first_round_candidate_equal": bool(candidate)
+                and candidate == str(right.get("first_round_candidate") or ""),
+                "first_round_proposal_equal": all(
+                    left.get(field) == right.get(field)
+                    for field in (
+                        "first_round_candidate",
+                        "first_round_reasoning",
+                        "first_round_imports",
+                        "first_round_opens",
+                    )
+                ),
                 "first_round_success_reference": first_round_reference,
                 "raw_success": raw_success,
                 "capsule_success": capsule_success,

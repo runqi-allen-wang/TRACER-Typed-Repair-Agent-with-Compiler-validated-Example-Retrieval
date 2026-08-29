@@ -25,6 +25,7 @@ Available artifacts:
 - **24 public failure capsules**, spanning four error families and Std, Mathlib, and project-local dependencies.
 - **18 frozen problems × 3 experimental conditions**, with a published real-provider pilot containing 56 per-round records and 54 successful proof files.
 - **An end-to-end workflow** covering a single-problem CLI, local HTTP API, batch evaluation, manual review, report validation, and sanitized export.
+- **A separate repair24 research suite** with retrieval-only, diagnostic-query and failure-context controls; multi-model results are pending. Jump to [research evaluation](#research-evaluation-beyond-the-smoke-test) and [related work](#related-work).
 
 These artifact counts are not evidence of general theorem-proving ability or superior performance; experimental limitations are discussed below.
 
@@ -314,7 +315,7 @@ Keep these checks distinct:
 ## Safety and scope
 
 - **Not an operating-system sandbox.** Temporary HOME/TMP/APPDATA directories, minimal environment variables, and candidate policies are defense layers. Run untrusted projects or Lean code in a container, VM, or isolated low-privilege environment.
-- **Local repair only.** The Agent must not rewrite imports or theorem headers. Candidates containing `sorry`, `admit`, `sorryAx`, unfinished-proof warnings, unsafe declarations, or certain explicit native-execution constructs are rejected. D01 verifies that an `unsafe inductive` construction of `False` is rejected before Agent, AxProverBase, Capsule pack, replay, or audit can compile it; this is a security regression, not a fourth A/B/C condition. Text rules cannot be assumed to detect every Lean metaprogramming construct.
+- **Local repair only.** The Agent must not rewrite imports or theorem headers. Candidates containing `sorry`, `admit`, `sorryAx`, unfinished-proof warnings, unsafe declarations, or certain explicit native-execution constructs are rejected. D01 verifies that an `unsafe inductive` construction of `False` is rejected before Agent, AxProverBase, Capsule pack, replay, or audit can compile it; this is a security regression, not a fourth A/B/C condition and not the research matrix’s retrieval-only arm D. Text rules cannot be assumed to detect every Lean metaprogramming construct.
 - **Separate credentials from releases.** The provider restricts cross-origin redirects and sanitizes errors; keys are not experiment-record fields. Still inspect exports and send keys only to trusted providers.
 - **Readable comparisons and caching.** Diagnostic comparisons and request caching use normalized readable text, without digest or fingerprint computation. Cache reuse is for local debugging, not independent real sampling.
 - **Extraction is not global minimization.** Full-file fallback and explicit local-file manifests are not arbitrary multi-file program slicing. Diagnostic consistency does not guarantee preservation of every contextual meaning.
@@ -355,6 +356,54 @@ results/               Local run data and reports
 published/             Reviewed, sanitized experimental releases
 docs/                  Usage guides and research methodology
 ```
+
+## Research evaluation beyond the smoke test
+
+**Preflight observation (2026-08-28, legacy strict-warning protocol):** DeepSeek Flash passed 20/24 and Pro 19/24 within three attempts in the B-only, single-repeat run; both passed 18/24 on the first attempt. All 39 saved successes were independently recompiled. There were 69 requests, no infrastructure failures, and an estimated total cost of $1.2260 under the recorded prices—not a bill. These local, not-yet-published results do not establish a model ranking or feedback/retrieval gains.
+
+The audit found 21 output-limit truncations with no final proof, three otherwise valid candidates rejected only by linters, and confusion between completing a proof tail and replacing the whole proof. New runs use **`tracer-proof-v2`**: an explicit whole-proof contract shared by all arms, frozen prompt templates, separate truncation outcomes, and separate kernel/warning-free fields. Incomplete proofs remain rejected. Historical scores are unchanged, and protocol versions must not be mixed. See [the audit, evidence location, and revised protocol](docs/RESEARCH_PROTOCOL.md#4-轨迹与报告); v2 has only offline validation so far.
+
+The original 18 problems and published A/B/C pilot remain an **engineering smoke test**, not evidence of broad superiority. The new [repair24-v1](benchmarks/repair24/manifest.json) contains 24 authored repair tasks across recursive lists, quantifiers, functions, options, and recursive arithmetic. Each has a concrete broken proof and a separately tested reference repair. Structural difficulty is a design objective; the limited preflight above does not establish generalization.
+
+| Arm | Compiler feedback | Retrieved examples | Query |
+| --- | --- | --- | --- |
+| A | No | No | — |
+| B | Yes | No | — |
+| C | Yes | Yes | Fixed |
+| D | No | Yes | Fixed |
+| C_dynamic | Yes | Yes | Updated from errors, types and goals |
+| C_failure | Yes | Yes, plus failure-capsule context | Same strategy as C_dynamic |
+
+A/D still compile to decide whether to stop; diagnostics are not sent back to the generator. The two additional arms separate query adaptation from failure reuse, rather than silently changing the old C condition. Model weights are never updated.
+
+The [research runner](src/research.py) freezes readable input snapshots, randomizes task order, disables request-cache reuse, records full prompts and usage, and independently recompiles saved proofs. It supports multiple models and repeats; incomplete or mixed traces are rejected by report validation. Unknown costs remain unknown, and manual review is separate from automatic checks.
+
+~~~powershell
+python src/research.py check-benchmark
+python src/research.py plan --config experiments/research.example.json
+~~~
+
+The example plan has **864 tasks / at most 2,592 logical generations**: 24 problems × 2 models × 3 repeats × 6 arms. These commands do not call a model API. Replace the example model names and review the budget before explicitly running a paid experiment. See the [research protocol and commands](docs/RESEARCH_PROTOCOL.md).
+
+Ready-to-review DeepSeek configurations are available for [Flash/Pro preflight](experiments/research.deepseek.preflight.json) (48 B-arm tasks) and the [full matrix](experiments/research.deepseek.json). The paid CLI requires explicit call and conservative cost-reservation limits, uses hidden in-memory key entry, and disables automatic HTTP retries. These limits are not a vendor-enforced billing cap. Thinking mode is explicitly fixed; DeepSeek ignores temperature in this mode. No new paid results are claimed until the actual traces exist.
+
+The [human-study runner](src/human_study.py) offers 8 compiler-checked synthetic context/reduced pairs, complementary participant assignments, source display only after timing starts, abandonment/timeout records, and separate review records. The existing gallery's 23 mapped source pairs are identical, so they cannot establish source-reduction benefits through reading-time comparisons. The new materials are a **synthetic feasibility study**, not a study of naturally occurring bugs. Timings must come from real people, not AI substitutes; do not read the materials or reviewer answers before participating.
+
+[Capsule metrics](src/capsule_metrics.py) separately measure replay agreement, source-size reduction and human diagnosis times. Cross-environment claims require actual independent environment records; changing a label is not a new environment. Human timings require participants and reviewed diagnoses. The experimental machinery is implemented; **multi-model gains, cross-environment benefits and human-time savings are not yet established**.
+
+Local reproducibility check (2026-08-28): **Windows 11 and Ubuntu WSL2 each matched 48/48 replays** of the same 24 cases under native Lean 4.32.0. This is cross-OS diagnostic reproduction on one physical machine—not independent hardware validation, a cold-start benchmark, or evidence of speedup. Both environments validated 23 source pairs; their median source reduction remains zero. Local trace locations and the retained incomplete precheck are recorded in [PROGRESS.md](PROGRESS.md).
+
+## Related work
+
+TRACER builds on established directions rather than claiming to invent compiler feedback or retrieval:
+
+- [MathForm](https://arxiv.org/abs/2608.14221): retrieval and verification-guided statement autoformalization; our target is repairing proofs of fixed formal statements.
+- [APOLLO](https://arxiv.org/abs/2505.05758) and [Baldur](https://arxiv.org/abs/2303.04910): closely related compiler-guided/whole-proof repair approaches. Their work makes clear that feedback-based repair itself is not our novelty.
+- [LeanDojo / ReProver](https://arxiv.org/abs/2306.15626), [LeanAgent](https://arxiv.org/abs/2410.06209) and [Lean Copilot](https://arxiv.org/abs/2404.12534): relevant work on premise retrieval, evolving knowledge and interactive proof assistance. Our current retriever is a lightweight heuristic, not a replacement for these trained systems.
+- [miniF2F](https://arxiv.org/abs/2109.00110): a broader formal-mathematics benchmark; our authored repair set is not directly comparable.
+- [Delta Debugging](https://pm.st.cs.uni-sb.de/papers/tse2002/?lang=en): foundational work on failure-preserving reduction. Our bounded import removal does not establish globally minimal programs.
+
+See the [related-work comparison](docs/RELATED_WORK.md) for boundaries and testable research questions. Our emphasis is auditable repair experiments and reusable failure artifacts; their practical benefit must be demonstrated rather than inferred from feature counts.
 
 ## Contributing and future research
 

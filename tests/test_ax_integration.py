@@ -381,7 +381,7 @@ class AxIntegrationTest(unittest.TestCase):
             self.assertTrue(first["metrics"]["kept"])
 
             rows = [json.loads(line) for line in metrics.read_text(encoding="utf-8").splitlines()]
-            feedback_rows = [row for row in rows if "fingerprint" in row]
+            feedback_rows = [row for row in rows if "feedback_text" in row]
             self.assertEqual(len(feedback_rows), 4)
             self.assertTrue(all(row["builder_result_reused"] for row in feedback_rows))
             self.assertTrue(all(row["capsule_compiler_calls"] == 0 for row in feedback_rows))

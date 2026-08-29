@@ -43,7 +43,7 @@ from leancapsule.feedback import (  # noqa: E402
 )
 
 
-_CAPSULE_STATE_FILE_RE = re.compile(r"^[0-9a-f]{24}\.json(?:\.tmp)?$")
+_CAPSULE_STATE_FILE_RE = re.compile(r"^session-[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\.json(?:\.tmp)?$")
 
 
 def _read(value: object, name: str, default: object = None) -> object:

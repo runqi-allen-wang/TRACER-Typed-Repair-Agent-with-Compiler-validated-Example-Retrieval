@@ -7,7 +7,7 @@ returned by that node and therefore never invokes Lean or an LLM itself.
 
 from __future__ import annotations
 
-import hashlib
+from uuid import uuid4
 import json
 import os
 import threading
@@ -40,11 +40,11 @@ from .feedback import (
     YXAI_STORE_RESPONSES,
     YXAI_WIRE_API,
     CapsuleFeedback,
-    stable_feedback_fingerprint,
+    normalized_feedback_text,
 )
 
 
-AX_INTEGRATION_VERSION = "ax-capsule-feedback.v0.2"
+AX_INTEGRATION_VERSION = "ax-capsule-feedback.readable.v0.3"
 DEFAULT_MAX_THEOREM_SESSIONS = 128
 YXAI_MAX_INPUT_TOKENS = 65536
 _PATCH_MARKER = "__leancapsule_part2_installed__"
@@ -193,27 +193,30 @@ class CapsuleFeedbackSessions:
         *,
         history_limit: int = 4,
         max_feedback_chars: int = 1600,
-        fingerprint_limit: int = 64,
+        feedback_limit: int = 64,
         max_sessions: int = DEFAULT_MAX_THEOREM_SESSIONS,
         state_dir: str | Path | None = None,
     ) -> None:
         self.history_limit = history_limit
         self.max_feedback_chars = max_feedback_chars
-        self.fingerprint_limit = fingerprint_limit
+        self.feedback_limit = feedback_limit
         self.max_sessions = max(1, min(int(max_sessions), 4096))
         self.state_dir = Path(state_dir) if state_dir else None
         self._sessions: OrderedDict[str, CapsuleFeedback] = OrderedDict()
 
-    @staticmethod
-    def _state_name(theorem_key: str) -> str:
-        import hashlib
-
-        return hashlib.sha256(theorem_key.encode("utf-8")).hexdigest()[:24] + ".json"
-
     def _state_path(self, theorem_key: str) -> Path | None:
+        """随机文件名只用于存储；读取时逐项比较完整定理键，不从键派生文件名。"""
         if self.state_dir is None:
             return None
-        return self.state_dir / self._state_name(theorem_key)
+        for path in sorted(self.state_dir.glob("session-*.json")):
+            if path.is_symlink():
+                raise ValueError("状态目录不允许符号链接")
+            value = json.loads(path.read_text(encoding="utf-8"))
+            if not isinstance(value, dict) or not isinstance(value.get("theorem_key"), str):
+                raise ValueError("状态文件缺少可读定理键")
+            if value["theorem_key"] == theorem_key:
+                return path
+        return self.state_dir / ("session-" + str(uuid4()) + ".json")
 
     def _new_session(self, theorem_key: str) -> CapsuleFeedback:
         state: dict[str, Any] = {}
@@ -222,11 +225,13 @@ class CapsuleFeedbackSessions:
             loaded = json.loads(state_path.read_text(encoding="utf-8"))
             if not isinstance(loaded, dict):
                 raise ValueError(f"CapsuleFeedback state is not an object: {state_path}")
-            state = loaded
+            if loaded.get("theorem_key") != theorem_key or not isinstance(loaded.get("state"), dict):
+                raise ValueError("状态文件与定理键不匹配")
+            state = loaded["state"]
         return CapsuleFeedback(
             history_limit=self.history_limit,
             max_feedback_chars=self.max_feedback_chars,
-            fingerprint_limit=self.fingerprint_limit,
+            feedback_limit=self.feedback_limit,
             state=state,
         )
 
@@ -237,7 +242,7 @@ class CapsuleFeedbackSessions:
         state_path.parent.mkdir(parents=True, exist_ok=True)
         temporary = state_path.with_name(state_path.name + ".tmp")
         temporary.write_text(
-            json.dumps(session.export_state(), ensure_ascii=False, indent=2) + "\n",
+            json.dumps({"theorem_key": theorem_key, "state": session.export_state()}, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
         temporary.replace(state_path)
@@ -276,31 +281,31 @@ class RawFeedbackTracker:
         else:
             diagnostic = str(_read(feedback, "error_output", "") or "")
             category = classify_diagnostic_text(diagnostic)
-        fingerprint = stable_feedback_fingerprint(category, diagnostic, goal_state)
+        feedback_text = normalized_feedback_text(category, diagnostic, goal_state)
         counts = self._counts.setdefault(theorem_key, {})
-        repeat_count = counts.get(fingerprint, 0) + 1
-        counts[fingerprint] = repeat_count
+        repeat_count = counts.get(feedback_text, 0) + 1
+        counts[feedback_text] = repeat_count
         previous = self._last.get(theorem_key)
         if previous is None:
             drift_kind = "initial"
-        elif previous == fingerprint:
+        elif previous == feedback_text:
             drift_kind = "none"
         else:
-            drift_kind = "changed"
+            drift_kind = "diagnostic_changed"
         consecutive = 1
-        if previous == fingerprint:
+        if previous == feedback_text:
             previous_consecutive = self._consecutive.get(theorem_key, 0)
             consecutive = previous_consecutive + 1
         self._consecutive[theorem_key] = consecutive
-        self._last[theorem_key] = fingerprint
+        self._last[theorem_key] = feedback_text
         return {
             "input_feedback_type": feedback_type,
             "category": category,
-            "fingerprint": fingerprint,
+            "feedback_text": feedback_text,
             "repeat_count": repeat_count,
             "consecutive_repeat_count": consecutive,
             "drift_kind": drift_kind,
-            "diagnostic_drift": drift_kind == "changed",
+            "diagnostic_drift": drift_kind == "diagnostic_changed",
             "diagnostic_chars": min(len(diagnostic), 32768),
         }
 
@@ -422,8 +427,6 @@ def _capsule_event(
     builder_elapsed_ms: float,
     capsule_elapsed_ms: float,
 ) -> dict[str, Any]:
-    import hashlib
-
     return {
         "integration_schema_version": AX_INTEGRATION_VERSION,
         "feedback_mode": "capsule",
@@ -436,12 +439,12 @@ def _capsule_event(
         "store": YXAI_STORE_RESPONSES,
         "reasoning_effort": YXAI_REASONING_EFFORT,
         "candidate_policy": dict(CANDIDATE_POLICY),
-        "theorem_key_sha256": hashlib.sha256(theorem_key.encode("utf-8")).hexdigest(),
+        "event_id": str(uuid4()),
         "theorem_name": theorem_key.rsplit(":", 1)[-1][:160],
         "round": round_no,
         "input_feedback_type": input_feedback_type,
         "category": payload["category"],
-        "fingerprint": payload["fingerprint"],
+        "feedback_text": payload["feedback_text"],
         "repeat_count": payload["repeat_count"],
         "consecutive_repeat_count": payload["consecutive_repeat_count"],
         "drift_kind": payload["drift_kind"],
@@ -466,11 +469,10 @@ def _raw_event(
 ) -> dict[str, Any]:
     """Record Raw feedback without changing the Ax feedback object."""
 
-    import hashlib
-
     return {
         "integration_schema_version": AX_INTEGRATION_VERSION,
         "feedback_mode": "raw",
+        "event_id": str(uuid4()),
         "axproverbase_commit": AXPROVERBASE_COMMIT,
         "model": AXPROVER_YXAI_MODEL,
         "base_url": YXAI_BASE_URL,
@@ -479,12 +481,11 @@ def _raw_event(
         "store": YXAI_STORE_RESPONSES,
         "reasoning_effort": YXAI_REASONING_EFFORT,
         "candidate_policy": dict(CANDIDATE_POLICY),
-        "theorem_key_sha256": hashlib.sha256(theorem_key.encode("utf-8")).hexdigest(),
         "theorem_name": theorem_key.rsplit(":", 1)[-1][:160],
         "round": round_no,
         "input_feedback_type": payload["input_feedback_type"],
         "category": payload["category"],
-        "fingerprint": payload["fingerprint"],
+        "feedback_text": payload["feedback_text"],
         "repeat_count": payload["repeat_count"],
         "consecutive_repeat_count": payload["consecutive_repeat_count"],
         "drift_kind": payload["drift_kind"],
@@ -568,9 +569,8 @@ def install_axproverbase_capsule_feedback(
                 "integration_schema_version": AX_INTEGRATION_VERSION,
                 "event": "unsafe_proposal_rejected",
                 "stage": stage,
-                "theorem_key_sha256": hashlib.sha256(theorem_key.encode("utf-8")).hexdigest(),
+                "event_id": str(uuid4()),
                 "theorem_name": theorem_key.rsplit(":", 1)[-1][:160],
-                "candidate_sha256": hashlib.sha256(str(code).encode("utf-8")).hexdigest(),
                 "candidate_chars": len(str(code)),
                 "candidate_policy": dict(CANDIDATE_POLICY),
                 "reason": violation[:500],
@@ -740,14 +740,9 @@ def install_axproverbase_capsule_feedback(
                 {
                     "integration_schema_version": AX_INTEGRATION_VERSION,
                     "event": "shared_first_round_candidate",
+                    "event_id": str(uuid4()),
                     "feedback_mode": getattr(self, "_capsule_feedback_mode", "capsule"),
-                    "theorem_key_sha256": hashlib.sha256(
-                        theorem_key.encode("utf-8")
-                    ).hexdigest(),
                     "theorem_name": theorem_key.rsplit(":", 1)[-1][:160],
-                    "candidate_sha256": hashlib.sha256(
-                        candidate["code"].encode("utf-8")
-                    ).hexdigest(),
                     "candidate_chars": len(candidate["code"]),
                     "proposer_llm_calls": 0,
                 }

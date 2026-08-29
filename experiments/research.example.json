@@ -1,0 +1,40 @@
+{
+  "models": [
+    {
+      "id": "model_a",
+      "model": "REPLACE_WITH_ACTUAL_MODEL_A",
+      "api_url": "https://api.deepseek.com/chat/completions",
+      "api_key_env": "TRACER_MODEL_A_KEY",
+      "temperature": 0,
+      "max_tokens": 12000,
+      "input_price_per_1k": null,
+      "output_price_per_1k": null,
+      "pricing_note": "运行前填写供应商当日价格；null 表示未知。"
+    },
+    {
+      "id": "model_b",
+      "model": "REPLACE_WITH_ACTUAL_MODEL_B",
+      "api_url": "https://api.openai.com/v1/chat/completions",
+      "api_key_env": "TRACER_MODEL_B_KEY",
+      "temperature": 0,
+      "max_tokens": 12000,
+      "input_price_per_1k": null,
+      "output_price_per_1k": null,
+      "pricing_note": "必须选择支持当前 Chat Completions 参数的模型。"
+    }
+  ],
+  "repeats": 3,
+  "arms": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "C_dynamic",
+    "C_failure"
+  ],
+  "max_rounds": 3,
+  "compile_timeout": 60,
+  "order_seed": 20260828,
+  "examples_dir": "examples",
+  "failure_notes": "experiments/failure_notes.json"
+}

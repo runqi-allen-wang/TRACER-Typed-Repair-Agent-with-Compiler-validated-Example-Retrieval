@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 
-WINDOWS_ABSOLUTE = re.compile(r"[A-Za-z]:[\\/][^\s\"']+")
+WINDOWS_ABSOLUTE = re.compile(r"(?<![A-Za-z0-9])[A-Za-z]:[\\/][^\s\"']+")
 POSIX_ABSOLUTE = re.compile(r"/(?:home|Users|tmp|private|var/tmp)/[^\s\"']+")
 
 

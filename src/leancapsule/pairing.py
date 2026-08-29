@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
-import json
 from collections.abc import Iterable, Mapping
 from typing import Any
 
@@ -22,25 +20,6 @@ from .feedback import (
     YXAI_STORE_RESPONSES,
     YXAI_WIRE_API,
 )
-
-
-def candidate_digest(candidate: object) -> str:
-    return hashlib.sha256(str(candidate or "").encode("utf-8")).hexdigest()
-
-
-def proposal_digest(row: Mapping[str, Any]) -> str:
-    """Hash the complete cached first-round ProposalMessage payload."""
-
-    payload = {
-        "code": row.get("first_round_candidate"),
-        "reasoning": row.get("first_round_reasoning"),
-        "imports": row.get("first_round_imports"),
-        "opens": row.get("first_round_opens"),
-    }
-    serialized = json.dumps(
-        payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")
-    )
-    return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
 
 
 def _task_id(row: Mapping[str, Any]) -> str:
@@ -143,7 +122,6 @@ def validate_paired_runs(
 
         left_candidate = str(left.get("first_round_candidate") or "")
         right_candidate = str(right.get("first_round_candidate") or "")
-        digest = candidate_digest(left_candidate)
         if not left_candidate or not right_candidate:
             errors.append(f"{task_id}: first_round_candidate is empty")
         elif left_candidate != right_candidate:
@@ -231,8 +209,9 @@ def validate_paired_runs(
         pairs.append(
             {
                 "task_id": task_id,
-                "candidate_sha256": digest,
-                "proposal_sha256": proposal_digest(left),
+                "first_round_candidate_equal": bool(left_candidate) and left_candidate == right_candidate,
+                "first_round_proposal_equal": all(left.get(field) == right.get(field) for field in
+                    ("first_round_candidate", "first_round_reasoning", "first_round_imports", "first_round_opens")),
                 "target": left_target,
                 "axproverbase_commit": left_ax_commit,
                 "model": left_model,
@@ -262,4 +241,4 @@ def validate_paired_runs(
     }
 
 
-__all__ = ["candidate_digest", "proposal_digest", "validate_paired_runs"]
+__all__ = ["validate_paired_runs"]

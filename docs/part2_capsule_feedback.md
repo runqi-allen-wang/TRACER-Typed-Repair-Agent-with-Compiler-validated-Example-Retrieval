@@ -21,7 +21,7 @@ Ax Builder: check_lean_file(...) -> (build_success, message)
 CapsuleFeedback.observe_ax((build_success, message))
                                 |
                                 +-- category
-                                +-- stable fingerprint
+                                +-- stable feedback_text
                                 +-- repeat / consecutive repeat count
                                 +-- diagnostic drift
                                 +-- bounded recent history
@@ -36,11 +36,11 @@ next Proposer
 
 ## 分步实现
 
-1. **核心接口（已实现）**：`leancapsule.feedback.CapsuleFeedback` 负责指纹、重复次数、漂移和历史；支持状态 JSON 往返。
+1. **核心接口（已实现）**：`leancapsule.feedback.CapsuleFeedback` 负责规范化诊断文本、重复次数、漂移和历史；支持状态 JSON 往返。
 2. **命令行边界（已实现）**：`python -m leancapsule feedback` 从 JSON 读取已有编译结果，并可原子更新逐题 state 文件。
 3. **Ax 接线（已实现）**：`leancapsule.ax_integration` 包裹固定 commit 的原 `_builder_node`，转换其返回的 `BuildFailedFeedback`/`SorriesGoalStateFeedback`，不再次调用 `check_lean_file`；每个 theorem 使用独立且有界的 session。
 4. **配对门禁（已实现并完成正式运行）**：`scripts/validate_part2_pairing.py` 严格检查两组题目身份、Ax commit、完整首轮 Proposal（code/reasoning/imports/opens）、模型、endpoint、Responses wire API、响应存储、推理强度、预算和题集一致，并要求 Capsule 的 Memory/额外编译/额外 LLM 调用为零。FATE-M 25 题修正版正式结果与配对报告位于 `results/handoff/part12-live-20260828-corrected/`。
-5. **正式 Part 3 准备（已实现）**：JSONL 遥测包含 fingerprint、repeat count、drift kind、feedback chars、Builder/CapsuleFeedback 耗时、固定模型、Proposer/Reviewer 的真实 `LLMClient.ainvoke` 次数、token、tool calls 和零额外调用声明。provider 未返回价格时成本保持 `null`。
+5. **正式 Part 3 准备（已实现）**：JSONL 遥测包含 feedback_text、repeat count、drift kind、feedback chars、Builder/CapsuleFeedback 耗时、固定模型、Proposer/Reviewer 的真实 `LLMClient.ainvoke` 次数、token、tool calls 和零额外调用声明。provider 未返回价格时成本保持 `null`。
 6. **D 类候选安全门禁（已实现）**：缓存和后续 LLM 的完整 theorem 都在 Builder 前检查 `unsafe`、占位符、额外声明、目标名和声明头；Builder 入口再次校验。配对门禁要求 Part 1/Part 2 都记录 `tracer-candidate-v2`。
 
 ## Python 接口
@@ -140,12 +140,12 @@ python .\scripts\validate_part2_pairing.py `
 
 ## 验收标准
 
-- 对相同错误的不同临时路径、行列号和 metavariable 编号生成相同指纹。
-- 连续相同错误增加 repeat count；类别或指纹变化标记 drift。
+- 对相同错误的不同临时路径、行列号和 metavariable 编号生成相同规范化诊断文本。
+- 连续相同错误增加 repeat count；类别或规范化诊断文本变化标记 drift。
 - history 和 prompt 长度严格有界，疑似 Bearer/API key 不出现在输出或 state。
 - 单元测试证明核心和 CLI 不调用 Lean 或任何模型。
 - Ax 接线后的 trace 中，每轮至多执行原 Builder 自带的一次 `check_lean_file`；CapsuleFeedback 增加的编译次数恒为 0，处理耗时单独记录。
-- `fingerprint_counts`、history、prompt 和驻留 theorem session 均有上限；未知状态 schema 会被拒绝。
+- `feedback_counts`、history、prompt 和驻留 theorem session 均有上限；未知状态 schema 会被拒绝。
 - 固定 Ax commit 的源码契约和真实 Python 消息类型在 Ubuntu workflow 中独立验证。
 - D01 `unsafe inductive` 构造 `False` 在共享缓存、后续 ProposalMessage 和 Builder 三个入口均于 Lean 编译前拒绝。
 
@@ -160,3 +160,7 @@ python .\scripts\validate_part2_pairing.py `
 - 专项测试通过后，Ubuntu 执行 `lake build` 和完整 Python 回归。
 
 GitHub 只为默认分支上的 `workflow_dispatch` 显示手动运行入口；合并前可通过 Pull Request 触发，合并后也可在 Actions 页面手动运行。
+
+## 当前合并版的状态格式
+
+诊断状态使用 `capsule-feedback.readable.v0.2`，Ax 遥测使用 `ax-capsule-feedback.readable.v0.3`。重复检测以脱敏后的完整规范化诊断文本为键；文件名为随机 `session-<UUID>.json`，文件内保留完整 theorem key，重新载入时严格匹配。旧状态格式拒绝载入，请使用新的空状态目录；历史实验不改写为新格式。首轮配对直接比较 code、reasoning、imports 和 opens，不使用派生摘要。

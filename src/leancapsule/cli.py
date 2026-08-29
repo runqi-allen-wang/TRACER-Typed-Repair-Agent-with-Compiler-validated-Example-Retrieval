@@ -54,7 +54,7 @@ def build_parser() -> argparse.ArgumentParser:
     feedback.add_argument("--state", type=Path, help="可选的逐题状态文件；读取后原子更新")
     feedback.add_argument("--history-limit", type=int, default=4)
     feedback.add_argument("--max-feedback-chars", type=int, default=1600)
-    feedback.add_argument("--fingerprint-limit", type=int, default=64)
+    feedback.add_argument("--feedback-limit", type=int, default=64)
     return parser
 
 
@@ -113,7 +113,7 @@ def main(argv: list[str] | None = None) -> int:
             formatter = CapsuleFeedback(
                 history_limit=args.history_limit,
                 max_feedback_chars=args.max_feedback_chars,
-                fingerprint_limit=args.fingerprint_limit,
+                feedback_limit=args.feedback_limit,
                 state=state,
             )
             result = formatter.observe_ax(payload, round_no=payload.get("round"))

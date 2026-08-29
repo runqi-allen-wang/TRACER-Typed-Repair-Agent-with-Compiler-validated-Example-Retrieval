@@ -7,6 +7,7 @@ from typing import Any
 
 
 ERROR_RE = re.compile(r"^(?P<location>[^\r\n]+:\d+:\d+): error(?:\([^)]*\))?: (?P<message>.*)$")
+WARNING_RE = re.compile(r"^(?P<location>[^\r\n]+:\d+:\d+): warning(?:\([^)]*\))?: (?P<message>.*)$")
 
 
 def _classify_message(message: str) -> str:
@@ -62,6 +63,7 @@ def normalize_diagnostics(
         }
 
     errors: list[dict[str, str]] = []
+    warnings: list[dict[str, str]] = []
     loose_lines: list[str] = []
     for raw_line in text.splitlines():
         line = raw_line.strip()
@@ -76,13 +78,19 @@ def normalize_diagnostics(
                     "category": _classify_message(match.group("message")),
                 }
             )
-        elif "warning:" not in line.lower():
-            loose_lines.append(line[:400])
+        else:
+            warning = WARNING_RE.match(line)
+            if warning:
+                warnings.append({"location": warning.group("location"), "message": warning.group("message")[:400]})
+            elif "warning:" not in line.lower():
+                loose_lines.append(line[:400])
 
     errors = errors[:max_errors]
     category = errors[0]["category"] if errors else (classify_diagnostic_text(text) if returncode else "ok")
     if errors:
         summary = "; ".join(f"{item['category']}: {item['message']}" for item in errors[:2])
+    elif returncode == 0 and warnings:
+        summary = f"Lean 编译通过，含 {len(warnings)} 条警告；警告不等同于证明错误。"
     elif loose_lines:
         summary = loose_lines[0]
     else:
@@ -94,6 +102,8 @@ def normalize_diagnostics(
         "category": category,
         "summary": summary[:700],
         "errors": errors,
+        "warnings": warnings[:max_errors],
+        "warning_count": len(warnings),
         "feedback": feedback,
         "truncated": truncated,
     }

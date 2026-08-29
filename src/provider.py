@@ -121,6 +121,9 @@ class OpenAICompatibleProvider(Provider):
         wire_api: str | None = None,
         reasoning_effort: str | None = None,
         disable_response_storage: bool = False,
+        thinking: str | None = None,
+        max_attempts: int = 3,
+        request_timeout: float = 90,
     ) -> None:
         parsed = urllib.parse.urlsplit(url)
         if parsed.scheme.lower() not in {"http", "https"} or not parsed.hostname:
@@ -143,8 +146,13 @@ class OpenAICompatibleProvider(Provider):
                     "",
                 )
             )
-        if reasoning_effort is not None and reasoning_effort not in {"minimal", "low", "medium", "high"}:
-            raise ValueError("reasoning_effort must be minimal, low, medium, or high")
+        allowed_efforts = {"minimal", "low", "medium", "high"} if self.wire_api == "responses" else {"low", "high", "max"}
+        if reasoning_effort is not None and reasoning_effort not in allowed_efforts:
+            raise ValueError("reasoning_effort 与当前接口协议不兼容")
+        if thinking not in {None, "enabled", "disabled"} or (thinking is not None and self.wire_api != "chat_completions"):
+            raise ValueError("thinking 仅适用于支持该参数的 Chat 接口")
+        if not 1 <= max_attempts <= 3 or request_timeout <= 0:
+            raise ValueError("请求重试次数或超时无效")
         self.url = normalized_url
         self.api_key = api_key
         self.model = model
@@ -152,6 +160,8 @@ class OpenAICompatibleProvider(Provider):
         self.max_tokens = max_tokens
         self.reasoning_effort = reasoning_effort
         self.disable_response_storage = bool(disable_response_storage)
+        self.thinking = thinking
+        self.max_attempts, self.request_timeout = max_attempts, request_timeout
 
     def _payload(self, prompt: str) -> dict[str, object]:
         messages = [
@@ -168,12 +178,17 @@ class OpenAICompatibleProvider(Provider):
             if self.reasoning_effort:
                 payload["reasoning"] = {"effort": self.reasoning_effort}
             return payload
-        return {
+        payload = {
             "model": self.model,
             "messages": messages,
             "temperature": self.temperature,
             "max_tokens": self.max_tokens,
         }
+        if self.thinking is not None:
+            payload["thinking"] = {"type": self.thinking}
+        if self.reasoning_effort is not None:
+            payload["reasoning_effort"] = self.reasoning_effort
+        return payload
 
     def generate(self, prompt: str) -> Generation:
         payload = self._payload(prompt)
@@ -184,9 +199,9 @@ class OpenAICompatibleProvider(Provider):
             method="POST",
         )
         opener = urllib.request.build_opener(SameOriginRedirectHandler())
-        for attempt in range(3):
+        for attempt in range(self.max_attempts):
             try:
-                with opener.open(request, timeout=90) as response:
+                with opener.open(request, timeout=self.request_timeout) as response:
                     body = json.loads(response.read().decode("utf-8"))
                 break
             except urllib.error.HTTPError as exc:
@@ -195,7 +210,7 @@ class OpenAICompatibleProvider(Provider):
                 detail = detail.replace(self.api_key, "[已隐藏的 API 密钥]")
                 raise RuntimeError(f"HTTP {exc.code} from provider: {detail}") from exc
             except (urllib.error.URLError, TimeoutError):
-                if attempt == 2:
+                if attempt == self.max_attempts - 1:
                     raise
                 time.sleep(0.5 * (attempt + 1))
         return parse_generation(json.dumps(body, ensure_ascii=False), self.name)
@@ -210,6 +225,9 @@ class OpenAICompatibleProvider(Provider):
             "temperature": self.temperature if self.wire_api == "chat_completions" else None,
             "max_tokens": self.max_tokens,
             "reasoning_effort": self.reasoning_effort,
+            **({"thinking": self.thinking} if self.thinking is not None else {}),
+            "max_http_attempts": self.max_attempts,
+            "request_timeout": self.request_timeout,
             "disable_response_storage": self.disable_response_storage,
             "store": not self.disable_response_storage,
             **configured_pricing(),
@@ -238,6 +256,21 @@ def clean_candidate(text: str) -> str:
     return (fenced.group(1) if fenced else candidate).strip()
 
 
+def generation_finish_reason(body: dict) -> str | None:
+    """将两种接口的完成状态转为统一日志字段，不将未完成响应送入编译器。"""
+    choices = body.get("choices") or []
+    if choices:
+        return choices[0].get("finish_reason")
+    if body.get("status") == "completed":
+        return "stop"
+    if body.get("status") == "incomplete":
+        reason = (body.get("incomplete_details") or {}).get("reason")
+        return "length" if reason == "max_output_tokens" else "incomplete"
+    if body.get("status") in {"failed", "cancelled", "queued", "in_progress"}:
+        return "incomplete"
+    return None
+
+
 def parse_generation(text: str, provider_name: str) -> Generation:
     try:
         body = json.loads(text)
@@ -247,10 +280,18 @@ def parse_generation(text: str, provider_name: str) -> Generation:
         return Generation(clean_candidate(str(body["candidate"])), body.get("usage", {}), provider_name, body)
     choices = body.get("choices") or []
     if choices:
-        content = choices[0].get("message", {}).get("content", "")
-        return Generation(clean_candidate(str(content)), body.get("usage", {}), provider_name, body)
+        content = choices[0].get("message", {}).get("content")
+        # 只有推理而没有最终答案时 content 可能为 null，不能把它变成 Lean 标识符 None。
+        if content is None:
+            content = ""
+        if not isinstance(content, str):
+            raise ValueError("provider 的最终证明 content 必须为文本或 null")
+        return Generation(clean_candidate(content), body.get("usage", {}), provider_name, body)
     if "output_text" in body:
-        return Generation(clean_candidate(str(body["output_text"])), body.get("usage", {}), provider_name, body)
+        content = body["output_text"]
+        if content is not None and not isinstance(content, str):
+            raise ValueError("provider 的 output_text 必须为文本或 null")
+        return Generation(clean_candidate(content or ""), body.get("usage", {}), provider_name, body)
     output_text = "\n".join(
         str(content.get("text", ""))
         for item in body.get("output", [])
@@ -258,7 +299,8 @@ def parse_generation(text: str, provider_name: str) -> Generation:
         for content in item.get("content", [])
         if isinstance(content, dict) and content.get("type") == "output_text"
     ).strip()
-    if output_text:
+    if output_text or isinstance(body.get("output"), list):
+        # 未输出最终文本的 Responses 响应仍保留用量和终止原因。
         return Generation(clean_candidate(output_text), body.get("usage", {}), provider_name, body)
     raise ValueError("provider 输出缺少 candidate/choices/output_text/output[].content[].text")
 
@@ -276,6 +318,9 @@ def build_provider(
     wire_api: str | None = None,
     reasoning_effort: str | None = None,
     disable_response_storage: bool | None = None,
+    thinking: str | None = None,
+    max_attempts: int = 3,
+    request_timeout: float = 90,
 ) -> Provider:
     if name == "command":
         return CommandProvider(command or os.environ.get("LEAN_PROOF_PROVIDER_COMMAND", ""))
@@ -302,6 +347,7 @@ def build_provider(
             wire_api=wire_api_value,
             reasoning_effort=reasoning_effort_value,
             disable_response_storage=disable_response_storage,
+            thinking=thinking, max_attempts=max_attempts, request_timeout=request_timeout,
         )
     if name == "mock":
         if mock_candidate is None:

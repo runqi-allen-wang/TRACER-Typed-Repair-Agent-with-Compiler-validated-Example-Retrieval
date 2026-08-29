@@ -4,7 +4,7 @@ This directory contains the reviewed handoff artifacts for the 25-problem FATE-M
 Part 1 Experience / Part 2 CapsuleFeedback paired experiment run on 2026-08-28.
 The source artifacts were checked for credential-like values and local absolute
 paths before export. No content replacements were required. Text line endings
-were normalized to LF for portable Git checkouts, and the exported hashes are
+were normalized to LF for portable Git checkouts, and the readable file manifest is
 recorded in `handoff.json`.
 
 ## Frozen conditions
@@ -41,6 +41,10 @@ zero Capsule-internal LLM calls, and zero Capsule-internal compiler calls.
 - `part2-first-round-full.json`: shared first-round candidate cache.
 - `capsule-metrics-full.jsonl`: Part 2 integration and call telemetry.
 - `pairing-full.json`: strict pairing validation report.
-- `handoff.json`: source revision, file sizes, and SHA-256 checksums.
+- `handoff.json`: source revision, file sizes, and metadata transformation notes.
 
 The API credential and local dependency caches are not included.
+
+## 合并版元数据说明
+
+仅移除派生摘要字段并更新可读清单中的字节数；原始 `baseline-full.jsonl`、`capsule-full.jsonl` 和 `part2-first-round-full.json` 保持不变。遥测中的历史协议版本与计数不改写，不能据此声称已运行新协议。严格配对应直接读取候选、推理、imports、opens 与配置进行相等比较；旧目录仍只是历史工件，以 corrected 目录为配对证据。
