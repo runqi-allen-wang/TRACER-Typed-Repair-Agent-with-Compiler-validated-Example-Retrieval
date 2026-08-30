@@ -447,7 +447,12 @@ See the [related-work comparison](docs/RELATED_WORK.md) for boundaries and testa
 
 Contributions of reproducible failures, tests, diagnostic improvements, and model integrations are welcome. Read [CONTRIBUTING](CONTRIBUTING.md) first, and include provenance, licensing, toolchain information, expected results, and reproduction steps for new cases.
 
-Future research directions include harder and broader benchmarks, cross-model and repeated-run comparisons, retrieval cost–benefit analysis, adversarial candidate tests, and stronger execution isolation. These are directions to investigate, not completed capabilities or performance promises.
+Community feedback received on 30 August 2026 from [subfish-zhou](https://github.com/subfish-zhou) and [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) highlighted two priorities for the next stage:
+
+- **Compiler-diagnostic feedback as a research object.** Move beyond forwarding normalized Lean error text. Future experiments should compare raw, normalized, and error-typed feedback; test whether the next candidate actually addresses the reported unknown identifier, type mismatch, unsolved goal, or elaboration failure; and report error-transition matrices, success by round, token cost, and retrieval-query changes. Any new comparison must be preregistered as a new protocol version rather than silently changing R-B, R-E, or R-F.
+- **SP-n as a systematic security program.** Extend the current SP-1 regression into a versioned threat model and adversarial case suite. Evaluation should separate false acceptance from false rejection, distinguish pre-compilation policy checks from operating-system isolation, and test container or low-privilege execution for candidates that textual gates cannot safely characterize. SP-n remains a security-policy namespace, not an additional research arm.
+
+Broader directions still include harder benchmarks, cross-model repeated runs, retrieval cost–benefit analysis, and cross-environment Capsule studies. These are directions to investigate, not completed capabilities or performance promises. The concrete protocol implications are recorded in [RESEARCH_PROTOCOL.md](docs/RESEARCH_PROTOCOL.md).
 
 For genuinely shared work, include `Co-authored-by: Name <email>` in the commit message. An @mention in a PR description does not replace commit co-authorship.
 
@@ -460,3 +465,5 @@ This project is licensed under the [MIT License](LICENSE). Public cases also rec
 ### Acknowledgments
 
 We gratefully acknowledge [SJTU AI4Math Summer School 2026](https://sjtu-ai4math.github.io/summer-school/2026/) for providing a platform for learning and exchanging ideas at the intersection of artificial intelligence and mathematics. We thank the organizers, instructors, and participants for fostering an open and collaborative research environment.
+
+We also thank [subfish-zhou](https://github.com/subfish-zhou) and [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) for community review that sharpened the compiler-feedback and SP-n future-work agenda. This acknowledgment records research feedback and does not imply commit co-authorship.

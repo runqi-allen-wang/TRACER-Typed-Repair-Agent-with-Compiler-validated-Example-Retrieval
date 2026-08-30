@@ -24,6 +24,15 @@ TRACER（Typed Repair Agent with Compiler-validated Example Retrieval）是 Lean
 
 证据与未完成事项以 [当前进度](../PROGRESS.md) 为准；历史改动见 [补丁记录](../CHANGELOG.md)。
 
+## 后续研究重点
+
+根据 2026 年 8 月 30 日来自 [subfish-zhou](https://github.com/subfish-zhou) 与 [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) 的社区反馈，下一阶段优先研究两项问题：
+
+1. 深化 Lean 编译诊断反馈：比较不同反馈表示，跟踪错误类别跨轮次变化，并验证模型是否真正采纳诊断，而不是只统计最终通过率。
+2. 将 SP-1 扩展为版本化 SP-n 安全计划：补充威胁模型、对抗案例、误放行/误拒绝指标与操作系统级隔离实验。
+
+这两项均为待完成工作，不改变当前 R-A～R-F 或 SP-1 的既有证据。详细约束见 [研究实验操作与预注册协议](RESEARCH_PROTOCOL.md#7-社区评审驱动的后续工作)。
+
 ## 无付费调用的复验
 
 ```text
