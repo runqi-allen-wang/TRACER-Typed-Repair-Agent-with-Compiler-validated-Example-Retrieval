@@ -2,6 +2,12 @@
 
 本文件记录影响安全性、实验可复现性、Lean 编译边界和公开发布的补丁。它与 `PROGRESS.md` 的职责不同：`PROGRESS.md` 描述当前状态，本文按提交批次记录变更原因、影响范围和验证证据。
 
+## 2026-08-30 — 记录社区评审提出的后续研究重点
+
+- 根据 [subfish-zhou](https://github.com/subfish-zhou) 与 [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) 的点评，将 Lean 编译诊断反馈和 SP-n 安全策略列为下一阶段优先方向。
+- 双语 README、项目概览与研究协议同步给出可检验目标：反馈表示及错误转移分析、SP 威胁模型、对抗案例、误放行/误拒绝和隔离层级。
+- 本次仅更新研究路线与致谢，没有修改实验组定义、代码、历史轨迹或结果，也不宣称新增模型收益或安全能力。
+
 ## 2026-08-30 — 发布 B 臂实验交接包
 
 - 将 B 臂 `ExperienceProcessor + CapsuleFeedback` 的完整 FATE-M 25 题原始结果从本地运行目录整理为 `results/handoff/part2-experience-capsule-20260829/`，包含逐题 JSONL、77 条遥测、首轮缓存、配对报告、9 个状态快照、报告和可读文件清单。
