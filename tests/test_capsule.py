@@ -1,4 +1,5 @@
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -31,10 +32,13 @@ class CapsuleTest(unittest.TestCase):
         )
 
     def test_both_module_entrypoints_are_usable(self):
+        child_env = os.environ.copy()
+        child_env["PYTHONIOENCODING"] = "utf-8"
         for module in ("leancapsule", "src.leancapsule"):
             completed = subprocess.run(
                 [sys.executable, "-m", module, "--help"],
                 cwd=ROOT,
+                env=child_env,
                 text=True,
                 encoding="utf-8",
                 capture_output=True,
@@ -48,6 +52,7 @@ class CapsuleTest(unittest.TestCase):
                 "import leancapsule.pack; import leancapsule; assert leancapsule.diagnostic_key",
             ],
             cwd=ROOT,
+            env=child_env,
             text=True,
             encoding="utf-8",
             capture_output=True,

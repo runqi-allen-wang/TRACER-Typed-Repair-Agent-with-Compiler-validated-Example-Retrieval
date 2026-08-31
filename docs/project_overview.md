@@ -31,7 +31,7 @@ TRACER（Typed Repair Agent with Compiler-validated Example Retrieval）是 Lean
 1. 深化 Lean 编译诊断反馈：比较不同反馈表示，跟踪错误类别跨轮次变化，并验证模型是否真正采纳诊断，而不是只统计最终通过率。
 2. 将 SP-1 扩展为版本化 SP-n 安全计划：补充威胁模型、对抗案例、误放行/误拒绝指标与操作系统级隔离实验。
 
-这两项均为待完成工作，不改变当前 R-A～R-F 或 SP-1 的既有证据。详细约束见 [研究实验操作与预注册协议](RESEARCH_PROTOCOL.md#7-社区评审驱动的后续工作)。
+这两项均为待完成工作，不改变当前 R-A～R-F 或 SP-1 的既有证据。详细约束见 [研究实验操作与预注册协议](RESEARCH_PROTOCOL.md#7-社区评审驱动的后续工作)，执行顺序见 [编译反馈与 SP-n 后续工作方案](FUTURE_WORK_PLAN.md)。
 
 ## 无付费调用的复验
 

@@ -60,7 +60,7 @@
 - 已合入 AxProverBase Part 1 Experience baseline 与 Part 2 `MemorylessProcessor + CapsuleFeedback`：冻结 Ax commit、`yxai` Responses 模型条件、预算、首轮候选和逐题遥测；Part 2 直接消费已有 Builder 结果，不重复调用 Lean 或模型。
 - 已完成 FATE-M 25 题正式配对实验：两组均 25/25 成功，严格配对 25/25 通过；修正版总轮次 39→36、编译错误 14→11、LLM calls 79→36、tokens 656657→274742，上游交接结果与可读文件清单位于 `results/handoff/part12-live-20260828-corrected/`；旧目录保留为历史工件。
 - 已完成并整理 B 臂 `ExperienceProcessor + CapsuleFeedback` 的 25 题正式运行：20/25（80.0%）通过，47 轮、69 次 LLM 请求（其中 27 次 Memory）、47 次 Lean 编译、659791 tokens、27 次编译错误、0 次超时；与 Part 1 共享的 9 个首轮失败中修复 4 个。原始结果保留在 `results/work/part2-experience-capsule-20260829/`，可发布交接包为 `results/handoff/part2-experience-capsule-20260829/`，配对校验 25/25 通过；本次没有运行完整 repair24 六臂矩阵，也没有重新下载依赖。
-- 新增独立 SP-1 安全回归（历史实现曾称 D01）：`unsafe inductive` 构造 `False` 的候选在 Agent、AxProverBase 缓存/Proposal/Builder、Capsule pack/replay/audit 的 Lean 编译前拒绝；SP 不是研究臂。
+- 新增独立 SP-1 安全回归（早期工作稿曾使用旧内部标签，公开名称现统一为 SP-1）：`unsafe inductive` 构造 `False` 的候选在 Agent、AxProverBase 缓存/Proposal/Builder、Capsule pack/replay/audit 的 Lean 编译前拒绝；SP 不是研究臂。
 - 已在 `53bc501`（当时已合并 `origin/main@90ba62b`）完成 FATE-M 前 25 题 Part 3 Raw/Capsule 交错实验；正式交接包位于 `results/handoff/part3-after-main-90ba62b-20260829/`，严格配对 25/25 通过。Raw 为 22/25、Capsule 为 19/25；9 个共享首轮失败题中分别最终修复 6/9 与 3/9，正式运行无 API/基础设施错误。之后合入的 `37f12de` 仅增加交接验收工具，未重新调用模型；此前 `07301eb` 批次的 502 失败、修正版和原始目录仍保留在 `results/handoff/part3-after-main-20260829/` 与 `results/work/part3-after-main-20260829/`，未覆盖。
 - **局部证明修复 Agent**：支持四种 Prompt 上下文策略、最多三轮编译反馈、项目环境选择、候选安全检查、成功证明保存、逐轮 JSONL、SQLite 精确请求缓存、命令行 provider、OpenAI 兼容 HTTP provider 与本地 HTTP API。
 - **发布版 18×3 pilot**：`published/pilot-20260826T122354Z-d628742d/` 含 56 条脱敏逐轮记录、54 个成功证明、完整人工复核与交付清单。A/B/C 的 pass@3 均为 18/18；A 已首轮 18/18，因此该批次只证明流程可行，不能证明反馈或检索带来最终成功率增益。
