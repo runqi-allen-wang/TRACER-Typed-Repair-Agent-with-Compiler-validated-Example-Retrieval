@@ -56,6 +56,13 @@ class ContinuousIntegrationTest(unittest.TestCase):
         self.assertIn("contents: read", workflow)
         self.assertNotIn("secrets.", workflow)
 
+    def test_part1_pin_check_does_not_depend_on_remote_ref_listing(self):
+        workflow = (ROOT / ".github" / "workflows" / "part1.yml").read_text(encoding="utf-8")
+        self.assertIn("Check immutable ax-prover dependency pin", workflow)
+        self.assertIn("requirements-axprover-part2.txt", workflow)
+        self.assertIn("06dfadc9ab439755af5efcfe0add95bfef2733c7", workflow)
+        self.assertNotIn("git ls-remote", workflow)
+
     def test_part3_workflow_validates_b_handoff(self):
         workflow = (ROOT / ".github" / "workflows" / "part3.yml").read_text(encoding="utf-8")
         self.assertIn("results/handoff/part2-experience-capsule-20260829/**", workflow)

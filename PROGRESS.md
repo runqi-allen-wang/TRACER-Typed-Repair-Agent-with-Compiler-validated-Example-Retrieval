@@ -61,7 +61,7 @@ PR #22 对应的远程 `main@d3e9402` 上，TRACER 主验证、Part 1、Part 2 �
 
 本次证据整理工作分支的本地 Windows 全量复审记录：
 
-- Python：共发现 218 项测试，216 项通过，2 项因仅适用于 Linux 符号链接边界而跳过；其中新增 1 项证据分层防回退测试。
+- Python：共发现 219 项测试，217 项通过，2 项因仅适用于 Linux 符号链接边界而跳过；其中新增证据分层与 Part 1 CI 防回退测试各 1 项。
 - `lake build`：通过；冻结 Evaluation18 输入中的 18 个 `sorry` 是预期占位警告，不代表题目已在原文件中修复。
 - `python -m leancapsule audit capsules`：24/24 通过。
 - `python -m leancapsule verify capsules`：24/24 通过，包含 4 个 Mathlib 案例。
