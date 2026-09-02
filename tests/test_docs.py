@@ -155,6 +155,22 @@ class DocumentationConsistencyTest(unittest.TestCase):
             evidence.append(links)
         self.assertEqual(evidence[0], evidence[1])
 
+    def test_evidence_register_separates_results_from_plans(self):
+        progress = (ROOT / "PROGRESS.md").read_text(encoding="utf-8")
+        for heading in (
+            "## 已发布证据",
+            "## 可复验实现，但尚未完成研究验收",
+            "## 仅有历史说明、当前仓库不能独立核验",
+            "## 下一阶段",
+        ):
+            self.assertIn(heading, progress)
+        self.assertNotIn("当前 `leiteng`", progress)
+        self.assertIn("配置文件不是实验结果", progress)
+        self.assertIn("不作为发布结果", progress)
+        for name, readme in self.readmes().items():
+            with self.subTest(language=name):
+                self.assertIn("[PROGRESS.md](PROGRESS.md)", readme)
+
     def test_methodology_documents_candidate_normalization(self):
         methodology = (ROOT / "docs" / "methodology.md").read_text(encoding="utf-8")
         schema = (ROOT / "docs" / "jsonl_schema.md").read_text(encoding="utf-8")

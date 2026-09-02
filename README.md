@@ -208,6 +208,21 @@ Model settings, output budget, compiler, timeout, problem order, and the three-r
 
 Evaluation does not use a runtime answer table. Retrieval checks for examples with declarations identical to evaluation problems; similar but non-identical propositions still require manual review. **Text deduplication does not eliminate every form of semantic leakage.** Here, `pass@3` means the proportion of tasks with at least one success within three rounds, not an unbiased pass@k estimate from independent samples. See the [experimental protocol](docs/methodology.md).
 
+### Current evidence status
+
+The canonical, dated evidence register is [PROGRESS.md](PROGRESS.md). It separates artifacts that can be independently checked in this repository from implemented infrastructure, unverifiable historical notes, and future plans.
+
+| Scope | Status in this repository |
+| --- | --- |
+| Evaluation18 P-A/P-B/P-C | Published provider traces, 54 proofs and complete 54-pair manual review; engineering smoke test only |
+| LeanCapsule | 24-case reviewed gallery plus 12-core / 4-challenge feasibility artifacts |
+| FATE-M | Part 1/2 corrected handoff, Experience + CapsuleFeedback arm, and Part 3 Raw/Capsule handoff are included as single-batch descriptive evidence |
+| repair24 R-A–R-F | Benchmark, runner and offline gates are implemented; the formal multi-model repeated matrix has not been run |
+| Security | SP-1 has a pre-compilation regression; SP-n coverage and operating-system isolation remain future work |
+| Historical local studies | DeepSeek R-B preflight, Windows/WSL comparison and human timing are not published evidence because their required raw artifacts are absent |
+
+Passing a software gate, compiling a proof, completing manual review and establishing a research effect are different claims. The repository does not promote one into another.
+
 ### AxProverBase Part 1 + Part 2 paired experiment and B confound arm
 
 The separate FATE-M experiment compares Part 1's AxProverBase `ExperienceProcessor` baseline with Part 2's `MemorylessProcessor` plus deterministic `CapsuleFeedback`. Both conditions reuse the same first-round candidate for each of 25 problems and freeze `gpt-5.6-sol`, the AI4Math `yxai` Responses endpoint, budgets, and candidate policy. Both solved 25/25; total rounds decreased from 39 to 36, compilation errors from 14 to 11, LLM calls from 79 to 36, and tokens from 656,657 to 274,742. In that Memoryless Part 2 condition, Capsule processing itself made zero LLM and compiler calls. See the [Part 2 design](docs/part2_capsule_feedback.md) and [reviewed result handoff](results/handoff/part12-live-20260828-corrected/README.md).

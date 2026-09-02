@@ -206,6 +206,21 @@ DeepSeek Flash 可将模型改为 `deepseek-v4-flash`。GPT-4.1 是当前请求�
 
 评测不依赖运行时答案表。检索会检查与评测题声明相同的示例；相似但不相同的命题仍需人工复核，**文本去重不等于消除了所有语义泄漏风险**。这里的 `pass@3` 指三轮预算内至少一次成功的题目比例，不是多次独立采样得到的无偏 pass@k 估计。方法详见 [实验协议](docs/methodology.md)。
 
+### 当前证据状态
+
+带日期的统一证据登记见 [PROGRESS.md](PROGRESS.md)。其中严格区分当前仓库可独立复核的工件、已经实现的实验基础设施、缺少原始工件的历史说明和未来计划。
+
+| 范围 | 当前仓库状态 |
+| --- | --- |
+| Evaluation18 P-A/P-B/P-C | 已发布 provider 轨迹、54 个证明和完整 54 对人工复核；只作为工程 smoke test |
+| LeanCapsule | 已发布 24 案例复核 gallery，并包含 12-core / 4-challenge 可行性工件 |
+| FATE-M | 包含 Part 1/2 corrected、Experience + CapsuleFeedback 和 Part 3 Raw/Capsule 交接包；均为单批次描述性证据 |
+| repair24 R-A～R-F | 题库、runner 和离线门禁已实现；正式多模型重复矩阵尚未运行 |
+| 安全 | SP-1 有编译前回归；SP-n 覆盖和操作系统级隔离仍是未来工作 |
+| 历史本地研究 | DeepSeek R-B 预跑、Windows/WSL 比较和真人计时因缺少必要原始工件，不属于已发布证据 |
+
+软件门禁通过、证明编译通过、人工复核完成和研究效应成立是四种不同结论；本仓库不将其中任何一项自动升级为另一项。
+
 ### AxProverBase Part 1 + Part 2 配对实验及 B 混杂拆分臂
 
 另一组 FATE-M 实验比较 Part 1 的 AxProverBase `ExperienceProcessor` baseline 与 Part 2 的 `MemorylessProcessor + CapsuleFeedback`。两组在 25 题上逐题复用相同首轮候选，并冻结 `gpt-5.6-sol`、AI4Math `yxai` Responses endpoint、预算和候选安全策略。两组均为 25/25 成功；总轮次由 39 降至 36，编译错误由 14 降至 11，LLM 调用由 79 降至 36，token 由 656,657 降至 274,742；在这个 Memoryless Part 2 条件中，Capsule 处理本身没有额外 LLM 或编译调用。详见 [Part 2 设计](docs/part2_capsule_feedback.md)与[正式结果交接包](results/handoff/part12-live-20260828-corrected/README.md)。
