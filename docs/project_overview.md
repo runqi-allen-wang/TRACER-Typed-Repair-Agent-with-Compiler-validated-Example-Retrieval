@@ -16,13 +16,12 @@ TRACER（Typed Repair Agent with Compiler-validated Example Retrieval）是 Lean
 
 ## 当前可核查工件
 
-- 18 个冻结 smoke 题与已发布 54 个题目×条件成功证明。
-- 24 个公开失败 Capsule 及其索引和人工复核台账。
-- 12-core / 4-challenge 可行性结果：core 12/12，challenge 干净回放 4/4。
-- FATE-M 25 题 Part 1/2 corrected 配对 handoff。
-- repair24 题库、六臂 runner 和离线门禁；完整多模型结果尚未完成。
+- **已发布证据**：Evaluation18 的 56 条逐轮记录、54 个成功证明与完整人工复核；24 个公开失败 Capsule；12-core / 4-challenge 可行性结果；FATE-M Part 1/2、拆分臂与 Part 3 交接工件。
+- **可复验实现**：repair24 题库、R-A～R-F 六臂 runner、动态查询、失败 Capsule 上下文、跨环境与真人研究入口；这些功能不等于相应研究结论已经获得。
+- **当前不含原始证据**：历史 DeepSeek R-B 预跑、Windows/WSL 比较和真人计时数据，不作为公开结果。
+- **未来计划**：原始/规范化/结构化编译反馈对照、反馈采纳与错误转移指标、SP-n 对抗矩阵和操作系统级隔离。
 
-证据与未完成事项以 [当前进度](../PROGRESS.md) 为准；历史改动见 [补丁记录](../CHANGELOG.md)。
+证据与未完成事项以带日期的[当前进度与证据登记](../PROGRESS.md)为准；历史改动见[补丁记录](../CHANGELOG.md)。
 
 ## 后续研究重点
 

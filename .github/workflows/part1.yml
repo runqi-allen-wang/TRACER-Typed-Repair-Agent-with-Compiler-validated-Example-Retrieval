@@ -27,10 +27,25 @@ jobs:
           python baseline/metrics_logger.py mock --tasks 5 --jsonl "$RUNNER_TEMP/m.jsonl"
           python baseline/metrics_logger.py summary --jsonl "$RUNNER_TEMP/m.jsonl"
 
-      - name: Check pinned ax-prover commit exists
+      - name: Check immutable ax-prover dependency pin
         run: |
-          git ls-remote https://github.com/Axiomatic-AI/ax-prover-base.git \
-            | grep -q '06dfadc9ab439755af5efcfe0add95bfef2733c7'
+          python - <<'PY'
+          from pathlib import Path
+
+          expected = (
+              "ax-prover @ git+https://github.com/Axiomatic-AI/"
+              "ax-prover-base.git@06dfadc9ab439755af5efcfe0add95bfef2733c7"
+          )
+          requirements = {
+              line.strip()
+              for line in Path("requirements-axprover-part2.txt")
+              .read_text(encoding="utf-8")
+              .splitlines()
+              if line.strip() and not line.lstrip().startswith("#")
+          }
+          assert expected in requirements, "ax-prover dependency is not pinned as expected"
+          print("ax-prover dependency pin OK")
+          PY
 
   axprover-smoke:
     runs-on: ubuntu-latest
