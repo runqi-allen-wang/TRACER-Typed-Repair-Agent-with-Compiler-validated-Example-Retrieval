@@ -1,8 +1,8 @@
 # TRACER 当前进度与证据登记
 
-更新时间：2026-09-03。
+更新时间：2026-09-08。
 
-当前发布基线为 `main@d3e9402`（PR #22）。本文是仓库内“完成到哪一步”的唯一当前口径；历史变更过程见 `CHANGELOG.md`，未来工作见 `docs/FUTURE_WORK_PLAN.md`。当旧报告、历史批次说明与本文冲突时，以各批次原始工件和本文的证据分层为准。
+当前发布基线为 `main@e8b36c9`（PR #23）。本文是仓库内“完成到哪一步”的唯一当前口径；历史变更过程见 `CHANGELOG.md`，未来工作见 `docs/FUTURE_WORK_PLAN.md`。当旧报告、历史批次说明与本文冲突时，以各批次原始工件和本文的证据分层为准。
 
 ## 口径规则
 
@@ -57,11 +57,11 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 
 ## 当前工程验收状态
 
-PR #22 对应的远程 `main@d3e9402` 上，TRACER 主验证、Part 1、Part 2 和 Part 3 四个 GitHub Actions 工作流均通过。
+PR #23 的远程合并提交 `main@e8b36c9` 上共有 7 项 GitHub Checks，均已通过：主测试、Lean build 与完整 Python 回归、Part 1 baseline、AxProver 安装 smoke、固定 AxProverBase 接口、Part 2 Ubuntu 专项测试和 Part 3 handoff contract。
 
-本次证据整理工作分支的本地 Windows 全量复审记录：
+当前文档基线的本地 Windows 全量复审记录：
 
-- Python：共发现 219 项测试，217 项通过，2 项因仅适用于 Linux 符号链接边界而跳过；其中新增证据分层与 Part 1 CI 防回退测试各 1 项。
+- Python：共发现 220 项测试，218 项通过，2 项因仅适用于 Linux 符号链接边界而跳过；当前包含证据分层、P/R/SP 命名和 Part 1 CI 防回退测试。
 - `lake build`：通过；冻结 Evaluation18 输入中的 18 个 `sorry` 是预期占位警告，不代表题目已在原文件中修复。
 - `python -m leancapsule audit capsules`：24/24 通过。
 - `python -m leancapsule verify capsules`：24/24 通过，包含 4 个 Mathlib 案例。

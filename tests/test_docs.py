@@ -106,7 +106,9 @@ class DocumentationConsistencyTest(unittest.TestCase):
             with self.subTest(language=name):
                 front = readme[: readme.index(quick_start[name])]
                 self.assertIn(headings[name], front)
-                self.assertIn("A / B / C", front)
+                for label in ("P-A", "P-B", "P-C"):
+                    self.assertIn(label, front)
+                self.assertIn("A/B/C", front)
                 for label in ("R-A", "R-B", "R-C", "R-D", "R-E", "R-F", "SP-1"):
                     self.assertIn(label, front)
                 self.assertIn("C_dynamic", front)
@@ -135,7 +137,7 @@ class DocumentationConsistencyTest(unittest.TestCase):
         for name, readme in self.readmes().items():
             rows = []
             for line in readme.splitlines():
-                if re.match(r"^\| [ABC][:：]", line):
+                if re.match(r"^\| P-[ABC][:：]", line):
                     cells = line.strip("|").split("|")[1:]
                     rows.append([
                         cell.replace("（", "(").replace("）", ")").replace(" ", "")
@@ -143,6 +145,14 @@ class DocumentationConsistencyTest(unittest.TestCase):
                     ])
             with self.subTest(language=name):
                 self.assertEqual(expected, rows)
+
+    def test_readmes_use_public_pilot_names_without_changing_storage_values(self):
+        for name, readme in self.readmes().items():
+            with self.subTest(language=name):
+                self.assertIn("P-A / P-B / P-C", readme)
+                self.assertIn("A/B/C", readme)
+                self.assertNotIn("| **Published pilot conditions** | A / B / C |", readme)
+                self.assertNotIn("| **已发布 pilot 条件** | A / B / C |", readme)
 
     def test_readmes_share_evidence_links_and_repository_license(self):
         evidence = []
