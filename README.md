@@ -16,7 +16,7 @@
 
 TRACER is a **research toolkit for Lean 4 proof repair, failure reproduction, and evaluation**. It connects language-model candidates, Lean compiler feedback, local example retrieval, and per-round experiment records. Its **LeanCapsule** component packages failures into shareable, replayable, and auditable artifacts.
 
-The project offers two complementary workflows: reproduce an error with LeanCapsule, **without a model API**, or connect a real provider to run bounded proof repair. The published smoke pilot retains its historical A/B/C condition names, while the current repair24 protocol exposes six research arms, R-A through R-F. Both workflows share compilation and diagnostic infrastructure, but have separate entry points and acceptance criteria.
+The project offers two complementary workflows: reproduce an error with LeanCapsule, **without a model API**, or connect a real provider to run bounded proof repair. Public documentation names the published smoke-pilot conditions P-A/P-B/P-C while preserving their historical machine values A/B/C; the current repair24 protocol exposes six separate research arms, R-A through R-F. Both workflows share compilation and diagnostic infrastructure, but have separate entry points and acceptance criteria.
 
 > **Research scope:** TRACER does not train or fine-tune models. It focuses on inference-time feedback, local repair, and reproducible experiment and failure artifacts, providing replaceable, inspectable infrastructure for method research.
 
@@ -26,7 +26,7 @@ TRACER uses three deliberately separate namespaces. They describe different evid
 
 | Namespace | Members | Purpose | Current evidence state |
 | --- | --- | --- | --- |
-| **Published pilot conditions** | A / B / C | Historical 18-problem smoke test: theorem only; compiler feedback; feedback plus static retrieval | Published 18 × 3 real-provider batch with traces, proofs, and manual review |
+| **Published pilot conditions** | P-A / P-B / P-C | Historical 18-problem smoke test: theorem only; compiler feedback; feedback plus static retrieval. Stored as A/B/C | Published 18 × 3 real-provider batch with traces, proofs, and manual review |
 | **Research arms** | R-A / R-B / R-C / R-D / R-E / R-F | repair24 protocol for separating feedback, retrieval, error-adaptive queries, and failure-context reuse | Runner, budgets, frozen tasks, and offline gates exist; the full multi-model repeated matrix is pending |
 | **Security policies** | SP-1, then SP-n | Pre-compilation rejection policies for candidates that may compile but violate the project's trust boundary | SP-1 is implemented as a regression gate; it is not a seventh research arm |
 
@@ -42,7 +42,7 @@ Available artifacts:
 
 - **24 public failure capsules**, spanning four error families and Std, Mathlib, and project-local dependencies.
 - **A 12-core / 4-challenge feasibility experiment** whose 16 cases preserve normalized diagnostics and replay in clean temporary directories, including project-local multi-file cases.
-- **18 frozen problems × 3 historical pilot conditions (A/B/C)**, with a published real-provider pilot containing 56 per-round records and 54 successful proof files.
+- **18 frozen problems × 3 published pilot conditions (P-A/P-B/P-C; stored as A/B/C)**, with a real-provider release containing 56 per-round records and 54 successful proof files.
 - **An end-to-end workflow** covering a single-problem CLI, local HTTP API, batch evaluation, manual review, report validation, and sanitized export.
 - **A separate six-arm repair24 research suite (R-A through R-F)** with retrieval-only, diagnostic-query and failure-context controls. The runner and offline checks exist; the full multi-model repeated experiment is pending. Jump to [research evaluation](#research-evaluation-beyond-the-smoke-test) and [related work](#related-work).
 
@@ -77,7 +77,7 @@ Implementation: [repair loop](src/agent.py) · [capsule packaging](src/leancapsu
 
 ```mermaid
 flowchart TD
-    S["Lean source and project environment"] --> A["Repair entry: pilot A/B/C or research R-A–R-F"]
+    S["Lean source and project environment"] --> A["Repair entry: pilot P-A/P-B/P-C or research R-A–R-F"]
     A --> P["Provider generates a local proof"]
     P --> V["Candidate checks and temporary compilation"]
     V -->|"Compilation passes"| O["Save proof and per-round traces"]
@@ -97,7 +97,7 @@ The two entry points work independently. The Agent does not automatically turn e
 - **Agent success:** a candidate passes Lean compilation and the project's incomplete-proof checks.
 - **Capsule replay success:** the observed compilation status, diagnostic category, and normalized diagnostic text match expectations. For a case expected to fail compilation, reproducing that failure is a successful replay.
 
-Thus, 24/24 gallery replays do not mean that a model solved 24 proofs, and must not be conflated with either the historical A/B/C pilot or R-A through R-F repair outcomes.
+Thus, 24/24 gallery replays do not mean that a model solved 24 proofs, and must not be conflated with either the published P-A/P-B/P-C pilot or R-A through R-F repair outcomes.
 
 ## Who is it for?
 
@@ -243,9 +243,9 @@ These results come from the published pilot `pilot-20260826T122354Z-d628742d`, n
 
 | Condition | Tasks | pass@1 | pass@3 | Mean rounds | Mean total tokens / task |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| A: Problem | 18 | 18/18 (100.0%) | 18/18 (100.0%) | 1.000 | 1,750.4 |
-| B: Problem + feedback | 18 | 16/18 (88.9%) | 18/18 (100.0%) | 1.111 | 1,841.9 |
-| C: Problem + feedback + retrieval | 18 | 18/18 (100.0%) | 18/18 (100.0%) | 1.000 | 2,906.1 |
+| P-A: Problem | 18 | 18/18 (100.0%) | 18/18 (100.0%) | 1.000 | 1,750.4 |
+| P-B: Problem + feedback | 18 | 16/18 (88.9%) | 18/18 (100.0%) | 1.111 | 1,841.9 |
+| P-C: Problem + feedback + retrieval | 18 | 18/18 (100.0%) | 18/18 (100.0%) | 1.000 | 2,906.1 |
 
 Mean total tokens are calculated by summing provider usage over every round of each task, then averaging over the condition's 18 tasks—not by counting only the final successful round.
 
@@ -254,7 +254,7 @@ The release includes **56 per-round records, 54 successful proof files, and zero
 **How to interpret the results:**
 
 - They provide operational evidence for the real-provider → compilation → proof saving → review and export workflow.
-- A already reaches 18/18 on the first attempt, creating a clear ceiling effect. This batch **does not demonstrate a final success-rate gain from B or C**. C also uses more tokens, so these results do not establish greater efficiency.
+- P-A already reaches 18/18 on the first attempt, creating a clear ceiling effect. This batch **does not demonstrate a final success-rate gain from P-B or P-C**. P-C also uses more tokens, so these results do not establish greater efficiency.
 - Eighteen problems, one model, and one batch cannot establish general theorem-proving capability, statistically significant superiority, or state-of-the-art performance. Even 18/18 corresponds to an approximately 82.4%–100.0% Wilson 95% interval.
 - Recompiling final proofs does not guarantee that another call to the same model will produce identical text. Server defaults and generation variability must be disclosed.
 
