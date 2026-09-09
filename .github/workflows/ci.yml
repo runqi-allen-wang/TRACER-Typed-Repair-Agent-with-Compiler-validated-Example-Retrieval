@@ -28,6 +28,9 @@ jobs:
         run: lake build
       - name: Check Python modules
         run: python -m compileall -q src scripts tests
+      # 固定的 12 个真实 Lean 失败与 3 个基础设施事件；不调用模型 API。
+      - name: Verify Compiler Feedback v1 fixtures
+        run: python scripts/verify_compiler_feedback_v1.py --verify-only
       # 12 个 core 案例是硬门槛；同时保留 4 个 challenge 的真实回放结果。
       - name: Run Capsule feasibility gate
         run: python scripts/run_capsule_feasibility.py --verify-only

@@ -10,7 +10,7 @@
 [![Lean 工具链](https://img.shields.io/badge/Lean-4.32.0-blue)](lean-toolchain)
 [![CI Python 版本](https://img.shields.io/badge/CI_Python-3.11-blue)](.github/workflows/ci.yml)
 
-[快速开始](#快速开始) · [命名体系](#实验与安全命名体系) · [创新点与工程贡献](#创新点与工程贡献) · [实验结果](#实验结果) · [API 指南](docs/API_GUIDE.md) · [失败案例库](capsules/index.md) · [参与贡献](CONTRIBUTING.md)
+[快速开始](#快速开始) · [命名体系](#实验与安全命名体系) · [创新点与工程贡献](#创新点与工程贡献) · [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) · [实验结果](#实验结果) · [API 指南](docs/API_GUIDE.md) · [失败案例库](capsules/index.md) · [参与贡献](CONTRIBUTING.md)
 
 ![TRACER 项目概览](TRACER.png)
 
@@ -42,6 +42,7 @@ TRACER 刻意分开三套命名。它们对应不同层级的证据，不能拼�
 
 - **24 个公开失败 capsule**：覆盖 4 类错误家族，来源包括 Std、Mathlib 和项目本地依赖。
 - **12 core + 4 challenge 可行性实验**：16 个案例均保留规范化诊断并在干净临时目录回放成功，包含项目本地多文件案例。
+- **Compiler Feedback v1**：冻结原始、规范化、结构化三层诊断协议，覆盖 12 个真实 Lean 失败和 3 个显式基础设施事件；每个结构化信号都保留脱敏原文片段。这是离线门禁，不是模型增益结果。
 - **18 道冻结题 × 3 个已发布 pilot 条件（P-A/P-B/P-C；底层存储为 A/B/C）**：真实 provider 发布包包含 56 条逐轮记录和 54 个成功证明文件。
 - **完整操作链**：单题 CLI、本地 HTTP API、批量评测、人工复核、报告校验与脱敏导出。
 - **独立六臂 repair24 研究套件（R-A～R-F）**：提供仅检索、动态查询与失败上下文对照；runner 与离线检查已实现，完整多模型重复实验待测。跳转至 [研究评测](#超越-smoke-test-的研究评测) 和 [相关工作](#相关工作)。
@@ -67,9 +68,10 @@ TRACER 将这三类问题分开处理，再通过可读记录连接起来。对�
 | **把失败作为独立交付物** | LeanCapsule 同时保存 Lean 文件、环境信息、预期诊断、来源与回放入口 | 错误可以被分享、复现和加入回归案例，而不依赖原作者的终端状态 |
 | **以编译验证约束案例抽取** | 按定理抽取后重新编译；诊断不一致则回退完整文件；在预算内尝试删除 imports | 缩小案例时仍检查是否保留原来的失败现象，不把“文件更短”误当作复现成功 |
 | **可控的推理时修复** | 局部候选生成 → 安全检查 → 项目环境编译 → 有界诊断反馈，最多三轮 | 在不改模型权重的前提下研究反馈与示例的作用；原题文件不被覆盖 |
+| **可审计的编译反馈** | 同时保留原始、规范化和结构化诊断；每个抽取类别和信号都指向原文片段 | 在研究模型是否采纳反馈之前，先离线检查诊断转换是否失真 |
 | **从结果数字追溯到证据** | 记录模型配置、候选、实际检索示例、usage 与编译诊断；成功证明落盘；正式报告前做严格校验 | 降低批次混合、缓存复用或基础设施错误被误当作能力提升的风险 |
 
-对应实现：[修复循环](src/agent.py) · [capsule 打包](src/leancapsule/pack.py) · [imports 精简](src/leancapsule/minimize.py) · [pilot 校验](scripts/validate_pilot.py) · [发布导出](scripts/export_pilot.py)。
+对应实现：[修复循环](src/agent.py) · [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) · [capsule 打包](src/leancapsule/pack.py) · [imports 精简](src/leancapsule/minimize.py) · [pilot 校验](scripts/validate_pilot.py) · [发布导出](scripts/export_pilot.py)。
 
 ## 工作原理
 
@@ -214,6 +216,7 @@ DeepSeek Flash 可将模型改为 `deepseek-v4-flash`。GPT-4.1 是当前请求�
 | --- | --- |
 | Evaluation18 P-A/P-B/P-C | 已发布 provider 轨迹、54 个证明和完整 54 对人工复核；只作为工程 smoke test |
 | LeanCapsule | 已发布 24 案例复核 gallery，并包含 12-core / 4-challenge 可行性工件 |
+| Compiler Feedback v1 | 已冻结三层反馈协议与 15 个离线夹具（12 个真实 Lean 失败、3 个基础设施事件）；尚未验证模型采纳或比较效应 |
 | FATE-M | 包含 Part 1/2 corrected、Experience + CapsuleFeedback 和 Part 3 Raw/Capsule 交接包；均为单批次描述性证据 |
 | repair24 R-A～R-F | 题库、runner 和离线门禁已实现；正式多模型重复矩阵尚未运行 |
 | 安全 | SP-1 有编译前回归；SP-n 覆盖和操作系统级隔离仍是未来工作 |
@@ -371,6 +374,7 @@ python -m leancapsule gallery capsules --out capsules/index.json
 | 跑真实实验、复核并导出 | [Pilot 手册](docs/REAL_PILOT_GUIDE.md) |
 | 理解条件控制和有效性约束 | [方法设计](docs/methodology.md) |
 | 查阅逐轮记录字段 | [JSONL 格式](docs/jsonl_schema.md) |
+| 检查或复验三层编译诊断协议 | [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) |
 | 创建可公开分享的失败工件 | [工件格式](docs/CAPSULE_FORMAT.md)与[案例贡献指南](docs/CONTRIBUTING_CAPSULES.md) |
 | 运行或检查 AxProverBase Part 1 + Part 2 实验 | [Part 1 指南](baseline/README.md)、[Part 2 设计](docs/part2_capsule_feedback.md)、[Part 3 交接清单](docs/part3_experiment_handoff.md)与[结果交接包](results/handoff/part12-live-20260828-corrected/README.md) |
 | 查看 Experience + CapsuleFeedback 混杂拆分臂 | [B 臂设计与结果](docs/part2_capsule_feedback_confound_arm.md)与[B 臂交接报告](results/handoff/part2-experience-capsule-20260829/REPORT.md) |
@@ -457,9 +461,9 @@ TRACER 沿用已有研究方向，不将编译反馈或检索本身作为首创�
 
 欢迎提交可复现失败案例、补充测试、改进诊断整理及模型集成。贡献前请阅读 [CONTRIBUTING](CONTRIBUTING.md)，并为案例补充来源许可、工具链、预期结果与复现步骤。
 
-2026 年 8 月 30 日收到 [subfish-zhou](https://github.com/subfish-zhou) 与 [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) 的社区评审后，下一阶段优先聚焦两条路线：
+2026 年 8 月 30 日收到 [subfish-zhou](https://github.com/subfish-zhou) 与 [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) 的社区评审后，下一阶段优先聚焦两条路线。第一项离线里程碑现已作为 [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) 落地；模型采纳研究与 SP-n 扩展仍属于后续工作：
 
-- **把 Lean 编译诊断反馈本身作为研究对象。** 不再只把归一化报错文本直接交给模型，而是比较原始反馈、归一化反馈和按错误类型组织的反馈；检查下一轮候选是否真正处理了未知标识符、类型不匹配、未解决目标或 elaboration 错误；同时报告错误类别转移、逐轮成功率、token 成本和检索查询变化。任何新增对照都应注册为新协议版本，不能静默改写现有 R-B、R-E 或 R-F。
+- **把 Lean 编译诊断反馈本身作为研究对象。** 原始/规范化/结构化表示及其可回溯夹具已经离线冻结；未来仍需比较三种表示，检查下一轮候选是否真正处理了未知标识符、类型不匹配、未解决目标或 elaboration 错误，并报告错误类别转移、逐轮成功率、token 成本和检索查询变化。任何新增对照都应注册为新协议版本，不能静默改写现有 R-B、R-E 或 R-F。
 - **把 SP-n 扩展为系统化安全研究路线。** 在现有 SP-1 回归基础上建立版本化威胁模型和对抗案例集，分别统计误放行与误拒绝，区分编译前策略检查与操作系统级隔离，并评估容器或低权限执行对文本规则难以判断的候选所提供的保护。SP-n 始终是安全策略命名空间，不是新增研究臂。
 
 更广泛的后续方向仍包括更难题库、跨模型重复运行、检索成本收益和跨环境 Capsule 研究。这些是待检验方向，不是已完成能力或性能承诺。具体协议要求见 [研究实验操作与预注册协议](docs/RESEARCH_PROTOCOL.md)，分阶段交付物和验收门禁见 [编译反馈与 SP-n 后续工作方案](docs/FUTURE_WORK_PLAN.md)。
