@@ -1,8 +1,8 @@
 # TRACER 当前进度与证据登记
 
-更新时间：2026-09-08。
+更新时间：2026-09-09。
 
-当前发布基线为 `main@e8b36c9`（PR #23）。本文是仓库内“完成到哪一步”的唯一当前口径；历史变更过程见 `CHANGELOG.md`，未来工作见 `docs/FUTURE_WORK_PLAN.md`。当旧报告、历史批次说明与本文冲突时，以各批次原始工件和本文的证据分层为准。
+当前发布基线为 `main@cd2d2bf`（PR #24）。本文是仓库内“完成到哪一步”的唯一当前口径；历史变更过程见 `CHANGELOG.md`，未来工作见 `docs/FUTURE_WORK_PLAN.md`。当旧报告、历史批次说明与本文冲突时，以各批次原始工件和本文的证据分层为准。
 
 ## 口径规则
 
@@ -42,7 +42,7 @@
 | I-03 | 多模型、重复、随机顺序、调用预算、usage 和发布门禁 | 计划中的 864 任务尚未执行；配置文件不是实验结果 |
 | I-04 | `src/capsule_metrics.py` 和跨环境记录合并 | 独立机器、受控冷热缓存和仓库内可交付原始轨迹 |
 | I-05 | `src/human_study.py`、8 对合成材料和互补分组 | 真实参与者回答、计时、知情说明和人工判分 |
-| I-06 | 编译反馈、诊断压缩和错误驱动检索 | 原始/规范化/结构化反馈的冻结对照，以及反馈采纳率和错误转移统计 |
+| I-06 | [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md)：冻结原始/规范化/结构化三层协议、JSON Schema、12 个真实 Lean 失败与 3 个基础设施事件，并要求结构化字段逐项保留原始诊断片段 | 反馈采纳率、候选相关修改、完整错误转移与检索查询变化统计；受控模型比较 |
 | I-07 | 最小环境、文本策略和 SP-1 | SP-2 以后对抗案例、正常对照、误放行/误拒绝指标及操作系统级隔离 |
 
 repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译→保存→独立复编译→报告校验”，但 mock 或参考候选不得计作模型实验结果。
@@ -57,15 +57,16 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 
 ## 当前工程验收状态
 
-PR #23 的远程合并提交 `main@e8b36c9` 上共有 7 项 GitHub Checks，均已通过：主测试、Lean build 与完整 Python 回归、Part 1 baseline、AxProver 安装 smoke、固定 AxProverBase 接口、Part 2 Ubuntu 专项测试和 Part 3 handoff contract。
+本轮从 PR #24 的远程合并提交 `main@cd2d2bf` 建立独立分支；Compiler Feedback v1 的最终远程 Checks 需在本分支推送并创建 PR 后由 GitHub Actions 给出。
 
 当前文档基线的本地 Windows 全量复审记录：
 
-- Python：共发现 220 项测试，218 项通过，2 项因仅适用于 Linux 符号链接边界而跳过；当前包含证据分层、P/R/SP 命名和 Part 1 CI 防回退测试。
+- Python：共发现 229 项测试，227 项通过，2 项因仅适用于 Linux 符号链接边界而跳过；当前包含 Compiler Feedback v1、证据分层、P/R/SP 命名和 Part 1 CI 防回退测试。
 - `lake build`：通过；冻结 Evaluation18 输入中的 18 个 `sorry` 是预期占位警告，不代表题目已在原文件中修复。
 - `python -m leancapsule audit capsules`：24/24 通过。
 - `python -m leancapsule verify capsules`：24/24 通过，包含 4 个 Mathlib 案例。
 - `python scripts/run_capsule_feasibility.py --verify-only`：12 个 core 与 4 个 challenge 全部通过。
+- `python scripts/verify_compiler_feedback_v1.py --verify-only`：15/15 通过，其中 12 个真实 Lean 失败、3 个基础设施事件；API 调用为 0，未改写已有实验。
 - `python scripts/validate_b_handoff.py` 与 `python scripts/validate_part3_handoff.py`：通过。
 - 已发布 54 个成功证明逐个独立重编译通过。
 
@@ -86,8 +87,8 @@ PR #23 的远程合并提交 `main@e8b36c9` 上共有 7 项 GitHub Checks，均�
 
 优先顺序见 `docs/FUTURE_WORK_PLAN.md`：
 
-1. 先冻结编译反馈协议，建立原始、规范化、结构化三层表示。
-2. 离线实现反馈采纳率、重复错误率、错误转移矩阵和动态查询变化指标。
+1. **已完成离线第一阶段：** 冻结 Compiler Feedback v1 原始、规范化、结构化三层表示和 15 个失败夹具。
+2. 离线补齐反馈采纳率、重复错误率、完整错误转移矩阵和动态查询变化指标；已有的基础类别转移汇总不等于反馈采纳研究完成。
 3. 将 SP-1 扩展为带威胁模型、恶意案例与正常对照的 SP-n。
 4. 验证容器或低权限账户隔离，不把文本规则称为沙箱。
 5. 上述门禁稳定后，只做小规模付费预跑；协议不再改动后才运行完整 repair24 多模型矩阵。

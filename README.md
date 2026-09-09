@@ -10,7 +10,7 @@
 [![Lean toolchain](https://img.shields.io/badge/Lean-4.32.0-blue)](lean-toolchain)
 [![CI Python version](https://img.shields.io/badge/CI_Python-3.11-blue)](.github/workflows/ci.yml)
 
-[Quick start](#quick-start) · [Naming](#experiment-and-policy-namespaces) · [Design contributions](#design-contributions) · [Pilot results](#pilot-results) · [API guide](docs/API_GUIDE.md) · [Failure gallery](capsules/index.md) · [Contributing](CONTRIBUTING.md)
+[Quick start](#quick-start) · [Naming](#experiment-and-policy-namespaces) · [Design contributions](#design-contributions) · [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) · [Pilot results](#pilot-results) · [API guide](docs/API_GUIDE.md) · [Failure gallery](capsules/index.md) · [Contributing](CONTRIBUTING.md)
 
 ![TRACER overview](TRACER.png)
 
@@ -42,6 +42,7 @@ Available artifacts:
 
 - **24 public failure capsules**, spanning four error families and Std, Mathlib, and project-local dependencies.
 - **A 12-core / 4-challenge feasibility experiment** whose 16 cases preserve normalized diagnostics and replay in clean temporary directories, including project-local multi-file cases.
+- **Compiler Feedback v1**, a frozen three-layer diagnostic protocol with 12 real Lean failure fixtures and 3 explicit infrastructure events. Every structured signal retains an exact excerpt from the sanitized raw diagnostic; this is an offline gate, not a model-effect result.
 - **18 frozen problems × 3 published pilot conditions (P-A/P-B/P-C; stored as A/B/C)**, with a real-provider release containing 56 per-round records and 54 successful proof files.
 - **An end-to-end workflow** covering a single-problem CLI, local HTTP API, batch evaluation, manual review, report validation, and sanitized export.
 - **A separate six-arm repair24 research suite (R-A through R-F)** with retrieval-only, diagnostic-query and failure-context controls. The runner and offline checks exist; the full multi-model repeated experiment is pending. Jump to [research evaluation](#research-evaluation-beyond-the-smoke-test) and [related work](#related-work).
@@ -69,9 +70,10 @@ These are verifiable engineering contributions and a combination of design choic
 | **Failures as first-class artifacts** | LeanCapsule stores Lean files, environment information, expected diagnostics, provenance, and replay entry points | Share, reproduce, and retain errors as regression cases without relying on the original terminal session |
 | **Compiler-checked case extraction** | Recompile extracted theorems, fall back to the full file if diagnostics change, and attempt import removal within a budget | Check that a smaller case preserves the failure instead of equating shorter files with successful reproduction |
 | **Controlled inference-time repair** | Local generation → candidate checks → compilation in the project environment → bounded feedback, for at most three rounds | Study feedback and examples without changing model weights or overwriting the original problem |
+| **Auditable compiler feedback** | Preserve raw, normalized, and structured diagnostics together; every extracted category and signal points to an exact raw excerpt | Support offline inspection of diagnostic transformations before testing whether a model uses them |
 | **Traceable experimental evidence** | Record model settings, candidates, actual retrieved examples, usage, and diagnostics; save proofs; validate before formal reporting | Reduce the risk of mistaking mixed batches, cache reuse, or infrastructure errors for improved model capability |
 
-Implementation: [repair loop](src/agent.py) · [capsule packaging](src/leancapsule/pack.py) · [import minimization](src/leancapsule/minimize.py) · [pilot validation](scripts/validate_pilot.py) · [release export](scripts/export_pilot.py).
+Implementation: [repair loop](src/agent.py) · [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) · [capsule packaging](src/leancapsule/pack.py) · [import minimization](src/leancapsule/minimize.py) · [pilot validation](scripts/validate_pilot.py) · [release export](scripts/export_pilot.py).
 
 ## How it works
 
@@ -216,6 +218,7 @@ The canonical, dated evidence register is [PROGRESS.md](PROGRESS.md). It separat
 | --- | --- |
 | Evaluation18 P-A/P-B/P-C | Published provider traces, 54 proofs and complete 54-pair manual review; engineering smoke test only |
 | LeanCapsule | 24-case reviewed gallery plus 12-core / 4-challenge feasibility artifacts |
+| Compiler Feedback v1 | Frozen raw/normalized/structured protocol with 15 offline fixtures (12 real Lean failures and 3 infrastructure events); model adoption and comparative effects are untested |
 | FATE-M | Part 1/2 corrected handoff, Experience + CapsuleFeedback arm, and Part 3 Raw/Capsule handoff are included as single-batch descriptive evidence |
 | repair24 R-A–R-F | Benchmark, runner and offline gates are implemented; the formal multi-model repeated matrix has not been run |
 | Security | SP-1 has a pre-compilation regression; SP-n coverage and operating-system isolation remain future work |
@@ -376,6 +379,7 @@ Keep these checks distinct:
 | Run, review, and export real experiments | [Pilot guide](docs/REAL_PILOT_GUIDE.md) |
 | Understand condition controls and validity constraints | [Methodology](docs/methodology.md) |
 | Look up per-round record fields | [JSONL format](docs/jsonl_schema.md) |
+| Inspect or verify the three-layer compiler-diagnostic protocol | [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) |
 | Create publicly shareable failure artifacts | [Artifact format](docs/CAPSULE_FORMAT.md) and [case contribution guide](docs/CONTRIBUTING_CAPSULES.md) |
 | Run or inspect the AxProverBase Part 1 + Part 2 experiment | [Part 1 guide](baseline/README.md), [Part 2 design](docs/part2_capsule_feedback.md), [Part 3 handoff checklist](docs/part3_experiment_handoff.md), and [result handoff](results/handoff/part12-live-20260828-corrected/README.md) |
 | Inspect the Experience + CapsuleFeedback confound arm | [B arm design and result](docs/part2_capsule_feedback_confound_arm.md) and [B arm handoff](results/handoff/part2-experience-capsule-20260829/REPORT.md) |
@@ -462,9 +466,9 @@ See the [related-work comparison](docs/RELATED_WORK.md) for boundaries and testa
 
 Contributions of reproducible failures, tests, diagnostic improvements, and model integrations are welcome. Read [CONTRIBUTING](CONTRIBUTING.md) first, and include provenance, licensing, toolchain information, expected results, and reproduction steps for new cases.
 
-Community feedback received on 30 August 2026 from [subfish-zhou](https://github.com/subfish-zhou) and [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) highlighted two priorities for the next stage:
+Community feedback received on 30 August 2026 from [subfish-zhou](https://github.com/subfish-zhou) and [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) highlighted two priorities for the next stage. The first offline milestone is now available as [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md), while model-adoption studies and SP-n expansion remain future work:
 
-- **Compiler-diagnostic feedback as a research object.** Move beyond forwarding normalized Lean error text. Future experiments should compare raw, normalized, and error-typed feedback; test whether the next candidate actually addresses the reported unknown identifier, type mismatch, unsolved goal, or elaboration failure; and report error-transition matrices, success by round, token cost, and retrieval-query changes. Any new comparison must be preregistered as a new protocol version rather than silently changing R-B, R-E, or R-F.
+- **Compiler-diagnostic feedback as a research object.** The raw/normalized/structured representation and its source-linked fixtures are frozen offline. Future experiments must still compare these representations; test whether the next candidate actually addresses the reported unknown identifier, type mismatch, unsolved goal, or elaboration failure; and report error-transition matrices, success by round, token cost, and retrieval-query changes. Any new comparison must be preregistered as a new protocol version rather than silently changing R-B, R-E, or R-F.
 - **SP-n as a systematic security program.** Extend the current SP-1 regression into a versioned threat model and adversarial case suite. Evaluation should separate false acceptance from false rejection, distinguish pre-compilation policy checks from operating-system isolation, and test container or low-privilege execution for candidates that textual gates cannot safely characterize. SP-n remains a security-policy namespace, not an additional research arm.
 
 Broader directions still include harder benchmarks, cross-model repeated runs, retrieval cost–benefit analysis, and cross-environment Capsule studies. These are directions to investigate, not completed capabilities or performance promises. The concrete protocol implications are recorded in [RESEARCH_PROTOCOL.md](docs/RESEARCH_PROTOCOL.md), with staged deliverables and acceptance gates in the [compiler-feedback and SP-n roadmap](docs/FUTURE_WORK_PLAN.md).

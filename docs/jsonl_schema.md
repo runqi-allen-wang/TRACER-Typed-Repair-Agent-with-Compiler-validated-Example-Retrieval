@@ -36,3 +36,13 @@
 原始源文件不会被覆盖。成功隔离文件保存在 `results/solutions/<experiment_id>/<condition>/`；持续失败的最后候选保存在对应批次的 `failures/` 子目录中。
 
 新 repair24 研究另用 `results/<研究目录>/trials/<模型>/<重复>/<组>/<题目>/`，以该目录内的 solutions 保存文件。`finish_reason=length` 不编译、记录 generation_truncated、消耗一轮且保留 usage/费用；不是 API 认证错误，也不直接证明数学失败。旧日志无新版字段时不补造字段或改成绩，研究报告标记 legacy-strict-warnings-v1。
+
+## Compiler Feedback v1 独立离线记录
+
+`tracer-compiler-feedback-v1` 是单独冻结的三层编译反馈协议，不会回填或改写上面的 Agent、pilot、repair24 与 FATE-M 历史 JSONL。每条记录同时包含：
+
+- `raw`：完整脱敏诊断与真实运行状态；
+- `normalized`：保留全部非空行的稳定化诊断；
+- `structured`：类别、分类来源和带原始片段的信号。
+
+每个结构化字段都必须用 `category_evidence` 或 `evidence_excerpt` 回溯到 `raw.text`。完整字段定义、15 个冻结夹具和离线验证命令见 [Compiler Feedback v1 协议](COMPILER_FEEDBACK_V1.md)；机器校验结构见 [record.schema.json](../benchmarks/compiler_feedback_v1/record.schema.json)。

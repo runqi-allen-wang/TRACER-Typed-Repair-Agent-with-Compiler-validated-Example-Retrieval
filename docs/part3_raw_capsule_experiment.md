@@ -89,7 +89,7 @@ finally {
 
 因此，在这一次 pilot 中，Raw 的最终成功数为 22/25（88%），Capsule 为 19/25（76%）；在真正有信息量的 9 个首轮失败题上，Raw 最终修复 6 题，Capsule 修复 3 题。两组实际 LLM 调用数相同，但 Capsule 多 4 个总轮次并多消耗 31686 token。这个结果不能推出 CapsuleFeedback 普遍降低性能：后续轮次仍受模型随机性和单次服务时间影响，且每个条件只运行一次。
 
-本次最新 main 批次的 `errors.jsonl` 为空，未发生 API/基础设施错误。更早的 `07301eb` 批次中，`fate24` 的 Capsule 请求收到一次 `502 Bad Gateway`；该批次原始目录 [`results/work/part3-after-main-20260829/full/`](../results/work/part3-after-main-20260829/full/) 及单题重试目录 `full-corrected/` 均保留，历史结果没有被覆盖。该重试仅用于纠正基础设施缺失，不与模型条件效果混为一谈。
+本次最新 main 批次的 `errors.jsonl` 为空，未发生 API/基础设施错误。更早的 `07301eb` 批次中，`fate24` 的 Capsule 请求收到一次 `502 Bad Gateway`；该批次当时保存在本地 `results/work/part3-after-main-20260829/full/` 及 `full-corrected/`，但这些工作目录不属于当前仓库的已发布工件，不能通过本文链接独立核验。该重试仅用于纠正基础设施缺失，不与模型条件效果混为一谈。
 
 Part 1 Experience 结果仅作资源参考：25/25 成功、39 总轮数、14 次编译错误、79 次 LLM 调用、656657 token。它使用 `ExperienceProcessor`，且运行时间不同，不能与 Raw/Capsule 做因果归因或合并成一个三条件结论。
 

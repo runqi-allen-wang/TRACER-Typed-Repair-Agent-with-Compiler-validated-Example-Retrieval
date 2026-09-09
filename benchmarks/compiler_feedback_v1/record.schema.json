@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/tracer/compiler-feedback-v1.schema.json",
+  "title": "TRACER Compiler Feedback v1 record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "case_id", "round", "raw", "normalized", "structured"],
+  "properties": {
+    "schema_version": {"const": "tracer-compiler-feedback-v1"},
+    "case_id": {"type": "string", "minLength": 1},
+    "round": {"type": "integer", "minimum": 1},
+    "raw": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["origin", "text", "compile_ok", "returncode", "timed_out"],
+      "properties": {
+        "origin": {
+          "enum": ["lean_compiler", "runner_timeout", "provider", "compiler_process"]
+        },
+        "text": {"type": "string"},
+        "compile_ok": {"type": "boolean"},
+        "returncode": {"type": ["integer", "null"]},
+        "timed_out": {"type": "boolean"}
+      }
+    },
+    "normalized": {
+      "type": "object",
+      "required": ["category", "summary", "diagnostic_text"],
+      "properties": {
+        "category": {
+          "enum": [
+            "ok",
+            "unknown_identifier",
+            "type_mismatch",
+            "unsolved_goals",
+            "syntax",
+            "typeclass",
+            "elaboration",
+            "metavariables",
+            "timeout",
+            "provider_error",
+            "compiler_unavailable",
+            "compile_error"
+          ]
+        },
+        "summary": {"type": "string"},
+        "diagnostic_text": {"type": "string"}
+      }
+    },
+    "structured": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category", "category_source", "category_evidence", "signals"],
+      "properties": {
+        "category": {
+          "enum": [
+            "ok",
+            "unknown_identifier",
+            "type_mismatch",
+            "unsolved_goals",
+            "syntax",
+            "typeclass",
+            "elaboration",
+            "metavariables",
+            "timeout",
+            "provider_error",
+            "compiler_unavailable",
+            "compile_error"
+          ]
+        },
+        "category_source": {"enum": ["diagnostic_text", "runtime_metadata"]},
+        "category_evidence": {"type": "string", "minLength": 1},
+        "signals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "value", "evidence_excerpt"],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "unknown_identifier",
+                  "actual_type",
+                  "expected_type",
+                  "goal",
+                  "typeclass_instance",
+                  "elaboration_message",
+                  "parser_message",
+                  "infrastructure_failure",
+                  "compiler_message"
+                ]
+              },
+              "value": {"type": "string", "minLength": 1},
+              "evidence_excerpt": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    }
+  }
+}

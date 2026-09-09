@@ -1,6 +1,6 @@
 # Lean 编译反馈与 SP-n 后续工作方案
 
-> **状态：规划中。** 本文件把社区建议转为可执行任务，不表示相关实验、安全能力或收益已经完成。现有 R-A～R-F、SP-1、历史轨迹和已发布结果保持不变。
+> **状态：部分实施（2026-09-09）。** Compiler Feedback v1 的三层离线协议、15 个失败夹具和验证门禁已经冻结；反馈采纳研究、受控模型实验和 SP-n 扩展仍是计划。本状态不表示模型收益或新增安全能力已经成立。现有 R-A～R-F、SP-1、历史轨迹和已发布结果保持不变。
 
 Community feedback from [subfish-zhou](https://github.com/subfish-zhou) and [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) motivates two next-stage tracks: measuring how models use Lean diagnostics, and expanding SP-1 into a versioned SP-n security program. The plan below freezes evidence boundaries before implementation.
 
@@ -17,6 +17,8 @@ Community feedback from [subfish-zhou](https://github.com/subfish-zhou) and [Ful
 目标不是简单回答“有没有反馈”，而是判断：哪类反馈被模型正确理解、下一轮是否处理了对应错误，以及额外上下文是否值得其 token 和时间成本。
 
 ### F0：冻结基线
+
+**当前进展：部分完成。** 已新增独立的 `tracer-compiler-feedback-v1`，以可读全文快照冻结诊断规则与 15 个夹具，且没有改写现有实验。repair24 的正式模型参数和新提示对照仍需在 F3 运行前另行预注册。
 
 **任务**
 
@@ -37,6 +39,8 @@ Community feedback from [subfish-zhou](https://github.com/subfish-zhou) and [Ful
 - 每个任务的原始错误能由 Lean 稳定重现。
 
 ### F1：建立可审计的反馈表示
+
+**当前进展：离线实现已完成。** [Compiler Feedback v1](COMPILER_FEEDBACK_V1.md) 同时保留原始、规范化和结构化三层；每个类别和结构化信号都必须保存可在脱敏原文中逐字定位的证据片段。12 个真实 Lean 失败与 3 个基础设施事件由 CI 离线复验。
 
 为每次编译同时保留以下三层信息：
 
@@ -142,9 +146,9 @@ SP 是安全策略编号，不是 R-A～R-F 之外的新增实验臂。新增编
 
 以下工作不需要 API，也不会改变已有结果：
 
-1. 为现有诊断类别制作 10～15 个最小失败夹具。
-2. 定义原始、归一化、结构化三层反馈的 JSONL 字段。
-3. 增加“错误类别转移”和“反馈采纳”离线统计器。
+1. **已完成：** 为现有诊断类别冻结 15 个最小失败夹具，其中 12 个由 Lean 真实编译、3 个为显式基础设施事件。
+2. **已完成：** 定义原始、归一化、结构化三层反馈记录与 JSON Schema，并要求每个结构化字段保留原始诊断片段。
+3. **部分完成：** 已有基础错误类别转移汇总；反馈采纳、候选相关修改和检索查询变化的完整离线统计仍待实现。
 4. 为 SP 候选案例编写威胁模型模板及正常对照模板。
 5. 在 Windows 与 Linux CI 中分别增加低权限隔离的可行性检查，但暂不宣称完整沙箱。
 

@@ -1,0 +1,162 @@
+{
+  "version": "compiler-feedback-fixtures-v1",
+  "status": "frozen-offline",
+  "protocol_version": "tracer-compiler-feedback-v1",
+  "lean_toolchain": "leanprover/lean4:v4.32.0",
+  "description": "Compiler Feedback v1 的 15 个最小失败夹具；12 个来自真实 Lean 编译，3 个是显式标记的基础设施事件。",
+  "cases": [
+    {
+      "id": "CF-01",
+      "family": "unknown_identifier",
+      "origin": "lean_compiler",
+      "file": "cases/unknown_term.lean",
+      "expected_category": "unknown_identifier",
+      "expected_signal_kinds": ["unknown_identifier"],
+      "expected_contains": "unknown identifier",
+      "source_text": "import Std\n\nexample : True := by\n  exact proofDoesNotExist\n"
+    },
+    {
+      "id": "CF-02",
+      "family": "unknown_identifier",
+      "origin": "lean_compiler",
+      "file": "cases/unknown_namespace.lean",
+      "expected_category": "unknown_identifier",
+      "expected_signal_kinds": ["unknown_identifier"],
+      "expected_contains": "unknown identifier",
+      "source_text": "import Std\n\nexample : Nat := MissingNamespace.value\n"
+    },
+    {
+      "id": "CF-03",
+      "family": "type_mismatch",
+      "origin": "lean_compiler",
+      "file": "cases/type_mismatch_literal.lean",
+      "expected_category": "type_mismatch",
+      "expected_signal_kinds": ["actual_type", "expected_type"],
+      "expected_contains": "type mismatch",
+      "source_text": "import Std\n\nexample : Nat := true\n"
+    },
+    {
+      "id": "CF-04",
+      "family": "type_mismatch",
+      "origin": "lean_compiler",
+      "file": "cases/application_type_mismatch.lean",
+      "expected_category": "type_mismatch",
+      "expected_signal_kinds": ["actual_type", "expected_type"],
+      "expected_contains": "application type mismatch",
+      "source_text": "import Std\n\ndef takesNat (n : Nat) : Nat := n\n\nexample : Nat := takesNat false\n"
+    },
+    {
+      "id": "CF-05",
+      "family": "unsolved_goals",
+      "origin": "lean_compiler",
+      "file": "cases/unsolved_conjunction.lean",
+      "expected_category": "unsolved_goals",
+      "expected_signal_kinds": ["goal"],
+      "expected_contains": "unsolved goals",
+      "source_text": "import Std\n\nexample (p q : Prop) (hp : p) : p ∧ q := by\n  constructor\n  · exact hp\n"
+    },
+    {
+      "id": "CF-06",
+      "family": "unsolved_goals",
+      "origin": "lean_compiler",
+      "file": "cases/unsolved_case_split.lean",
+      "expected_category": "unsolved_goals",
+      "expected_signal_kinds": ["goal"],
+      "expected_contains": "unsolved goals",
+      "source_text": "import Std\n\nexample (p : Prop) : p ∨ ¬p := by\n  by_cases hp : p\n  · exact Or.inl hp\n"
+    },
+    {
+      "id": "CF-07",
+      "family": "syntax",
+      "origin": "lean_compiler",
+      "file": "cases/syntax_unexpected_token.lean",
+      "expected_category": "syntax",
+      "expected_signal_kinds": ["parser_message"],
+      "expected_contains": "unexpected token",
+      "source_text": "import Std\n\nexample : True := by\n  exact )\n"
+    },
+    {
+      "id": "CF-08",
+      "family": "syntax",
+      "origin": "lean_compiler",
+      "file": "cases/syntax_missing_term.lean",
+      "expected_category": "syntax",
+      "expected_signal_kinds": ["parser_message"],
+      "expected_contains": "unexpected end of input",
+      "source_text": "import Std\n\nexample : True := by\n  exact\n"
+    },
+    {
+      "id": "CF-09",
+      "family": "typeclass",
+      "origin": "lean_compiler",
+      "file": "cases/typeclass_missing_witness.lean",
+      "expected_category": "typeclass",
+      "expected_signal_kinds": ["typeclass_instance"],
+      "expected_contains": "failed to synthesize",
+      "source_text": "import Std\n\nclass Witness (α : Type) where\n  witness : α\n\nexample : Nat := Witness.witness (α := Nat)\n"
+    },
+    {
+      "id": "CF-10",
+      "family": "typeclass",
+      "origin": "lean_compiler",
+      "file": "cases/typeclass_missing_printable.lean",
+      "expected_category": "typeclass",
+      "expected_signal_kinds": ["typeclass_instance"],
+      "expected_contains": "failed to synthesize",
+      "source_text": "import Std\n\nclass Printable (α : Type) where\n  print : α → String\n\ndef renderWithoutInstance {α : Type} (x : α) : String :=\n  Printable.print x\n"
+    },
+    {
+      "id": "CF-11",
+      "family": "elaboration",
+      "origin": "lean_compiler",
+      "file": "cases/elaboration_missing_binder.lean",
+      "expected_category": "elaboration",
+      "expected_signal_kinds": ["elaboration_message"],
+      "expected_contains": "failed to infer type of binder",
+      "source_text": "import Std\n\ndef identityWithoutBinderType := fun x => x\n"
+    },
+    {
+      "id": "CF-12",
+      "family": "elaboration",
+      "origin": "lean_compiler",
+      "file": "cases/elaboration_metavariable.lean",
+      "expected_category": "elaboration",
+      "expected_signal_kinds": ["elaboration_message"],
+      "expected_contains": "synthesize placeholder",
+      "source_text": "import Std\n\ndef unresolvedValue : Nat := _\n"
+    },
+    {
+      "id": "CF-13",
+      "family": "infrastructure",
+      "origin": "runner_timeout",
+      "file": "diagnostics/timeout.txt",
+      "expected_category": "timeout",
+      "expected_signal_kinds": ["infrastructure_failure"],
+      "expected_contains": "编译超时",
+      "raw_text": "Lean 编译超时（2s）\n",
+      "timed_out": true
+    },
+    {
+      "id": "CF-14",
+      "family": "infrastructure",
+      "origin": "provider",
+      "file": "diagnostics/provider_error.txt",
+      "expected_category": "provider_error",
+      "expected_signal_kinds": ["infrastructure_failure"],
+      "expected_contains": "HTTP 503",
+      "raw_text": "Provider request failed: HTTP 503 service unavailable\n",
+      "timed_out": false
+    },
+    {
+      "id": "CF-15",
+      "family": "infrastructure",
+      "origin": "compiler_process",
+      "file": "diagnostics/compiler_unavailable.txt",
+      "expected_category": "compiler_unavailable",
+      "expected_signal_kinds": ["infrastructure_failure"],
+      "expected_contains": "编译器不可用",
+      "raw_text": "编译器不可用: [WinError 2] The system cannot find the file specified\n",
+      "timed_out": false
+    }
+  ]
+}

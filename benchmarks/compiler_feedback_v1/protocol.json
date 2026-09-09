@@ -1,0 +1,35 @@
+{
+  "version": "tracer-compiler-feedback-v1",
+  "status": "frozen-offline",
+  "record_schema": "record.schema.json",
+  "layers": [
+    "raw",
+    "normalized",
+    "structured"
+  ],
+  "raw_policy": "保留既有运行的完整诊断文本，只清理认证信息、本机绝对路径和换行差异。",
+  "normalized_policy": "保留所有有内容的诊断行，规范位置、易变元变量编号和空白；不得用参考证明改写诊断。",
+  "structured_policy": "类别和每个信号必须保存 evidence_excerpt，且该片段必须逐字存在于脱敏后的 raw.text。",
+  "category_source_policy": "Lean 编译诊断只能从 diagnostic_text 分类；category_hint 只允许用于 timeout、provider 和 compiler-process 基础设施事件。",
+  "infrastructure_categories": [
+    "timeout",
+    "provider_error",
+    "compiler_unavailable"
+  ],
+  "proof_failure_categories": [
+    "unknown_identifier",
+    "type_mismatch",
+    "unsolved_goals",
+    "syntax",
+    "typeclass",
+    "elaboration",
+    "metavariables",
+    "compile_error"
+  ],
+  "prohibited_inputs": [
+    "reference_proof",
+    "runtime_answer_table",
+    "model_generated_category_override"
+  ],
+  "comparison_policy": "使用可读字段和原文片段直接比较，不生成派生摘要或指纹。"
+}
