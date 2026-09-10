@@ -177,6 +177,8 @@ python src/human_study.py report
 
 ### 7.1 Lean 编译诊断反馈
 
+离线协议与入口已经实现：三层诊断见 [COMPILER_FEEDBACK_V1.md](COMPILER_FEEDBACK_V1.md)，逐轮采纳/query 审计见 [FEEDBACK_ADOPTION_V1.md](FEEDBACK_ADOPTION_V1.md)，独立三表示对照见 [FEEDBACK_STUDY_V1.md](FEEDBACK_STUDY_V1.md)。下列条目中“记录与门禁”已完成；真实模型比较仍待另行授权运行。
+
 后续协议应把“是否提供反馈”细化为“提供什么反馈、模型是否采纳反馈”：
 
 1. 在相同题目、模型、生成预算和轮数下，对照原始 Lean 诊断、当前归一化诊断，以及由错误类别和目标状态组织的结构化反馈。
@@ -186,6 +188,8 @@ python src/human_study.py report
 5. 现有 R-B、R-E、R-F 的含义保持冻结。若增加新的反馈表示对照，必须建立新的协议版本、显示名和独立输出目录，不能回写旧轨迹。
 
 ### 7.2 SP-n 安全策略
+
+第一版威胁模型已经冻结为 SP-1～SP-6 和 CTRL-1～CTRL-3，并由 `src/security_study.py` 同时报告误放行、误拒绝及拒绝前编译调用。操作系统隔离与未知攻击覆盖仍未完成。
 
 SP 后续工作应从单个回归案例扩展为版本化安全计划：
 

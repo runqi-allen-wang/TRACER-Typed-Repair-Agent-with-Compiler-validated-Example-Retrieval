@@ -1,0 +1,80 @@
+{
+  "protocol_version": "tracer-feedback-study-v1",
+  "experiment_id": "feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248",
+  "trajectory_valid": true,
+  "design_complete": true,
+  "review_mode": "ai_assisted",
+  "review_complete": true,
+  "ai_assisted_review_complete": true,
+  "release_ready": true,
+  "archived_transport_retry_attempts": 2,
+  "errors": [],
+  "summary": [
+    {
+      "model": "deepseek",
+      "representation": "normalized",
+      "tasks": 72,
+      "pass_at_1": 56,
+      "pass_within_budget": 65,
+      "avg_rounds": 1.3333333333333333,
+      "avg_wall_ms": 92117.58888888889,
+      "total_tokens": 543014,
+      "total_estimated_cost_usd": null,
+      "feedback_relevant_change_rate": 0.2916666666666667,
+      "repeated_error_category_rate": 0.20833333333333334
+    },
+    {
+      "model": "deepseek",
+      "representation": "raw",
+      "tasks": 72,
+      "pass_at_1": 56,
+      "pass_within_budget": 67,
+      "avg_rounds": 1.3472222222222223,
+      "avg_wall_ms": 90740.85972222222,
+      "total_tokens": 527422,
+      "total_estimated_cost_usd": null,
+      "feedback_relevant_change_rate": 0.28,
+      "repeated_error_category_rate": 0.28
+    },
+    {
+      "model": "deepseek",
+      "representation": "structured",
+      "tasks": 72,
+      "pass_at_1": 60,
+      "pass_within_budget": 67,
+      "avg_rounds": 1.25,
+      "avg_wall_ms": 83705.03472222222,
+      "total_tokens": 467609,
+      "total_estimated_cost_usd": null,
+      "feedback_relevant_change_rate": 0.2777777777777778,
+      "repeated_error_category_rate": 0.16666666666666666
+    }
+  ],
+  "paired_comparisons": [
+    {
+      "model": "deepseek",
+      "comparison": "normalized - raw",
+      "matched_pairs": 72,
+      "mean_success_delta": -0.027777777777777776,
+      "mean_round_delta": -0.013888888888888888,
+      "interpretation": "描述性逐题配对，不是显著性检验。"
+    },
+    {
+      "model": "deepseek",
+      "comparison": "structured - raw",
+      "matched_pairs": 72,
+      "mean_success_delta": 0,
+      "mean_round_delta": -0.09722222222222222,
+      "interpretation": "描述性逐题配对，不是显著性检验。"
+    },
+    {
+      "model": "deepseek",
+      "comparison": "structured - normalized",
+      "matched_pairs": 72,
+      "mean_success_delta": 0.027777777777777776,
+      "mean_round_delta": -0.08333333333333333,
+      "interpretation": "描述性逐题配对，不是显著性检验。"
+    }
+  ],
+  "interpretation": "按同模型、同题、同重复进行三种反馈表示的描述性配对比较；网络失败续跑次数单独披露；不自动声称因果增益或统计显著。"
+}

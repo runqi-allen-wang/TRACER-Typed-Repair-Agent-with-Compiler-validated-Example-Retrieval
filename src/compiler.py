@@ -162,7 +162,7 @@ def validate_candidate_safety(candidate: str) -> None:
 def source_meta_execution_violation(source: str) -> bool:
     """识别源码中的编译期元编程入口或 unsafe 声明。"""
 
-    cleaned = _strip_lean_comments(source)
+    cleaned = _strip_lean_strings(_strip_lean_comments(source))
     return bool(_UNSAFE_ELABORATION.search(cleaned) or UNSAFE_DECLARATION_RE.search(cleaned))
 
 
@@ -222,6 +222,32 @@ def _strip_lean_comments(source: str) -> str:
         elif current == '"':
             in_string = True
         index += 1
+    return "".join(output)
+
+
+def _strip_lean_strings(source: str) -> str:
+    """屏蔽字符串内容，避免文档文本触发候选安全规则。"""
+
+    output: list[str] = []
+    in_string = False
+    escaped = False
+    for current in source:
+        if not in_string:
+            output.append(current)
+            if current == '"':
+                in_string = True
+            continue
+        if current in "\r\n":
+            output.append(current)
+        elif current == '"' and not escaped:
+            output.append(current)
+            in_string = False
+        else:
+            output.append(" ")
+        if escaped:
+            escaped = False
+        elif current == "\\":
+            escaped = True
     return "".join(output)
 
 

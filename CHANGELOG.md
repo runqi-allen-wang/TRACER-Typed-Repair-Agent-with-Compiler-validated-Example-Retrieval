@@ -2,6 +2,19 @@
 
 本文件记录影响安全性、实验可复现性、Lean 编译边界和公开发布的补丁。它与 `PROGRESS.md` 的职责不同：`PROGRESS.md` 描述当前状态，本文按提交批次记录变更原因、影响范围和验证证据。
 
+## 2026-09-09 — 完成反馈采纳离线层、三表示 runner 与 SP v1
+
+- 新增 `tracer-feedback-adoption-v1`，逐轮记录错误类别转移、候选是否变化、是否触及诊断信号、反馈缺失/转换错误、缓存复用，以及静态/动态检索的 query 与 Top-k 变化。
+- 研究报告加入反馈相关修改率、重复错误类别率和检索变化率；这些是可观察行为，不自动解释为模型因果采纳。
+- 新增独立 `tracer-feedback-study-v1`，冻结 raw、normalized、structured 三种表示的 repair24 配对 runner、预算入口、成功证明独立复编译、AI 辅助复核和正式报告门禁。命令行可直接指定 DeepSeek HTTPS 端点与模型、隐藏输入 API key，并显式选择本地美元门禁或只保留冻结调用次数。默认离线计划为一个模型、三重复、216 任务。
+- 将安全研究扩展为版本化 SP-1～SP-6，并加入 CTRL-1～CTRL-3 正常对照；离线统计同时覆盖误放行、误拒绝和拒绝前编译调用。字符串与注释内的安全术语不会触发文本门禁。
+- 修正 Chat Completions 元数据：请求体未发送 `store` 时，日志不再误记为 `store=true`；反馈对照 CLI 同时支持冻结 DeepSeek `thinking` 与 `reasoning_effort`。
+- 反馈对照 runner 支持透明续跑：跳过已完成任务，将原网络失败移入 `retry_history/`，恢复请求计数，并在报告中单列已归档的 transport retry 数。
+- 反馈对照 runner 新增有限次数同进程网络自动续跑；连接重置、响应截断、超时或 provider 5xx 不再要求重复输入 API 密钥，普通证明失败与 4xx 错误仍保持原结果。
+- DeepSeek 批次 `feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248` 已完成 216/216 个任务：raw、normalized、structured 的三轮内通过数分别为 67、65、67；记录 1,538,045 tokens。新增专用脱敏导出和发布审计器，发布 283 条有效逐轮记录、199 个成功证明、216 行 AI 辅助复核、静态模板和双份文件清单；2 条归档传输失败轮次与 1 次未配对调用预留只披露计数，不发布原始失败内容。
+- 新反馈实验的复核文件规范为 `ai_assisted_review.csv`，每行显式记录 `review_mode=ai_assisted`；报告改用 `review_mode`、`review_complete` 与 `ai_assisted_review_complete`，不再将自动化检查表述为纯人工复核。历史 Evaluation18 人工复核文件保持不变。
+- 同步双语 README、研究协议、未来工作、项目概览与 CI。最终 Windows 回归为 249 项测试中 247 项通过、2 项 Linux-only 跳过；Feedback Study 静态审计通过，公开证明 199/199 独立复编译通过；`lake build`、Compiler Feedback 15/15、Capsule audit 24/24 与 verify 24/24 均通过。
+
 ## 2026-09-09 — 冻结 Compiler Feedback v1 离线协议
 
 - 新增 `tracer-compiler-feedback-v1`，同时保存原始、规范化、结构化三层编译反馈；每个结构化类别和信号都必须保留可在脱敏原文中逐字定位的证据片段。

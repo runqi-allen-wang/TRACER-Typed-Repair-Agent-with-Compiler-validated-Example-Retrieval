@@ -1,6 +1,6 @@
 # TRACER 当前进度与证据登记
 
-更新时间：2026-09-09。
+更新时间：2026-09-10。
 
 当前发布基线为 `main@cd2d2bf`（PR #24）。本文是仓库内“完成到哪一步”的唯一当前口径；历史变更过程见 `CHANGELOG.md`，未来工作见 `docs/FUTURE_WORK_PLAN.md`。当旧报告、历史批次说明与本文冲突时，以各批次原始工件和本文的证据分层为准。
 
@@ -26,6 +26,7 @@
 | E-05 | Experience + CapsuleFeedback 拆分臂 | `results/handoff/part2-experience-capsule-20260829/`：20/25，47 轮，69 次 LLM 请求，659,791 token；严格配对 25/25 | 该配置在单批次中的描述性结果 | 它优于其他条件；可外推到 repair24 或其他模型 |
 | E-06 | Part 3 Raw/Capsule | `results/handoff/part3-after-main-90ba62b-20260829/`：25/25 配对，Raw 22/25、Capsule 19/25 | 该交错批次的结果与配对门禁可复查 | Capsule 带来增益；跨模型或跨数据集结论 |
 | E-07 | SP-1 安全回归 | `benchmarks/security/` 及相关测试：已知的 `unsafe inductive` 候选在 Agent、Ax 和 Capsule 入口的 Lean 编译前被拒绝 | 该已知案例受到一致门禁保护 | 系统已形成完整沙箱，或所有恶意 Lean 程序都被阻止 |
+| E-08 | Feedback Study v1 DeepSeek 批次 | `published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248/`：216 个任务、283 条脱敏逐轮记录、199 个成功证明、216 行 AI 辅助复核和可读文件清单 | 当前模型、24 题、三重复下三种反馈表示的描述性结果及完整证据链可复查 | 统计显著性、因果增益、跨模型泛化或纯人工复核 |
 
 ### E-01 的数值解释
 
@@ -38,14 +39,20 @@
 | 编号 | 已有实现 | 仍缺什么 |
 | --- | --- | --- |
 | I-01 | `repair24-v1`：24 个具体错误证明、隔离参考修复和冻结清单 | 真实 provider 的完整正式矩阵、独立复编译、人工复核和发布包 |
-| I-02 | R-A～R-F 六臂 runner，支持固定检索、只检索、动态查询和失败 Capsule 上下文 | 多次独立运行；R-E/R-F 是否有增益的配对证据 |
+| I-02 | R-A～R-F 六臂 runner，支持固定检索、只检索、动态查询和失败 Capsule 上下文；新报告显式汇总 query 与 Top-k 变化率 | 多次独立真实运行；R-E/R-F 是否有增益的配对证据 |
 | I-03 | 多模型、重复、随机顺序、调用预算、usage 和发布门禁 | 计划中的 864 任务尚未执行；配置文件不是实验结果 |
 | I-04 | `src/capsule_metrics.py` 和跨环境记录合并 | 独立机器、受控冷热缓存和仓库内可交付原始轨迹 |
 | I-05 | `src/human_study.py`、8 对合成材料和互补分组 | 真实参与者回答、计时、知情说明和人工判分 |
-| I-06 | [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md)：冻结原始/规范化/结构化三层协议、JSON Schema、12 个真实 Lean 失败与 3 个基础设施事件，并要求结构化字段逐项保留原始诊断片段 | 反馈采纳率、候选相关修改、完整错误转移与检索查询变化统计；受控模型比较 |
-| I-07 | 最小环境、文本策略和 SP-1 | SP-2 以后对抗案例、正常对照、误放行/误拒绝指标及操作系统级隔离 |
+| I-06 | [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) 与 [Feedback Adoption v1](docs/FEEDBACK_ADOPTION_V1.md)：三层诊断、原文证据、错误转移、候选相关修改、缓存状态及动态 query/Top-k 变化；DeepSeek 三表示批次已作为 E-08 发布 | 其他模型独立复现与按题聚合的不确定性分析，才能讨论跨模型效应或更强比较结论 |
+| I-07 | 最小环境、版本化威胁模型、SP-1～SP-6、CTRL-1～CTRL-3 和双向错误率入口 | 更多独立复核案例、未知攻击评估、操作系统级网络/文件/进程/资源隔离 |
 
 repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译→保存→独立复编译→报告校验”，但 mock 或参考候选不得计作模型实验结果。
+
+### E-08 的数值与发布边界
+
+`feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248` 使用 DeepSeek、repair24、raw/normalized/structured 三种表示和三次重复，共 216 个任务。Raw、Normalized、Structured 的三轮内成功数分别为 67/72、65/72、67/72；首轮成功数分别为 56/72、56/72、60/72。199 个成功证明均再次独立编译通过，并完成明确标注的 AI 辅助复核。公开包保存 283 条有效逐轮记录；预算账本共有 286 次调用预留，另披露 2 条归档传输失败轮次和 1 次没有对应轮次记录的预留。价格未冻结，因此只能报告 1,538,045 个已记录 token，不能报告美元成本。
+
+公开导出删除逐请求完整 prompt、供应商响应 ID、认证字段、本机绝对路径和传输失败归档原文，同时保留静态模板、反馈载荷、候选、诊断、usage 与重试计数。AI 辅助复核不得改写为纯人工复核。当前结果支持单模型描述性比较，不支持统计显著性、因果增益或跨模型泛化。
 
 ## 仅有历史说明、当前仓库不能独立核验
 
@@ -61,12 +68,15 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 
 当前文档基线的本地 Windows 全量复审记录：
 
-- Python：共发现 229 项测试，227 项通过，2 项因仅适用于 Linux 符号链接边界而跳过；当前包含 Compiler Feedback v1、证据分层、P/R/SP 命名和 Part 1 CI 防回退测试。
+- Python：共发现 249 项测试，247 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。覆盖 Compiler Feedback v1、反馈采纳、三表示 runner、Feedback Study 发布审计、直接 provider CLI、仅调用次数门禁、DeepSeek 思考参数和 Chat 存储字段披露、SP 双向指标、证据分层和既有实验防回退。
 - `lake build`：通过；冻结 Evaluation18 输入中的 18 个 `sorry` 是预期占位警告，不代表题目已在原文件中修复。
 - `python -m leancapsule audit capsules`：24/24 通过。
 - `python -m leancapsule verify capsules`：24/24 通过，包含 4 个 Mathlib 案例。
 - `python scripts/run_capsule_feasibility.py --verify-only`：12 个 core 与 4 个 challenge 全部通过。
 - `python scripts/verify_compiler_feedback_v1.py --verify-only`：15/15 通过，其中 12 个真实 Lean 失败、3 个基础设施事件；API 调用为 0，未改写已有实验。
+- `python src/feedback_study.py plan`：离线生成 repair24 × raw/normalized/structured × 三重复的 216 任务计划，网络调用为 0；这不是模型结果。
+- `python src/security_study.py`：冻结 SP-1～SP-6 误放行 0/6、CTRL-1～CTRL-3 误拒绝 0/3、拒绝前编译 0/6；只适用于当前案例集。
+- `python scripts/audit_feedback_study.py published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248 --compile-solutions`：发布静态审计通过，199/199 个公开证明独立复编译通过。
 - `python scripts/validate_b_handoff.py` 与 `python scripts/validate_part3_handoff.py`：通过。
 - 已发布 54 个成功证明逐个独立重编译通过。
 
@@ -78,7 +88,7 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 | --- | --- | --- |
 | 发布 smoke pilot | P-A、P-B、P-C | 对应历史存储值 A/B/C |
 | repair24 研究臂 | R-A～R-F | 对应存储值 `A/B/C/D/C_dynamic/C_failure` |
-| 安全策略 | SP-1、SP-2、… | 非实验臂；当前只有 SP-1 有回归证据 |
+| 安全策略 | SP-1～SP-6，后续继续 SP-n | 非实验臂；SP-1 有既有跨入口回归，SP-2～SP-6 与 3 个正常对照属于新增离线门禁 |
 | FATE-M 拆分条件 | 使用完整处理器组合名称 | 不再简称为新的 A/B/C/D 组 |
 
 历史 JSON 的存储值保持不变，避免破坏已有工件；新文档与图表使用公开显示名。
@@ -88,10 +98,10 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 优先顺序见 `docs/FUTURE_WORK_PLAN.md`：
 
 1. **已完成离线第一阶段：** 冻结 Compiler Feedback v1 原始、规范化、结构化三层表示和 15 个失败夹具。
-2. 离线补齐反馈采纳率、重复错误率、完整错误转移矩阵和动态查询变化指标；已有的基础类别转移汇总不等于反馈采纳研究完成。
-3. 将 SP-1 扩展为带威胁模型、恶意案例与正常对照的 SP-n。
-4. 验证容器或低权限账户隔离，不把文本规则称为沙箱。
-5. 上述门禁稳定后，只做小规模付费预跑；协议不再改动后才运行完整 repair24 多模型矩阵。
+2. **已完成离线实现：** 反馈采纳、重复错误、候选相关修改和动态 query/Top-k 变化指标；真实模型上的采纳率仍未测得。
+3. **已完成第一批离线实现：** SP-1～SP-6 威胁条目、3 个正常对照及误放行/误拒绝统计；这不是完整安全结论。
+4. 下一步验证容器或低权限账户隔离，不把文本规则称为沙箱。
+5. **已完成公开导出：** raw/normalized/structured DeepSeek 批次已脱敏发布；保留 AI 辅助复核标识，未上传逐请求完整 prompts、历史归档原文或认证字段。
 6. 真人计时与独立机器跨环境研究单独立项，不与模型结果混算。
 
-新结果只有在包含冻结配置、原始轨迹、成功证明、独立重编译、人工复核和发布审计后，才能从“可复验实现”升级为“已发布证据”。
+新结果只有在包含冻结配置、原始轨迹、成功证明、独立重编译、明确标注的复核模式和发布审计后，才能从“可复验实现”升级为“已发布证据”。AI 辅助复核不能表述为纯人工复核。

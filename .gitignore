@@ -11,6 +11,7 @@ results/requests.sqlite3
 results/solutions/
 /results/archive/
 /results/research*/
+/results/feedback-study-*/
 /results/human-*/
 /experiments/*.local.json
 results/handoff/

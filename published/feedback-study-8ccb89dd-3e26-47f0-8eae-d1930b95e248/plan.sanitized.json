@@ -1,0 +1,1372 @@
+{
+  "protocol_version": "tracer-feedback-study-v1",
+  "experiment_id": "feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248",
+  "config": {
+    "models": [
+      {
+        "id": "deepseek",
+        "model": "deepseek-v4-pro",
+        "api_url": "https://api.deepseek.com/chat/completions",
+        "temperature": 0.0,
+        "max_tokens": 12000,
+        "input_price_per_1k": null,
+        "output_price_per_1k": null,
+        "pricing_note": "正式运行前填写供应商当日价格；null 表示费用未知。",
+        "thinking": "enabled",
+        "reasoning_effort": "high"
+      }
+    ],
+    "repeats": 3,
+    "max_rounds": 3,
+    "compile_timeout": 180,
+    "order_seed": 20260909,
+    "examples_dir": "examples",
+    "representations": [
+      "raw",
+      "normalized",
+      "structured"
+    ]
+  },
+  "benchmark_version": "repair24-v1",
+  "tasks": [
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "exists_or"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "right_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "omap_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "size_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "injective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "double_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "size_map"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "double_even"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "omap_identity"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "scale_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "omap_identity"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "map_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "tri_lower"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "surjective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "stitch_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "forall_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "fold_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "fold_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "omap_identity"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "omap_bind"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "forall_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "omap_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "double_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "forall_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "tri_lower"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "forall_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "surjective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "right_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "omap_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "scale_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "scale_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "double_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "surjective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "exists_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "exists_or"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "obind_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "scale_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "surjective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "map_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "not_exists"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "map_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "stitch_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "injective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "right_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "double_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "double_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "not_exists"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "map_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "fold_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "obind_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "map_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "left_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "left_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "stitch_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "map_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "exists_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "surjective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "surjective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "scale_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "not_exists"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "omap_identity"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "double_even"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "right_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "tri_lower"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "omap_bind"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "not_exists"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "double_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "size_map"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "fold_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "scale_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "fold_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "double_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "omap_bind"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "stitch_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "injective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "omap_bind"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "obind_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "double_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "double_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "exists_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "omap_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "obind_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "double_even"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "omap_identity"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "scale_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "forall_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "double_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "injective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "tri_lower"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "exists_or"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "surjective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "stitch_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "double_even"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "scale_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "right_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "double_even"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "size_map"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "fold_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "size_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "fold_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "exists_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "left_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "forall_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "right_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "exists_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "forall_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "scale_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "omap_bind"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "double_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "size_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "double_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "map_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "map_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "exists_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "omap_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "injective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "double_even"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "not_exists"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "double_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "double_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "omap_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "map_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "left_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "right_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "scale_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "left_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "forall_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "fold_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "map_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "obind_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "size_map"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "obind_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "tri_lower"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "double_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "not_exists"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "map_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "omap_bind"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "size_map"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "exists_or"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "map_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "injective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "scale_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "tri_lower"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "left_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "fold_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "size_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "obind_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "stitch_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "exists_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "left_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "map_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "omap_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "not_exists"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "scale_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "left_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "tri_lower"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "size_map"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "size_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "exists_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "exists_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "scale_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "not_exists"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "double_even"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "injective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "injective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "size_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "map_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "tri_lower"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "right_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "injective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "exists_or"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "scale_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "forall_and"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "scale_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "obind_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "right_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "tri_lower"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "scale_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "size_map"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "omap_identity"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "exists_or"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "omap_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "not_exists"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "stitch_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "left_inverse"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "map_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "omap_identity"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "exists_or"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "omap_bind"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "map_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "obind_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "double_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "scale_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "map_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "omap_bind"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "size_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "double_value"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "normalized",
+      "problem_id": "size_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "scale_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "omap_identity"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "raw",
+      "problem_id": "exists_or"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "double_even"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "omap_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "structured",
+      "problem_id": "surjective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "stitch_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "surjective_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "normalized",
+      "problem_id": "size_map"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "raw",
+      "problem_id": "size_stitch"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "map_comp"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "stitch_assoc"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "exists_or"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "representation": "structured",
+      "problem_id": "double_add"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "representation": "structured",
+      "problem_id": "size_map"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "normalized",
+      "problem_id": "omap_identity"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "omap_bind"
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "representation": "raw",
+      "problem_id": "double_even"
+    }
+  ],
+  "platform": "Windows",
+  "python": "3.13.5",
+  "lean_toolchain": "leanprover/lean4:v4.32.0",
+  "feedback_protocol": {
+    "version": "tracer-feedback-study-v1",
+    "status": "frozen-runner-no-results",
+    "benchmark": "repair24-v1",
+    "condition": "compiler-feedback-without-retrieval",
+    "representations": [
+      "raw",
+      "normalized",
+      "structured"
+    ],
+    "controlled_variables": [
+      "problem",
+      "model",
+      "temperature",
+      "maximum output tokens",
+      "maximum repair rounds",
+      "compiler timeout",
+      "randomized task order"
+    ],
+    "primary_metrics": [
+      "pass_at_1",
+      "success_within_three_rounds",
+      "feedback_relevant_change_rate",
+      "repeated_error_category_rate"
+    ],
+    "secondary_metrics": [
+      "rounds",
+      "wall_time",
+      "tokens",
+      "known estimated cost",
+      "infrastructure errors"
+    ],
+    "evidence_policy": "运行器与计划不是模型实验结果；只有完整轨迹、成功证明、独立复编译和人工复核通过后才能发布。"
+  },
+  "status": "running",
+  "prompt_template_files": [
+    "protocol/feedback.txt",
+    "protocol/proof_contract.txt"
+  ],
+  "publication_note": "逐请求 prompt、供应商响应 ID、认证字段和传输失败原文未进入公开包。"
+}

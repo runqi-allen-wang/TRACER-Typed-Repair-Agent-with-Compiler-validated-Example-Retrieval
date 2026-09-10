@@ -183,6 +183,7 @@ class OpenAICompatibleProvider(Provider):
             "messages": messages,
             "temperature": self.temperature,
             "max_tokens": self.max_tokens,
+            "stream": False,
         }
         if self.thinking is not None:
             payload["thinking"] = {"type": self.thinking}
@@ -216,6 +217,7 @@ class OpenAICompatibleProvider(Provider):
         return parse_generation(json.dumps(body, ensure_ascii=False), self.name)
 
     def metadata(self) -> dict[str, object]:
+        response_storage = self.wire_api == "responses"
         return {
             "provider": self.name,
             "url": self.url,
@@ -228,8 +230,9 @@ class OpenAICompatibleProvider(Provider):
             **({"thinking": self.thinking} if self.thinking is not None else {}),
             "max_http_attempts": self.max_attempts,
             "request_timeout": self.request_timeout,
-            "disable_response_storage": self.disable_response_storage,
-            "store": not self.disable_response_storage,
+            # Chat Completions 请求不发送 store；不得在日志中把“未发送”记成 true。
+            "disable_response_storage": self.disable_response_storage if response_storage else None,
+            "store": (not self.disable_response_storage) if response_storage else None,
             **configured_pricing(),
         }
 

@@ -28,6 +28,46 @@ PROMPT_TEMPLATES = {
     "D": "retrieval_only.txt",
 }
 FORBIDDEN_PROOF_RE = re.compile(r"\b(?:sorryAx|sorry|admit)\b")
+FEEDBACK_REPRESENTATIONS = {"legacy", "raw", "normalized", "structured"}
+
+
+def feedback_payload(
+    representation: str,
+    diagnostic: dict,
+    raw_diagnostics: str,
+    *,
+    case_id: str,
+    round_no: int,
+) -> str:
+    """按冻结表示生成给模型的反馈；不会读取参考证明。"""
+
+    if representation not in FEEDBACK_REPRESENTATIONS:
+        raise ValueError("未知反馈表示")
+    legacy = str(diagnostic.get("feedback") or diagnostic.get("summary") or "暂无编译反馈。")
+    if representation == "legacy":
+        return legacy
+    if not raw_diagnostics.strip():
+        return legacy
+
+    from compiler_feedback import FeedbackProtocolError, build_feedback_record
+
+    try:
+        record = build_feedback_record(
+            case_id=case_id,
+            diagnostic_text=raw_diagnostics,
+            compile_ok=False,
+            returncode=1,
+            round_no=round_no,
+        )
+    except FeedbackProtocolError:
+        # 生成截断等非 Lean 诊断不属于 Compiler Feedback v1，显式退回既有文本。
+        return legacy
+    if representation == "raw":
+        return record["raw"]["text"]
+    if representation == "normalized":
+        normalized = record["normalized"]
+        return normalized["summary"] + "\n" + normalized["diagnostic_text"]
+    return json.dumps(record["structured"], ensure_ascii=False, sort_keys=True)
 
 
 def theorem_scope(source: str, theorem_name: str) -> str:
@@ -131,6 +171,7 @@ def solve_problem(
     initial_diagnostics: str = "",
     failure_notes: dict[str, str] | None = None,
     prompt_templates: dict[str, str] | None = None,
+    feedback_representation: str = "legacy",
 ) -> dict:
     if condition not in {"A", "B", "C", "D"}:
         raise ValueError("condition 必须是 A、B、C 或 D")
@@ -138,6 +179,10 @@ def solve_problem(
         raise ValueError("未知检索策略")
     if retrieval_strategy == "diagnostic" and condition != "C":
         raise ValueError("错误驱动检索仅用于 C 的独立消融；D 不得读取诊断")
+    if feedback_representation not in FEEDBACK_REPRESENTATIONS:
+        raise ValueError("feedback_representation 必须是 legacy、raw、normalized 或 structured")
+    if feedback_representation != "legacy" and condition not in {"B", "C"}:
+        raise ValueError("反馈表示对照只适用于启用反馈的 B/C 条件")
     if not 1 <= max_rounds <= 3:
         raise ValueError("max_rounds 必须在 1 到 3 之间")
     source = source_path.read_text(encoding="utf-8")
@@ -170,8 +215,14 @@ def solve_problem(
                     if failure_notes and example["path"] in failure_notes:
                         example["failure_context"] = failure_notes[example["path"]][:1600]
             if record_prompt and condition in {"B", "C"}:
-                details = feedback.get("feedback", "")
-                if previous_diagnostics:
+                details = feedback_payload(
+                    feedback_representation,
+                    feedback,
+                    previous_diagnostics,
+                    case_id=problem_id,
+                    round_no=round_no,
+                )
+                if previous_diagnostics and feedback_representation == "legacy":
                     from leancapsule.privacy import redact_text
                     details += "\n诊断与目标详情：\n" + redact_text(redact_sensitive_text(previous_diagnostics))[:2400]
                 if last_candidate:
@@ -290,6 +341,8 @@ def solve_problem(
                 "retrieved_examples": retrieved,
                 "retrieval_query": query,
                 "retrieval_strategy": retrieval_strategy,
+                "feedback_representation": feedback_representation,
+                "feedback_payload": details if record_prompt and condition in {"B", "C"} else None,
                 "generation_elapsed_ms": generation_ms,
                 "prompt_chars": len(prompt),
                 "compile_ok": compile_ok,
@@ -341,6 +394,12 @@ def main() -> int:
     solve.add_argument("--theorem", required=True)
     solve.add_argument("--condition", choices=["A", "B", "C", "D"], default="B")
     solve.add_argument("--retrieval-strategy", choices=["static", "diagnostic"], default="static")
+    solve.add_argument(
+        "--feedback-representation",
+        choices=sorted(FEEDBACK_REPRESENTATIONS),
+        default="legacy",
+        help="反馈启用时使用的表示；raw/normalized/structured 用于独立对照研究",
+    )
     solve.add_argument("--max-rounds", type=int, default=3)
     solve.add_argument("--timeout", type=float, default=20.0)
     solve.add_argument("--provider", choices=["command", "openai_compatible", "mock"], required=True)
@@ -384,7 +443,14 @@ def main() -> int:
             reasoning_effort=args.reasoning_effort,
             disable_response_storage=args.disable_response_storage,
         )
-        result = solve_problem(args.file.resolve(), args.theorem, args.condition, provider, args.max_rounds, args.timeout, args.examples_dir.resolve(), args.cache.resolve(), args.output_dir.resolve(), args.log.resolve(), args.start_marker, args.end_marker, args.placeholder, retrieval_strategy=args.retrieval_strategy)
+        result = solve_problem(
+            args.file.resolve(), args.theorem, args.condition, provider, args.max_rounds,
+            args.timeout, args.examples_dir.resolve(), args.cache.resolve(),
+            args.output_dir.resolve(), args.log.resolve(), args.start_marker,
+            args.end_marker, args.placeholder,
+            retrieval_strategy=args.retrieval_strategy,
+            feedback_representation=args.feedback_representation,
+        )
         response = {
             "compile_ok": result["compile_ok"],
             "round": result["round"],
