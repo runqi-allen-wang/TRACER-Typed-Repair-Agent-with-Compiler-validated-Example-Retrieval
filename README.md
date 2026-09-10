@@ -219,7 +219,7 @@ The canonical, dated evidence register is [PROGRESS.md](PROGRESS.md). It separat
 | --- | --- |
 | Evaluation18 P-A/P-B/P-C | Published provider traces, 54 proofs and complete 54-pair manual review; engineering smoke test only |
 | LeanCapsule | 24-case reviewed gallery plus 12-core / 4-challenge feasibility artifacts |
-| Compiler feedback | Compiler Feedback v1 plus offline adoption/query-change analysis and a frozen three-representation runner; the [216-task DeepSeek release](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248) includes sanitized traces, 199 proofs and AI-assisted review, but does not establish cross-model effects |
+| Compiler feedback | Compiler Feedback v1 plus offline adoption/query-change analysis and a frozen three-representation runner; the [216-task DeepSeek release](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248) includes sanitized traces, 199 proofs and AI-assisted review. A [strict second-model replication workflow](docs/SECOND_MODEL_REPLICATION.md) now freezes the reference contract and cross-model paired report, but no second-model result is claimed yet |
 | FATE-M | Part 1/2 corrected handoff, Experience + CapsuleFeedback arm, and Part 3 Raw/Capsule handoff are included as single-batch descriptive evidence |
 | repair24 R-A–R-F | Benchmark, runner and offline gates are implemented; the formal multi-model repeated matrix has not been run |
 | Security | SP-1–SP-6 and three benign controls form a versioned offline regression with two-direction error metrics; operating-system isolation remains future work |
@@ -379,6 +379,7 @@ Keep these checks distinct:
 | Configure DeepSeek, GPT, or a custom provider | [API guide](docs/API_GUIDE.md) |
 | Run, review, and export real experiments | [Pilot guide](docs/REAL_PILOT_GUIDE.md) |
 | Compare raw/normalized/structured compiler feedback with DeepSeek | [Feedback Study v1 live CLI](docs/FEEDBACK_STUDY_V1.md) |
+| Reproduce Feedback Study v1 with a second model | [Second-model replication protocol](docs/SECOND_MODEL_REPLICATION.md) |
 | Understand condition controls and validity constraints | [Methodology](docs/methodology.md) |
 | Look up per-round record fields | [JSONL format](docs/jsonl_schema.md) |
 | Inspect or verify the three-layer compiler-diagnostic protocol | [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) |
@@ -434,6 +435,8 @@ To prevent labels from different levels being conflated, public documentation us
 R-A/R-D still compile to decide whether to stop; diagnostics are not sent back to the generator. R-E/R-F separate query adaptation from failure reuse rather than silently changing R-C. SP-1–SP-6 are security-policy regressions, not additional research arms. Model weights are never updated.
 
 The [research runner](src/research.py) freezes readable input snapshots, randomizes task order, disables request-cache reuse, records full prompts and usage, and independently recompiles saved proofs. It supports multiple models and repeats; incomplete or mixed traces are rejected by report validation. Unknown costs remain unknown, and manual review is separate from automatic checks.
+
+For the narrower compiler-feedback study, the [second-model replication protocol](docs/SECOND_MODEL_REPLICATION.md) validates the published DeepSeek release before any paid request. It requires the exact repair24 contents, task order, feedback/proof templates, three representations, three repeats, three rounds, compiler timeout, temperature and output ceiling. A new public-package audit no longer assumes that the second model must reproduce DeepSeek's exact 199-success count. After both releases pass audit, `scripts/compare_feedback_models.py` reports paired first-round/final outcome agreement and the direction consistency of representation contrasts. This is implemented infrastructure; the second 216-task batch has not yet been run.
 
 ~~~powershell
 python src/research.py check-benchmark

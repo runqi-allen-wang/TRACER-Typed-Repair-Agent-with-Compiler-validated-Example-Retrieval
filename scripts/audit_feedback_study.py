@@ -105,6 +105,7 @@ def audit_release(root: Path, compile_solutions: bool = False, timeout: int = 18
     try:
         manifest = _read_json(root / "MANIFEST.json")
         plan = _read_json(root / "plan.sanitized.json")
+        benchmark = _read_json(root / "benchmark.json")
         summary = _read_json(root / "summary.json")
         completion = _read_json(root / "completion.sanitized.json")
         trials = _read_jsonl(root / "trials.jsonl")
@@ -126,7 +127,24 @@ def audit_release(root: Path, compile_solutions: bool = False, timeout: int = 18
         errors.extend(_walk_keys(row, f"attempts[{index}]"))
     expected_tasks = {_task_key(task) for task in plan.get("tasks", [])}
     trial_tasks = {_task_key(trial) for trial in trials}
-    if len(expected_tasks) != 216 or len(trial_tasks) != 216 or expected_tasks != trial_tasks:
+    config = plan.get("config", {})
+    models = config.get("models", [])
+    problem_ids = [str(problem.get("id", "")) for problem in benchmark.get("problems", [])]
+    exact_matrix = {
+        (str(models[0].get("id", "")), str(repeat), representation, problem_id)
+        for repeat in range(1, 4)
+        for representation in ("raw", "normalized", "structured")
+        for problem_id in problem_ids
+    } if len(models) == 1 else set()
+    if (
+        benchmark.get("version") != "repair24-v1"
+        or len(problem_ids) != 24
+        or len(set(problem_ids)) != 24
+        or config.get("repeats") != 3
+        or config.get("representations") != ["raw", "normalized", "structured"]
+        or expected_tasks != exact_matrix
+        or trial_tasks != expected_tasks
+    ):
         errors.append("计划与任务摘要未形成唯一的 216 任务矩阵")
 
     by_task: dict[tuple[str, str, str, str], list[dict]] = defaultdict(list)
@@ -150,8 +168,8 @@ def audit_release(root: Path, compile_solutions: bool = False, timeout: int = 18
         counts.get("tasks"), counts.get("successes"), counts.get("failed_tasks"), counts.get("proof_files")
     ):
         errors.append("任务、成功、失败或证明数量与 MANIFEST.json 不一致")
-    if (len(trials), len(successful), len(failed), len(proof_files)) != (216, 199, 17, 199):
-        errors.append("当前冻结发布包必须包含 216 任务、199 成功、17 失败和 199 个证明")
+    if len(trials) != 216 or not successful:
+        errors.append("Feedback Study 发布包必须包含完整 216 任务且至少有一个成功证明")
     for trial in trials:
         solution = trial.get("solution")
         if trial.get("compile_ok") is True:
@@ -163,7 +181,11 @@ def audit_release(root: Path, compile_solutions: bool = False, timeout: int = 18
     with (root / "ai_assisted_review.csv").open(encoding="utf-8-sig", newline="") as handle:
         review_rows = list(csv.DictReader(handle))
     review = {_task_key(row): row for row in review_rows}
-    if len(review_rows) != 216 or set(review) != expected_tasks:
+    if (
+        len(review_rows) != counts.get("review_rows")
+        or len(review_rows) != 216
+        or set(review) != expected_tasks
+    ):
         errors.append("AI 辅助复核表未唯一覆盖 216 个任务")
     for key in successful:
         row = review.get(key, {})

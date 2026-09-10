@@ -35,6 +35,8 @@ jobs:
         run: python src/feedback_study.py plan
       - name: Audit published feedback study
         run: python scripts/audit_feedback_study.py published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248
+      - name: Verify second-model replication contract
+        run: python scripts/plan_feedback_replication.py --model-id ci-second-model --api-url https://example.invalid/v1/chat/completions --model ci-second-model
       - name: Verify SP security metrics
         run: python src/security_study.py
       # 12 个 core 案例是硬门槛；同时保留 4 个 challenge 的真实回放结果。

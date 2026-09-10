@@ -60,6 +60,15 @@ class ContinuousIntegrationTest(unittest.TestCase):
         self.assertIn(command, workflow)
         self.assertLess(workflow.index(command), workflow.index("- name: Run tests"))
 
+    def test_second_model_replication_contract_is_checked_before_tests(self):
+        workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+        command = (
+            "run: python scripts/plan_feedback_replication.py --model-id ci-second-model "
+            "--api-url https://example.invalid/v1/chat/completions --model ci-second-model"
+        )
+        self.assertIn(command, workflow)
+        self.assertLess(workflow.index(command), workflow.index("- name: Run tests"))
+
     def test_lean_action_only_installs_toolchain(self):
         workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
         install_block = workflow.split("- name: Install Lean", 1)[1].split(

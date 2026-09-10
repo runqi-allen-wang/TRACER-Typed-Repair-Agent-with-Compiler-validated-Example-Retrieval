@@ -2,7 +2,7 @@
 
 更新时间：2026-09-10。
 
-当前发布基线为 `main@cd2d2bf`（PR #24）。本文是仓库内“完成到哪一步”的唯一当前口径；历史变更过程见 `CHANGELOG.md`，未来工作见 `docs/FUTURE_WORK_PLAN.md`。当旧报告、历史批次说明与本文冲突时，以各批次原始工件和本文的证据分层为准。
+当前发布基线为 `main@e05e6c3`（PR #26）。本文是仓库内“完成到哪一步”的唯一当前口径；历史变更过程见 `CHANGELOG.md`，未来工作见 `docs/FUTURE_WORK_PLAN.md`。当旧报告、历史批次说明与本文冲突时，以各批次原始工件和本文的证据分层为准。
 
 ## 口径规则
 
@@ -45,6 +45,7 @@
 | I-05 | `src/human_study.py`、8 对合成材料和互补分组 | 真实参与者回答、计时、知情说明和人工判分 |
 | I-06 | [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) 与 [Feedback Adoption v1](docs/FEEDBACK_ADOPTION_V1.md)：三层诊断、原文证据、错误转移、候选相关修改、缓存状态及动态 query/Top-k 变化；DeepSeek 三表示批次已作为 E-08 发布 | 其他模型独立复现与按题聚合的不确定性分析，才能讨论跨模型效应或更强比较结论 |
 | I-07 | 最小环境、版本化威胁模型、SP-1～SP-6、CTRL-1～CTRL-3 和双向错误率入口 | 更多独立复核案例、未知攻击评估、操作系统级网络/文件/进程/资源隔离 |
+| I-08 | 第二模型复现合同、付费前离线预检、通用 Feedback Study 发布审计和跨模型逐任务配对报告 | 第二模型的 216 个真实任务、成功证明、AI 辅助复核、脱敏发布包与最终一致性结果 |
 
 repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译→保存→独立复编译→报告校验”，但 mock 或参考候选不得计作模型实验结果。
 
@@ -64,11 +65,11 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 
 ## 当前工程验收状态
 
-本轮从 PR #24 的远程合并提交 `main@cd2d2bf` 建立独立分支；Compiler Feedback v1 的最终远程 Checks 需在本分支推送并创建 PR 后由 GitHub Actions 给出。
+本轮从 PR #26 的远程合并提交 `main@e05e6c3` 建立独立分支；第二模型复现流程的最终远程 Checks 需在本分支推送并创建 PR 后由 GitHub Actions 给出。
 
 当前文档基线的本地 Windows 全量复审记录：
 
-- Python：共发现 249 项测试，247 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。覆盖 Compiler Feedback v1、反馈采纳、三表示 runner、Feedback Study 发布审计、直接 provider CLI、仅调用次数门禁、DeepSeek 思考参数和 Chat 存储字段披露、SP 双向指标、证据分层和既有实验防回退。
+- Python：共发现 257 项测试，255 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。覆盖 Compiler Feedback v1、反馈采纳、三表示 runner、Feedback Study 发布审计、第二模型冻结合同与完整 216 任务跨模型配对、直接 provider CLI、仅调用次数门禁、DeepSeek 思考参数和 Chat 存储字段披露、SP 双向指标、证据分层和既有实验防回退。
 - `lake build`：通过；冻结 Evaluation18 输入中的 18 个 `sorry` 是预期占位警告，不代表题目已在原文件中修复。
 - `python -m leancapsule audit capsules`：24/24 通过。
 - `python -m leancapsule verify capsules`：24/24 通过，包含 4 个 Mathlib 案例。
@@ -100,8 +101,9 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 1. **已完成离线第一阶段：** 冻结 Compiler Feedback v1 原始、规范化、结构化三层表示和 15 个失败夹具。
 2. **已完成离线实现：** 反馈采纳、重复错误、候选相关修改和动态 query/Top-k 变化指标；真实模型上的采纳率仍未测得。
 3. **已完成第一批离线实现：** SP-1～SP-6 威胁条目、3 个正常对照及误放行/误拒绝统计；这不是完整安全结论。
-4. 下一步验证容器或低权限账户隔离，不把文本规则称为沙箱。
-5. **已完成公开导出：** raw/normalized/structured DeepSeek 批次已脱敏发布；保留 AI 辅助复核标识，未上传逐请求完整 prompts、历史归档原文或认证字段。
-6. 真人计时与独立机器跨环境研究单独立项，不与模型结果混算。
+4. **已完成第二模型离线准备：** 冻结基线引用、公共控制、任务顺序与跨模型一致性指标；真实第二模型 216 任务尚未调用。
+5. 第二模型结果发布后，再验证容器或低权限账户隔离，不把文本规则称为沙箱。
+6. **已完成公开导出：** raw/normalized/structured DeepSeek 批次已脱敏发布；保留 AI 辅助复核标识，未上传逐请求完整 prompts、历史归档原文或认证字段。
+7. 真人计时与独立机器跨环境研究单独立项，不与模型结果混算。
 
 新结果只有在包含冻结配置、原始轨迹、成功证明、独立重编译、明确标注的复核模式和发布审计后，才能从“可复验实现”升级为“已发布证据”。AI 辅助复核不能表述为纯人工复核。

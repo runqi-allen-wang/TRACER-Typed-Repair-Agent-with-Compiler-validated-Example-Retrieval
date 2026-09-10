@@ -98,8 +98,10 @@ def _readable_files(proofs: list[Path], staging: Path, counts: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _readme(summary: dict, counts: dict) -> str:
+def _readme(summary: dict, counts: dict, plan: dict) -> str:
     by_rep = {row["representation"]: row for row in summary["summary"]}
+    model_config = plan.get("config", {}).get("models", [{}])[0]
+    model_name = str(model_config.get("model") or model_config.get("id") or "未命名模型")
     table = [
         "| 表示 | 任务 | pass@1 | 三轮内通过 | 平均轮数 | tokens |",
         "| --- | ---: | ---: | ---: | ---: | ---: |",
@@ -111,7 +113,7 @@ def _readme(summary: dict, counts: dict) -> str:
             f"{row['avg_rounds']:.3f} | {row['total_tokens']} |"
         )
     return "\n".join([
-        "# TRACER Feedback Study v1：DeepSeek 本地批次公开包",
+        f"# TRACER Feedback Study v1：{model_name} 本地批次公开包",
         "",
         f"实验编号：`{summary['experiment_id']}`。本包公开 {counts['tasks']} 个 repair24 任务的任务级结果、"
         f"{counts['attempts']} 条逐轮记录、{counts['proof_files']} 个成功证明和 AI 辅助复核表。",
@@ -134,7 +136,8 @@ def _readme(summary: dict, counts: dict) -> str:
         "",
         "## 复核口径",
         "",
-        "199 个成功证明均经过独立 Lean 复编译和 AI 辅助检查。复核表明确记录 `review_mode=ai_assisted`；"
+        f"{counts['proof_files']} 个成功证明均经过独立 Lean 复编译和 AI 辅助检查。"
+        "复核表明确记录 `review_mode=ai_assisted`；"
         "它不是纯人工复核，也不替代对更广题库、其他模型或未知安全攻击的验证。",
         "",
         "完整文件索引见 `FILES.md`，机器可读清单见 `MANIFEST.json`。",
@@ -235,7 +238,7 @@ def export_release(source: Path, out: Path) -> dict:
             "attempted_call_reservations": attempted_calls,
             "unmatched_call_reservations": unmatched_reservations,
         }
-        (staging / "README.md").write_text(_readme(summary, counts), encoding="utf-8", newline="\n")
+        (staging / "README.md").write_text(_readme(summary, counts, plan), encoding="utf-8", newline="\n")
         (staging / "FILES.md").write_text(_readable_files(proofs, staging, counts), encoding="utf-8", newline="\n")
 
         for path in staging.rglob("*"):

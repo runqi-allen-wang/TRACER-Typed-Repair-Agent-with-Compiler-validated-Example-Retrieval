@@ -9,6 +9,7 @@ import math
 import os
 import platform
 import random
+import re
 import shutil
 import statistics
 import sys
@@ -27,6 +28,7 @@ from leancapsule.privacy import redact_value
 
 
 PROTOCOL_VERSION = "tracer-feedback-study-v1"
+REPLICATION_PROTOCOL_VERSION = "tracer-feedback-cross-model-v1"
 REPRESENTATIONS = ("raw", "normalized", "structured")
 AI_ASSISTED_REVIEW_FILE = "ai_assisted_review.csv"
 LEGACY_REVIEW_FILE = "manual_review.csv"
@@ -114,6 +116,7 @@ def apply_direct_model_config(
     config: dict,
     api_url: str | None = None,
     model: str | None = None,
+    model_id: str | None = None,
     temperature: float | None = None,
     max_tokens: int | None = None,
     thinking: str | None = None,
@@ -125,7 +128,7 @@ def apply_direct_model_config(
 
     direct = api_url is not None or model is not None
     optional_direct = any(value is not None for value in (
-        temperature, max_tokens, thinking, reasoning_effort,
+        model_id, temperature, max_tokens, thinking, reasoning_effort,
         input_price_per_1k, output_price_per_1k,
     ))
     if direct and (api_url is None or model is None):
@@ -147,8 +150,11 @@ def apply_direct_model_config(
     if not model.strip():
         raise ValueError("模型名称不能为空")
     selected = dict(config["models"][0])
+    selected_id = model_id or "deepseek"
+    if not re.fullmatch(r"[a-zA-Z0-9_-]+", selected_id):
+        raise ValueError("model-id 只能包含字母、数字、下划线或连字符")
     selected.update({
-        "id": "deepseek",
+        "id": selected_id,
         "api_url": api_url,
         "model": model.strip(),
         "api_key_env": "TRACER_FEEDBACK_MODEL_KEY",
@@ -178,6 +184,94 @@ def apply_direct_model_config(
                 raise ValueError("价格必须为非负数")
             selected[key] = value
     return {**config, "models": [selected]}
+
+
+def validate_replication_reference(config: dict, benchmark: dict, release: Path) -> dict:
+    """验证第二模型批次与已发布首批实验共享同一研究合同。"""
+
+    release = release.resolve()
+    required = (
+        "plan.sanitized.json", "benchmark.json", "MANIFEST.json",
+        "protocol/feedback_study.protocol.json", "protocol/feedback.txt",
+        "protocol/proof_contract.txt",
+    )
+    missing = [name for name in required if not (release / name).is_file()]
+    if missing:
+        raise ValueError("第二模型参考发布包不完整: " + ", ".join(missing))
+    reference_plan = json.loads((release / "plan.sanitized.json").read_text(encoding="utf-8"))
+    reference_benchmark = json.loads((release / "benchmark.json").read_text(encoding="utf-8"))
+    if reference_plan.get("protocol_version") != PROTOCOL_VERSION:
+        raise ValueError("第二模型参考发布包不是 Feedback Study v1")
+    if reference_benchmark != benchmark:
+        raise ValueError("第二模型题库与参考发布包不一致")
+    current_protocol = json.loads(
+        (ROOT / "experiments/feedback_study.protocol.json").read_text(encoding="utf-8")
+    )
+    reference_protocol = json.loads(
+        (release / "protocol/feedback_study.protocol.json").read_text(encoding="utf-8")
+    )
+    if current_protocol != reference_protocol:
+        raise ValueError("第二模型 Feedback Study 协议与参考发布包不一致")
+    for name in ("feedback.txt", "proof_contract.txt"):
+        if (
+            (ROOT / "prompts" / name).read_text(encoding="utf-8")
+            != (release / "protocol" / name).read_text(encoding="utf-8")
+        ):
+            raise ValueError(f"第二模型提示模板与参考发布包不一致: {name}")
+
+    reference_config = reference_plan.get("config", {})
+    control_fields = (
+        "repeats", "representations", "max_rounds", "compile_timeout",
+        "order_seed", "examples_dir",
+    )
+    drift = [field for field in control_fields if config.get(field) != reference_config.get(field)]
+    if drift:
+        raise ValueError("第二模型公共实验控制发生漂移: " + ", ".join(drift))
+    if len(config.get("models", [])) != 1 or len(reference_config.get("models", [])) != 1:
+        raise ValueError("第二模型复现要求参考批次和新批次各自只包含一个模型")
+    model = config["models"][0]
+    reference_model = reference_config["models"][0]
+    for field in ("temperature", "max_tokens"):
+        if model.get(field) != reference_model.get(field):
+            raise ValueError(f"第二模型公共生成预算发生漂移: {field}")
+    if model.get("id") == reference_model.get("id"):
+        raise ValueError("第二模型必须使用不同的 model-id")
+    if (
+        model.get("api_url") == reference_model.get("api_url")
+        and model.get("model") == reference_model.get("model")
+    ):
+        raise ValueError("第二模型不得与参考发布包使用相同端点和模型名称")
+
+    reference_tasks = [
+        (task.get("repeat"), task.get("representation"), task.get("problem_id"))
+        for task in reference_plan.get("tasks", [])
+    ]
+    current_tasks = [
+        (task.get("repeat"), task.get("representation"), task.get("problem_id"))
+        for task in build_plan(config, benchmark)
+    ]
+    if current_tasks != reference_tasks:
+        raise ValueError("第二模型任务集合或随机顺序与参考发布包不一致")
+    return {
+        "version": REPLICATION_PROTOCOL_VERSION,
+        "status": "reference-validated",
+        "reference_release": release.name,
+        "reference_experiment_id": reference_plan.get("experiment_id"),
+        "reference_model": {
+            key: reference_model.get(key) for key in ("id", "model", "api_url")
+        },
+        "replication_model": {
+            key: model.get(key) for key in (
+                "id", "model", "api_url", "thinking", "reasoning_effort",
+            )
+        },
+        "equal_controls": list(control_fields) + ["temperature", "max_tokens"],
+        "model_specific_fields": ["api_url", "model", "thinking", "reasoning_effort"],
+        "claim_boundary": (
+            "验证同题、同重复、同反馈表示与同预算下的描述性跨模型一致性；"
+            "模型专属推理接口差异必须披露，不自动构成因果或显著性证据。"
+        ),
+    }
 
 
 def build_plan(config: dict, benchmark: dict) -> list[dict]:
@@ -233,7 +327,15 @@ def _archive_failed_trial(out: Path, destination: Path) -> Path:
     return archived
 
 
-def run_matrix(config: dict, benchmark_path: Path, out: Path, api_keys=None, budget=None, resume=False) -> bool:
+def run_matrix(
+    config: dict,
+    benchmark_path: Path,
+    out: Path,
+    api_keys=None,
+    budget=None,
+    resume=False,
+    replication_contract: dict | None = None,
+) -> bool:
     benchmark = load_benchmark(benchmark_path)
     providers = _providers(config, api_keys, budget)
     initial_rows = check_benchmark(benchmark_path, config.get("compile_timeout", 60))
@@ -252,6 +354,7 @@ def run_matrix(config: dict, benchmark_path: Path, out: Path, api_keys=None, bud
             or plan.get("tasks") != tasks
             or plan.get("prompt_templates") != prompt_snapshot
             or frozen_benchmark != benchmark
+            or plan.get("replication_contract") != replication_contract
         ):
             raise ValueError("续跑参数、题库或提示模板与原批次不一致")
         if not review_path(out).is_file():
@@ -271,6 +374,7 @@ def run_matrix(config: dict, benchmark_path: Path, out: Path, api_keys=None, bud
             "lean_toolchain": (ROOT / "lean-toolchain").read_text(encoding="utf-8").strip(),
             "feedback_protocol": json.loads((ROOT / "experiments/feedback_study.protocol.json").read_text(encoding="utf-8")),
             "prompt_templates": prompt_snapshot,
+            "replication_contract": replication_contract,
             "status": "running",
         })
         write_json(out / "benchmark.json", benchmark)
@@ -506,6 +610,12 @@ def summarize(out: Path, allow_partial: bool = False) -> dict:
     report = {
         "protocol_version": PROTOCOL_VERSION,
         "experiment_id": plan["experiment_id"],
+        "replication_contract": plan.get("replication_contract"),
+        "replication_reference_validated": (
+            plan.get("replication_contract", {}).get("status") == "reference-validated"
+            if isinstance(plan.get("replication_contract"), dict)
+            else False
+        ),
         "trajectory_valid": not errors,
         "design_complete": design_complete,
         "review_mode": review_mode,
@@ -544,6 +654,11 @@ def main() -> int:
     )
     run_parser.add_argument("--api-url", help="直接覆盖单个 HTTPS Chat Completions 端点")
     run_parser.add_argument("--model", help="直接覆盖单个真实模型名称")
+    run_parser.add_argument("--model-id", help="轨迹目录使用的非敏感模型标识；第二模型复现必须显式指定")
+    run_parser.add_argument(
+        "--reference-release", type=Path,
+        help="第二模型复现所依据的已发布 Feedback Study 包；运行前严格校验公共实验控制",
+    )
     run_parser.add_argument("--temperature", type=float)
     run_parser.add_argument("--max-tokens", type=int)
     run_parser.add_argument("--thinking", choices=("enabled", "disabled"))
@@ -564,12 +679,24 @@ def main() -> int:
             config = validate_config(args.config)
             if args.command == "run":
                 config = apply_direct_model_config(
-                    config, args.api_url, args.model, args.temperature, args.max_tokens,
-                    args.thinking, args.reasoning_effort,
-                    args.input_price_per_1k, args.output_price_per_1k,
+                    config,
+                    api_url=args.api_url,
+                    model=args.model,
+                    model_id=args.model_id,
+                    temperature=args.temperature,
+                    max_tokens=args.max_tokens,
+                    thinking=args.thinking,
+                    reasoning_effort=args.reasoning_effort,
+                    input_price_per_1k=args.input_price_per_1k,
+                    output_price_per_1k=args.output_price_per_1k,
                 )
             benchmark = load_benchmark(args.benchmark)
             tasks = build_plan(config, benchmark)
+            replication_contract = None
+            if args.command == "run" and args.reference_release is not None:
+                replication_contract = validate_replication_reference(
+                    config, benchmark, args.reference_release,
+                )
             if args.command == "plan":
                 result = {
                     "protocol_version": PROTOCOL_VERSION,
@@ -602,6 +729,7 @@ def main() -> int:
                 while True:
                     if run_matrix(
                         config, args.benchmark.resolve(), output, keys, budget, resume=resume,
+                        replication_contract=replication_contract,
                     ):
                         return 0
                     error = latest_infrastructure_error(output)

@@ -217,7 +217,7 @@ DeepSeek Flash 可将模型改为 `deepseek-v4-flash`。GPT-4.1 是当前请求�
 | --- | --- |
 | Evaluation18 P-A/P-B/P-C | 已发布 provider 轨迹、54 个证明和完整 54 对人工复核；只作为工程 smoke test |
 | LeanCapsule | 已发布 24 案例复核 gallery，并包含 12-core / 4-challenge 可行性工件 |
-| 编译反馈 | Compiler Feedback v1、离线采纳/query 变化分析与三表示 runner 已冻结；[216 任务 DeepSeek 发布包](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248)含脱敏轨迹、199 个证明和 AI 辅助复核，但不能支持跨模型结论 |
+| 编译反馈 | Compiler Feedback v1、离线采纳/query 变化分析与三表示 runner 已冻结；[216 任务 DeepSeek 发布包](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248)含脱敏轨迹、199 个证明和 AI 辅助复核。现已实现[严格的第二模型复现流程](docs/SECOND_MODEL_REPLICATION.md)，冻结参考合同与跨模型配对报告，但尚未声称第二模型结果 |
 | FATE-M | 包含 Part 1/2 corrected、Experience + CapsuleFeedback 和 Part 3 Raw/Capsule 交接包；均为单批次描述性证据 |
 | repair24 R-A～R-F | 题库、runner 和离线门禁已实现；正式多模型重复矩阵尚未运行 |
 | 安全 | SP-1～SP-6 与 3 个正常对照组成版本化离线回归，并报告双向错误；操作系统级隔离仍是未来工作 |
@@ -374,6 +374,7 @@ python -m leancapsule gallery capsules --out capsules/index.json
 | 配置 DeepSeek、GPT 或自定义 provider | [API 使用指南](docs/API_GUIDE.md) |
 | 跑真实实验、复核并导出 | [Pilot 手册](docs/REAL_PILOT_GUIDE.md) |
 | 用 DeepSeek 对比 raw/normalized/structured 编译反馈 | [Feedback Study v1 真实实验 CLI](docs/FEEDBACK_STUDY_V1.md) |
+| 用第二模型复现 Feedback Study v1 | [第二模型复现协议](docs/SECOND_MODEL_REPLICATION.md) |
 | 理解条件控制和有效性约束 | [方法设计](docs/methodology.md) |
 | 查阅逐轮记录字段 | [JSONL 格式](docs/jsonl_schema.md) |
 | 检查或复验三层编译诊断协议 | [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) |
@@ -429,6 +430,8 @@ docs/                  使用说明与研究方法
 R-A/R-D 仍会编译以判断是否停止，但诊断不返回给生成器。R-E/R-F 分别隔离查询自适应与失败复用，不静默改写 R-C。SP-1～SP-6 是安全策略回归，不是新增研究组。模型权重始终不更新。
 
 [研究运行器](src/research.py) 保存可读输入快照、随机化任务顺序、禁用请求缓存、记录完整 prompt/usage，并独立重编译成功文件。支持多模型及重复运行，报告门禁拒绝不完整或混合轨迹。未知费用仍标未知，人工复核与自动检查分开。
+
+针对更窄的编译反馈子研究，[第二模型复现协议](docs/SECOND_MODEL_REPLICATION.md)会在任何付费请求前校验已发布的 DeepSeek 基线，强制保持 repair24 全文、任务顺序、反馈/证明模板、三种表示、三次重复、三轮预算、编译时限、温度与输出上限一致。新的公开包审计不再要求第二模型机械复制 DeepSeek 的 199 个成功数。两个发布包都通过审计后，`scripts/compare_feedback_models.py` 才计算首轮/最终结局一致率与表示差方向一致性。这些是已实现的实验基础设施；第二批 216 任务尚未运行。
 
 ~~~powershell
 python src/research.py check-benchmark
