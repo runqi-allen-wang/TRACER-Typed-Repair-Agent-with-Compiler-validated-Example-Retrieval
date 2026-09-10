@@ -28,7 +28,7 @@ TRACER 刻意分开三套命名。它们对应不同层级的证据，不能拼�
 | --- | --- | --- | --- |
 | **已发布 pilot 条件** | P-A / P-B / P-C | 历史 18 题 smoke test：仅题目；编译反馈；反馈加静态检索；底层存储为 A/B/C | 已发布 18 × 3 真实 provider 批次，含轨迹、证明和人工复核 |
 | **研究臂** | R-A / R-B / R-C / R-D / R-E / R-F | repair24 协议，用于分离反馈、检索、错误自适应查询与失败上下文复用 | runner、预算、冻结题与离线门禁已实现；完整多模型重复矩阵待运行 |
-| **安全策略** | SP-1～SP-6 | 版本化编译前策略与正常对照，用于检查可能违反可信边界的候选 | 6 个恶意夹具＋3 个正常对照形成离线门禁；它不是完整沙箱或第七个研究臂 |
+| **安全策略** | SP-1～SP-12 | 版本化编译前策略与正常对照，用于检查可能违反可信边界的候选 | 12 个危险夹具＋8 个正常对照形成离线门禁；它不是完整沙箱或第七个研究臂 |
 
 当前研究臂映射如下：
 
@@ -36,7 +36,7 @@ TRACER 刻意分开三套命名。它们对应不同层级的证据，不能拼�
 - **R-C：** 静态检索加反馈；**R-D：** 只检索，不把诊断反馈给生成器。
 - **R-E：** 反馈加错误自适应检索查询；**R-F：** 在 R-E 基础上复用公开失败 Capsule 上下文。
 
-底层存储值继续使用 `A/B/C/D/C_dynamic/C_failure`，以兼容已有脚本和历史记录；对外研究讨论统一使用 R-A～R-F。安全案例只使用 SP 编号；当前 [SP-1～SP-6 套件](docs/security_policy.md) 在编译前对照 6 个冻结恶意案例与 3 个正常候选。
+底层存储值继续使用 `A/B/C/D/C_dynamic/C_failure`，以兼容已有脚本和历史记录；对外研究讨论统一使用 R-A～R-F。安全案例只使用 SP 编号；当前 [SP-1～SP-12 套件](docs/security_policy.md) 在编译前对照 12 个冻结危险案例与 8 个正常候选。
 
 目前可直接查看的交付：
 
@@ -220,7 +220,7 @@ DeepSeek Flash 可将模型改为 `deepseek-v4-flash`。GPT-4.1 是当前请求�
 | 编译反馈 | Compiler Feedback v1、离线采纳/query 变化分析与三表示 runner 已冻结；通过审计的 [DeepSeek Pro 发布包](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248)含 199 个证明，[DeepSeek Flash 复现包](published/feedback-study-562ad440-3446-4138-801e-59726ed0e108)含 209 个证明。[跨模型配对报告](published/feedback-cross-model-8ccb89dd-562ad440)覆盖全部 216 个任务；这是模型族内描述性证据，不是跨供应商效应结论 |
 | FATE-M | 包含 Part 1/2 corrected、Experience + CapsuleFeedback 和 Part 3 Raw/Capsule 交接包；均为单批次描述性证据 |
 | repair24 R-A～R-F | 题库、runner 和离线门禁已实现；正式多模型重复矩阵尚未运行 |
-| 安全 | SP-1～SP-6 与 3 个正常对照组成版本化离线回归，并报告双向错误；操作系统级隔离仍是未来工作 |
+| 安全 | [SP-1～SP-12 与 8 个正常对照](published/security-study-tracer-sp-v2)组成版本化离线回归，报告双向错误与 Wilson 区间；操作系统级隔离仍是未来工作 |
 | 历史本地研究 | DeepSeek R-B 预跑、Windows/WSL 比较和真人计时因缺少必要原始工件，不属于已发布证据 |
 
 软件门禁通过、证明编译通过、指定复核模式完成和研究效应成立是四种不同结论；本仓库不将其中任何一项自动升级为另一项。新的反馈表示实验明确标记为 AI 辅助复核，不表述为纯人工复核。
@@ -361,7 +361,7 @@ python -m leancapsule gallery capsules --out capsules/index.json
 ## 安全与能力边界
 
 - **不是操作系统沙箱。** 临时 HOME/TMP/APPDATA、最小环境变量和候选策略只提供防护层。运行不受信任的项目或 Lean 代码，应使用容器、虚拟机或独立低权限环境。
-- **限制局部修复。** Agent 不应改写题目 imports 或定理头；候选中的 `sorry`、`admit`、`sorryAx`、未完成证明警告、unsafe 声明、显式元编程入口和额外命令会被拒绝。SP-1～SP-6 覆盖 6 个冻结风险案例，3 个正常对照检查误拒绝。SP 表示非实验性的安全策略，因此不会与研究矩阵中的 R-D 研究臂混淆。不承诺任意 Lean 元编程构造都能由文本规则识别。
+- **限制局部修复。** Agent 不应改写题目 imports 或定理头；候选中的 `sorry`、`admit`、`sorryAx`、未完成证明警告、unsafe 声明、显式元编程入口和额外命令会被拒绝。SP-1～SP-12 覆盖 12 个冻结风险案例，8 个正常对照同时接受策略检查和独立 Lean 编译。冻结套件中的误放行与误拒绝观察值均为零，但 Wilson 95% 上界约为 24.3% 和 32.4%；零次观察不等于零风险。SP 表示非实验性的安全策略，因此不会与研究矩阵中的 R-D 研究臂混淆。不承诺任意 Lean 元编程构造都能由文本规则识别。
 - **凭据与发布分离。** Provider 限制跨来源重定向并对错误文本脱敏；密钥不作为实验记录字段写入。发布前仍应检查导出内容，并只向可信 provider 发送密钥。
 - **透明的比较与缓存。** 诊断比较和请求缓存使用可读的规范化文本，不引入摘要或指纹计算；缓存用于本地调试复用，不充当独立真实采样。
 - **抽取不是全局最小化。** 完整文件 fallback 与显式本地文件清单不等于任意多文件项目的程序切片；诊断一致也不保证保留所有上下文语义。
@@ -381,7 +381,7 @@ python -m leancapsule gallery capsules --out capsules/index.json
 | 创建可公开分享的失败工件 | [工件格式](docs/CAPSULE_FORMAT.md)与[案例贡献指南](docs/CONTRIBUTING_CAPSULES.md) |
 | 运行或检查 AxProverBase Part 1 + Part 2 实验 | [Part 1 指南](baseline/README.md)、[Part 2 设计](docs/part2_capsule_feedback.md)、[Part 3 交接清单](docs/part3_experiment_handoff.md)与[结果交接包](results/handoff/part12-live-20260828-corrected/README.md) |
 | 查看 Experience + CapsuleFeedback 混杂拆分臂 | [B 臂设计与结果](docs/part2_capsule_feedback_confound_arm.md)与[B 臂交接报告](results/handoff/part2-experience-capsule-20260829/REPORT.md) |
-| 查看 SP-1～SP-6 编译前安全套件 | [安全策略回归与威胁模型](docs/security_policy.md) |
+| 查看 SP-1～SP-12 编译前安全套件 | [安全策略回归与威胁模型](docs/security_policy.md)与[冻结 SP v2 报告](published/security-study-tracer-sp-v2) |
 | 查看 12 core + 4 challenge 干净回放实验 | [Capsule 可行性报告](docs/CAPSULE_FEASIBILITY.md) |
 | 查看已发布实验与证明 | [Pilot 交付目录](published/pilot-20260826T122354Z-d628742d) |
 | 查看当前状态与历史改动 | [PROGRESS](PROGRESS.md)与[CHANGELOG](CHANGELOG.md) |
@@ -427,7 +427,7 @@ docs/                  使用说明与研究方法
 | R-E | `C_dynamic` | C | 有 | 有 | 根据错误、类型和目标更新 |
 | R-F | `C_failure` | C | 有 | 有，并追加失败 Capsule 上下文 | 与 R-E 相同 |
 
-R-A/R-D 仍会编译以判断是否停止，但诊断不返回给生成器。R-E/R-F 分别隔离查询自适应与失败复用，不静默改写 R-C。SP-1～SP-6 是安全策略回归，不是新增研究组。模型权重始终不更新。
+R-A/R-D 仍会编译以判断是否停止，但诊断不返回给生成器。R-E/R-F 分别隔离查询自适应与失败复用，不静默改写 R-C。SP-1～SP-12 是安全策略回归，不是新增研究组。模型权重始终不更新。
 
 [研究运行器](src/research.py) 保存可读输入快照、随机化任务顺序、禁用请求缓存、记录完整 prompt/usage，并独立重编译成功文件。支持多模型及重复运行，报告门禁拒绝不完整或混合轨迹。未知费用仍标未知，人工复核与自动检查分开。
 
@@ -466,10 +466,10 @@ TRACER 沿用已有研究方向，不将编译反馈或检索本身作为首创�
 
 欢迎提交可复现失败案例、补充测试、改进诊断整理及模型集成。贡献前请阅读 [CONTRIBUTING](CONTRIBUTING.md)，并为案例补充来源许可、工具链、预期结果与复现步骤。
 
-2026 年 8 月 30 日收到 [subfish-zhou](https://github.com/subfish-zhou) 与 [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) 的社区评审后，项目优先推进两条路线。第一批离线实现现已包含 [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md)、[Feedback Adoption v1](docs/FEEDBACK_ADOPTION_V1.md)、[三表示 runner](docs/FEEDBACK_STUDY_V1.md) 和 SP-1～SP-6 套件；真实 provider 效果与操作系统隔离仍属于后续工作：
+2026 年 8 月 30 日收到 [subfish-zhou](https://github.com/subfish-zhou) 与 [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) 的社区评审后，项目优先推进两条路线。离线实现现已包含 [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md)、[Feedback Adoption v1](docs/FEEDBACK_ADOPTION_V1.md)、两个已发布模型族内批次和 SP-1～SP-12 套件；独立供应商复现与操作系统隔离仍属于后续工作：
 
 - **把 Lean 编译诊断反馈本身作为研究对象。** 原始/规范化/结构化表示、可回溯夹具、候选改动观察与 query/Top-k 指标已经离线实现。下一项证据是另行授权的真实 provider 对照，必须保存完整轨迹与复核，不能静默改写现有 R-B、R-E 或 R-F。
-- **把 SP-n 扩展为系统化安全研究路线。** 第一版威胁模型已经分开 6 个恶意夹具与 3 个正常对照，并报告误放行和误拒绝。下一步是用容器或低权限执行处理文本门禁无法可靠判断的边界。SP-n 始终是安全策略命名空间，不是新增研究臂。
+- **把 SP-n 扩展为系统化安全研究路线。** SP v2 已分开 12 个危险夹具与 8 个正常对照，核对预期检测器、真实编译全部允许对照，并用 Wilson 区间报告双向错误。下一步是用容器或低权限执行处理文本门禁无法可靠判断的边界。SP-n 始终是安全策略命名空间，不是新增研究臂。
 
 更广泛的后续方向仍包括更难题库、跨模型重复运行、检索成本收益和跨环境 Capsule 研究。这些是待检验方向，不是已完成能力或性能承诺。具体协议要求见 [研究实验操作与预注册协议](docs/RESEARCH_PROTOCOL.md)，分阶段交付物和验收门禁见 [编译反馈与 SP-n 后续工作方案](docs/FUTURE_WORK_PLAN.md)。
 

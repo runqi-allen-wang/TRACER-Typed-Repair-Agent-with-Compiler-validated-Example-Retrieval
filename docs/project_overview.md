@@ -12,7 +12,7 @@ TRACER（Typed Repair Agent with Compiler-validated Example Retrieval）是 Lean
 
 - 已发布 smoke pilot 使用 P-A/P-B/P-C 表示历史 A/B/C 条件。
 - repair24 公开显示为 R-A～R-F；存储值保持 `A/B/C/D/C_dynamic/C_failure`。
-- SP-n 表示非实验性的 Security Policy 回归；当前离线套件为 SP-1～SP-6，并配有 CTRL-1～CTRL-3 正常对照。
+- SP-n 表示非实验性的 Security Policy 回归；当前离线套件为 SP-1～SP-12，并配有 CTRL-1～CTRL-8 正常对照。
 
 ## 当前可核查工件
 
@@ -28,9 +28,9 @@ TRACER（Typed Repair Agent with Compiler-validated Example Retrieval）是 Lean
 根据 2026 年 8 月 30 日来自 [subfish-zhou](https://github.com/subfish-zhou) 与 [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) 的社区反馈，下一阶段优先研究两项问题：
 
 1. 深化 Lean 编译诊断反馈：离线三表示和采纳指标已经实现，下一步在冻结预算下运行真实 provider 配对实验并完成证明复核。
-2. 深化 SP-n 安全计划：第一版威胁模型、6 个恶意案例和 3 个正常对照已经实现，下一步扩大案例并验证容器或低权限隔离。
+2. 深化 SP-n 安全计划：第二版威胁模型、12 个危险案例、8 个正常对照和双向区间已经实现，下一步进行外部案例复核并验证容器或低权限隔离。
 
-这些新增内容目前仍是可复验实现，不改变 R-A～R-F 或已发布 SP-1 证据，也不构成模型增益或完整安全结论。详细约束见 [研究实验操作与预注册协议](RESEARCH_PROTOCOL.md#7-社区评审驱动的后续工作)，执行顺序见 [编译反馈与 SP-n 后续工作方案](FUTURE_WORK_PLAN.md)。
+这些新增内容不改变 R-A～R-F 的定义；SP v2 是已发布的有限离线回归，但不构成完整安全结论。详细约束见 [研究实验操作与预注册协议](RESEARCH_PROTOCOL.md#7-社区评审驱动的后续工作)，执行顺序见 [编译反馈与 SP-n 后续工作方案](FUTURE_WORK_PLAN.md)。
 
 ## 无付费调用的复验
 

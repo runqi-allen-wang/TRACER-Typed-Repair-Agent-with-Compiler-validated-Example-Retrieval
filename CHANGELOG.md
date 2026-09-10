@@ -2,6 +2,14 @@
 
 本文件记录影响安全性、实验可复现性、Lean 编译边界和公开发布的补丁。它与 `PROGRESS.md` 的职责不同：`PROGRESS.md` 描述当前状态，本文按提交批次记录变更原因、影响范围和验证证据。
 
+## 2026-09-11 — 扩充 SP v2 安全回归
+
+- 将冻结威胁模型从 SP-1～SP-6 扩充为 SP-1～SP-12，新增网络出口尝试、axiom/#eval 命令注入、`include_str` 文件嵌入、`native_decide` 原生执行边界和宏规则注入；危险候选只验证编译前拒绝，不在主机执行。
+- 将正常对照从 CTRL-1～CTRL-3 扩充为 CTRL-1～CTRL-8，覆盖嵌套注释、字符串、标识符子串、构造式证明和证明内部的无害 scoped option；所有允许对照均由 Lean 真编译。
+- 细化 `set_option` 策略：证明内仅允许明确列入白名单的 `pp.*` 显示选项，资源、跟踪、profiler、compiler、未知选项及候选首层命令仍按 fail-closed 原则拒绝。安全报告新增预期检测器核对、正常对照编译失败和 Wilson 95% 区间，避免把 0 次观察误写成零风险。
+- 发布 `published/security-study-tracer-sp-v2/` 确定性报告并加入 CI 逐字段核对。当前冻结结果为误放行 0/12、策略误拒绝 0/8、正常对照编译失败 0/8、拒绝前编译 0/12、检测器不一致 0/12；这不构成完整沙箱结论。
+- 完整 Windows 回归共发现 262 项测试，其中 260 项通过、2 项 Linux-only 跳过；`lake build`、Compiler Feedback 15/15、Capsule audit 24/24 与真实回放 24/24 均通过。
+
 ## 2026-09-11 — 发布 DeepSeek Flash 第二模型复现
 
 - 使用 9 月 10 日冻结合同完成 DeepSeek Flash 的 repair24 × raw/normalized/structured × 三重复批次：216/216 任务完成，无基础设施错误；245 条逐轮记录中形成 209 个成功证明与 7 个失败任务。

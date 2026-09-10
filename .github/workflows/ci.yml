@@ -42,7 +42,7 @@ jobs:
       - name: Verify second-model replication contract
         run: python scripts/plan_feedback_replication.py --model-id ci-second-model --api-url https://example.invalid/v1/chat/completions --model ci-second-model
       - name: Verify SP security metrics
-        run: python src/security_study.py
+        run: python src/security_study.py --check published/security-study-tracer-sp-v2/report.json
       # 12 个 core 案例是硬门槛；同时保留 4 个 challenge 的真实回放结果。
       - name: Run Capsule feasibility gate
         run: python scripts/run_capsule_feasibility.py --verify-only

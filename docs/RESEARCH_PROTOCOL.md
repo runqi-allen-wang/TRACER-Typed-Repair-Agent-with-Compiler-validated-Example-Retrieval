@@ -189,7 +189,7 @@ python src/human_study.py report
 
 ### 7.2 SP-n 安全策略
 
-第一版威胁模型已经冻结为 SP-1～SP-6 和 CTRL-1～CTRL-3，并由 `src/security_study.py` 同时报告误放行、误拒绝及拒绝前编译调用。操作系统隔离与未知攻击覆盖仍未完成。
+第二版威胁模型已经冻结为 SP-1～SP-12 和 CTRL-1～CTRL-8，并由 `src/security_study.py` 同时报告误放行、误拒绝、正常对照真实编译、检测器一致性、拒绝前编译调用及 Wilson 95% 区间。操作系统隔离、外部安全复核与未知攻击覆盖仍未完成。
 
 SP 后续工作应从单个回归案例扩展为版本化安全计划：
 
