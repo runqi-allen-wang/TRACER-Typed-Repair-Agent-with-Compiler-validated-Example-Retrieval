@@ -2,7 +2,15 @@
 
 本流程复用已发布 DeepSeek 批次的 repair24 题库、raw/normalized/structured 三种反馈表示、三次重复、三轮修复预算、编译时限、任务顺序与静态提示模板。第二模型使用独立的模型标识、输出目录、API 密钥输入和公开发布包。
 
-冻结协议位于 `experiments/feedback_replication.protocol.json`。当前文档与代码只提供可执行流程；在第二模型 216 个任务全部完成、成功证明复编译、AI 辅助复核和发布审计通过前，不得声称跨模型复现已经完成。
+冻结协议位于 `experiments/feedback_replication.protocol.json`。DeepSeek Flash 第二模型批次现已完成并发布；本页同时保留复现命令，供后续独立供应商模型按相同流程运行。
+
+## 已发布结果
+
+- Pro 基线：[`published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248`](../published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248)，199/216 三轮内成功。
+- Flash 复现：[`published/feedback-study-562ad440-3446-4138-801e-59726ed0e108`](../published/feedback-study-562ad440-3446-4138-801e-59726ed0e108)，209/216 三轮内成功，209/209 证明通过发布后独立复编译。
+- 配对比较：[`published/feedback-cross-model-8ccb89dd-562ad440`](../published/feedback-cross-model-8ccb89dd-562ad440)，216/216 任务匹配并通过脱敏审计。
+
+Flash 在 raw、normalized、structured 上三轮内分别成功 69/72、69/72、71/72；Pro 为 67/72、65/72、67/72。相应最终结局一致率为 94.4%、88.9%、91.7%。这是一份 DeepSeek 模型族内描述性复现：Pro 显式启用 thinking/reasoning 参数，Flash 未启用，且表示差的任务级同向非零证据很少，因此不能声称跨供应商泛化或稳定因果增益。
 
 ## 1. 运行前离线检查
 

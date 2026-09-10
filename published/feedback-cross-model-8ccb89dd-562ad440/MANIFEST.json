@@ -1,0 +1,18 @@
+{
+  "format": "tracer-feedback-cross-model-comparison-v1",
+  "files": [
+    {
+      "path": "by_representation.csv",
+      "size_bytes": 630
+    },
+    {
+      "path": "comparison.json",
+      "size_bytes": 4129
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 688
+    }
+  ],
+  "inventory_method": "relative path and byte size"
+}

@@ -1,0 +1,116 @@
+{
+  "protocol_version": "tracer-feedback-study-v1",
+  "experiment_id": "feedback-study-562ad440-3446-4138-801e-59726ed0e108",
+  "replication_contract": {
+    "version": "tracer-feedback-cross-model-v1",
+    "status": "reference-validated",
+    "reference_release": "feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248",
+    "reference_experiment_id": "feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248",
+    "reference_model": {
+      "id": "deepseek",
+      "model": "deepseek-v4-pro",
+      "api_url": "https://api.deepseek.com/chat/completions"
+    },
+    "replication_model": {
+      "id": "deepseek_flash",
+      "model": "deepseek-v4-flash",
+      "api_url": "https://api.deepseek.com/chat/completions",
+      "thinking": null,
+      "reasoning_effort": null
+    },
+    "equal_controls": [
+      "repeats",
+      "representations",
+      "max_rounds",
+      "compile_timeout",
+      "order_seed",
+      "examples_dir",
+      "temperature",
+      "max_tokens"
+    ],
+    "model_specific_fields": [
+      "api_url",
+      "model",
+      "thinking",
+      "reasoning_effort"
+    ],
+    "claim_boundary": "验证同题、同重复、同反馈表示与同预算下的描述性跨模型一致性；模型专属推理接口差异必须披露，不自动构成因果或显著性证据。"
+  },
+  "replication_reference_validated": true,
+  "trajectory_valid": true,
+  "design_complete": true,
+  "review_mode": "ai_assisted",
+  "review_complete": true,
+  "ai_assisted_review_complete": true,
+  "release_ready": true,
+  "archived_transport_retry_attempts": 0,
+  "errors": [],
+  "summary": [
+    {
+      "model": "deepseek_flash",
+      "representation": "normalized",
+      "tasks": 72,
+      "pass_at_1": 63,
+      "pass_within_budget": 69,
+      "avg_rounds": 1.1805555555555556,
+      "avg_wall_ms": 22613.180555555555,
+      "total_tokens": 383184,
+      "total_estimated_cost_usd": null,
+      "feedback_relevant_change_rate": 0.38461538461538464,
+      "repeated_error_category_rate": 0.15384615384615385
+    },
+    {
+      "model": "deepseek_flash",
+      "representation": "raw",
+      "tasks": 72,
+      "pass_at_1": 67,
+      "pass_within_budget": 69,
+      "avg_rounds": 1.1111111111111112,
+      "avg_wall_ms": 17636.49861111111,
+      "total_tokens": 283443,
+      "total_estimated_cost_usd": null,
+      "feedback_relevant_change_rate": 0.375,
+      "repeated_error_category_rate": 0.125
+    },
+    {
+      "model": "deepseek_flash",
+      "representation": "structured",
+      "tasks": 72,
+      "pass_at_1": 66,
+      "pass_within_budget": 71,
+      "avg_rounds": 1.1111111111111112,
+      "avg_wall_ms": 17014.456944444446,
+      "total_tokens": 281839,
+      "total_estimated_cost_usd": null,
+      "feedback_relevant_change_rate": 0.5,
+      "repeated_error_category_rate": 0.0
+    }
+  ],
+  "paired_comparisons": [
+    {
+      "model": "deepseek_flash",
+      "comparison": "normalized - raw",
+      "matched_pairs": 72,
+      "mean_success_delta": 0,
+      "mean_round_delta": 0.06944444444444445,
+      "interpretation": "描述性逐题配对，不是显著性检验。"
+    },
+    {
+      "model": "deepseek_flash",
+      "comparison": "structured - raw",
+      "matched_pairs": 72,
+      "mean_success_delta": 0.027777777777777776,
+      "mean_round_delta": 0,
+      "interpretation": "描述性逐题配对，不是显著性检验。"
+    },
+    {
+      "model": "deepseek_flash",
+      "comparison": "structured - normalized",
+      "matched_pairs": 72,
+      "mean_success_delta": 0.027777777777777776,
+      "mean_round_delta": -0.06944444444444445,
+      "interpretation": "描述性逐题配对，不是显著性检验。"
+    }
+  ],
+  "interpretation": "按同模型、同题、同重复进行三种反馈表示的描述性配对比较；网络失败续跑次数单独披露；不自动声称因果增益或统计显著。"
+}

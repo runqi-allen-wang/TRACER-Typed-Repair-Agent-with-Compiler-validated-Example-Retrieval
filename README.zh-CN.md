@@ -217,7 +217,7 @@ DeepSeek Flash 可将模型改为 `deepseek-v4-flash`。GPT-4.1 是当前请求�
 | --- | --- |
 | Evaluation18 P-A/P-B/P-C | 已发布 provider 轨迹、54 个证明和完整 54 对人工复核；只作为工程 smoke test |
 | LeanCapsule | 已发布 24 案例复核 gallery，并包含 12-core / 4-challenge 可行性工件 |
-| 编译反馈 | Compiler Feedback v1、离线采纳/query 变化分析与三表示 runner 已冻结；[216 任务 DeepSeek 发布包](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248)含脱敏轨迹、199 个证明和 AI 辅助复核。现已实现[严格的第二模型复现流程](docs/SECOND_MODEL_REPLICATION.md)，冻结参考合同与跨模型配对报告，但尚未声称第二模型结果 |
+| 编译反馈 | Compiler Feedback v1、离线采纳/query 变化分析与三表示 runner 已冻结；通过审计的 [DeepSeek Pro 发布包](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248)含 199 个证明，[DeepSeek Flash 复现包](published/feedback-study-562ad440-3446-4138-801e-59726ed0e108)含 209 个证明。[跨模型配对报告](published/feedback-cross-model-8ccb89dd-562ad440)覆盖全部 216 个任务；这是模型族内描述性证据，不是跨供应商效应结论 |
 | FATE-M | 包含 Part 1/2 corrected、Experience + CapsuleFeedback 和 Part 3 Raw/Capsule 交接包；均为单批次描述性证据 |
 | repair24 R-A～R-F | 题库、runner 和离线门禁已实现；正式多模型重复矩阵尚未运行 |
 | 安全 | SP-1～SP-6 与 3 个正常对照组成版本化离线回归，并报告双向错误；操作系统级隔离仍是未来工作 |
@@ -431,7 +431,7 @@ R-A/R-D 仍会编译以判断是否停止，但诊断不返回给生成器。R-E
 
 [研究运行器](src/research.py) 保存可读输入快照、随机化任务顺序、禁用请求缓存、记录完整 prompt/usage，并独立重编译成功文件。支持多模型及重复运行，报告门禁拒绝不完整或混合轨迹。未知费用仍标未知，人工复核与自动检查分开。
 
-针对更窄的编译反馈子研究，[第二模型复现协议](docs/SECOND_MODEL_REPLICATION.md)会在任何付费请求前校验已发布的 DeepSeek 基线，强制保持 repair24 全文、任务顺序、反馈/证明模板、三种表示、三次重复、三轮预算、编译时限、温度与输出上限一致。新的公开包审计不再要求第二模型机械复制 DeepSeek 的 199 个成功数。两个发布包都通过审计后，`scripts/compare_feedback_models.py` 才计算首轮/最终结局一致率与表示差方向一致性。这些是已实现的实验基础设施；第二批 216 任务尚未运行。
+针对更窄的编译反馈子研究，[第二模型复现协议](docs/SECOND_MODEL_REPLICATION.md)在 Flash 运行前校验已发布的 Pro 基线，并固定 repair24 全文、任务顺序、反馈/证明模板、三种表示、三次重复、三轮预算、编译时限、温度与输出上限。Flash 三轮内通过 209/216，Pro 为 199/216；raw、normalized、structured 的最终结局一致率分别为 94.4%、88.9%、91.7%。[跨模型配对报告](published/feedback-cross-model-8ccb89dd-562ad440)同时显示，多数表示差方向一致来自两个模型在任务层面都没有处理差。Pro 显式启用了 thinking/reasoning 控制，Flash 未启用，且二者属于同一供应商模型族，因此只能解释为模型族内描述性复现，不能据此声称统计显著、反馈因果增益或跨供应商泛化。
 
 ~~~powershell
 python src/research.py check-benchmark

@@ -168,11 +168,16 @@ class DocumentationConsistencyTest(unittest.TestCase):
         for name, readme in self.readmes().items():
             links = set(re.findall(r"\]\((published/[^)]+)\)", readme))
             with self.subTest(language=name):
-                self.assertEqual(7, len(links))
+                self.assertEqual(9, len(links))
                 self.assertIn(
                     "published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248",
                     links,
                 )
+                self.assertIn(
+                    "published/feedback-study-562ad440-3446-4138-801e-59726ed0e108",
+                    links,
+                )
+                self.assertIn("published/feedback-cross-model-8ccb89dd-562ad440", links)
                 self.assertIn("[MIT License](LICENSE)", readme)
                 self.assertIn("MIT License", (ROOT / "LICENSE").read_text(encoding="utf-8"))
             evidence.append(links)

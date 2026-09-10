@@ -1,6 +1,6 @@
 # Lean 编译反馈与 SP-n 后续工作方案
 
-> **状态：单模型对照已脱敏发布，第二模型复现链路已冻结，真实复现与隔离仍待实施（2026-09-10）。** Compiler Feedback v1、Feedback Adoption v1、三表示对照 runner，以及 SP-1～SP-6/CTRL-1～CTRL-3 的冻结离线门禁已经实现。DeepSeek 三表示批次已经完成脱敏公开导出；第二模型的付费前参考合同、通用发布审计和跨模型逐任务报告已经实现，但真实第二模型 216 任务、操作系统隔离和超出冻结案例的安全结论仍未完成。本状态不表示普适模型收益或完整沙箱已经成立。现有历史轨迹和已发布结果保持不变。
+> **状态：DeepSeek Pro/Flash 模型族内复现已脱敏发布，独立供应商复现与隔离仍待实施（2026-09-11）。** Compiler Feedback v1、Feedback Adoption v1、三表示对照 runner，以及 SP-1～SP-6/CTRL-1～CTRL-3 的冻结离线门禁已经实现。两个 216 任务模型批次及逐任务配对报告均已通过发布审计；操作系统隔离、独立供应商模型与超出冻结案例的安全结论仍未完成。本状态不表示普适模型收益或完整沙箱已经成立。现有历史轨迹和已发布结果保持不变。
 
 Community feedback from [subfish-zhou](https://github.com/subfish-zhou) and [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) motivates two next-stage tracks: measuring how models use Lean diagnostics, and expanding SP-1 into a versioned SP-n security program. The plan below freezes evidence boundaries before implementation.
 
@@ -95,9 +95,9 @@ Community feedback from [subfish-zhou](https://github.com/subfish-zhou) and [Ful
 
 ### F4：第二模型独立复现
 
-**当前进展：离线协议与工具已完成，真实运行待输入第二模型 API。** [第二模型复现协议](SECOND_MODEL_REPLICATION.md)要求 `--reference-release` 在任何付费请求前核对 DeepSeek 发布包；公共题库、任务顺序、三表示、三重复、轮数、编译时限、温度、输出上限和静态模板不得漂移。发布审计按第二模型实际成功数检查证明，不再把 199 个成功硬编码为所有批次目标。
+**当前进展：DeepSeek Flash 模型族内复现已完成，独立供应商复现未完成。** [第二模型复现协议](SECOND_MODEL_REPLICATION.md)通过 `--reference-release` 在付费请求前核对 Pro 发布包；公共题库、任务顺序、三表示、三重复、轮数、编译时限、温度、输出上限和静态模板均未漂移。Flash 的 216 任务、209 个证明、AI 辅助复核和脱敏发布包已通过门禁。
 
-第二批完成发布后，由 `scripts/compare_feedback_models.py` 对齐 216 个任务，报告首轮与最终结局一致率、各表示成功差和表示对比方向一致性。报告必须单列共同零差异，不能把“两个模型都未出现表示差”解释为处理增益复现。模型专属 thinking/reasoning 接口、tokenizer、别名更新和服务端默认值作为残余混杂披露。
+`scripts/compare_feedback_models.py` 已对齐 Pro/Flash 的 216 个任务，并报告首轮与最终结局一致率、各表示成功差和表示对比方向一致性。报告单列共同零差异，避免把“两个模型都未出现表示差”解释为处理增益复现。下一次独立供应商复现仍须披露 thinking/reasoning 接口、tokenizer、别名更新和服务端默认值等残余混杂。
 
 ## 3. Track S：把 SP-1 扩展为 SP-n
 

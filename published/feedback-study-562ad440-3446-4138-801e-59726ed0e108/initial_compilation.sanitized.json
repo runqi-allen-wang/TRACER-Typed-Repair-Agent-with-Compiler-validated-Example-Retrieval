@@ -1,0 +1,531 @@
+{
+  "stitch_assoc": {
+    "problem_id": "stitch_assoc",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "type_mismatch",
+      "summary": "type_mismatch: Type mismatch",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Type mismatch",
+          "category": "type_mismatch"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=type_mismatch；摘要=type_mismatch: Type mismatch",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: Type mismatch\n  List.append_assoc xs ys zs\nhas type\n  xs ++ ys ++ zs = xs ++ (ys ++ zs)\nbut is expected to have type\n  stitch (stitch xs ys) zs = stitch xs (stitch ys zs)",
+    "compile_elapsed_ms": 6935.3
+  },
+  "map_stitch": {
+    "problem_id": "map_stitch",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "unknown_identifier",
+      "summary": "unknown_identifier: Unknown identifier `transform_stitch`; unsolved_goals: unsolved goals",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Unknown identifier `transform_stitch`",
+          "category": "unknown_identifier"
+        },
+        {
+          "location": "<local-path>",
+          "message": "unsolved goals",
+          "category": "unsolved_goals"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=unknown_identifier；摘要=unknown_identifier: Unknown identifier `transform_stitch`; unsolved_goals: unsolved goals",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error(lean.unknownIdentifier): Unknown identifier `transform_stitch`\n<local-path> error: unsolved goals\nf : Nat → Nat\nxs ys : List Nat\n⊢ transform f (stitch xs ys) = stitch (transform f xs) (transform f ys)",
+    "compile_elapsed_ms": 1026.3
+  },
+  "size_stitch": {
+    "problem_id": "size_stitch",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "unsolved_goals",
+      "summary": "unsolved_goals: unsolved goals",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "unsolved goals",
+          "category": "unsolved_goals"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=unsolved_goals；摘要=unsolved_goals: unsolved goals",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: unsolved goals\ncase cons\nys : List Nat\nx : Nat\nxs : List Nat\nih : size (stitch xs ys) = size xs + size ys\n⊢ size (stitch xs ys) + 1 = size xs + 1 + size ys",
+    "compile_elapsed_ms": 1010.8
+  },
+  "map_comp": {
+    "problem_id": "map_comp",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "compile_error",
+      "summary": "compile_error: Tactic `rfl` failed: The left-hand side",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Tactic `rfl` failed: The left-hand side",
+          "category": "compile_error"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=compile_error；摘要=compile_error: Tactic `rfl` failed: The left-hand side",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: Tactic `rfl` failed: The left-hand side\n  transform g (transform f xs)\nis not definitionally equal to the right-hand side\n  transform (fun x => g (f x)) xs\n\nf g : Nat → Nat\nxs : List Nat\n⊢ transform g (transform f xs) = transform (fun x => g (f x)) xs",
+    "compile_elapsed_ms": 924.1
+  },
+  "fold_stitch": {
+    "problem_id": "fold_stitch",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "type_mismatch",
+      "summary": "type_mismatch: Type mismatch",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Type mismatch",
+          "category": "type_mismatch"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=type_mismatch；摘要=type_mismatch: Type mismatch",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: Type mismatch\n  ih\nhas type\n  fold f z (stitch xs ys) = fold f (fold f z xs) ys\nbut is expected to have type\n  fold f z (stitch (x :: xs) ys) = fold f (fold f z (x :: xs)) ys",
+    "compile_elapsed_ms": 929.9
+  },
+  "size_map": {
+    "problem_id": "size_map",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "unknown_identifier",
+      "summary": "unknown_identifier: Unknown identifier `size_transform`",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Unknown identifier `size_transform`",
+          "category": "unknown_identifier"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=unknown_identifier；摘要=unknown_identifier: Unknown identifier `size_transform`",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error(lean.unknownIdentifier): Unknown identifier `size_transform`",
+    "compile_elapsed_ms": 862.4
+  },
+  "forall_and": {
+    "problem_id": "forall_and",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "type_mismatch",
+      "summary": "type_mismatch: Type mismatch; type_mismatch: Type mismatch",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Type mismatch",
+          "category": "type_mismatch"
+        },
+        {
+          "location": "<local-path>",
+          "message": "Type mismatch",
+          "category": "type_mismatch"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=type_mismatch；摘要=type_mismatch: Type mismatch; type_mismatch: Type mismatch",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: Type mismatch\n  h\nhas type\n  ∀ (x : Nat), P x ∧ Q x\nbut is expected to have type\n  (∀ (x : Nat), P x) ∧ ∀ (x : Nat), Q x\n<local-path> error: Type mismatch\n  h\nhas type\n  (∀ (x : Nat), P x) ∧ ∀ (x : Nat), Q x\nbut is expected to have type\n  ∀ (x : Nat), P x ∧ Q x",
+    "compile_elapsed_ms": 825.9
+  },
+  "exists_or": {
+    "problem_id": "exists_or",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "type_mismatch",
+      "summary": "type_mismatch: Application type mismatch: The argument; type_mismatch: Type mismatch",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Application type mismatch: The argument",
+          "category": "type_mismatch"
+        },
+        {
+          "location": "<local-path>",
+          "message": "Type mismatch",
+          "category": "type_mismatch"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=type_mismatch；摘要=type_mismatch: Application type mismatch: The argument; type_mismatch: Type mismatch",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: Application type mismatch: The argument\n  hx\nhas type\n  P x ∨ Q x\nbut is expected to have type\n  P x\nin the application\n  Exists.intro x hx\n<local-path> error: Type mismatch\n  h\nhas type\n  (∃ x, P x) ∨ ∃ x, Q x\nbut is expected to have type\n  ∃ x, P x ∨ Q x",
+    "compile_elapsed_ms": 831.6
+  },
+  "exists_and": {
+    "problem_id": "exists_and",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "unsolved_goals",
+      "summary": "unsolved_goals: unsolved goals",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "unsolved goals",
+          "category": "unsolved_goals"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=unsolved_goals；摘要=unsolved_goals: unsolved goals",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: unsolved goals\ncase mpr\nP : Nat → Prop\nQ : Prop\nh : (∃ x, P x) ∧ Q\n⊢ ∃ x, P x ∧ Q",
+    "compile_elapsed_ms": 852.1
+  },
+  "not_exists": {
+    "problem_id": "not_exists",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "type_mismatch",
+      "summary": "type_mismatch: Application type mismatch: The argument; type_mismatch: Application type mismatch: The argument",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Application type mismatch: The argument",
+          "category": "type_mismatch"
+        },
+        {
+          "location": "<local-path>",
+          "message": "Application type mismatch: The argument",
+          "category": "type_mismatch"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=type_mismatch；摘要=type_mismatch: Application type mismatch: The argument; type_mismatch: Application type mismatch: The argument",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: Application type mismatch: The argument\n  hx\nhas type\n  P x\nbut is expected to have type\n  ∃ x, P x\nin the application\n  h hx\n<local-path> error: Application type mismatch: The argument\n  hx\nhas type\n  ∃ x, P x\nof sort `Prop` but is expected to have type\n  Nat\nof sort `Type` in the application\n  h hx",
+    "compile_elapsed_ms": 830.2
+  },
+  "injective_comp": {
+    "problem_id": "injective_comp",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "type_mismatch",
+      "summary": "type_mismatch: Application type mismatch: The argument",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Application type mismatch: The argument",
+          "category": "type_mismatch"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=type_mismatch；摘要=type_mismatch: Application type mismatch: The argument",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: Application type mismatch: The argument\n  h\nhas type\n  g (f a) = g (f b)\nbut is expected to have type\n  g a = g b\nin the application\n  hg a b h",
+    "compile_elapsed_ms": 971.1
+  },
+  "left_inverse": {
+    "problem_id": "left_inverse",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "type_mismatch",
+      "summary": "type_mismatch: Type mismatch",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Type mismatch",
+          "category": "type_mismatch"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=type_mismatch；摘要=type_mismatch: Type mismatch",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: Type mismatch\n  hab\nhas type\n  f a = f b\nbut is expected to have type\n  a = b",
+    "compile_elapsed_ms": 1046.1
+  },
+  "surjective_comp": {
+    "problem_id": "surjective_comp",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "type_mismatch",
+      "summary": "type_mismatch: Type mismatch",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Type mismatch",
+          "category": "type_mismatch"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=type_mismatch；摘要=type_mismatch: Type mismatch",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: Type mismatch\n  hg y\nhas type\n  ∃ x, g x = y\nbut is expected to have type\n  ∃ x, g (f x) = y",
+    "compile_elapsed_ms": 992.0
+  },
+  "right_inverse": {
+    "problem_id": "right_inverse",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "type_mismatch",
+      "summary": "type_mismatch: Application type mismatch: The argument",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Application type mismatch: The argument",
+          "category": "type_mismatch"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=type_mismatch；摘要=type_mismatch: Application type mismatch: The argument",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: Application type mismatch: The argument\n  h y\nhas type\n  f (g y) = y\nbut is expected to have type\n  f y = y\nin the application\n  Exists.intro y (h y)",
+    "compile_elapsed_ms": 988.1
+  },
+  "omap_comp": {
+    "problem_id": "omap_comp",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "compile_error",
+      "summary": "compile_error: Tactic `rfl` failed: The left-hand side",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Tactic `rfl` failed: The left-hand side",
+          "category": "compile_error"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=compile_error；摘要=compile_error: Tactic `rfl` failed: The left-hand side",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: Tactic `rfl` failed: The left-hand side\n  omap g (omap f x)\nis not definitionally equal to the right-hand side\n  omap (fun n => g (f n)) x\n\nf g : Nat → Nat\nx : Option Nat\n⊢ omap g (omap f x) = omap (fun n => g (f n)) x",
+    "compile_elapsed_ms": 985.8
+  },
+  "obind_assoc": {
+    "problem_id": "obind_assoc",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "type_mismatch",
+      "summary": "type_mismatch: Type mismatch",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Type mismatch",
+          "category": "type_mismatch"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=type_mismatch；摘要=type_mismatch: Type mismatch",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: Type mismatch\n  Eq.refl n\nhas type\n  n = n\nbut is expected to have type\n  obind (obind (some n) f) g = obind (some n) fun n => obind (f n) g",
+    "compile_elapsed_ms": 1027.1
+  },
+  "omap_bind": {
+    "problem_id": "omap_bind",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "unknown_identifier",
+      "summary": "unknown_identifier: Unknown identifier `omap_obind`",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Unknown identifier `omap_obind`",
+          "category": "unknown_identifier"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=unknown_identifier；摘要=unknown_identifier: Unknown identifier `omap_obind`",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error(lean.unknownIdentifier): Unknown identifier `omap_obind`",
+    "compile_elapsed_ms": 1056.5
+  },
+  "omap_identity": {
+    "problem_id": "omap_identity",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "unsolved_goals",
+      "summary": "unsolved_goals: unsolved goals",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "unsolved goals",
+          "category": "unsolved_goals"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=unsolved_goals；摘要=unsolved_goals: unsolved goals",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: unsolved goals\ncase some\nn : Nat\n⊢ omap (fun n => n) (some n) = some n",
+    "compile_elapsed_ms": 1033.8
+  },
+  "double_add": {
+    "problem_id": "double_add",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "compile_error",
+      "summary": "compile_error: Tactic `rfl` failed: The left-hand side",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Tactic `rfl` failed: The left-hand side",
+          "category": "compile_error"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=compile_error；摘要=compile_error: Tactic `rfl` failed: The left-hand side",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: Tactic `rfl` failed: The left-hand side\n  double (a + b)\nis not definitionally equal to the right-hand side\n  double a + double b\n\na b : Nat\n⊢ double (a + b) = double a + double b",
+    "compile_elapsed_ms": 1032.4
+  },
+  "double_value": {
+    "problem_id": "double_value",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "unknown_identifier",
+      "summary": "unknown_identifier: Unknown identifier `double_eq_add`",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Unknown identifier `double_eq_add`",
+          "category": "unknown_identifier"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=unknown_identifier；摘要=unknown_identifier: Unknown identifier `double_eq_add`",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error(lean.unknownIdentifier): Unknown identifier `double_eq_add`",
+    "compile_elapsed_ms": 1079.6
+  },
+  "scale_add": {
+    "problem_id": "scale_add",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "unsolved_goals",
+      "summary": "unsolved_goals: unsolved goals",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "unsolved goals",
+          "category": "unsolved_goals"
+        }
+      ],
+      "warnings": [
+        {
+          "location": "<local-path>",
+          "message": "This simp argument is unused:"
+        }
+      ],
+      "warning_count": 1,
+      "feedback": "类别=unsolved_goals；摘要=unsolved_goals: unsolved goals",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: unsolved goals\ncase succ\na m n : Nat\nih : scale a (m + n) = scale a m + scale a n\n⊢ scale a (m.add n) + a = scale a m + (scale a n + a)\n<local-path> warning: This simp argument is unused:\n  Nat.add_succ\n\nHint: Omit it from the simp argument list.\n  simp only [̵N̵a̵t̵.̵a̵d̵d̵_̵s̵u̵c̵c̵,̵ ̵s̵c̵a̵l̵e̵]̵[̲s̲c̲a̲l̲e̲]̲\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`",
+    "compile_elapsed_ms": 1026.1
+  },
+  "scale_value": {
+    "problem_id": "scale_value",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "type_mismatch",
+      "summary": "type_mismatch: Type mismatch",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Type mismatch",
+          "category": "type_mismatch"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=type_mismatch；摘要=type_mismatch: Type mismatch",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: Type mismatch\n  ih\nhas type\n  scale a n = a * n\nbut is expected to have type\n  scale a (n + 1) = a * (n + 1)",
+    "compile_elapsed_ms": 974.9
+  },
+  "tri_lower": {
+    "problem_id": "tri_lower",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "type_mismatch",
+      "summary": "type_mismatch: Type mismatch",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Type mismatch",
+          "category": "type_mismatch"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=type_mismatch；摘要=type_mismatch: Type mismatch",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: Type mismatch\n  ih\nhas type\n  n ≤ tri n\nbut is expected to have type\n  n + 1 ≤ tri (n + 1)",
+    "compile_elapsed_ms": 1032.5
+  },
+  "double_even": {
+    "problem_id": "double_even",
+    "compile_ok": false,
+    "diagnostic": {
+      "category": "type_mismatch",
+      "summary": "type_mismatch: Application type mismatch: The argument",
+      "errors": [
+        {
+          "location": "<local-path>",
+          "message": "Application type mismatch: The argument",
+          "category": "type_mismatch"
+        }
+      ],
+      "warnings": [],
+      "warning_count": 0,
+      "feedback": "类别=type_mismatch；摘要=type_mismatch: Application type mismatch: The argument",
+      "truncated": false
+    },
+    "raw_diagnostics": "<local-path> error: Application type mismatch: The argument\n  rfl\nhas type\n  ?m.12 = ?m.12\nbut is expected to have type\n  double n = n + n\nin the application\n  Exists.intro n rfl",
+    "compile_elapsed_ms": 1031.4
+  }
+}

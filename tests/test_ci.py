@@ -53,12 +53,17 @@ class ContinuousIntegrationTest(unittest.TestCase):
 
     def test_published_feedback_study_is_audited_before_tests(self):
         workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
-        command = (
+        commands = [
             "run: python scripts/audit_feedback_study.py "
-            "published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248"
-        )
-        self.assertIn(command, workflow)
-        self.assertLess(workflow.index(command), workflow.index("- name: Run tests"))
+            "published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248",
+            "run: python scripts/audit_feedback_study.py "
+            "published/feedback-study-562ad440-3446-4138-801e-59726ed0e108",
+            "run: python scripts/audit_feedback_comparison.py "
+            "published/feedback-cross-model-8ccb89dd-562ad440",
+        ]
+        for command in commands:
+            self.assertIn(command, workflow)
+            self.assertLess(workflow.index(command), workflow.index("- name: Run tests"))
 
     def test_second_model_replication_contract_is_checked_before_tests(self):
         workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
