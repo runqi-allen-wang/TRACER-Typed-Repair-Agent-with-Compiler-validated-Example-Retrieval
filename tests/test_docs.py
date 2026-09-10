@@ -22,6 +22,15 @@ class DocumentationConsistencyTest(unittest.TestCase):
         self.assertTrue(manifest)
         self.assertTrue(all(case["id"].startswith("SP-") for case in manifest))
         self.assertTrue(all(case["type"] == "security_policy" for case in manifest))
+        self.assertEqual([case["id"] for case in manifest], [f"SP-{number}" for number in range(1, 7)])
+
+    def test_feedback_and_security_status_links_match_both_readmes(self):
+        for name, readme in self.readmes().items():
+            with self.subTest(language=name):
+                self.assertIn("docs/FEEDBACK_ADOPTION_V1.md", readme)
+                self.assertIn("docs/FEEDBACK_STUDY_V1.md", readme)
+                self.assertIn("SP-1", readme)
+                self.assertIn("SP-6", readme)
 
     def test_part2_freezes_yxai_responses_and_reuses_ax_build_result(self):
         part2 = (ROOT / "docs" / "part2_capsule_feedback.md").read_text(encoding="utf-8")
@@ -159,7 +168,11 @@ class DocumentationConsistencyTest(unittest.TestCase):
         for name, readme in self.readmes().items():
             links = set(re.findall(r"\]\((published/[^)]+)\)", readme))
             with self.subTest(language=name):
-                self.assertEqual(6, len(links))
+                self.assertEqual(7, len(links))
+                self.assertIn(
+                    "published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248",
+                    links,
+                )
                 self.assertIn("[MIT License](LICENSE)", readme)
                 self.assertIn("MIT License", (ROOT / "LICENSE").read_text(encoding="utf-8"))
             evidence.append(links)

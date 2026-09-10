@@ -12,14 +12,14 @@ TRACER（Typed Repair Agent with Compiler-validated Example Retrieval）是 Lean
 
 - 已发布 smoke pilot 使用 P-A/P-B/P-C 表示历史 A/B/C 条件。
 - repair24 公开显示为 R-A～R-F；存储值保持 `A/B/C/D/C_dynamic/C_failure`。
-- SP-n 表示非实验性的 Security Policy 回归；当前案例为 SP-1。
+- SP-n 表示非实验性的 Security Policy 回归；当前离线套件为 SP-1～SP-6，并配有 CTRL-1～CTRL-3 正常对照。
 
 ## 当前可核查工件
 
 - **已发布证据**：Evaluation18 的 56 条逐轮记录、54 个成功证明与完整人工复核；24 个公开失败 Capsule；12-core / 4-challenge 可行性结果；FATE-M Part 1/2、拆分臂与 Part 3 交接工件。
-- **可复验实现**：repair24 题库、R-A～R-F 六臂 runner、动态查询、失败 Capsule 上下文、跨环境与真人研究入口；这些功能不等于相应研究结论已经获得。
+- **可复验实现**：repair24 题库、R-A～R-F 六臂 runner、反馈采纳/query 变化审计、raw/normalized/structured 对照 runner、SP 双向指标、动态查询、失败 Capsule 上下文、跨环境与真人研究入口；这些功能不等于相应研究结论已经获得。
 - **当前不含原始证据**：历史 DeepSeek R-B 预跑、Windows/WSL 比较和真人计时数据，不作为公开结果。
-- **未来计划**：原始/规范化/结构化编译反馈对照、反馈采纳与错误转移指标、SP-n 对抗矩阵和操作系统级隔离。
+- **未来计划**：运行并复核真实 provider 三表示对照，扩大 SP 案例覆盖，并验证操作系统级隔离。
 
 证据与未完成事项以带日期的[当前进度与证据登记](../PROGRESS.md)为准；历史改动见[补丁记录](../CHANGELOG.md)。
 
@@ -27,16 +27,19 @@ TRACER（Typed Repair Agent with Compiler-validated Example Retrieval）是 Lean
 
 根据 2026 年 8 月 30 日来自 [subfish-zhou](https://github.com/subfish-zhou) 与 [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) 的社区反馈，下一阶段优先研究两项问题：
 
-1. 深化 Lean 编译诊断反馈：比较不同反馈表示，跟踪错误类别跨轮次变化，并验证模型是否真正采纳诊断，而不是只统计最终通过率。
-2. 将 SP-1 扩展为版本化 SP-n 安全计划：补充威胁模型、对抗案例、误放行/误拒绝指标与操作系统级隔离实验。
+1. 深化 Lean 编译诊断反馈：离线三表示和采纳指标已经实现，下一步在冻结预算下运行真实 provider 配对实验并完成证明复核。
+2. 深化 SP-n 安全计划：第一版威胁模型、6 个恶意案例和 3 个正常对照已经实现，下一步扩大案例并验证容器或低权限隔离。
 
-这两项均为待完成工作，不改变当前 R-A～R-F 或 SP-1 的既有证据。详细约束见 [研究实验操作与预注册协议](RESEARCH_PROTOCOL.md#7-社区评审驱动的后续工作)，执行顺序见 [编译反馈与 SP-n 后续工作方案](FUTURE_WORK_PLAN.md)。
+这些新增内容目前仍是可复验实现，不改变 R-A～R-F 或已发布 SP-1 证据，也不构成模型增益或完整安全结论。详细约束见 [研究实验操作与预注册协议](RESEARCH_PROTOCOL.md#7-社区评审驱动的后续工作)，执行顺序见 [编译反馈与 SP-n 后续工作方案](FUTURE_WORK_PLAN.md)。
 
 ## 无付费调用的复验
 
 ```text
 lake build
 python scripts/run_capsule_feasibility.py --verify-only
+python scripts/verify_compiler_feedback_v1.py --verify-only
+python src/feedback_study.py plan
+python src/security_study.py
 python scripts/run_ci_tests.py
 python -m leancapsule audit capsules
 python -m leancapsule verify capsules

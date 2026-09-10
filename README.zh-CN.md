@@ -28,7 +28,7 @@ TRACER 刻意分开三套命名。它们对应不同层级的证据，不能拼�
 | --- | --- | --- | --- |
 | **已发布 pilot 条件** | P-A / P-B / P-C | 历史 18 题 smoke test：仅题目；编译反馈；反馈加静态检索；底层存储为 A/B/C | 已发布 18 × 3 真实 provider 批次，含轨迹、证明和人工复核 |
 | **研究臂** | R-A / R-B / R-C / R-D / R-E / R-F | repair24 协议，用于分离反馈、检索、错误自适应查询与失败上下文复用 | runner、预算、冻结题与离线门禁已实现；完整多模型重复矩阵待运行 |
-| **安全策略** | SP-1，后续为 SP-n | 在编译前拒绝“可能被 Lean 接受、但违反项目可信边界”的候选 | SP-1 回归门禁已实现；它不是第七个研究臂 |
+| **安全策略** | SP-1～SP-6 | 版本化编译前策略与正常对照，用于检查可能违反可信边界的候选 | 6 个恶意夹具＋3 个正常对照形成离线门禁；它不是完整沙箱或第七个研究臂 |
 
 当前研究臂映射如下：
 
@@ -36,13 +36,13 @@ TRACER 刻意分开三套命名。它们对应不同层级的证据，不能拼�
 - **R-C：** 静态检索加反馈；**R-D：** 只检索，不把诊断反馈给生成器。
 - **R-E：** 反馈加错误自适应检索查询；**R-F：** 在 R-E 基础上复用公开失败 Capsule 上下文。
 
-底层存储值继续使用 `A/B/C/D/C_dynamic/C_failure`，以兼容已有脚本和历史记录；对外研究讨论统一使用 R-A～R-F。安全案例只使用 SP 编号；当前 [SP-1](docs/security_policy.md) 在 Lean 编译前拒绝一种 unsafe 声明模式。
+底层存储值继续使用 `A/B/C/D/C_dynamic/C_failure`，以兼容已有脚本和历史记录；对外研究讨论统一使用 R-A～R-F。安全案例只使用 SP 编号；当前 [SP-1～SP-6 套件](docs/security_policy.md) 在编译前对照 6 个冻结恶意案例与 3 个正常候选。
 
 目前可直接查看的交付：
 
 - **24 个公开失败 capsule**：覆盖 4 类错误家族，来源包括 Std、Mathlib 和项目本地依赖。
 - **12 core + 4 challenge 可行性实验**：16 个案例均保留规范化诊断并在干净临时目录回放成功，包含项目本地多文件案例。
-- **Compiler Feedback v1**：冻结原始、规范化、结构化三层诊断协议，覆盖 12 个真实 Lean 失败和 3 个显式基础设施事件；每个结构化信号都保留脱敏原文片段。这是离线门禁，不是模型增益结果。
+- **Compiler Feedback v1 与 Feedback Adoption v1**：冻结三层诊断协议和 15 个失败/基础设施夹具，并记录候选相关修改、缓存分离以及静态/动态 query 与 Top-k 变化。[已发布的 raw/normalized/structured DeepSeek 批次](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248)包含 216 条任务结果、283 条脱敏逐轮记录、199 个证明和明确标注的 AI 辅助复核表。
 - **18 道冻结题 × 3 个已发布 pilot 条件（P-A/P-B/P-C；底层存储为 A/B/C）**：真实 provider 发布包包含 56 条逐轮记录和 54 个成功证明文件。
 - **完整操作链**：单题 CLI、本地 HTTP API、批量评测、人工复核、报告校验与脱敏导出。
 - **独立六臂 repair24 研究套件（R-A～R-F）**：提供仅检索、动态查询与失败上下文对照；runner 与离线检查已实现，完整多模型重复实验待测。跳转至 [研究评测](#超越-smoke-test-的研究评测) 和 [相关工作](#相关工作)。
@@ -69,9 +69,10 @@ TRACER 将这三类问题分开处理，再通过可读记录连接起来。对�
 | **以编译验证约束案例抽取** | 按定理抽取后重新编译；诊断不一致则回退完整文件；在预算内尝试删除 imports | 缩小案例时仍检查是否保留原来的失败现象，不把“文件更短”误当作复现成功 |
 | **可控的推理时修复** | 局部候选生成 → 安全检查 → 项目环境编译 → 有界诊断反馈，最多三轮 | 在不改模型权重的前提下研究反馈与示例的作用；原题文件不被覆盖 |
 | **可审计的编译反馈** | 同时保留原始、规范化和结构化诊断；每个抽取类别和信号都指向原文片段 | 在研究模型是否采纳反馈之前，先离线检查诊断转换是否失真 |
+| **可观察的反馈采纳** | 比较相邻候选与上一轮诊断信号，单列缓存复用，并记录动态检索 query/Top-k 的实际变化 | 区分“观察到行为变化”和“模型因果理解反馈”两种不同强度的结论 |
 | **从结果数字追溯到证据** | 记录模型配置、候选、实际检索示例、usage 与编译诊断；成功证明落盘；正式报告前做严格校验 | 降低批次混合、缓存复用或基础设施错误被误当作能力提升的风险 |
 
-对应实现：[修复循环](src/agent.py) · [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) · [capsule 打包](src/leancapsule/pack.py) · [imports 精简](src/leancapsule/minimize.py) · [pilot 校验](scripts/validate_pilot.py) · [发布导出](scripts/export_pilot.py)。
+对应实现：[修复循环](src/agent.py) · [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) · [反馈采纳审计](docs/FEEDBACK_ADOPTION_V1.md) · [三表示对照](docs/FEEDBACK_STUDY_V1.md) · [SP 安全套件](docs/security_policy.md) · [capsule 打包](src/leancapsule/pack.py) · [pilot 校验](scripts/validate_pilot.py)。
 
 ## 工作原理
 
@@ -216,13 +217,13 @@ DeepSeek Flash 可将模型改为 `deepseek-v4-flash`。GPT-4.1 是当前请求�
 | --- | --- |
 | Evaluation18 P-A/P-B/P-C | 已发布 provider 轨迹、54 个证明和完整 54 对人工复核；只作为工程 smoke test |
 | LeanCapsule | 已发布 24 案例复核 gallery，并包含 12-core / 4-challenge 可行性工件 |
-| Compiler Feedback v1 | 已冻结三层反馈协议与 15 个离线夹具（12 个真实 Lean 失败、3 个基础设施事件）；尚未验证模型采纳或比较效应 |
+| 编译反馈 | Compiler Feedback v1、离线采纳/query 变化分析与三表示 runner 已冻结；[216 任务 DeepSeek 发布包](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248)含脱敏轨迹、199 个证明和 AI 辅助复核，但不能支持跨模型结论 |
 | FATE-M | 包含 Part 1/2 corrected、Experience + CapsuleFeedback 和 Part 3 Raw/Capsule 交接包；均为单批次描述性证据 |
 | repair24 R-A～R-F | 题库、runner 和离线门禁已实现；正式多模型重复矩阵尚未运行 |
-| 安全 | SP-1 有编译前回归；SP-n 覆盖和操作系统级隔离仍是未来工作 |
+| 安全 | SP-1～SP-6 与 3 个正常对照组成版本化离线回归，并报告双向错误；操作系统级隔离仍是未来工作 |
 | 历史本地研究 | DeepSeek R-B 预跑、Windows/WSL 比较和真人计时因缺少必要原始工件，不属于已发布证据 |
 
-软件门禁通过、证明编译通过、人工复核完成和研究效应成立是四种不同结论；本仓库不将其中任何一项自动升级为另一项。
+软件门禁通过、证明编译通过、指定复核模式完成和研究效应成立是四种不同结论；本仓库不将其中任何一项自动升级为另一项。新的反馈表示实验明确标记为 AI 辅助复核，不表述为纯人工复核。
 
 ### AxProverBase Part 1 + Part 2 配对实验及 B 混杂拆分臂
 
@@ -360,7 +361,7 @@ python -m leancapsule gallery capsules --out capsules/index.json
 ## 安全与能力边界
 
 - **不是操作系统沙箱。** 临时 HOME/TMP/APPDATA、最小环境变量和候选策略只提供防护层。运行不受信任的项目或 Lean 代码，应使用容器、虚拟机或独立低权限环境。
-- **限制局部修复。** Agent 不应改写题目 imports 或定理头；候选中的 `sorry`、`admit`、`sorryAx`、未完成证明警告、unsafe 声明和部分显式本机执行构造会被拒绝。SP-1 验证通过 `unsafe inductive` 构造 `False` 的候选会在 Agent、AxProverBase、Capsule pack、replay 和 audit 编译前被拒绝。SP 表示非实验性的安全策略，因此不会与研究矩阵中的 R-D 研究臂混淆。不承诺任意 Lean 元编程构造都能由文本规则识别。
+- **限制局部修复。** Agent 不应改写题目 imports 或定理头；候选中的 `sorry`、`admit`、`sorryAx`、未完成证明警告、unsafe 声明、显式元编程入口和额外命令会被拒绝。SP-1～SP-6 覆盖 6 个冻结风险案例，3 个正常对照检查误拒绝。SP 表示非实验性的安全策略，因此不会与研究矩阵中的 R-D 研究臂混淆。不承诺任意 Lean 元编程构造都能由文本规则识别。
 - **凭据与发布分离。** Provider 限制跨来源重定向并对错误文本脱敏；密钥不作为实验记录字段写入。发布前仍应检查导出内容，并只向可信 provider 发送密钥。
 - **透明的比较与缓存。** 诊断比较和请求缓存使用可读的规范化文本，不引入摘要或指纹计算；缓存用于本地调试复用，不充当独立真实采样。
 - **抽取不是全局最小化。** 完整文件 fallback 与显式本地文件清单不等于任意多文件项目的程序切片；诊断一致也不保证保留所有上下文语义。
@@ -372,13 +373,14 @@ python -m leancapsule gallery capsules --out capsules/index.json
 | --- | --- |
 | 配置 DeepSeek、GPT 或自定义 provider | [API 使用指南](docs/API_GUIDE.md) |
 | 跑真实实验、复核并导出 | [Pilot 手册](docs/REAL_PILOT_GUIDE.md) |
+| 用 DeepSeek 对比 raw/normalized/structured 编译反馈 | [Feedback Study v1 真实实验 CLI](docs/FEEDBACK_STUDY_V1.md) |
 | 理解条件控制和有效性约束 | [方法设计](docs/methodology.md) |
 | 查阅逐轮记录字段 | [JSONL 格式](docs/jsonl_schema.md) |
 | 检查或复验三层编译诊断协议 | [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) |
 | 创建可公开分享的失败工件 | [工件格式](docs/CAPSULE_FORMAT.md)与[案例贡献指南](docs/CONTRIBUTING_CAPSULES.md) |
 | 运行或检查 AxProverBase Part 1 + Part 2 实验 | [Part 1 指南](baseline/README.md)、[Part 2 设计](docs/part2_capsule_feedback.md)、[Part 3 交接清单](docs/part3_experiment_handoff.md)与[结果交接包](results/handoff/part12-live-20260828-corrected/README.md) |
 | 查看 Experience + CapsuleFeedback 混杂拆分臂 | [B 臂设计与结果](docs/part2_capsule_feedback_confound_arm.md)与[B 臂交接报告](results/handoff/part2-experience-capsule-20260829/REPORT.md) |
-| 查看 SP-1 编译前安全门禁 | [安全策略回归](docs/security_policy.md) |
+| 查看 SP-1～SP-6 编译前安全套件 | [安全策略回归与威胁模型](docs/security_policy.md) |
 | 查看 12 core + 4 challenge 干净回放实验 | [Capsule 可行性报告](docs/CAPSULE_FEASIBILITY.md) |
 | 查看已发布实验与证明 | [Pilot 交付目录](published/pilot-20260826T122354Z-d628742d) |
 | 查看当前状态与历史改动 | [PROGRESS](PROGRESS.md)与[CHANGELOG](CHANGELOG.md) |
@@ -424,7 +426,7 @@ docs/                  使用说明与研究方法
 | R-E | `C_dynamic` | C | 有 | 有 | 根据错误、类型和目标更新 |
 | R-F | `C_failure` | C | 有 | 有，并追加失败 Capsule 上下文 | 与 R-E 相同 |
 
-R-A/R-D 仍会编译以判断是否停止，但诊断不返回给生成器。R-E/R-F 分别隔离查询自适应与失败复用，不静默改写 R-C。`SP-1` 是安全策略回归，不是第七个研究组。模型权重始终不更新。
+R-A/R-D 仍会编译以判断是否停止，但诊断不返回给生成器。R-E/R-F 分别隔离查询自适应与失败复用，不静默改写 R-C。SP-1～SP-6 是安全策略回归，不是新增研究组。模型权重始终不更新。
 
 [研究运行器](src/research.py) 保存可读输入快照、随机化任务顺序、禁用请求缓存、记录完整 prompt/usage，并独立重编译成功文件。支持多模型及重复运行，报告门禁拒绝不完整或混合轨迹。未知费用仍标未知，人工复核与自动检查分开。
 
@@ -461,10 +463,10 @@ TRACER 沿用已有研究方向，不将编译反馈或检索本身作为首创�
 
 欢迎提交可复现失败案例、补充测试、改进诊断整理及模型集成。贡献前请阅读 [CONTRIBUTING](CONTRIBUTING.md)，并为案例补充来源许可、工具链、预期结果与复现步骤。
 
-2026 年 8 月 30 日收到 [subfish-zhou](https://github.com/subfish-zhou) 与 [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) 的社区评审后，下一阶段优先聚焦两条路线。第一项离线里程碑现已作为 [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) 落地；模型采纳研究与 SP-n 扩展仍属于后续工作：
+2026 年 8 月 30 日收到 [subfish-zhou](https://github.com/subfish-zhou) 与 [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) 的社区评审后，项目优先推进两条路线。第一批离线实现现已包含 [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md)、[Feedback Adoption v1](docs/FEEDBACK_ADOPTION_V1.md)、[三表示 runner](docs/FEEDBACK_STUDY_V1.md) 和 SP-1～SP-6 套件；真实 provider 效果与操作系统隔离仍属于后续工作：
 
-- **把 Lean 编译诊断反馈本身作为研究对象。** 原始/规范化/结构化表示及其可回溯夹具已经离线冻结；未来仍需比较三种表示，检查下一轮候选是否真正处理了未知标识符、类型不匹配、未解决目标或 elaboration 错误，并报告错误类别转移、逐轮成功率、token 成本和检索查询变化。任何新增对照都应注册为新协议版本，不能静默改写现有 R-B、R-E 或 R-F。
-- **把 SP-n 扩展为系统化安全研究路线。** 在现有 SP-1 回归基础上建立版本化威胁模型和对抗案例集，分别统计误放行与误拒绝，区分编译前策略检查与操作系统级隔离，并评估容器或低权限执行对文本规则难以判断的候选所提供的保护。SP-n 始终是安全策略命名空间，不是新增研究臂。
+- **把 Lean 编译诊断反馈本身作为研究对象。** 原始/规范化/结构化表示、可回溯夹具、候选改动观察与 query/Top-k 指标已经离线实现。下一项证据是另行授权的真实 provider 对照，必须保存完整轨迹与复核，不能静默改写现有 R-B、R-E 或 R-F。
+- **把 SP-n 扩展为系统化安全研究路线。** 第一版威胁模型已经分开 6 个恶意夹具与 3 个正常对照，并报告误放行和误拒绝。下一步是用容器或低权限执行处理文本门禁无法可靠判断的边界。SP-n 始终是安全策略命名空间，不是新增研究臂。
 
 更广泛的后续方向仍包括更难题库、跨模型重复运行、检索成本收益和跨环境 Capsule 研究。这些是待检验方向，不是已完成能力或性能承诺。具体协议要求见 [研究实验操作与预注册协议](docs/RESEARCH_PROTOCOL.md)，分阶段交付物和验收门禁见 [编译反馈与 SP-n 后续工作方案](docs/FUTURE_WORK_PLAN.md)。
 

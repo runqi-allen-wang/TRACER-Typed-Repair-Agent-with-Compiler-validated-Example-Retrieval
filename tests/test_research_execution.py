@@ -74,14 +74,29 @@ class ResearchExecutionTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             CallBudget(10, 1).reserve("prompt", dict(model, input_price_per_1k=None))
 
+    def test_count_only_budget_needs_no_price_but_keeps_frozen_call_limit(self):
+        guard = CallBudget(1, None)
+        guard.reserve("test", {"max_tokens": 12000})
+        self.assertEqual(guard.snapshot()["attempted_calls"], 1)
+        self.assertIsNone(guard.snapshot()["max_reserved_usd"])
+        self.assertIsNone(guard.snapshot()["reserved_usd"])
+        with self.assertRaises(RuntimeError):
+            guard.reserve("again", {"max_tokens": 12000})
+
     def test_one_secret_prompt_per_origin_not_stored_in_environment(self):
         config = load_config(ROOT / "experiments/research.deepseek.json")
         previous = dict(os.environ)
-        with patch("research.sys.stdin.isatty", return_value=True), patch("research.getpass.getpass", return_value="test-only-not-a-key") as prompt:
-            keys = prompt_api_keys(config)
+        with patch("research.sys.stdin.isatty", return_value=True), \
+             patch("research.getpass.getpass", return_value="test-only-not-a-key") as prompt, \
+             patch("builtins.print") as shown:
+            keys = prompt_api_keys(config, show_confirmation=True)
         self.assertEqual(prompt.call_count, 1)
         self.assertEqual(len(keys), 1)
         self.assertEqual(dict(os.environ), previous)
+        rendered = " ".join(str(call) for call in shown.call_args_list)
+        self.assertIn("长度=19", rendered)
+        self.assertIn("末四位=-key", rendered)
+        self.assertNotIn("test-only-not-a-key", rendered)
 
     def test_secret_prompt_refuses_non_interactive_fallback(self):
         config = load_config(ROOT / "experiments/research.deepseek.json")

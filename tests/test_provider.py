@@ -113,6 +113,17 @@ class ProviderTest(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "invalid model"):
                 provider.generate("demo prompt")
 
+    def test_chat_metadata_does_not_claim_an_unsent_storage_field(self):
+        provider = OpenAICompatibleProvider(
+            "https://api.deepseek.com/chat/completions", "secret", "deepseek-v4-pro", 0.0, 12000,
+            wire_api="chat_completions", thinking="enabled", reasoning_effort="high",
+        )
+        payload = provider._payload("demo prompt")
+        self.assertNotIn("store", payload)
+        self.assertIs(payload["stream"], False)
+        self.assertIsNone(provider.metadata()["store"])
+        self.assertIsNone(provider.metadata()["disable_response_storage"])
+
     def test_cross_origin_redirect_is_rejected(self):
         handler = SameOriginRedirectHandler()
         request = urllib.request.Request("https://provider.example/v1/chat/completions")

@@ -1,0 +1,34 @@
+{
+  "version": "tracer-feedback-study-v1",
+  "status": "frozen-runner-no-results",
+  "benchmark": "repair24-v1",
+  "condition": "compiler-feedback-without-retrieval",
+  "representations": [
+    "raw",
+    "normalized",
+    "structured"
+  ],
+  "controlled_variables": [
+    "problem",
+    "model",
+    "temperature",
+    "maximum output tokens",
+    "maximum repair rounds",
+    "compiler timeout",
+    "randomized task order"
+  ],
+  "primary_metrics": [
+    "pass_at_1",
+    "success_within_three_rounds",
+    "feedback_relevant_change_rate",
+    "repeated_error_category_rate"
+  ],
+  "secondary_metrics": [
+    "rounds",
+    "wall_time",
+    "tokens",
+    "known estimated cost",
+    "infrastructure errors"
+  ],
+  "evidence_policy": "运行器与计划不是模型实验结果；只有完整轨迹、成功证明、独立复编译和显式标注的 AI 辅助复核通过后才能发布。AI 辅助复核不得表述为纯人工复核。"
+}

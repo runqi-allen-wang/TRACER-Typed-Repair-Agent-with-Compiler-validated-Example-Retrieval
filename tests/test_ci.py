@@ -42,6 +42,24 @@ class ContinuousIntegrationTest(unittest.TestCase):
         self.assertLess(workflow.index("- name: Build Lean project"), workflow.index(gate))
         self.assertLess(workflow.index(gate), workflow.index("- name: Run tests"))
 
+    def test_feedback_plan_and_sp_metrics_are_ci_gates(self):
+        workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+        self.assertIn("run: python src/feedback_study.py plan", workflow)
+        self.assertIn("run: python src/security_study.py", workflow)
+        self.assertLess(
+            workflow.index("run: python src/feedback_study.py plan"),
+            workflow.index("- name: Run tests"),
+        )
+
+    def test_published_feedback_study_is_audited_before_tests(self):
+        workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+        command = (
+            "run: python scripts/audit_feedback_study.py "
+            "published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248"
+        )
+        self.assertIn(command, workflow)
+        self.assertLess(workflow.index(command), workflow.index("- name: Run tests"))
+
     def test_lean_action_only_installs_toolchain(self):
         workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
         install_block = workflow.split("- name: Install Lean", 1)[1].split(

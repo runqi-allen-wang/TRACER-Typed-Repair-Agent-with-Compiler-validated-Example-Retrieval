@@ -1,0 +1,14 @@
+{
+  "planned": 216,
+  "completed": 216,
+  "complete": true,
+  "infrastructure_errors": 0,
+  "archived_retry_attempts": 2,
+  "budget": {
+    "attempted_calls": 286,
+    "max_calls": 648,
+    "reserved_usd": null,
+    "max_reserved_usd": null,
+    "scope": "仅限制冻结实验的最大调用次数；未设置本地费用上限，不代表免费"
+  }
+}

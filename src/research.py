@@ -26,6 +26,7 @@ from provider import OpenAICompatibleProvider, redact_sensitive_text
 from proof_protocol import LEGACY_PROTOCOL_VERSION, PROOF_PROTOCOL
 from retriever import Example, find_retrieval_leaks, load_examples
 from leancapsule.privacy import redact_value
+from feedback_adoption import analyze_trace, summarize_analyses
 
 ARMS = {
     "A": ("A", "static"),
@@ -187,36 +188,69 @@ class PricedProvider:
 
 
 class CallBudget:
-    """单次 HTTP 尝试并按保守输入/输出额度预留；不是服务方账单硬上限。"""
+    """在 HTTP 请求前记账；可选按保守价格设置本地费用门禁。"""
 
-    def __init__(self, max_calls, max_reserved_usd):
-        if max_calls < 1 or not math.isfinite(max_reserved_usd) or max_reserved_usd <= 0:
-            raise ValueError("调用次数和预算必须为正数")
+    def __init__(self, max_calls, max_reserved_usd=None):
+        if type(max_calls) is not int or max_calls < 1:
+            raise ValueError("调用次数必须为正整数")
+        if max_reserved_usd is not None and (
+            not isinstance(max_reserved_usd, (int, float))
+            or not math.isfinite(max_reserved_usd)
+            or max_reserved_usd <= 0
+        ):
+            raise ValueError("本地预留费用上限必须为正数或 null")
         self.max_calls, self.max_reserved_usd = max_calls, max_reserved_usd
-        self.calls, self.reserved_usd = 0, 0.0
+        self.calls = 0
+        self.reserved_usd = 0.0 if max_reserved_usd is not None else None
         self.ledger_path = None
 
     def reserve(self, prompt, model):
-        prices = [model.get(k) for k in ("input_price_per_1k", "output_price_per_1k")]
-        if any(price is None for price in prices):
-            raise ValueError("预算模式要求明确的保守价格")
-        # 按 UTF-8 字节近似输入 token 上界，并给消息封装预留 1024；不依赖摘要。
-        reservation = ((len(prompt.encode("utf-8")) + 1024) * prices[0] + model["max_tokens"] * prices[1]) / 1000
-        if self.calls >= self.max_calls or self.reserved_usd + reservation > self.max_reserved_usd:
-            raise RuntimeError("已达到用户批准的调用次数或预留费用预算；停止，保留未完成批次")
+        if self.calls >= self.max_calls:
+            raise RuntimeError("已达到冻结实验的调用次数上限；停止，保留未完成批次")
+        reservation = None
+        if self.max_reserved_usd is not None:
+            prices = [model.get(k) for k in ("input_price_per_1k", "output_price_per_1k")]
+            if any(price is None for price in prices):
+                raise ValueError("费用门禁模式要求明确的保守价格")
+            # 按 UTF-8 字节近似输入 token 上界，并给消息封装预留 1024；不依赖摘要。
+            reservation = ((len(prompt.encode("utf-8")) + 1024) * prices[0] + model["max_tokens"] * prices[1]) / 1000
+            if self.reserved_usd + reservation > self.max_reserved_usd:
+                raise RuntimeError("已达到用户设置的本地预留费用上限；停止，保留未完成批次")
         # 请求结果不明也不退回预算，不自动重试可能已经计费的请求。
         self.calls += 1
-        self.reserved_usd += reservation
+        if reservation is not None:
+            self.reserved_usd += reservation
         if self.ledger_path is not None:
             write_json(self.ledger_path, self.snapshot())
 
     def snapshot(self):
+        scope = (
+            "保守预留，非实际账单；服务方额外费用或价格变化不受本地控制"
+            if self.max_reserved_usd is not None
+            else "仅限制冻结实验的最大调用次数；未设置本地费用上限，不代表免费"
+        )
         return {"attempted_calls": self.calls, "max_calls": self.max_calls,
-                "reserved_usd": self.reserved_usd, "max_reserved_usd": self.max_reserved_usd,
-                "scope": "保守预留，非实际账单；服务方额外费用或价格变化不受本地控制"}
+                  "reserved_usd": self.reserved_usd, "max_reserved_usd": self.max_reserved_usd,
+                  "scope": scope}
+
+    def restore(self, snapshot):
+        """从同一批次的可读账本恢复计数；不改变本次运行的上限。"""
+
+        if snapshot.get("max_calls") != self.max_calls or snapshot.get("max_reserved_usd") != self.max_reserved_usd:
+            raise ValueError("续跑的调用次数或费用上限与原批次不一致")
+        calls = snapshot.get("attempted_calls")
+        if type(calls) is not int or not 0 <= calls <= self.max_calls:
+            raise ValueError("原批次调用计数无效")
+        reserved = snapshot.get("reserved_usd")
+        if self.max_reserved_usd is None:
+            if reserved is not None:
+                raise ValueError("无费用上限批次不应包含预留金额")
+        elif not isinstance(reserved, (int, float)) or not 0 <= reserved <= self.max_reserved_usd:
+            raise ValueError("原批次预留金额无效")
+        self.calls, self.reserved_usd = calls, reserved
 
 
-def prompt_api_keys(config):
+def prompt_api_keys(config, show_confirmation=False):
     if not sys.stdin.isatty():
         raise ValueError("隐藏密钥输入需要本地交互终端；拒绝退回明文回显或从管道读入")
     keys = {}
@@ -227,7 +261,13 @@ def prompt_api_keys(config):
             if not key:
                 raise ValueError("API key 不能为空")
             keys[name] = key
-    print("已在进程内读取密钥；不显示长度、后缀或内容。", flush=True)
+            if show_confirmation:
+                suffix = key[-4:] if len(key) >= 4 else "不足四位"
+                print(f"已读取 {name}：长度={len(key)}，末四位={suffix}", flush=True)
+    if show_confirmation:
+        print("已在进程内读取密钥；仅显示上述确认信息，不显示或保存完整内容。", flush=True)
+    else:
+        print("已在进程内读取密钥；不显示长度、后缀或内容。", flush=True)
     return keys
 
 
@@ -454,6 +494,10 @@ def summarize(out, allow_partial=False):
                 generation_ms.append(row.get("generation_elapsed_ms", 0))
                 compile_ms.append(row.get("compile_elapsed_ms", 0))
         rates = [statistics.mean(v) for v in repeat_rates.values()]
+        adoption = summarize_analyses([
+            analyze_trace(rows, f"{model}/{arm}/{trial['problem_id']}")
+            for trial, rows in items if rows
+        ])
         summary.append({"model": model, "arm": arm, "tasks": len(items), **totals,
             "protocol_version": protocol_version,
             "generation_truncated_calls": truncated_calls, "empty_candidate_calls": empty_calls,
@@ -472,7 +516,14 @@ def summarize(out, allow_partial=False):
             "total_tokens": sum(token_totals) if token_totals and all(isinstance(t, int) for t in token_totals) else None,
             "known_estimated_cost_usd": sum(c for c in costs if c is not None),
             "missing_cost_records": sum(c is None for c in costs),
-            "total_estimated_cost_usd": sum(costs) if costs and all(c is not None for c in costs) else None})
+            "total_estimated_cost_usd": sum(costs) if costs and all(c is not None for c in costs) else None,
+            "feedback_relevant_change_rate": adoption["relevant_change_rate"],
+            "repeated_error_category_rate": adoption["repeated_error_category_rate"],
+            "retrieval_query_change_rate": adoption["dynamic_retrieval"]["query_change_rate"]
+                if ARMS[arm][1] == "diagnostic" else adoption["static_retrieval"]["query_change_rate"],
+            "retrieval_top_k_change_rate": adoption["dynamic_retrieval"]["top_k_change_rate"]
+                if ARMS[arm][1] == "diagnostic" else adoption["static_retrieval"]["top_k_change_rate"],
+        })
     review_path = out / "manual_review.csv"
     reviewed = set()
     if review_path.exists():
