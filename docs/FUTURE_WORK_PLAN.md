@@ -1,6 +1,6 @@
 # Lean 编译反馈与 SP-n 后续工作方案
 
-> **状态：DeepSeek Pro/Flash 模型族内复现与 SP v2 已脱敏发布，独立供应商复现及操作系统隔离仍待实施（2026-09-11）。** Compiler Feedback v1、Feedback Adoption v1、三表示对照 runner，以及 SP-1～SP-12/CTRL-1～CTRL-8 的冻结离线门禁已经实现。两个 216 任务模型批次、逐任务配对报告和 SP v2 确定性报告均已通过门禁；操作系统隔离、独立供应商模型与超出冻结案例的安全结论仍未完成。本状态不表示普适模型收益或完整沙箱已经成立。现有历史轨迹和已发布结果保持不变。
+> **状态：DeepSeek Pro/Flash 模型族内复现与 SP v2 已脱敏发布，SP 容器低权限原型已实现，独立供应商复现及真实双平台隔离结果仍待完成（2026-09-11）。** Compiler Feedback v1、Feedback Adoption v1、三表示对照 runner、SP-1～SP-12/CTRL-1～CTRL-8 离线门禁，以及 `tracer-sp-isolation-v1` 的冻结配置、探针和手动工作流已经实现。两个 216 任务模型批次、逐任务配对报告和 SP v2 确定性报告均已通过门禁；当前开发机没有 Docker，因此不能声称操作系统隔离已经运行通过。本状态不表示普适模型收益或完整沙箱已经成立。现有历史轨迹和已发布结果保持不变。
 
 Community feedback from [subfish-zhou](https://github.com/subfish-zhou) and [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) motivates two next-stage tracks: measuring how models use Lean diagnostics, and expanding SP-1 into a versioned SP-n security program. The plan below freezes evidence boundaries before implementation.
 
@@ -147,6 +147,8 @@ SP 是安全策略编号，不是 R-A～R-F 之外的新增实验臂。新增编
 
 文本规则和清理后的子进程环境都不是完整沙箱。应在独立分支验证容器或低权限账户方案，并明确：只读源码范围、可写临时目录、网络策略、进程与资源限制、超时后的清理方式。Windows 和 Linux 的实现与证据分别记录，不能用改环境标签代替真实运行。
 
+**当前进展：原型与离线门禁已完成，真实双平台结果未完成。** [SP 容器与低权限隔离协议 v1](SP_ISOLATION_V1.md)冻结 Linux Docker、非 root UID/GID、只读根文件系统与仓库、独立 noexec `/tmp`、禁网、清空 capabilities、`no-new-privileges`、seccomp 以及内存/CPU/PID/墙钟限制。探针会逐项读取容器内证据并 fail-closed；普通 CI 只验证计划，手动 workflow 才执行真实容器。当前机器没有 Docker，尚未生成 Windows Docker Desktop 与原生 Linux 报告，因此不能升级为已发布隔离证据。
+
 ## 4. 推荐执行顺序
 
 | 阶段 | 先决条件 | 主要产物 | 完成标准 |
@@ -167,6 +169,6 @@ SP 是安全策略编号，不是 R-A～R-F 之外的新增实验臂。新增编
 2. **已完成：** 定义原始、归一化、结构化三层反馈记录与 JSON Schema，并要求每个结构化字段保留原始诊断片段。
 3. **已完成模型族内复现：** 记录错误类别转移、候选相关修改、反馈缺失/转换状态、缓存复用和检索 query/Top-k 变化；Pro/Flash 脱敏发布与逐任务配对已完成，独立供应商仍待完成。
 4. **已完成第二版：** 冻结 SP 威胁模型、12 个危险案例和 8 个可真实编译的正常对照，并同时报告检测器一致性和带 Wilson 区间的双向错误率。
-5. **待完成：** 在 Windows 与 Linux 中增加低权限或容器隔离的可行性检查；在此之前不宣称完整沙箱。
+5. **原型已完成、运行待完成：** Windows 与 Linux 共用的 Docker 低权限探针、14 项冻结控制与手动工作流已实现；仍需两个平台的真实报告及脱敏审计，在此之前不宣称隔离通过或完整沙箱。
 
-下一项是在不改写当前批次的前提下进入操作系统级隔离原型；独立供应商模型复现可另行授权，但不再阻塞 SP 隔离研究。
+下一项是实际运行并审计 Windows Docker Desktop 与原生 Linux 两份隔离报告；独立供应商模型复现可另行授权，但不再阻塞 SP 隔离研究。

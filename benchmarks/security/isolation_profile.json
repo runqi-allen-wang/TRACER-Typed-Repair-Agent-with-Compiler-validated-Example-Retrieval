@@ -1,0 +1,32 @@
+{
+  "version": "tracer-sp-isolation-v1",
+  "status": "container-prototype",
+  "runtime": "docker",
+  "image": "python:3.11-slim-bookworm",
+  "container_user": "65532:65532",
+  "limits": {
+    "memory_bytes": 536870912,
+    "pids": 64,
+    "cpus": 1.0,
+    "tmpfs_bytes": 134217728,
+    "wall_timeout_seconds": 90
+  },
+  "required_controls": [
+    "non_root",
+    "read_only_rootfs",
+    "read_only_workspace",
+    "network_egress_denied",
+    "effective_capabilities_zero",
+    "no_new_privileges",
+    "seccomp_filter",
+    "memory_limit",
+    "pids_limit",
+    "cpu_limit",
+    "temporary_directory_writable",
+    "temporary_directory_noexec",
+    "host_secret_not_inherited",
+    "unmounted_host_sentinel_absent"
+  ],
+  "dangerous_lean_execution": "forbidden",
+  "claim_boundary": "该配置只验证冻结的容器边界探针，不证明未知容器逃逸、恶意依赖或任意 Lean 元程序安全。"
+}

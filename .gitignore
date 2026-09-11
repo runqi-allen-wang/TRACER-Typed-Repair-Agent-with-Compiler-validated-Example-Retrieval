@@ -13,6 +13,7 @@ results/solutions/
 /results/research*/
 /results/feedback-study-*/
 /results/human-*/
+/results/sp-isolation-*/
 /experiments/*.local.json
 results/handoff/
 results/work/

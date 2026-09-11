@@ -2,6 +2,14 @@
 
 本文件记录影响安全性、实验可复现性、Lean 编译边界和公开发布的补丁。它与 `PROGRESS.md` 的职责不同：`PROGRESS.md` 描述当前状态，本文按提交批次记录变更原因、影响范围和验证证据。
 
+## 2026-09-11 — 冻结 SP 容器与低权限隔离原型
+
+- 新增 `tracer-sp-isolation-v1` 机器可读配置、容器内受控探针和主机运行器；冻结非 root、只读根文件系统/仓库、noexec 临时目录、禁网、清空 capabilities、`no-new-privileges`、seccomp 与内存/CPU/PID/墙钟限制，共 14 项 fail-closed 控制。
+- Docker 客户端以最小环境启动，不向容器传递模型密钥、token 或代理凭据；容器命令不经过 shell，不挂载 Docker socket，不使用 privileged 模式，也不执行 12 个危险 Lean 夹具。
+- 新增仅手动触发的 GitHub Actions 工作流。普通 push/PR 只验证离线计划，不自动下载镜像或把静态配置伪装成真实运行结果。
+- 当前开发机没有 Docker，因此本批次只完成实现与离线门禁；Windows Docker Desktop 和原生 Linux 的真实报告、脱敏审计及跨平台差异仍待完成，不能声称完整沙箱。
+- 本地完整 Python 回归共发现 270 项测试，其中 268 项通过、2 项 Linux-only 符号链接测试按预期跳过；真实容器报告不计入该测试结果。
+
 ## 2026-09-11 — 扩充 SP v2 安全回归
 
 - 将冻结威胁模型从 SP-1～SP-6 扩充为 SP-1～SP-12，新增网络出口尝试、axiom/#eval 命令注入、`include_str` 文件嵌入、`native_decide` 原生执行边界和宏规则注入；危险候选只验证编译前拒绝，不在主机执行。
