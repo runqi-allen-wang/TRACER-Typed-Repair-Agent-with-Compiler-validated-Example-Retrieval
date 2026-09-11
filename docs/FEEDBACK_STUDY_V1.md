@@ -121,3 +121,5 @@ python scripts/audit_feedback_study.py published/feedback-study-001 --compile-so
 ## 结论边界
 
 runner、冻结计划和 mock 端到端测试属于可复验实现。只有完整真实轨迹、成功证明和明确复核模式都通过时，本地 `release_ready` 才能为 `true`；该字段不替代脱敏发布审计。README 必须区分本地结果与已发布证据，不得把当前描述性差异写成性能定论。
+
+第二模型不得直接复制本节命令后自行拼接结果。请使用[第二模型复现协议](SECOND_MODEL_REPLICATION.md)：`--reference-release` 会在付费请求前锁定与当前发布包相同的题库、顺序、协议、模板和公共预算；第二批发布后再由跨模型脚本执行逐任务配对。

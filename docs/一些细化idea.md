@@ -1,6 +1,6 @@
 # LeanCapsule 实施状态与后续研究
 
-- **安全对抗（已实现）**：独立安全策略案例 SP-1 覆盖 `unsafe inductive` 绕过 positivity 检查并构造 `False`。SP 不是实验组；它要求 Agent、AxProverBase 与 Capsule 在编译前拒绝恶意候选，详见 [`security_policy.md`](security_policy.md)。
+- **安全对抗（已实现至 SP v2）**：SP-1 保留 `unsafe inductive` 的 Agent、AxProverBase 与 Capsule 跨入口回归；SP-1～SP-12/CTRL-1～CTRL-8 进一步覆盖编译前策略、正常对照真编译和双向错误区间。SP 不是实验组，也不是完整沙箱，详见 [`security_policy.md`](security_policy.md)。
 
 ## 1. 提高错误保真度，同时控制验证成本
 

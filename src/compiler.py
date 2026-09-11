@@ -48,6 +48,12 @@ INJECTED_COMMAND_RE = re.compile(
     r"(?m)^[ \t]*(?:import|namespace|section|end|open|attribute|set_option|theorem|lemma|def|abbrev|"
     r"instance|structure|class|inductive|coinductive|axiom|opaque|example|elab|macro|syntax|unsafe)\b"
 )
+RESOURCE_OPTION_RE = re.compile(
+    r"(?im)^[ \t]*set_option[ \t]+(?:maxHeartbeats|maxRecDepth|"
+    r"trace\.|profiler\.|compiler\.)"
+)
+SET_OPTION_NAME_RE = re.compile(r"(?i)^[ \t]*set_option[ \t]+([A-Za-z_][A-Za-z0-9_.]*)\b")
+SAFE_SCOPED_OPTIONS = frozenset({"pp.universes", "pp.explicit", "pp.fullnames"})
 FULL_DECLARATION_RE = re.compile(
     r"(?m)^(?P<indent>[ \t]*)(?:(?:private|protected|noncomputable|local|scoped)[ \t]+)*"
     r"(?P<kind>theorem|lemma|def|abbrev|instance|structure|class|inductive|coinductive|"
@@ -166,14 +172,50 @@ def source_meta_execution_violation(source: str) -> bool:
     return bool(_UNSAFE_ELABORATION.search(cleaned) or UNSAFE_DECLARATION_RE.search(cleaned))
 
 
+def candidate_safety_finding(candidate: str) -> dict[str, str] | None:
+    """返回可审计的候选安全命中；注释与字符串不会触发规则。"""
+
+    cleaned = _strip_lean_strings(_strip_lean_comments(candidate))
+    if _UNSAFE_ELABORATION.search(cleaned) or UNSAFE_DECLARATION_RE.search(cleaned):
+        return {
+            "detector": "meta_execution",
+            "message": "禁止的本机执行构造：候选包含不允许的 Lean 元编程、本机执行入口或 unsafe 声明",
+        }
+    if RESOURCE_OPTION_RE.search(cleaned):
+        return {
+            "detector": "command_injection",
+            "message": "候选试图修改资源、跟踪或编译器选项",
+        }
+
+    code_lines = [line for line in cleaned.splitlines() if line.strip()]
+    base_indent = min(
+        (len(line) - len(line.lstrip(" \t")) for line in code_lines),
+        default=0,
+    )
+    for line in code_lines:
+        match = INJECTED_COMMAND_RE.match(line)
+        if not match:
+            continue
+        command = line.lstrip(" \t").split(None, 1)[0].lower()
+        indent = len(line) - len(line.lstrip(" \t"))
+        # 只有明确列入允许列表的显示选项可以作为 ``by`` 块中的局部 tactic；
+        # 未知选项按 fail-closed 处理，与候选首层同缩进时仍视为命令注入。
+        if command == "set_option" and indent > base_indent:
+            option = SET_OPTION_NAME_RE.match(line)
+            if option and option.group(1).lower() in SAFE_SCOPED_OPTIONS:
+                continue
+        return {
+            "detector": "command_injection",
+            "message": "候选试图注入额外 Lean 命令",
+        }
+    return None
+
+
 def candidate_safety_violation(candidate: str) -> str | None:
     """拒绝局部证明中的元编程入口、unsafe 声明或额外顶层命令。"""
 
-    if source_meta_execution_violation(candidate):
-        return "禁止的本机执行构造：候选包含不允许的 Lean 元编程、本机执行入口或 unsafe 声明"
-    if any(INJECTED_COMMAND_RE.match(line) for line in candidate.splitlines()):
-        return "候选试图注入额外 Lean 命令"
-    return None
+    finding = candidate_safety_finding(candidate)
+    return finding["message"] if finding else None
 
 
 def _strip_lean_comments(source: str) -> str:

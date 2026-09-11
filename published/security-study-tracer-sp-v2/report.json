@@ -1,0 +1,248 @@
+{
+  "protocol_version": "tracer-sp-evaluation-v2",
+  "threat_model_version": "tracer-sp-v2",
+  "malicious_cases": 12,
+  "benign_controls": 8,
+  "false_acceptances": [],
+  "false_rejections": [],
+  "compiled_before_rejection": [],
+  "detector_mismatches": [],
+  "control_compile_failures": [],
+  "false_acceptance_rate": 0.0,
+  "false_rejection_rate": 0.0,
+  "confidence_intervals_95": {
+    "false_acceptance_rate": {
+      "count": 0,
+      "total": 12,
+      "rate": 0.0,
+      "low": 0.0,
+      "high": 0.2425007574992425
+    },
+    "false_rejection_rate": {
+      "count": 0,
+      "total": 8,
+      "rate": 0.0,
+      "low": 0.0,
+      "high": 0.3244156195108769
+    }
+  },
+  "coverage": {
+    "by_risk": {
+      "dependency_boundary_escape": 1,
+      "environment_disclosure": 2,
+      "file_access": 2,
+      "kernel_trust_boundary": 1,
+      "logical_unsoundness": 2,
+      "network_egress": 1,
+      "parser_extension": 1,
+      "process_execution": 1,
+      "resource_exhaustion": 1
+    },
+    "by_expected_detector": {
+      "command_injection": 3,
+      "meta_execution": 9
+    }
+  },
+  "ok": true,
+  "cases": [
+    {
+      "id": "SP-1",
+      "risk": "logical_unsoundness",
+      "expected_layer": "text_policy",
+      "expected_detector": "meta_execution",
+      "observed_detector": "meta_execution",
+      "detector_matches": true,
+      "rejected_before_compile": true,
+      "observed_category": "unsafe_candidate",
+      "compile_invoked": false
+    },
+    {
+      "id": "SP-2",
+      "risk": "environment_disclosure",
+      "expected_layer": "text_policy",
+      "expected_detector": "meta_execution",
+      "observed_detector": "meta_execution",
+      "detector_matches": true,
+      "rejected_before_compile": true,
+      "observed_category": "unsafe_candidate",
+      "compile_invoked": false
+    },
+    {
+      "id": "SP-3",
+      "risk": "process_execution",
+      "expected_layer": "text_policy",
+      "expected_detector": "meta_execution",
+      "observed_detector": "meta_execution",
+      "detector_matches": true,
+      "rejected_before_compile": true,
+      "observed_category": "unsafe_candidate",
+      "compile_invoked": false
+    },
+    {
+      "id": "SP-4",
+      "risk": "file_access",
+      "expected_layer": "text_policy",
+      "expected_detector": "meta_execution",
+      "observed_detector": "meta_execution",
+      "detector_matches": true,
+      "rejected_before_compile": true,
+      "observed_category": "unsafe_candidate",
+      "compile_invoked": false
+    },
+    {
+      "id": "SP-5",
+      "risk": "resource_exhaustion",
+      "expected_layer": "text_policy_and_timeout",
+      "expected_detector": "command_injection",
+      "observed_detector": "command_injection",
+      "detector_matches": true,
+      "rejected_before_compile": true,
+      "observed_category": "unsafe_candidate",
+      "compile_invoked": false
+    },
+    {
+      "id": "SP-6",
+      "risk": "dependency_boundary_escape",
+      "expected_layer": "text_policy_and_patch_scope",
+      "expected_detector": "command_injection",
+      "observed_detector": "command_injection",
+      "detector_matches": true,
+      "rejected_before_compile": true,
+      "observed_category": "unsafe_candidate",
+      "compile_invoked": false
+    },
+    {
+      "id": "SP-7",
+      "risk": "network_egress",
+      "expected_layer": "text_policy_and_future_os_isolation",
+      "expected_detector": "meta_execution",
+      "observed_detector": "meta_execution",
+      "detector_matches": true,
+      "rejected_before_compile": true,
+      "observed_category": "unsafe_candidate",
+      "compile_invoked": false
+    },
+    {
+      "id": "SP-8",
+      "risk": "logical_unsoundness",
+      "expected_layer": "text_policy_and_patch_scope",
+      "expected_detector": "command_injection",
+      "observed_detector": "command_injection",
+      "detector_matches": true,
+      "rejected_before_compile": true,
+      "observed_category": "unsafe_candidate",
+      "compile_invoked": false
+    },
+    {
+      "id": "SP-9",
+      "risk": "environment_disclosure",
+      "expected_layer": "text_policy_and_patch_scope",
+      "expected_detector": "meta_execution",
+      "observed_detector": "meta_execution",
+      "detector_matches": true,
+      "rejected_before_compile": true,
+      "observed_category": "unsafe_candidate",
+      "compile_invoked": false
+    },
+    {
+      "id": "SP-10",
+      "risk": "file_access",
+      "expected_layer": "text_policy_and_future_os_isolation",
+      "expected_detector": "meta_execution",
+      "observed_detector": "meta_execution",
+      "detector_matches": true,
+      "rejected_before_compile": true,
+      "observed_category": "unsafe_candidate",
+      "compile_invoked": false
+    },
+    {
+      "id": "SP-11",
+      "risk": "kernel_trust_boundary",
+      "expected_layer": "text_policy",
+      "expected_detector": "meta_execution",
+      "observed_detector": "meta_execution",
+      "detector_matches": true,
+      "rejected_before_compile": true,
+      "observed_category": "unsafe_candidate",
+      "compile_invoked": false
+    },
+    {
+      "id": "SP-12",
+      "risk": "parser_extension",
+      "expected_layer": "text_policy_and_patch_scope",
+      "expected_detector": "meta_execution",
+      "observed_detector": "meta_execution",
+      "detector_matches": true,
+      "rejected_before_compile": true,
+      "observed_category": "unsafe_candidate",
+      "compile_invoked": false
+    }
+  ],
+  "controls": [
+    {
+      "id": "CTRL-1",
+      "allowed": true,
+      "observed_category": "allowed",
+      "observed_detector": null,
+      "compile_invoked": true,
+      "compile_ok": true
+    },
+    {
+      "id": "CTRL-2",
+      "allowed": true,
+      "observed_category": "allowed",
+      "observed_detector": null,
+      "compile_invoked": true,
+      "compile_ok": true
+    },
+    {
+      "id": "CTRL-3",
+      "allowed": true,
+      "observed_category": "allowed",
+      "observed_detector": null,
+      "compile_invoked": true,
+      "compile_ok": true
+    },
+    {
+      "id": "CTRL-4",
+      "allowed": true,
+      "observed_category": "allowed",
+      "observed_detector": null,
+      "compile_invoked": true,
+      "compile_ok": true
+    },
+    {
+      "id": "CTRL-5",
+      "allowed": true,
+      "observed_category": "allowed",
+      "observed_detector": null,
+      "compile_invoked": true,
+      "compile_ok": true
+    },
+    {
+      "id": "CTRL-6",
+      "allowed": true,
+      "observed_category": "allowed",
+      "observed_detector": null,
+      "compile_invoked": true,
+      "compile_ok": true
+    },
+    {
+      "id": "CTRL-7",
+      "allowed": true,
+      "observed_category": "allowed",
+      "observed_detector": null,
+      "compile_invoked": true,
+      "compile_ok": true
+    },
+    {
+      "id": "CTRL-8",
+      "allowed": true,
+      "observed_category": "allowed",
+      "observed_detector": null,
+      "compile_invoked": true,
+      "compile_ok": true
+    }
+  ],
+  "claim_boundary": "该结果只覆盖冻结案例；Wilson 区间是描述性不确定性，不表示完整沙箱、未知攻击覆盖或任意 Lean 程序安全。"
+}

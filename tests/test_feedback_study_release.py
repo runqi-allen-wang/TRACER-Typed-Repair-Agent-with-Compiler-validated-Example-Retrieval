@@ -9,9 +9,12 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from audit_feedback_study import audit_release  # noqa: E402
+from audit_feedback_comparison import audit_comparison  # noqa: E402
 
 
 RELEASE = ROOT / "published" / "feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248"
+SECOND_RELEASE = ROOT / "published" / "feedback-study-562ad440-3446-4138-801e-59726ed0e108"
+COMPARISON = ROOT / "published" / "feedback-cross-model-8ccb89dd-562ad440"
 
 
 class FeedbackStudyReleaseTest(unittest.TestCase):
@@ -43,6 +46,19 @@ class FeedbackStudyReleaseTest(unittest.TestCase):
         self.assertEqual(manifest["counts"]["attempted_call_reservations"], 286)
         self.assertEqual(manifest["counts"]["archived_retry_round_records"], 2)
         self.assertEqual(manifest["counts"]["unmatched_call_reservations"], 1)
+
+    def test_second_model_release_passes_static_audit(self):
+        result = audit_release(SECOND_RELEASE)
+        self.assertTrue(result["ok"], result["errors"])
+        self.assertEqual(
+            (result["tasks"], result["attempts"], result["successes"], result["failed_tasks"], result["proof_files"]),
+            (216, 245, 209, 7, 209),
+        )
+
+    def test_cross_model_comparison_passes_static_audit(self):
+        result = audit_comparison(COMPARISON)
+        self.assertTrue(result["ok"], result["errors"])
+        self.assertEqual(result["matched_tasks"], 216)
 
 
 if __name__ == "__main__":

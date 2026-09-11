@@ -1,0 +1,39 @@
+{
+  "version": "tracer-feedback-cross-model-v1",
+  "status": "completed-deepseek-flash-release",
+  "reference_release": "feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248",
+  "reference_experiment_id": "feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248",
+  "replication_release": "feedback-study-562ad440-3446-4138-801e-59726ed0e108",
+  "comparison_release": "feedback-cross-model-8ccb89dd-562ad440",
+  "benchmark": "repair24-v1",
+  "required_equal_controls": [
+    "benchmark content",
+    "task order",
+    "feedback study protocol",
+    "feedback and proof-contract templates",
+    "three feedback representations",
+    "three repeats",
+    "three repair rounds",
+    "compiler timeout",
+    "temperature",
+    "maximum output tokens"
+  ],
+  "required_differences": [
+    "model id",
+    "provider model identity"
+  ],
+  "model_specific_disclosures": [
+    "API endpoint",
+    "thinking mode",
+    "reasoning effort",
+    "provider-side defaults and alias versioning"
+  ],
+  "primary_consistency_metrics": [
+    "pass at one by representation",
+    "success within three rounds by representation",
+    "paired final-outcome agreement",
+    "paired first-round agreement",
+    "direction consistency of representation contrasts"
+  ],
+  "evidence_policy": "第二模型必须形成独立的 216 任务批次、成功证明、AI 辅助复核和脱敏发布包。跨模型报告只比较两个已通过发布审计的包；一致率是描述性结果，不是模型等价性、统计显著性或因果增益证明。"
+}

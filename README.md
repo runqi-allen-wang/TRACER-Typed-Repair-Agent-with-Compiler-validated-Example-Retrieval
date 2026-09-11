@@ -28,7 +28,7 @@ TRACER uses three deliberately separate namespaces. They describe different evid
 | --- | --- | --- | --- |
 | **Published pilot conditions** | P-A / P-B / P-C | Historical 18-problem smoke test: theorem only; compiler feedback; feedback plus static retrieval. Stored as A/B/C | Published 18 × 3 real-provider batch with traces, proofs, and manual review |
 | **Research arms** | R-A / R-B / R-C / R-D / R-E / R-F | repair24 protocol for separating feedback, retrieval, error-adaptive queries, and failure-context reuse | Runner, budgets, frozen tasks, and offline gates exist; the full multi-model repeated matrix is pending |
-| **Security policies** | SP-1 through SP-6 | Versioned pre-compilation policies plus benign controls for candidates that may violate the trust boundary | Six malicious fixtures and three benign controls form an offline gate; this is not a complete sandbox or a seventh research arm |
+| **Security policies** | SP-1 through SP-12 | Versioned pre-compilation policies plus benign controls for candidates that may violate the trust boundary | Twelve dangerous fixtures and eight benign controls form an offline gate; this is not a complete sandbox or a seventh research arm |
 
 The current research-arm map is:
 
@@ -36,7 +36,7 @@ The current research-arm map is:
 - **R-C:** static retrieval plus feedback; **R-D:** retrieval only, with no diagnostic feedback returned to generation.
 - **R-E:** feedback plus error-adaptive retrieval queries; **R-F:** R-E plus reusable public failure-capsule context.
 
-Machine-facing values remain `A/B/C/D/C_dynamic/C_failure` for compatibility with existing scripts and records. Public research discussion should use R-A through R-F. Security cases use SP identifiers exclusively; the current [SP-1–SP-6 suite](docs/security_policy.md) measures six frozen malicious cases against three benign controls before Lean compilation.
+Machine-facing values remain `A/B/C/D/C_dynamic/C_failure` for compatibility with existing scripts and records. Public research discussion should use R-A through R-F. Security cases use SP identifiers exclusively; the current [SP-1–SP-12 suite](docs/security_policy.md) measures twelve frozen dangerous cases against eight benign controls before Lean compilation.
 
 Available artifacts:
 
@@ -219,10 +219,10 @@ The canonical, dated evidence register is [PROGRESS.md](PROGRESS.md). It separat
 | --- | --- |
 | Evaluation18 P-A/P-B/P-C | Published provider traces, 54 proofs and complete 54-pair manual review; engineering smoke test only |
 | LeanCapsule | 24-case reviewed gallery plus 12-core / 4-challenge feasibility artifacts |
-| Compiler feedback | Compiler Feedback v1 plus offline adoption/query-change analysis and a frozen three-representation runner; the [216-task DeepSeek release](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248) includes sanitized traces, 199 proofs and AI-assisted review, but does not establish cross-model effects |
+| Compiler feedback | Compiler Feedback v1 plus offline adoption/query-change analysis and a frozen three-representation runner; the audited [DeepSeek Pro release](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248) contains 199 proofs, while the audited [DeepSeek Flash replication](published/feedback-study-562ad440-3446-4138-801e-59726ed0e108) contains 209. The [paired comparison](published/feedback-cross-model-8ccb89dd-562ad440) covers all 216 tasks; this is within-family descriptive evidence, not a cross-provider effect claim |
 | FATE-M | Part 1/2 corrected handoff, Experience + CapsuleFeedback arm, and Part 3 Raw/Capsule handoff are included as single-batch descriptive evidence |
 | repair24 R-A–R-F | Benchmark, runner and offline gates are implemented; the formal multi-model repeated matrix has not been run |
-| Security | SP-1–SP-6 and three benign controls form a versioned offline regression with two-direction error metrics; operating-system isolation remains future work |
+| Security | [SP-1–SP-12 and eight benign controls](published/security-study-tracer-sp-v2) form a versioned offline regression with two-direction error metrics and Wilson intervals; operating-system isolation remains future work |
 | Historical local studies | DeepSeek R-B preflight, Windows/WSL comparison and human timing are not published evidence because their required raw artifacts are absent |
 
 Passing a software gate, compiling a proof, completing a declared review mode and establishing a research effect are different claims. The repository does not promote one into another. The new feedback-representation study labels its review as AI-assisted; it is not presented as human review.
@@ -366,7 +366,7 @@ Keep these checks distinct:
 ## Safety and scope
 
 - **Not an operating-system sandbox.** Temporary HOME/TMP/APPDATA directories, minimal environment variables, and candidate policies are defense layers. Run untrusted projects or Lean code in a container, VM, or isolated low-privilege environment.
-- **Local repair only.** The Agent must not rewrite imports or theorem headers. Candidates containing `sorry`, `admit`, `sorryAx`, unfinished-proof warnings, unsafe declarations, explicit metaprogramming entry points, or injected commands are rejected. SP-1–SP-6 cover six frozen risk examples, while three benign controls check false rejection. SP identifies a non-experimental security policy, so it cannot be confused with research arm R-D. Text rules cannot be assumed to detect every Lean metaprogramming construct.
+- **Local repair only.** The Agent must not rewrite imports or theorem headers. Candidates containing `sorry`, `admit`, `sorryAx`, unfinished-proof warnings, unsafe declarations, explicit metaprogramming entry points, or injected commands are rejected. SP-1–SP-12 cover twelve frozen risk examples, while eight benign controls are policy-checked and independently compiled to measure false rejection. Observed false acceptance and false rejection are both zero in this frozen suite, but their Wilson 95% upper bounds are about 24.3% and 32.4%; zero observations are not zero risk. SP identifies a non-experimental security policy, so it cannot be confused with research arm R-D. Text rules cannot be assumed to detect every Lean metaprogramming construct.
 - **Separate credentials from releases.** The provider restricts cross-origin redirects and sanitizes errors; keys are not experiment-record fields. Still inspect exports and send keys only to trusted providers.
 - **Readable comparisons and caching.** Diagnostic comparisons and request caching use normalized readable text and do not create opaque derived identifiers. Cache reuse is for local debugging, not independent real sampling.
 - **Extraction is not global minimization.** Full-file fallback and explicit local-file manifests are not arbitrary multi-file program slicing. Diagnostic consistency does not guarantee preservation of every contextual meaning.
@@ -379,13 +379,14 @@ Keep these checks distinct:
 | Configure DeepSeek, GPT, or a custom provider | [API guide](docs/API_GUIDE.md) |
 | Run, review, and export real experiments | [Pilot guide](docs/REAL_PILOT_GUIDE.md) |
 | Compare raw/normalized/structured compiler feedback with DeepSeek | [Feedback Study v1 live CLI](docs/FEEDBACK_STUDY_V1.md) |
+| Reproduce Feedback Study v1 with a second model | [Second-model replication protocol](docs/SECOND_MODEL_REPLICATION.md) |
 | Understand condition controls and validity constraints | [Methodology](docs/methodology.md) |
 | Look up per-round record fields | [JSONL format](docs/jsonl_schema.md) |
 | Inspect or verify the three-layer compiler-diagnostic protocol | [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) |
 | Create publicly shareable failure artifacts | [Artifact format](docs/CAPSULE_FORMAT.md) and [case contribution guide](docs/CONTRIBUTING_CAPSULES.md) |
 | Run or inspect the AxProverBase Part 1 + Part 2 experiment | [Part 1 guide](baseline/README.md), [Part 2 design](docs/part2_capsule_feedback.md), [Part 3 handoff checklist](docs/part3_experiment_handoff.md), and [result handoff](results/handoff/part12-live-20260828-corrected/README.md) |
 | Inspect the Experience + CapsuleFeedback confound arm | [B arm design and result](docs/part2_capsule_feedback_confound_arm.md) and [B arm handoff](results/handoff/part2-experience-capsule-20260829/REPORT.md) |
-| Inspect the SP-1–SP-6 pre-compilation suite | [Security-policy regression and threat model](docs/security_policy.md) |
+| Inspect the SP-1–SP-12 pre-compilation suite | [Security-policy regression and threat model](docs/security_policy.md) and [frozen SP v2 report](published/security-study-tracer-sp-v2) |
 | Inspect the 12-core / 4-challenge clean-replay experiment | [Capsule feasibility report](docs/CAPSULE_FEASIBILITY.md) |
 | Inspect published experiments and proofs | [Pilot release](published/pilot-20260826T122354Z-d628742d) |
 | Check current status and past changes | [PROGRESS](PROGRESS.md) and [CHANGELOG](CHANGELOG.md) |
@@ -431,9 +432,11 @@ To prevent labels from different levels being conflated, public documentation us
 | R-E | `C_dynamic` | C | Yes | Yes | Updated from errors, types and goals |
 | R-F | `C_failure` | C | Yes | Yes, plus failure-capsule context | Same strategy as R-E |
 
-R-A/R-D still compile to decide whether to stop; diagnostics are not sent back to the generator. R-E/R-F separate query adaptation from failure reuse rather than silently changing R-C. SP-1–SP-6 are security-policy regressions, not additional research arms. Model weights are never updated.
+R-A/R-D still compile to decide whether to stop; diagnostics are not sent back to the generator. R-E/R-F separate query adaptation from failure reuse rather than silently changing R-C. SP-1–SP-12 are security-policy regressions, not additional research arms. Model weights are never updated.
 
 The [research runner](src/research.py) freezes readable input snapshots, randomizes task order, disables request-cache reuse, records full prompts and usage, and independently recompiles saved proofs. It supports multiple models and repeats; incomplete or mixed traces are rejected by report validation. Unknown costs remain unknown, and manual review is separate from automatic checks.
+
+For the narrower compiler-feedback study, the [second-model replication protocol](docs/SECOND_MODEL_REPLICATION.md) validated the published Pro baseline before the Flash run and kept the repair24 contents, task order, feedback/proof templates, three representations, three repeats, three rounds, compiler timeout, temperature and output ceiling fixed. Flash completed 209/216 tasks within three rounds versus 199/216 for Pro; per-representation final-outcome agreement was 94.4% for raw, 88.9% for normalized and 91.7% for structured. The [paired report](published/feedback-cross-model-8ccb89dd-562ad440) also shows that most apparent contrast-direction agreement comes from both models having zero task-level treatment difference. Pro used its explicit thinking/reasoning controls while Flash did not, and both models are from the same provider family, so the result is descriptive within-family replication—not statistical significance, causal feedback gain or cross-provider generalization.
 
 ~~~powershell
 python src/research.py check-benchmark
@@ -468,10 +471,10 @@ See the [related-work comparison](docs/RELATED_WORK.md) for boundaries and testa
 
 Contributions of reproducible failures, tests, diagnostic improvements, and model integrations are welcome. Read [CONTRIBUTING](CONTRIBUTING.md) first, and include provenance, licensing, toolchain information, expected results, and reproduction steps for new cases.
 
-Community feedback received on 30 August 2026 from [subfish-zhou](https://github.com/subfish-zhou) and [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) highlighted two priorities. Their first offline implementations now include [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md), [Feedback Adoption v1](docs/FEEDBACK_ADOPTION_V1.md), a [three-representation runner](docs/FEEDBACK_STUDY_V1.md), and the SP-1–SP-6 suite. Real-provider effects and operating-system isolation remain future work:
+Community feedback received on 30 August 2026 from [subfish-zhou](https://github.com/subfish-zhou) and [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) highlighted two priorities. Their offline implementations now include [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md), [Feedback Adoption v1](docs/FEEDBACK_ADOPTION_V1.md), two published model-family runs, and the SP-1–SP-12 suite. Independent-provider replication and operating-system isolation remain future work:
 
 - **Compiler-diagnostic feedback as a research object.** Raw/normalized/structured representations, source-linked fixtures, candidate-change observations and query/Top-k metrics are now implemented offline. The next evidence step is a separately authorized real-provider comparison with complete traces and review; it must not silently change R-B, R-E, or R-F.
-- **SP-n as a systematic security program.** The first versioned threat model now separates six malicious fixtures from three benign controls and reports false acceptance and false rejection. The next step is container or low-privilege execution for boundaries that textual gates cannot safely characterize. SP-n remains a security-policy namespace, not an additional research arm.
+- **SP-n as a systematic security program.** SP v2 separates twelve dangerous fixtures from eight benign controls, checks the expected detector, compiles every allowed control, and reports both error directions with Wilson intervals. The next step is container or low-privilege execution for boundaries that textual gates cannot safely characterize. SP-n remains a security-policy namespace, not an additional research arm.
 
 Broader directions still include harder benchmarks, cross-model repeated runs, retrieval cost–benefit analysis, and cross-environment Capsule studies. These are directions to investigate, not completed capabilities or performance promises. The concrete protocol implications are recorded in [RESEARCH_PROTOCOL.md](docs/RESEARCH_PROTOCOL.md), with staged deliverables and acceptance gates in the [compiler-feedback and SP-n roadmap](docs/FUTURE_WORK_PLAN.md).
 

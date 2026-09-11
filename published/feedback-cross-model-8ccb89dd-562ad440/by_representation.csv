@@ -1,0 +1,4 @@
+representation,matched_tasks,baseline_pass_at_1,replication_pass_at_1,pass_at_1_agreement_rate,baseline_pass_within_budget,replication_pass_within_budget,success_delta,final_outcome_agreement_rate,both_success,baseline_only_success,replication_only_success,both_failed,baseline_avg_rounds,replication_avg_rounds
+raw,72,56,67,0.8194444444444444,67,69,2,0.9444444444444444,66,1,3,2,1.3472222222222223,1.1111111111111112
+normalized,72,56,63,0.9027777777777778,65,69,4,0.8888888888888888,63,2,6,1,1.3333333333333333,1.1805555555555556
+structured,72,60,66,0.8611111111111112,67,71,4,0.9166666666666666,66,1,5,0,1.25,1.1111111111111112
