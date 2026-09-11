@@ -10,7 +10,7 @@
 [![Lean toolchain](https://img.shields.io/badge/Lean-4.32.0-blue)](lean-toolchain)
 [![CI Python version](https://img.shields.io/badge/CI_Python-3.11-blue)](.github/workflows/ci.yml)
 
-[Quick start](#quick-start) · [Naming](#experiment-and-policy-namespaces) · [Design contributions](#design-contributions) · [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) · [Pilot results](#pilot-results) · [API guide](docs/API_GUIDE.md) · [Failure gallery](capsules/index.md) · [Contributing](CONTRIBUTING.md)
+[Latest results](#latest-published-results) · [Quick start](#quick-start) · [Naming](#experiment-and-policy-namespaces) · [Design contributions](#design-contributions) · [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) · [API guide](docs/API_GUIDE.md) · [Failure gallery](capsules/index.md) · [Contributing](CONTRIBUTING.md)
 
 ![TRACER overview](TRACER.png)
 
@@ -42,8 +42,8 @@ Available artifacts:
 
 - **24 public failure capsules**, spanning four error families and Std, Mathlib, and project-local dependencies.
 - **A 12-core / 4-challenge feasibility experiment** whose 16 cases preserve normalized diagnostics and replay in clean temporary directories, including project-local multi-file cases.
-- **Compiler Feedback v1 and Feedback Adoption v1**, covering the frozen three-layer diagnostic protocol, 15 failure/infrastructure fixtures, candidate-change observations, cache separation, and static-versus-dynamic query/Top-k change metrics. The [published raw/normalized/structured DeepSeek batch](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248) contains 216 task results, 283 sanitized round records, 199 proofs, and an explicitly AI-assisted review ledger.
-- **18 frozen problems × 3 published pilot conditions (P-A/P-B/P-C; stored as A/B/C)**, with a real-provider release containing 56 per-round records and 54 successful proof files.
+- **Compiler Feedback v1 and Feedback Adoption v1**, covering the frozen three-layer diagnostic protocol, 15 failure/infrastructure fixtures, candidate-change observations, cache separation, and static-versus-dynamic query/Top-k change metrics. The latest published evidence consists of two audited 216-task runs: [DeepSeek Pro](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248) with 199 successful proofs and [DeepSeek Flash](published/feedback-study-562ad440-3446-4138-801e-59726ed0e108) with 209, plus a complete [task-paired comparison](published/feedback-cross-model-8ccb89dd-562ad440). Both ledgers are explicitly AI-assisted.
+- **A historical 18-problem smoke pilot**, retained as engineering evidence for the provider-to-compiler pipeline but no longer treated as the headline experiment.
 - **An end-to-end workflow** covering a single-problem CLI, local HTTP API, batch evaluation, manual review, report validation, and sanitized export.
 - **A separate six-arm repair24 research suite (R-A through R-F)** with retrieval-only, diagnostic-query and failure-context controls. The runner and offline checks exist; the full multi-model repeated experiment is pending. Jump to [research evaluation](#research-evaluation-beyond-the-smoke-test) and [related work](#related-work).
 
@@ -197,101 +197,39 @@ Other interfaces:
 
 Single-problem candidates, model usage, cache hits, and compiler diagnostics are recorded in `results/agent_runs.jsonl`. Successful proofs go to `results/solutions/`; the last candidate after persistent failure goes to `results/solutions/failures/`.
 
-## Experimental design
+## Latest published results
 
-The frozen evaluation set is [Evaluation18.lean](lean_project/Benchmarks/Evaluation18.lean); problem IDs, tags, and difficulty are in the [benchmark manifest](benchmarks/manifest.json). **18 distinct problems × 3 conditions = 54 task–condition pairs**, not 54 independent problems.
+The current headline evidence is the frozen **Compiler Feedback Study v1** on [repair24-v1](benchmarks/repair24/manifest.json): 24 repair tasks × three feedback representations × three repeats = **216 task instances per model**. Both releases use a three-round budget, preserve per-round compiler evidence, save every successful proof, independently recompile the exported proofs, and label their review ledgers as AI-assisted.
 
-| Condition | Context visible to the model | Research question |
-| --- | --- | --- |
-| **A: Problem** | The theorem and target local code, without previous diagnostics or retrieved examples | What can baseline generation achieve with the same round budget? |
-| **B: Problem + feedback** | A, plus bounded compiler diagnostics from the previous round | Can feedback help repair the preceding candidate? |
-| **C: Problem + feedback + retrieval** | B, plus the text of the top three local examples | Are related examples worth their extra token cost beyond feedback alone? |
+| Model-family run | Feedback representation | Tasks | pass@1 | Success within three rounds |
+| --- | --- | ---: | ---: | ---: |
+| DeepSeek Pro | Raw | 72 | 56/72 (77.8%) | 67/72 (93.1%) |
+| DeepSeek Pro | Normalized | 72 | 56/72 (77.8%) | 65/72 (90.3%) |
+| DeepSeek Pro | Structured | 72 | 60/72 (83.3%) | 67/72 (93.1%) |
+| DeepSeek Flash | Raw | 72 | 67/72 (93.1%) | 69/72 (95.8%) |
+| DeepSeek Flash | Normalized | 72 | 63/72 (87.5%) | 69/72 (95.8%) |
+| DeepSeek Flash | Structured | 72 | 66/72 (91.7%) | **71/72 (98.6%)** |
 
-Model settings, output budget, compiler, timeout, problem order, and the three-round limit are held constant across conditions; only prompt context changes. A can generate multiple times but does not read previous diagnostics. B/C have no previous-round feedback on their first attempt.
+The Pro release contains **283 sanitized round records, 199 successful proofs, and 1,538,045 recorded tokens**. The Flash replication contains **245 round records, 209 successful proofs, and 948,466 recorded tokens**. All 408 exported proofs passed an additional independent compilation audit. Monetary cost remains unknown because a frozen price schedule was not part of either release.
 
-Evaluation does not use a runtime answer table. Retrieval checks for examples with declarations identical to evaluation problems; similar but non-identical propositions still require manual review. **Text deduplication does not eliminate every form of semantic leakage.** Here, `pass@3` means the proportion of tasks with at least one success within three rounds, not an unbiased pass@k estimate from independent samples. See the [experimental protocol](docs/methodology.md).
+The complete task-paired final-outcome agreement between Pro and Flash is 94.4% for raw, 88.9% for normalized, and 91.7% for structured feedback. Flash + structured feedback is the highest observed row in these releases, but this is **descriptive evidence within one provider family**. The two model configurations differ in explicit reasoning controls, and the study does not establish statistical significance, a causal advantage for structured feedback, cross-provider generalization, or state-of-the-art performance.
 
-### Current evidence status
+**Inspect the evidence:** [Pro release](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248) · [Flash release](published/feedback-study-562ad440-3446-4138-801e-59726ed0e108) · [paired comparison](published/feedback-cross-model-8ccb89dd-562ad440) · [protocol](docs/FEEDBACK_STUDY_V1.md) · [replication contract](docs/SECOND_MODEL_REPLICATION.md).
 
-The canonical, dated evidence register is [PROGRESS.md](PROGRESS.md). It separates artifacts that can be independently checked in this repository from implemented infrastructure, unverifiable historical notes, and future plans.
+### Current evidence at a glance
 
-| Scope | Status in this repository |
+| Scope | Current repository evidence |
 | --- | --- |
-| Evaluation18 P-A/P-B/P-C | Published provider traces, 54 proofs and complete 54-pair manual review; engineering smoke test only |
-| LeanCapsule | 24-case reviewed gallery plus 12-core / 4-challenge feasibility artifacts |
-| Compiler feedback | Compiler Feedback v1 plus offline adoption/query-change analysis and a frozen three-representation runner; the audited [DeepSeek Pro release](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248) contains 199 proofs, while the audited [DeepSeek Flash replication](published/feedback-study-562ad440-3446-4138-801e-59726ed0e108) contains 209. The [paired comparison](published/feedback-cross-model-8ccb89dd-562ad440) covers all 216 tasks; this is within-family descriptive evidence, not a cross-provider effect claim |
-| FATE-M | Part 1/2 corrected handoff, Experience + CapsuleFeedback arm, and Part 3 Raw/Capsule handoff are included as single-batch descriptive evidence |
-| repair24 R-A–R-F | Benchmark, runner and offline gates are implemented; the formal multi-model repeated matrix has not been run |
-| Security | [SP-1–SP-12 and eight benign controls](published/security-study-tracer-sp-v2) form a versioned offline regression. The [SP isolation v1 protocol](docs/SP_ISOLATION_V1.md) now provides a fail-closed Docker/low-privilege probe with fourteen frozen controls; no real container report is published yet |
-| Historical local studies | DeepSeek R-B preflight, Windows/WSL comparison and human timing are not published evidence because their required raw artifacts are absent |
+| Compiler feedback | Two audited 216-task model-family runs, 408 independently recompiled proofs, AI-assisted review ledgers, and a complete paired comparison |
+| LeanCapsule | A reviewed 24-case gallery across Std, Mathlib, and project-local dependencies, plus 12-core / 4-challenge feasibility artifacts |
+| Security | [SP-1–SP-12 with eight benign controls](published/security-study-tracer-sp-v2); dangerous-candidate false acceptance 0/12 and benign-control false rejection 0/8 in the frozen suite. [SP isolation v1](docs/SP_ISOLATION_V1.md) freezes fourteen Docker/low-privilege controls, but a native Linux execution report has not yet been published |
+| Broader repair study | The R-A–R-F repair24 benchmark, runner, budget controls, and offline gates are implemented; the full six-arm repeated provider experiment has not been run |
 
-Passing a software gate, compiling a proof, completing a declared review mode and establishing a research effect are different claims. The repository does not promote one into another. The new feedback-representation study labels its review as AI-assisted; it is not presented as human review.
+Passing a software gate, compiling a proof, completing a declared review mode, and establishing a research effect are different claims. TRACER does not promote one into another. The canonical dated evidence register is [PROGRESS.md](PROGRESS.md).
 
-### AxProverBase Part 1 + Part 2 paired experiment and B confound arm
+### Earlier work
 
-The separate FATE-M experiment compares Part 1's AxProverBase `ExperienceProcessor` baseline with Part 2's `MemorylessProcessor` plus deterministic `CapsuleFeedback`. Both conditions reuse the same first-round candidate for each of 25 problems and freeze `gpt-5.6-sol`, the AI4Math `yxai` Responses endpoint, budgets, and candidate policy. Both solved 25/25; total rounds decreased from 39 to 36, compilation errors from 14 to 11, LLM calls from 79 to 36, and tokens from 656,657 to 274,742. In that Memoryless Part 2 condition, Capsule processing itself made zero LLM and compiler calls. See the [Part 2 design](docs/part2_capsule_feedback.md) and [reviewed result handoff](results/handoff/part12-live-20260828-corrected/README.md).
-
-Because the original comparison changes both memory and feedback at once, a separate
-`capsule_experience` confound arm was run with Part 1's `ExperienceProcessor` and the
-same deterministic `CapsuleFeedback`. It solved 20/25 (80.0%), with 47 total rounds,
-69 LLM requests (27 Memory requests), 27 compilation errors, and 659,791 total tokens;
-4 of the 9 shared first-round failures were repaired. This is a single descriptive
-batch, not a replacement for the original two-condition result. It is also distinct
-from the Evaluation18 condition named B above and is not a fourth ABCD agent condition.
-See the [B arm design and result](docs/part2_capsule_feedback_confound_arm.md) and the
-[B arm handoff report](results/handoff/part2-experience-capsule-20260829/REPORT.md).
-
-## Pilot results
-
-These results come from the published pilot `pilot-20260826T122354Z-d628742d`, not a new experiment run for this README update. Configuration: `deepseek-v4-pro`, requested temperature 0, maximum output 12,000 tokens, and at most three rounds.
-
-| Condition | Tasks | pass@1 | pass@3 | Mean rounds | Mean total tokens / task |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| P-A: Problem | 18 | 18/18 (100.0%) | 18/18 (100.0%) | 1.000 | 1,750.4 |
-| P-B: Problem + feedback | 18 | 16/18 (88.9%) | 18/18 (100.0%) | 1.111 | 1,841.9 |
-| P-C: Problem + feedback + retrieval | 18 | 18/18 (100.0%) | 18/18 (100.0%) | 1.000 | 2,906.1 |
-
-Mean total tokens are calculated by summing provider usage over every round of each task, then averaging over the condition's 18 tasks—not by counting only the final successful round.
-
-The release includes **56 per-round records, 54 successful proof files, and zero cache hits**. Token prices were not configured, so monetary cost is `unknown`, not zero.
-
-**How to interpret the results:**
-
-- They provide operational evidence for the real-provider → compilation → proof saving → review and export workflow.
-- P-A already reaches 18/18 on the first attempt, creating a clear ceiling effect. This batch **does not demonstrate a final success-rate gain from P-B or P-C**. P-C also uses more tokens, so these results do not establish greater efficiency.
-- Eighteen problems, one model, and one batch cannot establish general theorem-proving capability, statistically significant superiority, or state-of-the-art performance. Even 18/18 corresponds to an approximately 82.4%–100.0% Wilson 95% interval.
-- Recompiling final proofs does not guarantee that another call to the same model will produce identical text. Server defaults and generation variability must be disclosed.
-
-**Inspect the evidence:** [full report](published/pilot-20260826T122354Z-d628742d/REPORT.md) · [sanitized per-round traces](published/pilot-20260826T122354Z-d628742d/real_pilot_runs.sanitized.jsonl) · [successful proofs](published/pilot-20260826T122354Z-d628742d/solutions) · [manual review](published/pilot-20260826T122354Z-d628742d/manual_review.csv) · [handoff manifest](published/pilot-20260826T122354Z-d628742d/handoff.json).
-
-### Run your own formal experiment
-
-See the [real-pilot generation, review, and export guide](docs/REAL_PILOT_GUIDE.md). Run and export a separate batch for each model; do not mix logs from different models, budgets, or runs.
-
-<details>
-<summary>Expand: full pilot and formal release commands (PowerShell)</summary>
-
-Start with the frozen set. This calls a real model and may incur charges. `--fresh` moves old logs, proofs, review sheets, and reports into recoverable `results/archive/` storage and clears the persistent request cache by default:
-
-```powershell
-python src/evaluate.py --provider openai_compatible --api-url "https://api.deepseek.com/chat/completions" --model deepseek-v4-pro --temperature 0 --max-tokens 12000 --api-key-prompt --conditions A,B,C --max-rounds 3 --timeout 60 --fresh
-```
-
-Complete per-task manual review in this batch's `results/manual_review.csv`, then run:
-
-```powershell
-python scripts/validate_pilot.py --runs results/real_pilot_runs.jsonl --require-manual-review
-if ($LASTEXITCODE -ne 0) { throw "Validation failed; release stopped" }
-python src/report.py
-if ($LASTEXITCODE -ne 0) { throw "Report generation failed; export stopped" }
-python scripts/export_pilot.py --out published/deepseek-v4-pro-12000-run01
-```
-
-The export directory must not already exist. Validation checks task coverage, consecutive rounds, configuration consistency, cache hits, and infrastructure errors. Formal reporting also requires manual review and proof artifacts. Do not fill review rows with PASS merely to satisfy validation.
-
-With explicit `--reuse-cache`, results are not a strict fresh experiment: retain the warnings and treat them as a draft. Publish sanitized exports, not raw logs, SQLite databases, or historical archives.
-
-</details>
+The original 18-problem P-A/P-B/P-C provider pilot is retained as an engineering smoke test for the provider → compiler → proof export pipeline; its first-attempt ceiling prevents a feedback-gain claim. Earlier FATE-M handoffs, an R-B preflight, and local Windows/WSL or timing notes remain available for traceability, but they are not the headline result and some lack the raw artifacts required for independent verification. See [PROGRESS.md](PROGRESS.md) for evidence status, [CHANGELOG.md](CHANGELOG.md) for history, and the [real-pilot guide](docs/REAL_PILOT_GUIDE.md) for reproduction commands.
 
 ## LeanCapsule failure gallery
 
@@ -414,47 +352,18 @@ published/             Reviewed, sanitized experimental releases
 docs/                  Usage guides and research methodology
 ```
 
-## Research evaluation beyond the smoke test
+## Research status and next validation
 
-**Historical local preflight note (2026-08-28, legacy strict-warning protocol):** a previous local audit reported DeepSeek Flash 20/24 and Pro 19/24 within three attempts in an R-B-only (stored arm `B`), single-repeat run; both were 18/24 on the first attempt. It also reported 39 independently recompiled successes, 69 requests, no infrastructure failures, and an estimated cost of $1.2260 under then-recorded prices—not a bill. The raw trajectories and proof directory are **not included in this source export**, so these figures are not independently verifiable from the present repository and are not a published result or evidence of model ranking or feedback/retrieval gains.
+The two published Compiler Feedback v1 runs are the repository's current primary model evidence. The broader [R-A–R-F protocol](docs/RESEARCH_PROTOCOL.md) remains a separate, not-yet-run experiment: it is designed to isolate feedback, retrieval-only context, error-adaptive queries, and reusable failure-capsule context. Its runner and offline checks are available, but configuration files and dry-run plans are not results.
 
-The audit found 21 output-limit truncations with no final proof, three otherwise valid candidates rejected only by linters, and confusion between completing a proof tail and replacing the whole proof. New runs use **`tracer-proof-v2`**: an explicit whole-proof contract shared by all arms, frozen prompt templates, separate truncation outcomes, and separate kernel/warning-free fields. Incomplete proofs remain rejected. Historical scores are unchanged, and protocol versions must not be mixed. See [the audit, evidence location, and revised protocol](docs/RESEARCH_PROTOCOL.md#4-轨迹与报告); v2 has only offline validation so far.
+The next evidence priorities are:
 
-The original 18 problems and published A/B/C pilot remain an **engineering smoke test**, not evidence of broad superiority. The new [repair24-v1](benchmarks/repair24/manifest.json) contains 24 authored repair tasks across recursive lists, quantifiers, functions, options, and recursive arithmetic. Each has a concrete broken proof and a separately tested reference repair. Structural difficulty is a design objective; the limited preflight above does not establish generalization.
+1. reproduce the three-representation study with an independent provider family;
+2. run and audit [SP isolation v1](docs/SP_ISOLATION_V1.md) on native Linux and Windows Docker Desktop, reporting the two environments separately;
+3. run the complete R-A–R-F repeated design only after freezing provider configurations and review capacity;
+4. collect real participant data before making any human diagnosis-time claim.
 
-To prevent labels from different levels being conflated, public documentation uses the following display names. Existing stored arm IDs remain unchanged so historical local directories and tools stay readable.
-
-| Display arm | Stored `arm` | Prompt strategy | Compiler feedback | Retrieved examples | Query |
-| --- | --- | --- | --- | --- | --- |
-| R-A | `A` | A | No | No | — |
-| R-B | `B` | B | Yes | No | — |
-| R-C | `C` | C | Yes | Yes | Fixed |
-| R-D | `D` | D | No | Yes | Fixed |
-| R-E | `C_dynamic` | C | Yes | Yes | Updated from errors, types and goals |
-| R-F | `C_failure` | C | Yes | Yes, plus failure-capsule context | Same strategy as R-E |
-
-R-A/R-D still compile to decide whether to stop; diagnostics are not sent back to the generator. R-E/R-F separate query adaptation from failure reuse rather than silently changing R-C. SP-1–SP-12 are security-policy regressions, not additional research arms. Model weights are never updated.
-
-The [research runner](src/research.py) freezes readable input snapshots, randomizes task order, disables request-cache reuse, records full prompts and usage, and independently recompiles saved proofs. It supports multiple models and repeats; incomplete or mixed traces are rejected by report validation. Unknown costs remain unknown, and manual review is separate from automatic checks.
-
-For the narrower compiler-feedback study, the [second-model replication protocol](docs/SECOND_MODEL_REPLICATION.md) validated the published Pro baseline before the Flash run and kept the repair24 contents, task order, feedback/proof templates, three representations, three repeats, three rounds, compiler timeout, temperature and output ceiling fixed. Flash completed 209/216 tasks within three rounds versus 199/216 for Pro; per-representation final-outcome agreement was 94.4% for raw, 88.9% for normalized and 91.7% for structured. The [paired report](published/feedback-cross-model-8ccb89dd-562ad440) also shows that most apparent contrast-direction agreement comes from both models having zero task-level treatment difference. Pro used its explicit thinking/reasoning controls while Flash did not, and both models are from the same provider family, so the result is descriptive within-family replication—not statistical significance, causal feedback gain or cross-provider generalization.
-
-~~~powershell
-python src/research.py check-benchmark
-python src/research.py plan --config experiments/research.example.json
-~~~
-
-The example plan has **864 tasks / at most 2,592 logical generations**: 24 problems × 2 models × 3 repeats × 6 arms. These commands do not call a model API. Replace the example model names and review the budget before explicitly running a paid experiment. See the [research protocol and commands](docs/RESEARCH_PROTOCOL.md).
-
-Ready-to-review DeepSeek configurations are available for [Flash/Pro preflight](experiments/research.deepseek.preflight.json) (48 R-B tasks; stored arm `B`) and the [full matrix](experiments/research.deepseek.json). The paid CLI requires explicit call and conservative cost-reservation limits, uses hidden in-memory key entry, and disables automatic HTTP retries. These limits are not a vendor-enforced billing cap. Thinking mode is explicitly fixed; DeepSeek ignores temperature in this mode. No new paid results are claimed until the actual traces exist.
-
-The [human-study runner](src/human_study.py) can prepare 8 compiler-checked synthetic context/reduced pairs, complementary participant assignments, source display only after timing starts, abandonment/timeout records, and separate review records. No participant responses or human-time results are included in this export. The existing gallery's 23 mapped source pairs are identical, so they cannot establish source-reduction benefits through reading-time comparisons. Any generated materials are a **synthetic feasibility study**, not a study of naturally occurring bugs. Timings must come from real people, not AI substitutes; do not inspect generated materials or reviewer answers before participating.
-
-[Capsule metrics](src/capsule_metrics.py) separately measure replay agreement, source-size reduction and human diagnosis times. Cross-environment claims require actual independent environment records; changing a label is not a new environment. Human timings require participants and reviewed diagnoses. The experimental machinery is implemented; **multi-model gains, cross-environment benefits and human-time savings are not yet established**.
-
-A historical local note reported that Windows 11 and Ubuntu WSL2 each matched 48/48 replays of the same 24 cases under native Lean 4.32.0. Those raw cross-OS records are not included in this source export, so the claim cannot be independently checked here. Even if reproduced, it would describe two operating systems on one physical machine—not independent hardware validation, a cold-start benchmark, or evidence of speedup.
-
-The [Part 3 handoff](docs/part3_raw_capsule_experiment.md) records an existing Raw/CapsuleFeedback model run after the earlier main merge: 25/25 paired tasks, with Raw 22/25 and Capsule 19/25 final success. The [handoff checklist](docs/part3_experiment_handoff.md) validates the adjacent Part 1/2 handoff and does not itself call a model; neither document should be read as a new repeated experiment.
+Historical pilots and FATE-M handoffs remain linked through [PROGRESS.md](PROGRESS.md) and [CHANGELOG.md](CHANGELOG.md), but are intentionally not repeated here. Model weights are never updated; TRACER studies inference-time behavior and evidence handling.
 
 ## Related work
 

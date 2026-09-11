@@ -129,7 +129,7 @@ class DocumentationConsistencyTest(unittest.TestCase):
         for name, readme in self.readmes().items():
             blocks = [match[1] for match in re.findall(r"^(```|~~~)[^\n]*\n(.*?)^\1", readme, re.MULTILINE | re.DOTALL)]
             with self.subTest(language=name):
-                self.assertGreaterEqual(len(blocks), 18)
+                self.assertGreaterEqual(len(blocks), 15)
             commands.append([
                 line for block in blocks for line in block.splitlines()
                 if line.startswith(("python ", "lake ", "git ", "cd ", "$env:", "./scripts/", "bash "))
@@ -137,23 +137,31 @@ class DocumentationConsistencyTest(unittest.TestCase):
         self.assertTrue(commands[0])
         self.assertEqual(commands[0], commands[1])
 
-    def test_readme_pilot_numbers_match_published_summary(self):
+    def test_readme_latest_feedback_numbers_match_published_summaries(self):
         expected = [
-            ["18", "18/18(100.0%)", "18/18(100.0%)", "1.000", "1,750.4"],
-            ["18", "16/18(88.9%)", "18/18(100.0%)", "1.111", "1,841.9"],
-            ["18", "18/18(100.0%)", "18/18(100.0%)", "1.000", "2,906.1"],
+            ["DeepSeekPro", "Raw", "72", "56/72(77.8%)", "67/72(93.1%)"],
+            ["DeepSeekPro", "Normalized", "72", "56/72(77.8%)", "65/72(90.3%)"],
+            ["DeepSeekPro", "Structured", "72", "60/72(83.3%)", "67/72(93.1%)"],
+            ["DeepSeekFlash", "Raw", "72", "67/72(93.1%)", "69/72(95.8%)"],
+            ["DeepSeekFlash", "Normalized", "72", "63/72(87.5%)", "69/72(95.8%)"],
+            ["DeepSeekFlash", "Structured", "72", "66/72(91.7%)", "71/72(98.6%)"],
         ]
         for name, readme in self.readmes().items():
             rows = []
             for line in readme.splitlines():
-                if re.match(r"^\| P-[ABC][:：]", line):
-                    cells = line.strip("|").split("|")[1:]
+                if line.startswith("| DeepSeek "):
+                    cells = line.strip("|").split("|")
                     rows.append([
-                        cell.replace("（", "(").replace("）", ")").replace(" ", "")
+                        cell.replace("（", "(")
+                        .replace("）", ")")
+                        .replace("**", "")
+                        .replace(" ", "")
                         for cell in cells
                     ])
             with self.subTest(language=name):
                 self.assertEqual(expected, rows)
+                self.assertNotIn("## Pilot results", readme)
+                self.assertNotIn("## 实验结果", readme)
 
     def test_readmes_use_public_pilot_names_without_changing_storage_values(self):
         for name, readme in self.readmes().items():
@@ -168,7 +176,7 @@ class DocumentationConsistencyTest(unittest.TestCase):
         for name, readme in self.readmes().items():
             links = set(re.findall(r"\]\((published/[^)]+)\)", readme))
             with self.subTest(language=name):
-                self.assertEqual(10, len(links))
+                self.assertEqual(5, len(links))
                 self.assertIn(
                     "published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248",
                     links,
