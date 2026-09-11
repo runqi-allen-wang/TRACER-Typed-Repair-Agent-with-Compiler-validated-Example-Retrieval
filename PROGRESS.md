@@ -72,7 +72,7 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 
 ## 当前工程验收状态
 
-本轮从 PR #27 的远程合并提交 `main@35b53ab` 建立 `codex/sp-os-isolation`；SP 隔离原型的远程 Checks 需在后续推送并创建 PR 后由 GitHub Actions 给出。
+当前待合并分支在 `main@35b53ab` 之上加入 SP 隔离原型与 README 证据重排；普通 CI 已验证离线实现。仅手动触发的原生 Linux 隔离 workflow 必须先进入默认分支才能运行，因此真实 Linux 报告仍未生成，也不计作当前证据。
 
 当前文档基线的本地 Windows 全量复审记录：
 

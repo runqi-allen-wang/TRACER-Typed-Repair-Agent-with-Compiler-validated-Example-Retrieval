@@ -2,6 +2,13 @@
 
 本文件记录影响安全性、实验可复现性、Lean 编译边界和公开发布的补丁。它与 `PROGRESS.md` 的职责不同：`PROGRESS.md` 描述当前状态，本文按提交批次记录变更原因、影响范围和验证证据。
 
+## 2026-09-11 — README 聚焦最新发布证据
+
+- 中英文 README 将 Compiler Feedback Study v1 的 DeepSeek Pro/Flash 两批 216 任务结果提升为首页主结果，列出三种反馈表示的 pass@1 与三轮内成功数，并链接两份发布包及逐任务配对报告。
+- 明确披露 408 个独立复编译证明、两批 token 记录、同供应商模型族边界和 reasoning 配置差异；最高观测值不表述为因果增益、统计显著或跨供应商泛化。
+- 将 18 题 pilot、FATE-M、旧预跑和本地跨系统/计时记录压缩为历史索引，详细证据状态继续由 `PROGRESS.md` 管理，不在 README 重复展开。
+- 同步文档回归测试，改为核对最新六行结果表、核心发布链接、双语命令与命名体系；完整 Python 回归 270 项通过，其中 2 项 Linux-only 测试按预期跳过。
+
 ## 2026-09-11 — 冻结 SP 容器与低权限隔离原型
 
 - 新增 `tracer-sp-isolation-v1` 机器可读配置、容器内受控探针和主机运行器；冻结非 root、只读根文件系统/仓库、noexec 临时目录、禁网、清空 capabilities、`no-new-privileges`、seccomp 与内存/CPU/PID/墙钟限制，共 14 项 fail-closed 控制。

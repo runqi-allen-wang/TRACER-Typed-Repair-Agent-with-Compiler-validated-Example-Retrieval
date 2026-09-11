@@ -10,7 +10,7 @@
 [![Lean 工具链](https://img.shields.io/badge/Lean-4.32.0-blue)](lean-toolchain)
 [![CI Python 版本](https://img.shields.io/badge/CI_Python-3.11-blue)](.github/workflows/ci.yml)
 
-[快速开始](#快速开始) · [命名体系](#实验与安全命名体系) · [创新点与工程贡献](#创新点与工程贡献) · [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) · [实验结果](#实验结果) · [API 指南](docs/API_GUIDE.md) · [失败案例库](capsules/index.md) · [参与贡献](CONTRIBUTING.md)
+[最新结果](#最新已发布结果) · [快速开始](#快速开始) · [命名体系](#实验与安全命名体系) · [创新点与工程贡献](#创新点与工程贡献) · [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) · [API 指南](docs/API_GUIDE.md) · [失败案例库](capsules/index.md) · [参与贡献](CONTRIBUTING.md)
 
 ![TRACER 项目概览](TRACER.png)
 
@@ -42,8 +42,8 @@ TRACER 刻意分开三套命名。它们对应不同层级的证据，不能拼�
 
 - **24 个公开失败 capsule**：覆盖 4 类错误家族，来源包括 Std、Mathlib 和项目本地依赖。
 - **12 core + 4 challenge 可行性实验**：16 个案例均保留规范化诊断并在干净临时目录回放成功，包含项目本地多文件案例。
-- **Compiler Feedback v1 与 Feedback Adoption v1**：冻结三层诊断协议和 15 个失败/基础设施夹具，并记录候选相关修改、缓存分离以及静态/动态 query 与 Top-k 变化。[已发布的 raw/normalized/structured DeepSeek 批次](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248)包含 216 条任务结果、283 条脱敏逐轮记录、199 个证明和明确标注的 AI 辅助复核表。
-- **18 道冻结题 × 3 个已发布 pilot 条件（P-A/P-B/P-C；底层存储为 A/B/C）**：真实 provider 发布包包含 56 条逐轮记录和 54 个成功证明文件。
+- **Compiler Feedback v1 与 Feedback Adoption v1**：冻结三层诊断协议和 15 个失败/基础设施夹具，并记录候选相关修改、缓存分离以及静态/动态 query 与 Top-k 变化。最新发布证据包含两批各 216 任务的审计结果：[DeepSeek Pro](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248)有 199 个成功证明，[DeepSeek Flash](published/feedback-study-562ad440-3446-4138-801e-59726ed0e108)有 209 个，并提供完整的[逐任务配对比较](published/feedback-cross-model-8ccb89dd-562ad440)。两份复核表均明确标注为 AI 辅助复核。
+- **历史 18 题 smoke pilot**：保留为 provider 到编译器链路的工程证据，不再作为首页主结果。
 - **完整操作链**：单题 CLI、本地 HTTP API、批量评测、人工复核、报告校验与脱敏导出。
 - **独立六臂 repair24 研究套件（R-A～R-F）**：提供仅检索、动态查询与失败上下文对照；runner 与离线检查已实现，完整多模型重复实验待测。跳转至 [研究评测](#超越-smoke-test-的研究评测) 和 [相关工作](#相关工作)。
 
@@ -195,98 +195,39 @@ DeepSeek Flash 可将模型改为 `deepseek-v4-flash`。GPT-4.1 是当前请求�
 
 单题运行的候选、模型 usage、缓存命中和编译诊断记录在 `results/agent_runs.jsonl`。成功证明写入 `results/solutions/`，持续失败的最后候选写入 `results/solutions/failures/`。
 
-## 实验设计
+## 最新已发布结果
 
-冻结评测集为 [Evaluation18.lean](lean_project/Benchmarks/Evaluation18.lean)，题目 ID、标签与难度见 [benchmark manifest](benchmarks/manifest.json)。**18 道不同题目 × 3 个条件 = 54 个任务组合**，不是 54 道独立题目。
+当前首页主证据是冻结在 [repair24-v1](benchmarks/repair24/manifest.json) 上的 **Compiler Feedback Study v1**：24 道修复题 × 三种反馈表示 × 三次重复，即**每个模型 216 个任务实例**。两批实验均采用三轮预算，保存逐轮编译证据和全部成功证明；导出后的证明再次独立编译，复核表明确标注为 AI 辅助复核。
 
-| 条件 | 模型读取的上下文 | 研究问题 |
-| --- | --- | --- |
-| **A：题目** | 定理与目标局部代码，不加入历史编译诊断或检索示例 | 基础生成在同样轮数预算下能做到什么？ |
-| **B：题目 + 反馈** | A，加上上一轮有界编译诊断 | 编译反馈能否帮助修正前一轮候选？ |
-| **C：题目 + 反馈 + 检索** | B，加上 Top-3 本地示例文本 | 在反馈之外，相近示例是否值得额外 token 成本？ |
+| 模型族内批次 | 反馈表示 | 任务数 | pass@1 | 三轮内成功 |
+| --- | --- | ---: | ---: | ---: |
+| DeepSeek Pro | Raw | 72 | 56/72（77.8%） | 67/72（93.1%） |
+| DeepSeek Pro | Normalized | 72 | 56/72（77.8%） | 65/72（90.3%） |
+| DeepSeek Pro | Structured | 72 | 60/72（83.3%） | 67/72（93.1%） |
+| DeepSeek Flash | Raw | 72 | 67/72（93.1%） | 69/72（95.8%） |
+| DeepSeek Flash | Normalized | 72 | 63/72（87.5%） | 69/72（95.8%） |
+| DeepSeek Flash | Structured | 72 | 66/72（91.7%） | **71/72（98.6%）** |
 
-三组保持模型、输出预算、编译器、超时、题目顺序和最多三轮等设置一致，只改变提示上下文。A 也可以进行多轮生成，但不读取上一轮诊断；B/C 的第一轮尚无真实的上一轮反馈。
+Pro 发布包包含 **283 条脱敏逐轮记录、199 个成功证明和 1,538,045 个已记录 token**；Flash 复现包包含 **245 条逐轮记录、209 个成功证明和 948,466 个已记录 token**。导出的 408 个证明均额外通过独立编译审计。两批均未冻结价格表，因此美元成本为未知，不能写成零成本。
 
-评测不依赖运行时答案表。检索会检查与评测题声明相同的示例；相似但不相同的命题仍需人工复核，**文本去重不等于消除了所有语义泄漏风险**。这里的 `pass@3` 指三轮预算内至少一次成功的题目比例，不是多次独立采样得到的无偏 pass@k 估计。方法详见 [实验协议](docs/methodology.md)。
+Pro 与 Flash 的逐任务最终结局一致率为：raw 94.4%、normalized 88.9%、structured 91.7%。Flash + structured 是本次发布中观测值最高的一行，但这些结果只是**同一供应商模型族内的描述性证据**。两批在显式 reasoning 控制上仍有差异，不能据此声称 structured 存在因果优势、达到统计显著、能够跨供应商泛化或取得 SOTA。
 
-### 当前证据状态
+**查看证据：** [Pro 发布包](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248) · [Flash 发布包](published/feedback-study-562ad440-3446-4138-801e-59726ed0e108) · [逐任务配对比较](published/feedback-cross-model-8ccb89dd-562ad440) · [实验协议](docs/FEEDBACK_STUDY_V1.md) · [第二模型复现合同](docs/SECOND_MODEL_REPLICATION.md)。
 
-带日期的统一证据登记见 [PROGRESS.md](PROGRESS.md)。其中严格区分当前仓库可独立复核的工件、已经实现的实验基础设施、缺少原始工件的历史说明和未来计划。
+### 当前证据一览
 
-| 范围 | 当前仓库状态 |
+| 范围 | 当前仓库证据 |
 | --- | --- |
-| Evaluation18 P-A/P-B/P-C | 已发布 provider 轨迹、54 个证明和完整 54 对人工复核；只作为工程 smoke test |
-| LeanCapsule | 已发布 24 案例复核 gallery，并包含 12-core / 4-challenge 可行性工件 |
-| 编译反馈 | Compiler Feedback v1、离线采纳/query 变化分析与三表示 runner 已冻结；通过审计的 [DeepSeek Pro 发布包](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248)含 199 个证明，[DeepSeek Flash 复现包](published/feedback-study-562ad440-3446-4138-801e-59726ed0e108)含 209 个证明。[跨模型配对报告](published/feedback-cross-model-8ccb89dd-562ad440)覆盖全部 216 个任务；这是模型族内描述性证据，不是跨供应商效应结论 |
-| FATE-M | 包含 Part 1/2 corrected、Experience + CapsuleFeedback 和 Part 3 Raw/Capsule 交接包；均为单批次描述性证据 |
-| repair24 R-A～R-F | 题库、runner 和离线门禁已实现；正式多模型重复矩阵尚未运行 |
-| 安全 | [SP-1～SP-12 与 8 个正常对照](published/security-study-tracer-sp-v2)组成版本化离线回归；[SP 隔离 v1 协议](docs/SP_ISOLATION_V1.md)新增 14 项冻结控制的 fail-closed Docker/低权限探针，但尚无真实容器发布报告 |
-| 历史本地研究 | DeepSeek R-B 预跑、Windows/WSL 比较和真人计时因缺少必要原始工件，不属于已发布证据 |
+| 编译反馈 | 两批通过审计的 216 任务模型族内实验、408 个独立复编译证明、AI 辅助复核表和完整配对比较 |
+| LeanCapsule | 覆盖 Std、Mathlib 和 project-local 的 24 案例复核 gallery，以及 12-core / 4-challenge 可行性工件 |
+| 安全 | [SP-1～SP-12 与 8 个正常对照](published/security-study-tracer-sp-v2)；冻结套件内危险候选误放行 0/12、正常对照误拒绝 0/8。[SP 隔离 v1](docs/SP_ISOLATION_V1.md)已冻结 14 项 Docker/低权限控制，但尚未发布原生 Linux 实测报告 |
+| 更广修复研究 | R-A～R-F 的 repair24 题库、runner、预算控制和离线门禁已实现；六臂真实 provider 重复实验尚未执行 |
 
-软件门禁通过、证明编译通过、指定复核模式完成和研究效应成立是四种不同结论；本仓库不将其中任何一项自动升级为另一项。新的反馈表示实验明确标记为 AI 辅助复核，不表述为纯人工复核。
+软件门禁通过、证明编译通过、指定复核模式完成和研究效应成立是四种不同结论；TRACER 不将其中任何一项自动升级为另一项。带日期的统一证据登记见 [PROGRESS.md](PROGRESS.md)。
 
-### AxProverBase Part 1 + Part 2 配对实验及 B 混杂拆分臂
+### 过往工作
 
-另一组 FATE-M 实验比较 Part 1 的 AxProverBase `ExperienceProcessor` baseline 与 Part 2 的 `MemorylessProcessor + CapsuleFeedback`。两组在 25 题上逐题复用相同首轮候选，并冻结 `gpt-5.6-sol`、AI4Math `yxai` Responses endpoint、预算和候选安全策略。两组均为 25/25 成功；总轮次由 39 降至 36，编译错误由 14 降至 11，LLM 调用由 79 降至 36，token 由 656,657 降至 274,742；在这个 Memoryless Part 2 条件中，Capsule 处理本身没有额外 LLM 或编译调用。详见 [Part 2 设计](docs/part2_capsule_feedback.md)与[正式结果交接包](results/handoff/part12-live-20260828-corrected/README.md)。
-
-由于原始比较同时改变了 Memory 和失败反馈格式，另运行了独立的
-`capsule_experience` 混杂拆分臂：使用 Part 1 的 `ExperienceProcessor`，但采用同一
-确定性 `CapsuleFeedback`。该臂通过 20/25（80.0%），总计 47 轮、69 次 LLM 请求
-（其中 27 次 Memory 请求）、27 次编译错误和 659,791 tokens；9 个共享首轮失败中
-修复了 4 个。这是单批次描述性结果，不替代原来的两条件结果；它也不同于上面的
-Evaluation18 B 条件，不是 ABCD 的第四个 Agent 条件。详见 [B 臂设计与结果](docs/part2_capsule_feedback_confound_arm.md)和[B 臂交接报告](results/handoff/part2-experience-capsule-20260829/REPORT.md)。
-
-## 实验结果
-
-以下是已发布 pilot `pilot-20260826T122354Z-d628742d` 的结果，不是本次 README 更新重新运行的实验。配置为 `deepseek-v4-pro`、请求温度 0、最大输出 12,000 token、最多三轮。
-
-| 条件 | 任务数 | pass@1 | pass@3 | 平均轮次 | 平均总 token / 任务 |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| P-A：题目 | 18 | 18/18（100.0%） | 18/18（100.0%） | 1.000 | 1,750.4 |
-| P-B：题目 + 反馈 | 18 | 16/18（88.9%） | 18/18（100.0%） | 1.111 | 1,841.9 |
-| P-C：题目 + 反馈 + 检索 | 18 | 18/18（100.0%） | 18/18（100.0%） | 1.000 | 2,906.1 |
-
-平均总 token 先累加每题各轮的 provider usage，再对该条件的 18 个任务取平均；不是只统计成功的最后一轮。
-
-这批交付包含 **56 条逐轮记录、54 个成功证明文件，缓存命中为 0**。未配置 token 单价，成本为 `unknown`，不能解释为零成本。
-
-**如何理解这些结果：**
-
-- 它提供了“真实 provider → 编译检查 → 证明保存 → 复核与导出”链路的运行证据。
-- P-A 已在首轮达到 18/18，存在明显的天花板效应；本批数据**没有证明 P-B/P-C 带来最终成功率提升**。P-C 消耗了更多 token，也不能据此声称更高效。
-- 18 题、单模型、单批次不足以支持通用自动定理证明、统计显著优势或 SOTA 结论。即便 18/18 成功，对应 Wilson 95% 区间仍约为 82.4%–100.0%。
-- 复现最终证明的编译检查，不等于保证再次调用同一模型会得到逐字相同的输出。服务端默认设置和生成波动需要在实验中披露。
-
-**查看证据：** [完整报告](published/pilot-20260826T122354Z-d628742d/REPORT.md) · [逐轮脱敏轨迹](published/pilot-20260826T122354Z-d628742d/real_pilot_runs.sanitized.jsonl) · [成功证明](published/pilot-20260826T122354Z-d628742d/solutions) · [人工复核](published/pilot-20260826T122354Z-d628742d/manual_review.csv) · [交付清单](published/pilot-20260826T122354Z-d628742d/handoff.json)。
-
-### 运行自己的正式实验
-
-操作手册见 [真实 pilot 生成、复核与导出指南](docs/REAL_PILOT_GUIDE.md)。每个模型独立运行并导出一批；不要混用不同模型、预算或不同批次的日志。
-
-<details>
-<summary>展开：完整 pilot 与正式发布命令（PowerShell）</summary>
-
-先运行冻结集。这会调用真实模型并产生费用。`--fresh` 会把旧日志、证明、复核表和报告移入可恢复的 `results/archive/`，并默认清空持久请求缓存：
-
-```powershell
-python src/evaluate.py --provider openai_compatible --api-url "https://api.deepseek.com/chat/completions" --model deepseek-v4-pro --temperature 0 --max-tokens 12000 --api-key-prompt --conditions A,B,C --max-rounds 3 --timeout 60 --fresh
-```
-
-完成本批 `results/manual_review.csv` 的逐题人工复核，再执行：
-
-```powershell
-python scripts/validate_pilot.py --runs results/real_pilot_runs.jsonl --require-manual-review
-if ($LASTEXITCODE -ne 0) { throw "校验未通过，停止发布" }
-python src/report.py
-if ($LASTEXITCODE -ne 0) { throw "报告生成失败，停止导出" }
-python scripts/export_pilot.py --out published/deepseek-v4-pro-12000-run01
-```
-
-导出目录必须尚不存在。校验检查任务完整性、连续轮次、配置一致性、缓存命中和基础设施错误；formal 报告还要求人工复核与证明工件。复核不能仅为通过校验而批量填入 PASS。
-
-如果显式使用 `--reuse-cache`，结果不能作为严格 fresh 实验，应保留相应警告并按草稿处理。发布使用脱敏导出，不直接上传原始日志、SQLite 或历史归档。
-
-</details>
+原有 18 题 P-A/P-B/P-C provider pilot 保留为“provider → 编译器 → 证明导出”链路的工程 smoke test；由于首轮存在天花板效应，不支持反馈增益结论。更早的 FATE-M 交接、R-B 预跑，以及本地 Windows/WSL 或计时说明继续保留用于追溯，但不再作为首页主结果，其中部分也缺少可独立核验所需的原始工件。证据状态见 [PROGRESS.md](PROGRESS.md)，历史变更见 [CHANGELOG.md](CHANGELOG.md)，复现实验命令见[真实 pilot 指南](docs/REAL_PILOT_GUIDE.md)。
 
 ## LeanCapsule 失败案例库
 
@@ -409,47 +350,18 @@ published/             经复核、脱敏的实验交付
 docs/                  使用说明与研究方法
 ```
 
-## 超越 smoke test 的研究评测
+## 当前研究状态与下一步验证
 
-**历史本地预跑说明（2026-08-28，旧严格警告协议）：** 先前本地审计记录称，DeepSeek Flash 与 Pro 在一次仅 R-B（存储 arm 为 `B`）、单重复预跑中，三轮内分别通过 20/24 和 19/24，首轮均为 18/24；另记录 39 个成功文件已独立复编译、共 69 次请求、无基础设施错误，按当时价格估算总成本约 $1.2260（不是供应商账单）。本源码导出版**未包含原始轨迹与证明目录**，因此目前无法仅凭仓库独立核验这些数字；它们不是已发布结果，也不能证明模型排名或反馈/检索增益。
+两批已发布的 Compiler Feedback v1 实验是仓库当前主要的模型证据。更广的 [R-A～R-F 协议](docs/RESEARCH_PROTOCOL.md)是另一项尚未执行的实验，用于分别考察编译反馈、只检索、错误自适应查询和失败 Capsule 上下文复用。它的 runner 与离线检查已存在，但配置文件和 dry-run 计划不是实验结果。
 
-审计发现 21 次输出额度截断且没有最终证明、3 个有效候选仅因 linter 被拒绝，以及模型混淆“补全尾部”和“替换完整证明”。新运行采用 **`tracer-proof-v2`**：所有组共享完整证明契约，冻结提示模板，单列截断，并分开记录内核验证与无警告状态；未完成证明仍拒绝。历史成绩不变，不能混合协议版本。详见 [审计、证据位置与修订协议](docs/RESEARCH_PROTOCOL.md#4-轨迹与报告)；v2 目前仅完成离线验证。
+下一阶段的证据优先级是：
 
-保留原有 18 题与已发布 A/B/C pilot，作为**工程 smoke test**，不据此声称普遍领先。新增 [repair24-v1](benchmarks/repair24/manifest.json)：24 道人工构造修复题，覆盖递归列表、量词、函数、Option 与递归自然数；每题有真实错误证明和单独验证的参考修复。结构难度是设计目标，上述有限预跑不能证明泛化能力。
+1. 使用独立供应商模型族复现三种反馈表示实验；
+2. 在原生 Linux 与 Windows Docker Desktop 上分别运行并审计 [SP 隔离 v1](docs/SP_ISOLATION_V1.md)；
+3. 先冻结 provider 配置和复核能力，再执行完整 R-A～R-F 重复实验；
+4. 在提出真人诊断时间结论前，采集真实参与者数据。
 
-为避免混淆不同层级的标签，公开文档统一使用以下显示名。已有存储字段保持不变，以兼容历史本地目录与工具。
-
-| 显示组 | 存储 `arm` | Prompt 策略 | 编译反馈 | 检索示例 | 查询方式 |
-| --- | --- | --- | --- | --- | --- |
-| R-A | `A` | A | 无 | 无 | — |
-| R-B | `B` | B | 有 | 无 | — |
-| R-C | `C` | C | 有 | 有 | 固定 |
-| R-D | `D` | D | 无 | 有 | 固定 |
-| R-E | `C_dynamic` | C | 有 | 有 | 根据错误、类型和目标更新 |
-| R-F | `C_failure` | C | 有 | 有，并追加失败 Capsule 上下文 | 与 R-E 相同 |
-
-R-A/R-D 仍会编译以判断是否停止，但诊断不返回给生成器。R-E/R-F 分别隔离查询自适应与失败复用，不静默改写 R-C。SP-1～SP-12 是安全策略回归，不是新增研究组。模型权重始终不更新。
-
-[研究运行器](src/research.py) 保存可读输入快照、随机化任务顺序、禁用请求缓存、记录完整 prompt/usage，并独立重编译成功文件。支持多模型及重复运行，报告门禁拒绝不完整或混合轨迹。未知费用仍标未知，人工复核与自动检查分开。
-
-针对更窄的编译反馈子研究，[第二模型复现协议](docs/SECOND_MODEL_REPLICATION.md)在 Flash 运行前校验已发布的 Pro 基线，并固定 repair24 全文、任务顺序、反馈/证明模板、三种表示、三次重复、三轮预算、编译时限、温度与输出上限。Flash 三轮内通过 209/216，Pro 为 199/216；raw、normalized、structured 的最终结局一致率分别为 94.4%、88.9%、91.7%。[跨模型配对报告](published/feedback-cross-model-8ccb89dd-562ad440)同时显示，多数表示差方向一致来自两个模型在任务层面都没有处理差。Pro 显式启用了 thinking/reasoning 控制，Flash 未启用，且二者属于同一供应商模型族，因此只能解释为模型族内描述性复现，不能据此声称统计显著、反馈因果增益或跨供应商泛化。
-
-~~~powershell
-python src/research.py check-benchmark
-python src/research.py plan --config experiments/research.example.json
-~~~
-
-示例计划为 **864 个任务，最多 2,592 次逻辑生成**：24 题 × 2 模型 × 3 重复 × 6 组。上述命令不调用模型 API。实际付费运行前，替换示例模型名并核对预算，详见 [研究协议与操作命令](docs/RESEARCH_PROTOCOL.md)。
-
-提供待核准的 DeepSeek [Flash/Pro 预跑配置](experiments/research.deepseek.preflight.json)（48 个 R-B 任务，存储 arm 为 `B`）及[完整矩阵](experiments/research.deepseek.json)。付费 CLI 必须明确调用次数和保守费用预留上限，密钥隐藏输入且只留内存，禁止自动 HTTP 重试。这不是供应商硬账单上限。两模型显式固定思考模式；DeepSeek 在该模式下忽略温度参数。没有实际轨迹前，不宣称产生新付费实验结果。
-
-[真人研究入口](src/human_study.py) 可生成 8 对经编译验证的合成长上下文/精简材料，并支持互补参与者分组、开始计时后才显示源码、放弃/超时记录及独立复核记录。本导出版没有参与者回答或人工计时结果。原 gallery 的 23 对映射源码完全一致，不能用阅读时间验证源码精简收益。生成材料只用于**合成可行性预研究**，不代表自然发生的项目缺陷。计时必须由真人产生，AI 不能替代；参与前请勿查看生成材料或评审答案。
-
-[Capsule 度量工具](src/capsule_metrics.py) 分别测量回放一致率、源码缩减和人工定位时间。跨环境结论需要独立环境的真实记录，改标签不算换环境；人工计时需要参与者和定位结果复核。评测工具已实现，**多模型增益、跨环境收益与人工时间节省尚未建立证据**。
-
-历史本地记录曾报告 Windows 11 与 Ubuntu WSL2 在原生 Lean 4.32.0 下，对同一 24 个案例均取得 48/48 回放匹配。本源码导出版未包含这些跨 OS 原始记录，因此目前不能在仓库内独立核验。即使复现，它也只表示同一物理机上的两个操作系统，不是独立硬件验证、严格冷启动基准或加速证据。
-
-[Part 3 交接报告](docs/part3_raw_capsule_experiment.md)记录了此前合并 main 后已经完成的 Raw/CapsuleFeedback 模型运行：25/25 题严格配对，Raw 最终 22/25、Capsule 19/25。[交接清单](docs/part3_experiment_handoff.md)只校验相邻的 Part 1/2 handoff，本身不调用模型；两份文档都不应被理解为新的重复实验。
+历史 pilot 与 FATE-M 交接仍可从 [PROGRESS.md](PROGRESS.md)和 [CHANGELOG.md](CHANGELOG.md)追溯，但这里不再重复展开。TRACER 不更新模型权重，研究对象是推理阶段行为与证据组织。
 
 ## 相关工作
 
