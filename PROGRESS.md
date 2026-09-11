@@ -45,7 +45,8 @@
 | I-04 | `src/capsule_metrics.py` 和跨环境记录合并 | 独立机器、受控冷热缓存和仓库内可交付原始轨迹 |
 | I-05 | `src/human_study.py`、8 对合成材料和互补分组 | 真实参与者回答、计时、知情说明和人工判分 |
 | I-06 | [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) 与 [Feedback Adoption v1](docs/FEEDBACK_ADOPTION_V1.md)：三层诊断、原文证据、错误转移、候选相关修改、缓存状态及动态 query/Top-k 变化；Pro/Flash 模型族内结果已作为 E-08/E-09 发布 | 独立供应商模型复现与按题聚合的不确定性分析，才能讨论更广跨模型效应或更强比较结论 |
-| I-07 | 最小环境、版本化 SP v2 威胁模型、SP-1～SP-12、CTRL-1～CTRL-8、检测器核对和 Wilson 双向错误区间 | 未知攻击评估、外部安全复核、操作系统级网络/文件/进程/内存隔离 |
+| I-07 | 最小环境、版本化 SP v2 威胁模型、SP-1～SP-12、CTRL-1～CTRL-8、检测器核对和 Wilson 双向错误区间 | 未知攻击评估、外部安全复核；文本策略本身仍不是操作系统沙箱 |
+| I-08 | `tracer-sp-isolation-v1`：Docker 非 root、只读根与仓库、noexec 临时目录、禁网、清空 capabilities、`no-new-privileges`、seccomp、内存/CPU/PID/墙钟限制，共 14 项 fail-closed 探针；含手动 Actions 工作流 | 当前机器没有 Docker，尚无 Windows Docker Desktop 或原生 Linux 的真实运行报告；未知容器逃逸与恶意依赖不在已验证范围 |
 
 repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译→保存→独立复编译→报告校验”，但 mock 或参考候选不得计作模型实验结果。
 
@@ -71,11 +72,11 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 
 ## 当前工程验收状态
 
-本轮从 PR #26 的远程合并提交 `main@e05e6c3` 建立独立分支；第二模型复现流程的最终远程 Checks 需在本分支推送并创建 PR 后由 GitHub Actions 给出。
+本轮从 PR #27 的远程合并提交 `main@35b53ab` 建立 `codex/sp-os-isolation`；SP 隔离原型的远程 Checks 需在后续推送并创建 PR 后由 GitHub Actions 给出。
 
 当前文档基线的本地 Windows 全量复审记录：
 
-- Python：共发现 262 项测试，260 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。覆盖 Compiler Feedback v1、反馈采纳、三表示 runner、两份 Feedback Study 发布包与跨模型比较审计、第二模型冻结合同与完整 216 任务跨模型配对、直接 provider CLI、仅调用次数门禁、DeepSeek 思考参数和 Chat 存储字段披露、SP v2 双向指标及正常对照真编译、证据分层和既有实验防回退。
+- Python：共发现 270 项测试，268 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。覆盖 Compiler Feedback v1、反馈采纳、三表示 runner、两份 Feedback Study 发布包与跨模型比较审计、第二模型冻结合同与完整 216 任务跨模型配对、直接 provider CLI、仅调用次数门禁、DeepSeek 思考参数和 Chat 存储字段披露、SP v2 双向指标及正常对照真编译、SP 隔离 v1 的 14 项静态 fail-closed 合同、证据分层和既有实验防回退。
 - `lake build`：通过；冻结 Evaluation18 输入中的 18 个 `sorry` 是预期占位警告，不代表题目已在原文件中修复。
 - `python -m leancapsule audit capsules`：24/24 通过。
 - `python -m leancapsule verify capsules`：24/24 通过，包含 4 个 Mathlib 案例。
@@ -83,6 +84,7 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 - `python scripts/verify_compiler_feedback_v1.py --verify-only`：15/15 通过，其中 12 个真实 Lean 失败、3 个基础设施事件；API 调用为 0，未改写已有实验。
 - `python src/feedback_study.py plan`：离线生成 repair24 × raw/normalized/structured × 三重复的 216 任务计划，网络调用为 0；这不是模型结果。
 - `python src/security_study.py --check published/security-study-tracer-sp-v2/report.json`：SP-1～SP-12 误放行 0/12、CTRL-1～CTRL-8 策略误拒绝 0/8、正常对照 Lean 编译失败 0/8、拒绝前编译 0/12、检测器不一致 0/12；Wilson 95% 上界约为 24.3% 与 32.4%，只适用于当前案例集。
+- `python src/security_isolation.py plan`：离线核对 `tracer-sp-isolation-v1` 的 14 项容器控制，网络调用为 0；当前机器未安装 Docker，因此没有生成或发布真实隔离 PASS。
 - `python scripts/audit_feedback_study.py published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248 --compile-solutions`：发布静态审计通过，199/199 个公开证明独立复编译通过。
 - `python scripts/audit_feedback_study.py published/feedback-study-562ad440-3446-4138-801e-59726ed0e108 --compile-solutions`：第二模型发布审计通过，209/209 个公开证明独立复编译通过。
 - `python scripts/audit_feedback_comparison.py published/feedback-cross-model-8ccb89dd-562ad440`：Pro/Flash 的 216 个任务完整配对，比较包脱敏审计通过。
@@ -110,7 +112,7 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 2. **已完成离线实现：** 反馈采纳、重复错误、候选相关修改和动态 query/Top-k 变化指标；真实模型上的采纳率仍未测得。
 3. **已完成 SP v2 离线实现：** SP-1～SP-12、8 个正常对照、检测器核对、正常对照真编译及 Wilson 双向错误区间；这不是完整安全结论。
 4. **已完成第二模型模型族内复现：** DeepSeek Flash 的 216 任务、209 个证明、AI 辅助复核、脱敏发布包与 Pro/Flash 配对报告均已通过门禁；尚无独立供应商模型复现。
-5. 下一步验证容器或低权限账户隔离，不把文本规则称为沙箱。
+5. **隔离原型已完成、实测待完成：** 已冻结 14 项 Docker/低权限控制与手动 workflow；下一步分别生成 Windows Docker Desktop 和原生 Linux 报告并脱敏审计，不把计划、环境标签或静态参数称为隔离通过。
 6. **已完成公开导出：** raw/normalized/structured DeepSeek 批次已脱敏发布；保留 AI 辅助复核标识，未上传逐请求完整 prompts、历史归档原文或认证字段。
 7. 真人计时与独立机器跨环境研究单独立项，不与模型结果混算。
 

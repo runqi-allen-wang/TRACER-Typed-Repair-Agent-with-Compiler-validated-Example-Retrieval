@@ -1,0 +1,34 @@
+name: SP 容器隔离实验
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  isolation-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify frozen isolation plan
+        run: python src/security_isolation.py plan
+      - name: Run low-privilege container probe
+        run: >-
+          python src/security_isolation.py run
+          --allow-pull
+          --out results/sp-isolation-manual
+      - name: Check observed report
+        run: >-
+          python src/security_isolation.py check
+          results/sp-isolation-manual/report.json
+      - name: Upload isolation evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: tracer-sp-isolation-report
+          path: results/sp-isolation-manual/
+          if-no-files-found: error

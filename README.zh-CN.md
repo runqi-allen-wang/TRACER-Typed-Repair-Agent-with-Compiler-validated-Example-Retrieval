@@ -220,7 +220,7 @@ DeepSeek Flash 可将模型改为 `deepseek-v4-flash`。GPT-4.1 是当前请求�
 | 编译反馈 | Compiler Feedback v1、离线采纳/query 变化分析与三表示 runner 已冻结；通过审计的 [DeepSeek Pro 发布包](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248)含 199 个证明，[DeepSeek Flash 复现包](published/feedback-study-562ad440-3446-4138-801e-59726ed0e108)含 209 个证明。[跨模型配对报告](published/feedback-cross-model-8ccb89dd-562ad440)覆盖全部 216 个任务；这是模型族内描述性证据，不是跨供应商效应结论 |
 | FATE-M | 包含 Part 1/2 corrected、Experience + CapsuleFeedback 和 Part 3 Raw/Capsule 交接包；均为单批次描述性证据 |
 | repair24 R-A～R-F | 题库、runner 和离线门禁已实现；正式多模型重复矩阵尚未运行 |
-| 安全 | [SP-1～SP-12 与 8 个正常对照](published/security-study-tracer-sp-v2)组成版本化离线回归，报告双向错误与 Wilson 区间；操作系统级隔离仍是未来工作 |
+| 安全 | [SP-1～SP-12 与 8 个正常对照](published/security-study-tracer-sp-v2)组成版本化离线回归；[SP 隔离 v1 协议](docs/SP_ISOLATION_V1.md)新增 14 项冻结控制的 fail-closed Docker/低权限探针，但尚无真实容器发布报告 |
 | 历史本地研究 | DeepSeek R-B 预跑、Windows/WSL 比较和真人计时因缺少必要原始工件，不属于已发布证据 |
 
 软件门禁通过、证明编译通过、指定复核模式完成和研究效应成立是四种不同结论；本仓库不将其中任何一项自动升级为另一项。新的反馈表示实验明确标记为 AI 辅助复核，不表述为纯人工复核。
@@ -360,7 +360,7 @@ python -m leancapsule gallery capsules --out capsules/index.json
 
 ## 安全与能力边界
 
-- **不是操作系统沙箱。** 临时 HOME/TMP/APPDATA、最小环境变量和候选策略只提供防护层。运行不受信任的项目或 Lean 代码，应使用容器、虚拟机或独立低权限环境。
+- **尚不是操作系统沙箱。** 临时 HOME/TMP/APPDATA、最小环境变量和候选策略仍只是防护层。新增的 Docker/低权限[隔离协议](docs/SP_ISOLATION_V1.md)冻结非 root、只读挂载、禁网、清空 capabilities、seccomp 和资源限制；当前开发机没有 Docker，也尚未发布真实容器报告。
 - **限制局部修复。** Agent 不应改写题目 imports 或定理头；候选中的 `sorry`、`admit`、`sorryAx`、未完成证明警告、unsafe 声明、显式元编程入口和额外命令会被拒绝。SP-1～SP-12 覆盖 12 个冻结风险案例，8 个正常对照同时接受策略检查和独立 Lean 编译。冻结套件中的误放行与误拒绝观察值均为零，但 Wilson 95% 上界约为 24.3% 和 32.4%；零次观察不等于零风险。SP 表示非实验性的安全策略，因此不会与研究矩阵中的 R-D 研究臂混淆。不承诺任意 Lean 元编程构造都能由文本规则识别。
 - **凭据与发布分离。** Provider 限制跨来源重定向并对错误文本脱敏；密钥不作为实验记录字段写入。发布前仍应检查导出内容，并只向可信 provider 发送密钥。
 - **透明的比较与缓存。** 诊断比较和请求缓存使用可读的规范化文本，不引入摘要或指纹计算；缓存用于本地调试复用，不充当独立真实采样。
@@ -382,6 +382,7 @@ python -m leancapsule gallery capsules --out capsules/index.json
 | 运行或检查 AxProverBase Part 1 + Part 2 实验 | [Part 1 指南](baseline/README.md)、[Part 2 设计](docs/part2_capsule_feedback.md)、[Part 3 交接清单](docs/part3_experiment_handoff.md)与[结果交接包](results/handoff/part12-live-20260828-corrected/README.md) |
 | 查看 Experience + CapsuleFeedback 混杂拆分臂 | [B 臂设计与结果](docs/part2_capsule_feedback_confound_arm.md)与[B 臂交接报告](results/handoff/part2-experience-capsule-20260829/REPORT.md) |
 | 查看 SP-1～SP-12 编译前安全套件 | [安全策略回归与威胁模型](docs/security_policy.md)与[冻结 SP v2 报告](published/security-study-tracer-sp-v2) |
+| 规划或运行 SP 容器/低权限探针 | [SP 隔离 v1 协议](docs/SP_ISOLATION_V1.md) |
 | 查看 12 core + 4 challenge 干净回放实验 | [Capsule 可行性报告](docs/CAPSULE_FEASIBILITY.md) |
 | 查看已发布实验与证明 | [Pilot 交付目录](published/pilot-20260826T122354Z-d628742d) |
 | 查看当前状态与历史改动 | [PROGRESS](PROGRESS.md)与[CHANGELOG](CHANGELOG.md) |
@@ -466,10 +467,10 @@ TRACER 沿用已有研究方向，不将编译反馈或检索本身作为首创�
 
 欢迎提交可复现失败案例、补充测试、改进诊断整理及模型集成。贡献前请阅读 [CONTRIBUTING](CONTRIBUTING.md)，并为案例补充来源许可、工具链、预期结果与复现步骤。
 
-2026 年 8 月 30 日收到 [subfish-zhou](https://github.com/subfish-zhou) 与 [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) 的社区评审后，项目优先推进两条路线。离线实现现已包含 [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md)、[Feedback Adoption v1](docs/FEEDBACK_ADOPTION_V1.md)、两个已发布模型族内批次和 SP-1～SP-12 套件；独立供应商复现与操作系统隔离仍属于后续工作：
+2026 年 8 月 30 日收到 [subfish-zhou](https://github.com/subfish-zhou) 与 [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) 的社区评审后，项目优先推进两条路线。现有实现已包含 [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md)、[Feedback Adoption v1](docs/FEEDBACK_ADOPTION_V1.md)、两个已发布模型族内批次、SP-1～SP-12，以及尚未真实运行的容器隔离原型；独立供应商复现与双平台隔离证据仍属于后续工作：
 
 - **把 Lean 编译诊断反馈本身作为研究对象。** 原始/规范化/结构化表示、可回溯夹具、候选改动观察与 query/Top-k 指标已经离线实现。下一项证据是另行授权的真实 provider 对照，必须保存完整轨迹与复核，不能静默改写现有 R-B、R-E 或 R-F。
-- **把 SP-n 扩展为系统化安全研究路线。** SP v2 已分开 12 个危险夹具与 8 个正常对照，核对预期检测器、真实编译全部允许对照，并用 Wilson 区间报告双向错误。下一步是用容器或低权限执行处理文本门禁无法可靠判断的边界。SP-n 始终是安全策略命名空间，不是新增研究臂。
+- **把 SP-n 扩展为系统化安全研究路线。** SP v2 已分开 12 个危险夹具与 8 个正常对照；SP 隔离 v1 又加入不执行危险 Lean 夹具的 14 项 Docker/低权限边界探针。下一项证据是在 Windows Docker Desktop 与原生 Linux 独立运行和审计，不能把静态配置当成已观察到的隔离。SP-n 始终是安全策略命名空间，不是新增研究臂。
 
 更广泛的后续方向仍包括更难题库、跨模型重复运行、检索成本收益和跨环境 Capsule 研究。这些是待检验方向，不是已完成能力或性能承诺。具体协议要求见 [研究实验操作与预注册协议](docs/RESEARCH_PROTOCOL.md)，分阶段交付物和验收门禁见 [编译反馈与 SP-n 后续工作方案](docs/FUTURE_WORK_PLAN.md)。
 
