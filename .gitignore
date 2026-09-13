@@ -14,6 +14,7 @@ results/solutions/
 /results/feedback-study-*/
 /results/human-*/
 /results/sp-isolation-*/
+/private_references/
 /experiments/*.local.json
 results/handoff/
 results/work/

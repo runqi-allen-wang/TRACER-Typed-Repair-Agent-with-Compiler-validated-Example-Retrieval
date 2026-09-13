@@ -43,6 +43,8 @@ TRACER 刻意分开三套命名。它们对应不同层级的证据，不能拼�
 - **24 个公开失败 capsule**：覆盖 4 类错误家族，来源包括 Std、Mathlib 和项目本地依赖。
 - **12 core + 4 challenge 可行性实验**：16 个案例均保留规范化诊断并在干净临时目录回放成功，包含项目本地多文件案例。
 - **Compiler Feedback v1 与 Feedback Adoption v1**：冻结三层诊断协议和 15 个失败/基础设施夹具，并记录候选相关修改、缓存分离以及静态/动态 query 与 Top-k 变化。最新发布证据包含两批各 216 任务的审计结果：[DeepSeek Pro](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248)有 199 个成功证明，[DeepSeek Flash](published/feedback-study-562ad440-3446-4138-801e-59726ed0e108)有 209 个，并提供完整的[逐任务配对比较](published/feedback-cross-model-8ccb89dd-562ad440)。两份复核表均明确标注为 AI 辅助复核。
+- **Causal Feedback v1、Error-State Graph 与 Adaptive Router 原型**：先冻结一个首轮失败候选，再分叉到空反馈重试、真实反馈、同类无关反馈、反事实反馈、只检索和自适应路由。项目级试点已写入[机器可读预注册](experiments/preregistrations/tracer_real_causal_v1.json)，但尚未发布正式因果结论，详见[协议](docs/CAUSAL_FEEDBACK_V1.md)。
+- **TRACER-REAL v1**：包含三个独立上游项目的 11 条真实历史修复，Mathlib 用于开发、Batteries 用于验证、Aesop 作为项目外测试。每题都要求定理陈述不变、旧证明在固定环境失败、修复证明重新编译通过；参考证明与公开任务隔离。这是项目级试点，不是大规模效果基准。
 - **历史 18 题 smoke pilot**：保留为 provider 到编译器链路的工程证据，不再作为首页主结果。
 - **完整操作链**：单题 CLI、本地 HTTP API、批量评测、人工复核、报告校验与脱敏导出。
 - **独立六臂 repair24 研究套件（R-A～R-F）**：提供仅检索、动态查询与失败上下文对照；runner 与离线检查已实现，完整多模型重复实验待测。跳转至 [研究评测](#超越-smoke-test-的研究评测) 和 [相关工作](#相关工作)。
@@ -70,9 +72,10 @@ TRACER 将这三类问题分开处理，再通过可读记录连接起来。对�
 | **可控的推理时修复** | 局部候选生成 → 安全检查 → 项目环境编译 → 有界诊断反馈，最多三轮 | 在不改模型权重的前提下研究反馈与示例的作用；原题文件不被覆盖 |
 | **可审计的编译反馈** | 同时保留原始、规范化和结构化诊断；每个抽取类别和信号都指向原文片段 | 在研究模型是否采纳反馈之前，先离线检查诊断转换是否失真 |
 | **可观察的反馈采纳** | 比较相邻候选与上一轮诊断信号，单列缓存复用，并记录动态检索 query/Top-k 的实际变化 | 区分“观察到行为变化”和“模型因果理解反馈”两种不同强度的结论 |
+| **同首轮候选诊断干预** | 冻结同一个失败候选，再分叉到真实、无关、反事实、只检索和自适应条件 | 把反馈内容与重复采样分开，并测量模型受到误导诊断影响的程度 |
 | **从结果数字追溯到证据** | 记录模型配置、候选、实际检索示例、usage 与编译诊断；成功证明落盘；正式报告前做严格校验 | 降低批次混合、缓存复用或基础设施错误被误当作能力提升的风险 |
 
-对应实现：[修复循环](src/agent.py) · [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) · [反馈采纳审计](docs/FEEDBACK_ADOPTION_V1.md) · [三表示对照](docs/FEEDBACK_STUDY_V1.md) · [SP 安全套件](docs/security_policy.md) · [capsule 打包](src/leancapsule/pack.py) · [pilot 校验](scripts/validate_pilot.py)。
+对应实现：[修复循环](src/agent.py) · [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) · [反馈采纳审计](docs/FEEDBACK_ADOPTION_V1.md) · [三表示对照](docs/FEEDBACK_STUDY_V1.md) · [同首轮因果协议](docs/CAUSAL_FEEDBACK_V1.md) · [SP 安全套件](docs/security_policy.md) · [capsule 打包](src/leancapsule/pack.py) · [pilot 校验](scripts/validate_pilot.py)。
 
 ## 工作原理
 
@@ -221,6 +224,7 @@ Pro 与 Flash 的逐任务最终结局一致率为：raw 94.4%、normalized 88.9
 | 编译反馈 | 两批通过审计的 216 任务模型族内实验、408 个独立复编译证明、AI 辅助复核表和完整配对比较 |
 | LeanCapsule | 覆盖 Std、Mathlib 和 project-local 的 24 案例复核 gallery，以及 12-core / 4-challenge 可行性工件 |
 | 安全 | [SP-1～SP-12 与 8 个正常对照](published/security-study-tracer-sp-v2)；冻结套件内危险候选误放行 0/12、正常对照误拒绝 0/8。[SP 隔离 v1](docs/SP_ISOLATION_V1.md)已冻结 14 项 Docker/低权限控制，但尚未发布原生 Linux 实测报告 |
+| 项目级因果试点 | [TRACER-REAL v1](benchmarks/real_repairs/tracer_real_v1/manifest.json)：11 条修复按三个上游项目互斥划分；Aesop 测试项目和 structured 对 content-free 的唯一主对比已经写入[机器可读预注册](experiments/preregistrations/tracer_real_causal_v1.json)。运行和审计完成前，provider 输出不算正式结果 |
 | 更广修复研究 | R-A～R-F 的 repair24 题库、runner、预算控制和离线门禁已实现；六臂真实 provider 重复实验尚未执行 |
 
 软件门禁通过、证明编译通过、指定复核模式完成和研究效应成立是四种不同结论；TRACER 不将其中任何一项自动升级为另一项。带日期的统一证据登记见 [PROGRESS.md](PROGRESS.md)。
@@ -316,6 +320,8 @@ python -m leancapsule gallery capsules --out capsules/index.json
 | 跑真实实验、复核并导出 | [Pilot 手册](docs/REAL_PILOT_GUIDE.md) |
 | 用 DeepSeek 对比 raw/normalized/structured 编译反馈 | [Feedback Study v1 真实实验 CLI](docs/FEEDBACK_STUDY_V1.md) |
 | 用第二模型复现 Feedback Study v1 | [第二模型复现协议](docs/SECOND_MODEL_REPLICATION.md) |
+| 查看同首轮候选因果协议与自适应路由器 | [Causal Feedback v1](docs/CAUSAL_FEEDBACK_V1.md) |
+| 查看或重建按项目划分的真实历史题库 | [TRACER-REAL v1 与构建器](benchmarks/real_repairs/README.md) |
 | 理解条件控制和有效性约束 | [方法设计](docs/methodology.md) |
 | 查阅逐轮记录字段 | [JSONL 格式](docs/jsonl_schema.md) |
 | 检查或复验三层编译诊断协议 | [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) |
@@ -333,6 +339,10 @@ src/agent.py           证明修复循环与单题 CLI
 src/provider.py        模型接口与候选输出解析
 src/compiler.py        Lean 编译与局部证明补丁
 src/retriever.py       本地示例检索与命题重合检查
+src/causal_feedback.py 同首轮候选的诊断干预运行器
+src/error_state_graph.py 源码对齐的诊断状态表示
+src/adaptive_router.py 确定性预算路由原型
+src/real_repairs.py    真实历史修复任务构建器
 src/leancapsule/       打包、抽取、回放、审计与 Issue 生成
 capsule_schema/        capsule manifest 结构定义
 capsules/              公开失败案例、索引与复核台账
@@ -356,10 +366,10 @@ docs/                  使用说明与研究方法
 
 下一阶段的证据优先级是：
 
-1. 使用独立供应商模型族复现三种反馈表示实验；
-2. 在原生 Linux 与 Windows Docker Desktop 上分别运行并审计 [SP 隔离 v1](docs/SP_ISOLATION_V1.md)；
-3. 先冻结 provider 配置和复核能力，再执行完整 R-A～R-F 重复实验；
-4. 在提出真人诊断时间结论前，采集真实参与者数据。
+1. 不改变冻结测试项目与主对比，运行并审计已经预注册的 TRACER-REAL 项目级因果试点；
+2. 在声称跨项目确认性结论前，将 TRACER-REAL 扩展到至少 5 个真正留出项目和 30 个合格首轮失败；
+3. 在因果对照稳定后，再用学习得到的预算策略替换或对照当前确定性 Adaptive Router；
+4. 在原生 Linux 与 Windows Docker Desktop 上分别运行并审计 [SP 隔离 v1](docs/SP_ISOLATION_V1.md)。
 
 历史 pilot 与 FATE-M 交接仍可从 [PROGRESS.md](PROGRESS.md)和 [CHANGELOG.md](CHANGELOG.md)追溯，但这里不再重复展开。TRACER 不更新模型权重，研究对象是推理阶段行为与证据组织。
 

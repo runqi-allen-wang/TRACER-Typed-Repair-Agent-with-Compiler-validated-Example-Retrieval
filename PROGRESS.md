@@ -1,6 +1,6 @@
 # TRACER 当前进度与证据登记
 
-更新时间：2026-09-11。
+更新时间：2026-09-13。
 
 当前发布基线为 `main@e05e6c3`（PR #26）。本文是仓库内“完成到哪一步”的唯一当前口径；历史变更过程见 `CHANGELOG.md`，未来工作见 `docs/FUTURE_WORK_PLAN.md`。当旧报告、历史批次说明与本文冲突时，以各批次原始工件和本文的证据分层为准。
 
@@ -47,6 +47,8 @@
 | I-06 | [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) 与 [Feedback Adoption v1](docs/FEEDBACK_ADOPTION_V1.md)：三层诊断、原文证据、错误转移、候选相关修改、缓存状态及动态 query/Top-k 变化；Pro/Flash 模型族内结果已作为 E-08/E-09 发布 | 独立供应商模型复现与按题聚合的不确定性分析，才能讨论更广跨模型效应或更强比较结论 |
 | I-07 | 最小环境、版本化 SP v2 威胁模型、SP-1～SP-12、CTRL-1～CTRL-8、检测器核对和 Wilson 双向错误区间 | 未知攻击评估、外部安全复核；文本策略本身仍不是操作系统沙箱 |
 | I-08 | `tracer-sp-isolation-v1`：Docker 非 root、只读根与仓库、noexec 临时目录、禁网、清空 capabilities、`no-new-privileges`、seccomp、内存/CPU/PID/墙钟限制，共 14 项 fail-closed 探针；含手动 Actions 工作流 | 当前机器没有 Docker，尚无 Windows Docker Desktop 或原生 Linux 的真实运行报告；未知容器逃逸与恶意依赖不在已验证范围 |
+| I-09 | `tracer-causal-feedback-v1`：冻结无反馈首轮候选后分叉到空反馈、三种真实反馈、同类无关反馈、反事实反馈、只检索和 adaptive；负对照禁止自配对，所有分支保留同一首轮候选；TRACER-REAL 试点已冻结机器可读预注册 | provider 批次与结果审计尚待完成；单 test 项目且最多 12 个合格失败，预注册明确禁止正式统计或跨项目因果结论 |
+| I-10 | Error-State Graph、确定性 Adaptive Router 与 TRACER-REAL v1：结构化信号保留原始证据边；Mathlib 3、Batteries 4、Aesop 4 共 11 题按 development/validation/test 上游项目互斥划分，均经旧证明失败与修复证明通过门禁，参考证明单独存放 | 当前 Router 尚未学习；11 题/3 项目仍是试点，确认性结论门禁要求至少 5 个 test 项目与 30 个合格首轮失败 |
 
 repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译→保存→独立复编译→报告校验”，但 mock 或参考候选不得计作模型实验结果。
 
@@ -76,7 +78,7 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 
 当前文档基线的本地 Windows 全量复审记录：
 
-- Python：共发现 270 项测试，268 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。覆盖 Compiler Feedback v1、反馈采纳、三表示 runner、两份 Feedback Study 发布包与跨模型比较审计、第二模型冻结合同与完整 216 任务跨模型配对、直接 provider CLI、仅调用次数门禁、DeepSeek 思考参数和 Chat 存储字段披露、SP v2 双向指标及正常对照真编译、SP 隔离 v1 的 14 项静态 fail-closed 合同、证据分层和既有实验防回退。
+- Python：共发现 288 项测试，286 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。覆盖 Compiler Feedback v1、同首轮候选因果分叉、项目级划分与预注册漂移门禁、长文件目标感知提示、Error-State Graph、自适应路由、11 题/3 项目 TRACER-REAL 及其构建器、反馈采纳、三表示 runner、两份 Feedback Study 发布包与跨模型比较审计、第二模型冻结合同与完整 216 任务跨模型配对、直接 provider CLI、仅调用次数门禁、DeepSeek 思考参数和 Chat 存储字段披露、SP v2 双向指标及正常对照真编译、SP 隔离 v1 的 14 项静态 fail-closed 合同、证据分层和既有实验防回退。
 - `lake build`：通过；冻结 Evaluation18 输入中的 18 个 `sorry` 是预期占位警告，不代表题目已在原文件中修复。
 - `python -m leancapsule audit capsules`：24/24 通过。
 - `python -m leancapsule verify capsules`：24/24 通过，包含 4 个 Mathlib 案例。
@@ -115,5 +117,6 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 5. **隔离原型已完成、实测待完成：** 已冻结 14 项 Docker/低权限控制与手动 workflow；下一步分别生成 Windows Docker Desktop 和原生 Linux 报告并脱敏审计，不把计划、环境标签或静态参数称为隔离通过。
 6. **已完成公开导出：** raw/normalized/structured DeepSeek 批次已脱敏发布；保留 AI 辅助复核标识，未上传逐请求完整 prompts、历史归档原文或认证字段。
 7. 真人计时与独立机器跨环境研究单独立项，不与模型结果混算。
+8. **TRACER-REAL 项目级试点与因果预注册已冻结：** 先完成 Aesop 留出项目的 12 个首轮/最多 96 分支 provider 运行与审计，再扩展到满足 5 个 test 项目和 30 个合格首轮失败的确认性门禁；旧 Feedback Study 仍保留为表示对照历史证据，不被回写。
 
 新结果只有在包含冻结配置、原始轨迹、成功证明、独立重编译、明确标注的复核模式和发布审计后，才能从“可复验实现”升级为“已发布证据”。AI 辅助复核不能表述为纯人工复核。

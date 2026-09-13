@@ -1,0 +1,13 @@
+定理与局部上下文：
+{theorem}
+
+所有实验分支共享的冻结首轮候选：
+{first_candidate}
+
+本分支收到的信息：
+{intervention}
+
+本分支允许看到的检索示例：
+{examples}
+
+请在不修改定理陈述、imports 或已有定义的前提下，返回完整的局部 Lean proof term。

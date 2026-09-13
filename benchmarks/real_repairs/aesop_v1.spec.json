@@ -1,0 +1,36 @@
+{
+  "version": "tracer-real-repair-v1",
+  "benchmark_version": "tracer-real-aesop-v1",
+  "source_repository": "https://github.com/leanprover-community/aesop",
+  "source_license": "Apache-2.0",
+  "cases": [
+    {
+      "id": "aesop_map_reverse_core",
+      "before_revision": "06cca4bd36b2af743d4858c5cc31604aa9da26bc",
+      "fixed_revision": "a7dbf0c63b694e47f425f3dcddbc0e178bb432d3",
+      "file": "AesopTest/List.lean",
+      "theorem": "map_reverse_core"
+    },
+    {
+      "id": "aesop_exists_length_succ",
+      "before_revision": "8a796d9360c1836da9242149eae5a2374e3a0790",
+      "fixed_revision": "a7dbf0c63b694e47f425f3dcddbc0e178bb432d3",
+      "file": "AesopTest/List.lean",
+      "theorem": "exists_of_length_succ"
+    },
+    {
+      "id": "aesop_length_pos_ne_nil",
+      "before_revision": "8a796d9360c1836da9242149eae5a2374e3a0790",
+      "fixed_revision": "a7dbf0c63b694e47f425f3dcddbc0e178bb432d3",
+      "file": "AesopTest/List.lean",
+      "theorem": "length_pos_of_ne_nil"
+    },
+    {
+      "id": "aesop_replicate_injective",
+      "before_revision": "8a796d9360c1836da9242149eae5a2374e3a0790",
+      "fixed_revision": "a7dbf0c63b694e47f425f3dcddbc0e178bb432d3",
+      "file": "AesopTest/List.lean",
+      "theorem": "replicate_right_injective"
+    }
+  ]
+}

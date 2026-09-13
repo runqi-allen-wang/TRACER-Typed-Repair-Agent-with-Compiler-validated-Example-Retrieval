@@ -1,0 +1,32 @@
+{
+  "models": [
+    {
+      "id": "replace_model",
+      "model": "REPLACE_WITH_REAL_MODEL",
+      "api_url": "https://api.example.invalid/chat/completions",
+      "api_key_env": "TRACER_CAUSAL_MODEL_KEY",
+      "temperature": 0,
+      "max_tokens": 12000,
+      "input_price_per_1k": null,
+      "output_price_per_1k": null,
+      "pricing_note": "运行前填写并冻结当日价格；null 表示不报告美元成本",
+      "thinking": null,
+      "reasoning_effort": null
+    }
+  ],
+  "repeats": 3,
+  "arms": [
+    "content_free_retry",
+    "true_raw",
+    "true_normalized",
+    "true_structured",
+    "irrelevant_matched",
+    "counterfactual",
+    "retrieval_only",
+    "adaptive"
+  ],
+  "branch_attempts": 1,
+  "compile_timeout": 60,
+  "order_seed": 20260913,
+  "examples_dir": "examples"
+}

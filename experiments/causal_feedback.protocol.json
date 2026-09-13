@@ -1,0 +1,70 @@
+{
+  "version": "tracer-causal-feedback-v1",
+  "status": "implemented-offline-no-formal-results",
+  "research_question": "模型是否利用了与当前失败因果相关的 Lean 编译反馈，而不是仅从重复采样、额外文本或检索中获益？",
+  "experimental_unit": "model x repeat x problem 的冻结首轮候选",
+  "eligibility": "首轮候选必须由同一无反馈提示生成，并形成非基础设施的真实 Lean 编译失败",
+  "arms": [
+    "content_free_retry",
+    "true_raw",
+    "true_normalized",
+    "true_structured",
+    "irrelevant_matched",
+    "counterfactual",
+    "retrieval_only",
+    "adaptive"
+  ],
+  "primary_estimand": {
+    "population": "eligible_first_failures",
+    "baseline": "content_free_retry",
+    "primary_contrast": "true_structured - content_free_retry",
+    "outcome": "one_branch_attempt_kernel_success",
+    "analysis": "同一冻结首轮候选内的逐题配对差；正式报告必须给出按题和项目聚类的不确定性"
+  },
+  "project_split_policy": {
+    "benchmark": "TRACER-REAL",
+    "unit": "upstream Git repository",
+    "rule": "同一上游项目不得跨 development、validation 和 test；正式外推只使用预注册 test 项目",
+    "pilot_boundary": "项目数或合格首轮失败数未达到预注册门禁时，只能报告项目级试点描述值"
+  },
+  "negative_controls": {
+    "irrelevant_matched": "同模型、同重复、同错误类别的另一道题的真实原始诊断",
+    "counterfactual": "保留目标错误类别，但使用另一道题的结构化信号值",
+    "donor_policy": "类别内按题号排序后轮换；禁止自配对；不足两个供体时标记为不可用且不得调用模型"
+  },
+  "frozen_controls": [
+    "benchmark version",
+    "model endpoint and name",
+    "temperature",
+    "maximum output tokens",
+    "Lean toolchain",
+    "compiler timeout",
+    "seed prompt",
+    "branch prompt",
+    "one branch generation",
+    "random order seed"
+  ],
+  "preregistration_gate": "题库版本、项目划分、模型端点与名称、采样参数、提示文件、主对比、停止规则和结论门禁必须在 provider 调用前写入机器可读预注册；命令行覆盖后重新校验。",
+  "prompt_view": {
+    "maximum_source_characters": 12000,
+    "long_file_policy": "保留 imports、目标前最近局部上下文与完整目标声明；目标声明不得被截断",
+    "first_candidate_policy": "所有分支逐字接收完整冻结首轮候选，不允许按字符截短",
+    "intervention_policy": "干预载荷和已记录检索示例完整进入分支提示"
+  },
+  "exclusions": [
+    "首轮已经通过",
+    "provider 或编译器基础设施错误",
+    "超时",
+    "安全策略拒绝",
+    "无法形成同类别供体的负对照分支"
+  ],
+  "reporting": [
+    "首轮资格率",
+    "每个干预的逐题结果",
+    "相对 content-free retry 的配对差",
+    "错误类别、token、时间与编译次数",
+    "无关及反事实反馈的误导率",
+    "所有排除和不可用分支"
+  ],
+  "claim_boundary": "运行器与计划不是因果证据；预注册试点若未达到项目数和合格失败数门禁，也不得声称统计显著、跨项目普适或正式因果结论。"
+}

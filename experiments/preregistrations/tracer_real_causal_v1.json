@@ -1,0 +1,92 @@
+{
+  "version": "tracer-causal-preregistration-v1",
+  "status": "frozen-before-provider-run",
+  "planned_experiment_id": "tracer-real-causal-v1-deepseek-20260913",
+  "registered_at_utc": "2026-09-13T16:35:04Z",
+  "registration_medium": "版本控制仓库中的机器可读预注册；正式解释必须引用包含本文件且早于 provider 轨迹的提交。",
+  "benchmark": {
+    "version": "tracer-real-v1",
+    "split_policy": "upstream_project_disjoint",
+    "projects": [
+      {
+        "project_id": "mathlib",
+        "split": "development",
+        "tasks": 3
+      },
+      {
+        "project_id": "batteries",
+        "split": "validation",
+        "tasks": 4
+      },
+      {
+        "project_id": "aesop",
+        "split": "test",
+        "tasks": 4
+      }
+    ]
+  },
+  "models": [
+    {
+      "id": "deepseek_v4_pro",
+      "model": "deepseek-v4-pro",
+      "api_url": "https://api.deepseek.com/chat/completions",
+      "temperature": 0,
+      "max_tokens": 12000,
+      "thinking": "enabled",
+      "reasoning_effort": "high"
+    }
+  ],
+  "design": {
+    "protocol_version": "tracer-causal-feedback-v1",
+    "arms": [
+      "content_free_retry",
+      "true_raw",
+      "true_normalized",
+      "true_structured",
+      "irrelevant_matched",
+      "counterfactual",
+      "retrieval_only",
+      "adaptive"
+    ],
+    "repeats": 3,
+    "branch_attempts": 1,
+    "benchmark_splits": [
+      "test"
+    ],
+    "order_seed": 20260913,
+    "compile_timeout": 180,
+    "prompt_files": [
+      "prompts/causal_seed.txt",
+      "prompts/causal_branch.txt",
+      "prompts/proof_contract.txt"
+    ]
+  },
+  "primary_analysis": {
+    "population": "eligible_first_failures_on_test_split",
+    "contrast": "true_structured - content_free_retry",
+    "outcome": "one_branch_attempt_kernel_success",
+    "estimand": "冻结同一首轮失败内的平均配对成功率差",
+    "missingness": "供体不可用只影响负对照；主对比任何 provider 或编译基础设施错误均使批次不具备正式解释资格。",
+    "uncertainty": "逐项目报告配对效应；达到 claim_gate 后才进行项目聚类区间与置换检验。"
+  },
+  "secondary_analyses": [
+    "true_raw、true_normalized、adaptive、retrieval_only 相对 content_free_retry 的配对差",
+    "irrelevant_matched 与 counterfactual 的误导率和相对真实反馈差",
+    "按错误类别、token、墙钟时间和项目的描述性异质性",
+    "Error-State Graph 路由动作与修复成功的描述性关联"
+  ],
+  "stopping_rule": {
+    "maximum_seed_generations": 12,
+    "maximum_branch_generations": 96,
+    "maximum_provider_calls": 108,
+    "adaptive_early_stopping": false,
+    "transport_policy": "不自动重试结果未知的已计费请求；停止并保留批次，续跑必须沿用同一预注册。"
+  },
+  "claim_gate": {
+    "minimum_test_projects": 5,
+    "minimum_eligible_first_failures": 30,
+    "current_test_projects": 1,
+    "confirmatory_claim_allowed_for_v1": false,
+    "required_label": "预注册项目级试点；不得声称统计显著、跨项目普适或正式因果结论。"
+  }
+}
