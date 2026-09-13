@@ -83,6 +83,31 @@ python src/causal_feedback.py plan `
   --preregistration experiments/preregistrations/tracer_real_causal_v1.json
 ```
 
+正式输出目录创建前，先用合成的 `True` 定理验证密钥、provider 协议、候选解析与 Lean。该调用不读取任何 TRACER-REAL 题目，也不计入 108 次实验调用：
+
+```powershell
+python src/causal_feedback.py preflight `
+  --config experiments/causal_feedback.tracer_real_v1.json `
+  --api-key-prompt
+```
+
+只有输出 `provider_ok: true` 后才运行正式批次；密钥仍由隐藏输入读取，不进入环境配置文件或日志。正式命令为：
+
+```powershell
+python src/causal_feedback.py run `
+  --config experiments/causal_feedback.tracer_real_v1.json `
+  --benchmark benchmarks/real_repairs/tracer_real_v1/manifest.json `
+  --project-root mathlib_project `
+  --preregistration experiments/preregistrations/tracer_real_causal_v1.json `
+  --out results/causal-tracer-real-v1-deepseek-20260913 `
+  --api-key-prompt `
+  --max-calls 108 `
+  --no-cost-limit
+
+python src/causal_feedback.py audit `
+  --run results/causal-tracer-real-v1-deepseek-20260913
+```
+
 真实运行入口要求显式选择本地费用门禁。`--max-reserved-usd` 需要同时冻结输入/输出价格；`--no-cost-limit` 只表示不按本地美元估算停止，仍受 `--max-calls` 和冻结计划上限约束，不代表供应商免费。正式实验不应直接把本示例命令当作预注册。
 
 ## 主分析与结论边界

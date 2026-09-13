@@ -10,8 +10,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from causal_feedback import (  # noqa: E402
-    ARMS, _prompt_source, branch_prompt, build_plan, donor_map, intervention_for, run_matrix, summarize,
-    validate_config, validate_preregistration, validate_protocol,
+    ARMS, _prompt_source, audit_run, branch_prompt, build_plan, donor_map, intervention_for,
+    preflight_provider, run_matrix, summarize, validate_config, validate_preregistration, validate_protocol,
 )
 from compiler_feedback import build_feedback_record  # noqa: E402
 from error_state_graph import build_error_state_graph  # noqa: E402
@@ -42,6 +42,30 @@ def seed(problem_id, unknown):
 
 
 class CausalFeedbackTest(unittest.TestCase):
+    def test_audit_rejects_incomplete_run(self):
+        with TemporaryDirectory() as directory:
+            result = audit_run(Path(directory))
+        self.assertFalse(result["ok"])
+        self.assertIn("plan.json", result["errors"][0])
+
+    def test_provider_preflight_uses_only_synthetic_theorem(self):
+        class OfflineProvider:
+            def generate(self, prompt):
+                self.prompt = prompt
+                return Generation(
+                    "by trivial", {"total_tokens": 2}, "offline",
+                    {"choices": [{"finish_reason": "stop"}], "model": "offline"},
+                )
+
+        config = validate_config(ROOT / "experiments/causal_feedback.tracer_real_v1.json")
+        provider = OfflineProvider()
+        with patch("causal_feedback._providers", return_value={"deepseek_v4_pro": provider}), \
+             patch("causal_feedback.compile_candidate", return_value=CompileResult(True, 1, "", "", False, 0, ["lean"])):
+            result = preflight_provider(config, {"TRACER_CAUSAL_DEEPSEEK_KEY": "not-used"})
+        self.assertTrue(result["ok"])
+        self.assertIn("tracerProviderPreflight", provider.prompt)
+        self.assertNotIn("aesop", provider.prompt.lower())
+
     def test_tracer_real_preregistration_freezes_project_test_split(self):
         config = validate_config(ROOT / "experiments/causal_feedback.tracer_real_v1.json")
         benchmark = load_benchmark(ROOT / "benchmarks/real_repairs/tracer_real_v1/manifest.json")

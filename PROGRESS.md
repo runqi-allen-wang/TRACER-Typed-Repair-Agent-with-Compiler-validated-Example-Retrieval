@@ -78,7 +78,7 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 
 当前文档基线的本地 Windows 全量复审记录：
 
-- Python：共发现 288 项测试，286 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。覆盖 Compiler Feedback v1、同首轮候选因果分叉、项目级划分与预注册漂移门禁、长文件目标感知提示、Error-State Graph、自适应路由、11 题/3 项目 TRACER-REAL 及其构建器、反馈采纳、三表示 runner、两份 Feedback Study 发布包与跨模型比较审计、第二模型冻结合同与完整 216 任务跨模型配对、直接 provider CLI、仅调用次数门禁、DeepSeek 思考参数和 Chat 存储字段披露、SP v2 双向指标及正常对照真编译、SP 隔离 v1 的 14 项静态 fail-closed 合同、证据分层和既有实验防回退。
+- Python：共发现 290 项测试，288 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。覆盖 Compiler Feedback v1、同首轮候选因果分叉、项目级划分与预注册漂移门禁、合成 provider 预检和不完整批次审计、长文件目标感知提示、Error-State Graph、自适应路由、11 题/3 项目 TRACER-REAL 及其构建器、反馈采纳、三表示 runner、两份 Feedback Study 发布包与跨模型比较审计、第二模型冻结合同与完整 216 任务跨模型配对、直接 provider CLI、仅调用次数门禁、DeepSeek 思考参数和 Chat 存储字段披露、SP v2 双向指标及正常对照真编译、SP 隔离 v1 的 14 项静态 fail-closed 合同、证据分层和既有实验防回退。
 - `lake build`：通过；冻结 Evaluation18 输入中的 18 个 `sorry` 是预期占位警告，不代表题目已在原文件中修复。
 - `python -m leancapsule audit capsules`：24/24 通过。
 - `python -m leancapsule verify capsules`：24/24 通过，包含 4 个 Mathlib 案例。

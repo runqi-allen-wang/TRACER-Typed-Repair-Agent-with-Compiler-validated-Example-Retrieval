@@ -817,6 +817,41 @@ def audit_run(run: Path) -> dict[str, Any]:
     }
 
 
+def preflight_provider(config: dict[str, Any], api_keys: dict[str, str] | None = None) -> dict[str, Any]:
+    """用合成定理验证 provider、候选解析和 Lean；不读取 TRACER-REAL。"""
+
+    providers = _providers(config, api_keys, None)
+    source = "import Std\n\ntheorem tracerProviderPreflight : True :=\n  by trivial\n"
+    prompt = (
+        "这是连接预检，不是实验任务。请只返回 Lean 证明体，使下列定理成立；"
+        "不要返回 Markdown 或解释。\n\n" + source
+    )
+    rows = []
+    for model in config["models"]:
+        provider = providers[model["id"]]
+        try:
+            candidate, generation, finish = _generate(provider, prompt)
+            compiled = compile_candidate(
+                ROOT / "lean_project/TRACERProviderPreflight.lean", source, candidate,
+                "tracerProviderPreflight", timeout=config["compile_timeout"],
+            )
+            rows.append({
+                "model_id": model["id"],
+                "provider_ok": True,
+                "finish_reason": finish,
+                "candidate_parsed": bool(candidate),
+                "lean_compile_ok": bool(compiled.ok and not diagnostics_use_sorry(compiled.diagnostics)),
+                "usage": generation.usage,
+            })
+        except Exception as exc:
+            rows.append({"model_id": model["id"], "provider_ok": False, "error": redact_sensitive_text(exc)})
+    return {
+        "ok": all(row["provider_ok"] for row in rows),
+        "scope": "合成 True 定理连接预检；不读取 TRACER-REAL，不属于预注册实验调用数。",
+        "models": rows,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -844,10 +879,33 @@ def main() -> int:
             cost.add_argument("--no-cost-limit", action="store_true")
     audit = sub.add_parser("audit")
     audit.add_argument("--run", type=Path, required=True)
+    preflight = sub.add_parser("preflight")
+    preflight.add_argument("--config", type=Path, default=ROOT / "experiments/causal_feedback.tracer_real_v1.json")
+    preflight.add_argument("--api-url")
+    preflight.add_argument("--model")
+    preflight.add_argument("--model-id")
+    preflight.add_argument("--temperature", type=float)
+    preflight.add_argument("--max-tokens", type=int)
+    preflight.add_argument("--thinking", choices=("enabled", "disabled"))
+    preflight.add_argument("--reasoning-effort", choices=("low", "high", "max"))
+    preflight.add_argument("--input-price-per-1k", type=float)
+    preflight.add_argument("--output-price-per-1k", type=float)
+    preflight.add_argument("--api-key-prompt", action="store_true")
     args = parser.parse_args()
     try:
         if args.command == "audit":
             result = audit_run(args.run)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return 0 if result["ok"] else 1
+        if args.command == "preflight":
+            config = validate_config(args.config)
+            config = apply_direct_model_config(
+                config, args.api_url, args.model, args.model_id, args.temperature,
+                args.max_tokens, args.thinking, args.reasoning_effort,
+                args.input_price_per_1k, args.output_price_per_1k,
+            )
+            keys = _prompt_keys(config) if args.api_key_prompt else None
+            result = preflight_provider(config, keys)
             print(json.dumps(result, ensure_ascii=False, indent=2))
             return 0 if result["ok"] else 1
         protocol = validate_protocol()
