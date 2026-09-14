@@ -108,6 +108,14 @@ python src/causal_feedback.py audit `
   --run results/causal-tracer-real-v1-deepseek-20260913
 ```
 
+Windows PowerShell 可直接使用封装脚本，避免复制多行命令时混入 Markdown 围栏：
+
+```powershell
+.\scripts\run_tracer_real_causal.ps1
+```
+
+脚本只提示输入一次密钥，先预检，再运行并审计；无论成功还是失败，都会清除当前脚本进程中的密钥变量。
+
 真实运行入口要求显式选择本地费用门禁。`--max-reserved-usd` 需要同时冻结输入/输出价格；`--no-cost-limit` 只表示不按本地美元估算停止，仍受 `--max-calls` 和冻结计划上限约束，不代表供应商免费。正式实验不应直接把本示例命令当作预注册。
 
 ## 主分析与结论边界

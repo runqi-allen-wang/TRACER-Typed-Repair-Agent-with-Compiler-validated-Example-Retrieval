@@ -42,6 +42,13 @@ def seed(problem_id, unknown):
 
 
 class CausalFeedbackTest(unittest.TestCase):
+    def test_powershell_wrapper_preflights_before_formal_run_and_clears_key(self):
+        script = (ROOT / "scripts/run_tracer_real_causal.ps1").read_text(encoding="utf-8")
+        self.assertLess(script.index("preflight"), script.index("causal_feedback.py run"))
+        self.assertIn('Read-Host "DeepSeek API key" -AsSecureString', script)
+        self.assertIn("Remove-Item Env:TRACER_CAUSAL_DEEPSEEK_KEY", script)
+        self.assertIn("--preregistration experiments/preregistrations/tracer_real_causal_v1.json", script)
+
     def test_audit_rejects_incomplete_run(self):
         with TemporaryDirectory() as directory:
             result = audit_run(Path(directory))
