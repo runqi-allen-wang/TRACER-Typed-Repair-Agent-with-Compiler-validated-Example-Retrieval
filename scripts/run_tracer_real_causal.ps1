@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
-    [string]$Out = "results/causal-tracer-real-v1-deepseek-20260913"
+    [string]$Out = "results/causal-tracer-real-v1-deepseek-20260913",
+    [switch]$Resume
 )
 
 Set-StrictMode -Version Latest
@@ -8,8 +9,11 @@ $ErrorActionPreference = "Stop"
 $repoRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot "..")).Path
 Set-Location -LiteralPath $repoRoot
 
-if (Test-Path -LiteralPath $Out) {
-    throw "Output directory already exists; refusing to overwrite: $Out"
+if ((Test-Path -LiteralPath $Out) -and -not $Resume) {
+    throw "Output directory already exists. Use -Resume to continue without repeating completed requests: $Out"
+}
+if ($Resume -and -not (Test-Path -LiteralPath $Out)) {
+    throw "Resume directory does not exist: $Out"
 }
 
 $secureKey = Read-Host "DeepSeek API key" -AsSecureString
@@ -29,14 +33,20 @@ try {
         throw "Provider preflight failed; the formal experiment was not started."
     }
 
-    & python src/causal_feedback.py run `
-        --config experiments/causal_feedback.tracer_real_v1.json `
-        --benchmark benchmarks/real_repairs/tracer_real_v1/manifest.json `
-        --project-root mathlib_project `
-        --preregistration experiments/preregistrations/tracer_real_causal_v1.json `
-        --out $Out `
-        --max-calls 108 `
-        --no-cost-limit
+    $runArguments = @(
+        "src/causal_feedback.py", "run",
+        "--config", "experiments/causal_feedback.tracer_real_v1.json",
+        "--benchmark", "benchmarks/real_repairs/tracer_real_v1/manifest.json",
+        "--project-root", "mathlib_project",
+        "--preregistration", "experiments/preregistrations/tracer_real_causal_v1.json",
+        "--out", $Out,
+        "--max-calls", "108",
+        "--no-cost-limit"
+    )
+    if ($Resume) {
+        $runArguments += "--resume"
+    }
+    & python @runArguments
     if ($LASTEXITCODE -ne 0) {
         throw "Formal experiment did not finish. Keep the output directory and do not rerun blindly."
     }

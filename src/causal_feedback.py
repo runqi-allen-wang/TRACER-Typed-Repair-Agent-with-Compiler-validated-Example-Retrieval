@@ -471,8 +471,9 @@ def run_matrix(
     config: dict[str, Any], benchmark_path: Path, out: Path,
     *, api_keys: dict[str, str] | None = None, budget: CallBudget | None = None,
     project_root: Path | None = None, preregistration: dict[str, Any] | None = None,
+    resume: bool = False,
 ) -> dict[str, Any]:
-    """运行两阶段矩阵；v1 不支持覆盖旧目录或把分支答案写回首轮。"""
+    """运行两阶段矩阵；显式续跑只跳过已落盘记录，不重发已有请求。"""
 
     protocol = validate_protocol()
     benchmark = load_benchmark(benchmark_path)
@@ -485,13 +486,15 @@ def run_matrix(
     plan = build_plan(config, benchmark)
     providers = _providers(config, api_keys, budget)
     examples = load_examples(ROOT / config.get("examples_dir", "examples"))
-    out.mkdir(parents=True, exist_ok=False)
+    saved_plan = read_json(out / "plan.json") if resume and (out / "plan.json").is_file() else None
     experiment_id = (
+        str(saved_plan["experiment_id"])
+        if saved_plan is not None else
         preregistration["planned_experiment_id"]
         if preregistration is not None else "causal-feedback-" + str(uuid.uuid4())
     )
     toolchain_path = (project_root or ROOT) / "lean-toolchain"
-    write_json(out / "plan.json", {
+    plan_record = {
         "protocol_version": PROTOCOL_VERSION,
         "experiment_id": experiment_id,
         "protocol": protocol,
@@ -507,17 +510,52 @@ def run_matrix(
         },
         "status": "running",
         "preregistration": preregistration,
-    })
-    write_json(out / "benchmark.json", benchmark)
+    }
+    if resume:
+        if not out.is_dir():
+            raise ValueError("续跑目录不存在")
+        if (out / "summary.json").is_file():
+            raise ValueError("批次已经生成 summary.json；拒绝再次续跑")
+        saved_plan = read_json(out / "plan.json")
+        saved_benchmark = read_json(out / "benchmark.json")
+        if saved_plan != plan_record or saved_benchmark != benchmark:
+            raise ValueError("续跑输入、配置、提示模板、环境或预注册记录与原批次不一致")
+        if budget is not None:
+            saved_budget = read_json(out / "budget.json")
+            budget.restore(saved_budget)
+            saved_seed_attempts = len(list((out / "seeds").rglob("*.json"))) if (out / "seeds").is_dir() else 0
+            saved_branch_attempts = 0
+            if (out / "branches").is_dir():
+                for path in (out / "branches").rglob("result.json"):
+                    if read_json(path).get("status") != "not_applicable":
+                        saved_branch_attempts += 1
+            if budget.calls != saved_seed_attempts + saved_branch_attempts:
+                raise ValueError(
+                    "预算账本与已落盘请求数不一致；可能存在结果未知的已计费请求，拒绝自动续跑"
+                )
+    else:
+        out.mkdir(parents=True, exist_ok=False)
+        write_json(out / "plan.json", plan_record)
+        write_json(out / "benchmark.json", benchmark)
     if budget is not None:
         budget.ledger_path = out / "budget.json"
-        write_json(out / "budget.json", budget.snapshot())
+        if not resume:
+            write_json(out / "budget.json", budget.snapshot())
 
     selected_ids = {item["problem_id"] for item in plan["seed_tasks"]}
     problems = {item["id"]: item for item in benchmark["problems"] if item["id"] in selected_ids}
     models = {item["id"]: item for item in config["models"]}
     seeds: list[dict[str, Any]] = []
     for index, task in enumerate(plan["seed_tasks"], 1):
+        seed_path = out / "seeds" / task["model_id"] / str(task["repeat"]) / f"{task['problem_id']}.json"
+        if resume and seed_path.is_file():
+            seed = read_json(seed_path)
+            expected = {**task, "experiment_id": experiment_id, "seed_id": seed_key(task)}
+            if any(seed.get(key) != value for key, value in expected.items()):
+                raise ValueError("既有首轮记录与冻结计划不一致：" + seed_key(task))
+            seeds.append(seed)
+            print(f"seed {index}/{len(plan['seed_tasks'])} {seed['seed_id']}: SKIP", flush=True)
+            continue
         problem = problems[task["problem_id"]]
         source_file = benchmark_path.parent / problem["file"]
         compile_anchor = (
@@ -544,12 +582,10 @@ def run_matrix(
             seed = {**task, "experiment_id": experiment_id, "seed_id": seed_key(task), "candidate": "", "compile_ok": False,
                     "eligible_first_failure": False, "ineligibility_reason": "provider_or_policy_error",
                     "error": redact_sensitive_text(exc)}
-        write_json(out / "seeds" / task["model_id"] / str(task["repeat"]) / f"{task['problem_id']}.json", seed)
+        write_json(seed_path, seed)
         seeds.append(seed)
         seed_status = "ELIGIBLE" if seed.get("eligible_first_failure") else "INELIGIBLE:" + str(seed.get("ineligibility_reason"))
         print(f"seed {index}/{len(plan['seed_tasks'])} {seed['seed_id']}: {seed_status}", flush=True)
-        if seed.get("error"):
-            raise RuntimeError(seed["error"])
 
     irrelevant_donors = donor_map(seeds)
     counterfactual_donors = donor_map(seeds, distinct_signals=True)
@@ -577,6 +613,19 @@ def run_matrix(
         donor = by_id.get(selected_donors.get(seed["seed_id"], ""))
         intervention = intervention_for(item["arm"], seed, donor=donor, examples=retrieved)
         destination = out / "branches" / seed["model_id"] / str(seed["repeat"]) / item["arm"] / seed["problem_id"]
+        result_path = destination / "result.json"
+        if resume and result_path.is_file():
+            result = read_json(result_path)
+            if (
+                result.get("experiment_id") != experiment_id
+                or result.get("seed_id") != seed["seed_id"]
+                or result.get("arm") != item["arm"]
+                or result.get("problem_id") != seed["problem_id"]
+            ):
+                raise ValueError("既有分支记录与冻结计划不一致：" + seed["seed_id"] + "/" + item["arm"])
+            results.append(result)
+            print(f"branch {index}/{len(branches)} {item['arm']} {seed['seed_id']}: SKIP", flush=True)
+            continue
         if not intervention["available"]:
             result = {**item, "experiment_id": experiment_id, "problem_id": seed["problem_id"], "status": "not_applicable",
                       "reason": "同模型、同重复、同错误类别内没有其他供体", "compile_ok": None,
@@ -636,11 +685,9 @@ def run_matrix(
                           "first_candidate": seed["candidate"], "same_first_candidate": True,
                           "intervention": intervention, "compile_ok": False,
                           "error": redact_sensitive_text(exc)}
-        write_json(destination / "result.json", result)
+        write_json(result_path, result)
         results.append(result)
         print(f"branch {index}/{len(branches)} {item['arm']} {seed['seed_id']}: {result['status']}", flush=True)
-        if result["status"] == "error":
-            raise RuntimeError(result["error"])
 
     summary = summarize(seeds, results)
     write_json(out / "summary.json", summary)
@@ -700,6 +747,10 @@ def summarize(seeds: list[dict[str, Any]], results: list[dict[str, Any]]) -> dic
         "eligible_first_failures": len(eligible),
         "eligibility_rate": len(eligible) / len(seeds) if seeds else None,
         "branch_results": len(results),
+        "infrastructure_errors": sum(
+            bool(seed.get("error")) or seed.get("ineligibility_reason") == "provider_or_policy_error"
+            for seed in seeds
+        ) + sum(row.get("status") == "error" for row in results),
         "same_first_candidate_invariant": invariant,
         "successful_proof_recompile_invariant": independent_invariant,
         "by_arm": by_arm,
@@ -880,6 +931,7 @@ def main() -> int:
             command.add_argument("--output-price-per-1k", type=float)
             command.add_argument("--api-key-prompt", action="store_true")
             command.add_argument("--max-calls", type=int)
+            command.add_argument("--resume", action="store_true", help="严格续跑已有目录；跳过已落盘请求")
             cost = command.add_mutually_exclusive_group(required=True)
             cost.add_argument("--max-reserved-usd", type=float)
             cost.add_argument("--no-cost-limit", action="store_true")
@@ -956,6 +1008,7 @@ def main() -> int:
         result = run_matrix(
             config, args.benchmark.resolve(), args.out.resolve(), api_keys=keys, budget=budget,
             project_root=args.project_root, preregistration=preregistration,
+            resume=args.resume,
         )
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0

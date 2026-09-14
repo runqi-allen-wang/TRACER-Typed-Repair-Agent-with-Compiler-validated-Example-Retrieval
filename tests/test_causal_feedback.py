@@ -15,7 +15,7 @@ from causal_feedback import (  # noqa: E402
 )
 from compiler_feedback import build_feedback_record  # noqa: E402
 from error_state_graph import build_error_state_graph  # noqa: E402
-from research import load_benchmark  # noqa: E402
+from research import CallBudget, load_benchmark  # noqa: E402
 from compiler import CompileResult, FileCompileResult  # noqa: E402
 from provider import Generation  # noqa: E402
 
@@ -44,10 +44,11 @@ def seed(problem_id, unknown):
 class CausalFeedbackTest(unittest.TestCase):
     def test_powershell_wrapper_preflights_before_formal_run_and_clears_key(self):
         script = (ROOT / "scripts/run_tracer_real_causal.ps1").read_text(encoding="utf-8")
-        self.assertLess(script.index("preflight"), script.index("causal_feedback.py run"))
+        self.assertLess(script.index("preflight"), script.index('"src/causal_feedback.py", "run"'))
         self.assertIn('Read-Host "DeepSeek API key" -AsSecureString', script)
         self.assertIn("Remove-Item Env:TRACER_CAUSAL_DEEPSEEK_KEY", script)
-        self.assertIn("--preregistration experiments/preregistrations/tracer_real_causal_v1.json", script)
+        self.assertIn('"--preregistration", "experiments/preregistrations/tracer_real_causal_v1.json"', script)
+        self.assertIn("--resume", script)
 
     def test_audit_rejects_incomplete_run(self):
         with TemporaryDirectory() as directory:
@@ -224,6 +225,70 @@ end Demo
             self.assertEqual(result["branch_results"], 16)
             self.assertTrue(result["same_first_candidate_invariant"])
             self.assertTrue(all(item["matched_pairs"] == 2 for item in result["paired_comparisons"]))
+
+    def test_resume_skips_existing_records_and_restores_budget(self):
+        class OfflineProvider:
+            name = "offline"
+
+            def __init__(self, budget):
+                self.calls = 0
+                self.budget = budget
+
+            def metadata(self):
+                return {"provider": "offline", "model": "offline-test", "temperature": 0, "max_tokens": 100}
+
+            def generate(self, prompt):
+                self.calls += 1
+                self.budget.reserve(prompt, config["models"][0])
+                return Generation(
+                    "by exact missing", {"prompt_tokens": 1, "completion_tokens": 1}, "offline",
+                    {"choices": [{"finish_reason": "stop"}], "model": "offline-test"},
+                )
+
+        def fake_compile(_path, _source, candidate, _theorem, **_kwargs):
+            return CompileResult(False, 1.0, "Demo.lean:4:3: error: unknown identifier 'missing'", "", False, 1, ["lean"])
+
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            task_dir = root / "tasks"
+            task_dir.mkdir()
+            source = "import Std\nnamespace Demo\ntheorem demo : True :=\n  -- PROOF_START\n  by exact missing\n  -- PROOF_END\nend Demo\n"
+            (task_dir / "demo.lean").write_text(source, encoding="utf-8")
+            benchmark = {"version": "resume-v1", "status": "test", "license": "MIT", "problems": [{
+                "id": "demo", "file": "tasks/demo.lean", "theorem": "Demo.demo", "tags": ["test"],
+                "difficulty": "test", "expected_error": "unknown_identifier", "source_text": source,
+            }]}
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps(benchmark), encoding="utf-8")
+            config = validate_config(ROOT / "experiments/causal_feedback.example.json")
+            config["models"] = [{**config["models"][0], "id": "offline", "model": "offline-test"}]
+            config["repeats"] = 2
+            first_budget = CallBudget(18)
+            first = OfflineProvider(first_budget)
+            out = root / "out"
+            with patch("causal_feedback._providers", return_value={"offline": first}), \
+                 patch("causal_feedback.compile_candidate", side_effect=fake_compile):
+                run_matrix(config, manifest, out, budget=first_budget)
+            self.assertEqual(first.calls, 14)
+
+            (out / "summary.json").unlink()
+            completed = [
+                path for path in (out / "branches").rglob("result.json")
+                if json.loads(path.read_text(encoding="utf-8")).get("status") == "complete"
+            ]
+            completed[-1].unlink()
+            ledger = json.loads((out / "budget.json").read_text(encoding="utf-8"))
+            ledger["attempted_calls"] -= 1
+            (out / "budget.json").write_text(json.dumps(ledger), encoding="utf-8")
+
+            second_budget = CallBudget(18)
+            second = OfflineProvider(second_budget)
+            with patch("causal_feedback._providers", return_value={"offline": second}), \
+                 patch("causal_feedback.compile_candidate", side_effect=fake_compile):
+                result = run_matrix(config, manifest, out, budget=second_budget, resume=True)
+            self.assertEqual(second.calls, 1)
+            self.assertEqual(second_budget.calls, 14)
+            self.assertEqual(result["branch_results"], 16)
 
 
 if __name__ == "__main__":

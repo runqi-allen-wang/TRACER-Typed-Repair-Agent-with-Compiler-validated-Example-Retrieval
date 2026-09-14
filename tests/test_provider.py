@@ -36,6 +36,18 @@ class ProviderTest(unittest.TestCase):
         result = parse_generation('{"choices":[{"message":{"content":"by rfl"}}]}', "openai_compatible")
         self.assertEqual(result.candidate, "by rfl")
 
+    def test_json_null_is_reported_as_provider_shape_error(self):
+        with self.assertRaisesRegex(ValueError, "JSON 顶层"):
+            parse_generation("null", "openai_compatible")
+
+    def test_chat_null_content_and_usage_are_empty_not_python_none(self):
+        result = parse_generation(
+            '{"choices":[{"message":{"content":null},"finish_reason":"stop"}],"usage":null}',
+            "openai_compatible",
+        )
+        self.assertEqual(result.candidate, "")
+        self.assertEqual(result.usage, {})
+
     def test_openai_responses_shape(self):
         result = parse_generation(
             json.dumps(
