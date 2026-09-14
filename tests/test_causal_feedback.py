@@ -59,10 +59,10 @@ class CausalFeedbackTest(unittest.TestCase):
 
         config = validate_config(ROOT / "experiments/causal_feedback.tracer_real_v1.json")
         provider = OfflineProvider()
-        with patch("causal_feedback._providers", return_value={"deepseek_v4_pro": provider}), \
-             patch("causal_feedback.compile_candidate", return_value=CompileResult(True, 1, "", "", False, 0, ["lean"])):
+        with patch("causal_feedback._providers", return_value={"deepseek_v4_pro": provider}):
             result = preflight_provider(config, {"TRACER_CAUSAL_DEEPSEEK_KEY": "not-used"})
         self.assertTrue(result["ok"])
+        self.assertTrue(result["models"][0]["lean_compile_ok"])
         self.assertIn("tracerProviderPreflight", provider.prompt)
         self.assertNotIn("aesop", provider.prompt.lower())
 

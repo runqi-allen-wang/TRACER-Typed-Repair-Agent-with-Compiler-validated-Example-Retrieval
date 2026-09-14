@@ -821,7 +821,13 @@ def preflight_provider(config: dict[str, Any], api_keys: dict[str, str] | None =
     """用合成定理验证 provider、候选解析和 Lean；不读取 TRACER-REAL。"""
 
     providers = _providers(config, api_keys, None)
-    source = "import Std\n\ntheorem tracerProviderPreflight : True :=\n  by trivial\n"
+    source = (
+        "import Std\n\n"
+        "theorem tracerProviderPreflight : True :=\n"
+        "  -- PROOF_START\n"
+        "  by trivial\n"
+        "  -- PROOF_END\n"
+    )
     prompt = (
         "这是连接预检，不是实验任务。请只返回 Lean 证明体，使下列定理成立；"
         "不要返回 Markdown 或解释。\n\n" + source
