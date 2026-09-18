@@ -1,0 +1,449 @@
+{
+  "version": "tracer-real-candidate-inventory-v1",
+  "status": "deterministic-history-scan",
+  "project_id": "scilean",
+  "source_repository": "https://github.com/lecopivo/SciLean",
+  "source_license": "Apache-2.0",
+  "endpoint_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+  "history_policy": {
+    "traversal": "first_parent",
+    "maximum_commits": 120,
+    "pairs_scanned": 120,
+    "modified_lean_files_considered": 1448,
+    "candidate_rule": "same parsed declaration header; proof changed in window; endpoint proof differs"
+  },
+  "candidates": [
+    {
+      "id": "scilean_hdiv",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/AD/FDeriv.lean",
+      "theorem": "HDiv",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_hmul_2",
+      "before_revision": "52619edeaaff7d4482dd3385dffd312cd218928b",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/AD/FDeriv.lean",
+      "theorem": "HMul",
+      "change_revision": "bba7171c035e2ead6f111b16017dea638a9dc186"
+    },
+    {
+      "id": "scilean_prod",
+      "before_revision": "57dcd06f2304599a28d4dd56d511a909f1838d1b",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/AD/FDeriv.lean",
+      "theorem": "Prod",
+      "change_revision": "1c3d7a91935020f8d04edf6681f1bb9c548683ec"
+    },
+    {
+      "id": "scilean_scilean_deriv_fderiv",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/AD/FDeriv.lean",
+      "theorem": "SciLean.deriv_fderiv",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_hmul_3",
+      "before_revision": "52619edeaaff7d4482dd3385dffd312cd218928b",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/AD/FwdFDeriv.lean",
+      "theorem": "HMul",
+      "change_revision": "bba7171c035e2ead6f111b16017dea638a9dc186"
+    },
+    {
+      "id": "scilean_norm2",
+      "before_revision": "52619edeaaff7d4482dd3385dffd312cd218928b",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/AD/HasFDeriv.lean",
+      "theorem": "Norm2",
+      "change_revision": "bba7171c035e2ead6f111b16017dea638a9dc186"
+    },
+    {
+      "id": "scilean_prod_2",
+      "before_revision": "57dcd06f2304599a28d4dd56d511a909f1838d1b",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/AD/HasFDeriv.lean",
+      "theorem": "Prod",
+      "change_revision": "1c3d7a91935020f8d04edf6681f1bb9c548683ec"
+    },
+    {
+      "id": "scilean_hasfderivat_let",
+      "before_revision": "57dcd06f2304599a28d4dd56d511a909f1838d1b",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/AD/HasFDeriv.lean",
+      "theorem": "hasFDerivAt_let",
+      "change_revision": "1c3d7a91935020f8d04edf6681f1bb9c548683ec"
+    },
+    {
+      "id": "scilean_scilean_fwdfderiv_from_hasfwdfderiv",
+      "before_revision": "cee9eeebe596b1d73a4f1f6ba429372c08721122",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/AD/HasFwdFDeriv.lean",
+      "theorem": "SciLean.fwdFDeriv_from_hasFwdFDeriv",
+      "change_revision": "5b5b9199b0c57cccfe67bd53f566c5375b80b4a1"
+    },
+    {
+      "id": "scilean_norm2_2",
+      "before_revision": "52619edeaaff7d4482dd3385dffd312cd218928b",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/AD/HasRevFDeriv.lean",
+      "theorem": "Norm2",
+      "change_revision": "bba7171c035e2ead6f111b16017dea638a9dc186"
+    },
+    {
+      "id": "scilean_scilean_hasvecfwdfderiv_pi_rule",
+      "before_revision": "0be3db9275ce612feb62f3c8b515dc8c7c67156f",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/AD/HasVecFwdFDeriv.lean",
+      "theorem": "SciLean.HasVecFwdFDeriv.pi_rule",
+      "change_revision": "d2bb3ccc50164a0cd6ab22a9160df25ecf164c93"
+    },
+    {
+      "id": "scilean_scilean_hsmul",
+      "before_revision": "e743c7b4af655685cdd13eb0f968e6e69c2d8745",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/AD/RevFDeriv.lean",
+      "theorem": "SciLean.HSMul",
+      "change_revision": "a0fcd034ad071c47fd7d2adf929b49eb628e163b"
+    },
+    {
+      "id": "scilean_scilean_revfderiv_pi_rule",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/AD/RevFDeriv.lean",
+      "theorem": "SciLean.revFDeriv.pi_rule",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_hadd",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Algebra/IsAddGroupHom.lean",
+      "theorem": "HAdd",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_hsub",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Algebra/IsAddGroupHom.lean",
+      "theorem": "HSub",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_dite",
+      "before_revision": "5769d305c19fbfc7743a47618ce2f23f009a8212",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Algebra/IsAffineMap.lean",
+      "theorem": "dite",
+      "change_revision": "87bc4cf7057b2201e9bbc2398344105d93034a9d"
+    },
+    {
+      "id": "scilean_scilean_matvecmuladd_zero_a",
+      "before_revision": "cf8c54a040c6a13a767fceb3ce7cfb0b36600b25",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Algebra/TensorProduct/Basic.lean",
+      "theorem": "SciLean.matVecMulAdd_zero_A",
+      "change_revision": "d245f73ab69b26c085da4ee1bd63c2e6630253c1"
+    },
+    {
+      "id": "scilean_scilean_matvecmuladd_zero_a_2",
+      "before_revision": "cf8c54a040c6a13a767fceb3ce7cfb0b36600b25",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Algebra/TensorProduct/Basic.lean",
+      "theorem": "SciLean.matVecMulAdd_zero_a",
+      "change_revision": "d245f73ab69b26c085da4ee1bd63c2e6630253c1"
+    },
+    {
+      "id": "scilean_scilean_matvecmuladd_zero_x",
+      "before_revision": "0be3db9275ce612feb62f3c8b515dc8c7c67156f",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Algebra/TensorProduct/Basic.lean",
+      "theorem": "SciLean.matVecMulAdd_zero_x",
+      "change_revision": "d2bb3ccc50164a0cd6ab22a9160df25ecf164c93"
+    },
+    {
+      "id": "scilean_scilean_vecmatmuladd_zero_y",
+      "before_revision": "0be3db9275ce612feb62f3c8b515dc8c7c67156f",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Algebra/TensorProduct/Basic.lean",
+      "theorem": "SciLean.vecMatMulAdd_zero_y",
+      "change_revision": "d2bb3ccc50164a0cd6ab22a9160df25ecf164c93"
+    },
+    {
+      "id": "scilean_scilean_matvecmuladd_addidentitymatrix",
+      "before_revision": "cf8c54a040c6a13a767fceb3ce7cfb0b36600b25",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Algebra/TensorProduct/Self.lean",
+      "theorem": "SciLean.matVecMulAdd_addIdentityMatrix",
+      "change_revision": "d245f73ab69b26c085da4ee1bd63c2e6630253c1"
+    },
+    {
+      "id": "scilean_scilean_matvecmuladd_identitymatrix",
+      "before_revision": "cf8c54a040c6a13a767fceb3ce7cfb0b36600b25",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Algebra/TensorProduct/Self.lean",
+      "theorem": "SciLean.matVecMulAdd_identityMatrix",
+      "change_revision": "d245f73ab69b26c085da4ee1bd63c2e6630253c1"
+    },
+    {
+      "id": "scilean_scilean_tmuladd_smul_x",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Algebra/VectorOptimize/Basic.lean",
+      "theorem": "SciLean.tmulAdd_smul_x",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_finset",
+      "before_revision": "60cd2b64a5cce70906698a856a87f668199d690d",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Analysis/AdjointSpace/Adjoint.lean",
+      "theorem": "Finset",
+      "change_revision": "13e60175c92989f141bae13f5183115a9e630224"
+    },
+    {
+      "id": "scilean_hdiv_2",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Analysis/AdjointSpace/Adjoint.lean",
+      "theorem": "HDiv",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_hmul",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Analysis/AdjointSpace/Adjoint.lean",
+      "theorem": "HMul",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_inner",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Analysis/AdjointSpace/Adjoint.lean",
+      "theorem": "Inner",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_adjointspace_inner_mul_symm_re_eq_norm",
+      "before_revision": "e743c7b4af655685cdd13eb0f968e6e69c2d8745",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Analysis/AdjointSpace/Basic.lean",
+      "theorem": "AdjointSpace.inner_mul_symm_re_eq_norm",
+      "change_revision": "a0fcd034ad071c47fd7d2adf929b49eb628e163b"
+    },
+    {
+      "id": "scilean_adjointspace_inner_self_nonpos",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Analysis/AdjointSpace/Basic.lean",
+      "theorem": "AdjointSpace.inner_self_nonpos",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_scilean_dualbasis_ext",
+      "before_revision": "60cd2b64a5cce70906698a856a87f668199d690d",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Analysis/AdjointSpace/CanonicalBasis.lean",
+      "theorem": "SciLean.dualBasis_ext",
+      "change_revision": "13e60175c92989f141bae13f5183115a9e630224"
+    },
+    {
+      "id": "scilean_hadd_2",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Analysis/AdjointSpace/HasAdjoint.lean",
+      "theorem": "HAdd",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_hsmul",
+      "before_revision": "57dcd06f2304599a28d4dd56d511a909f1838d1b",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Analysis/AdjointSpace/HasAdjoint.lean",
+      "theorem": "HSmul",
+      "change_revision": "1c3d7a91935020f8d04edf6681f1bb9c548683ec"
+    },
+    {
+      "id": "scilean_hsub_2",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Analysis/AdjointSpace/HasAdjoint.lean",
+      "theorem": "HSub",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_inner_2",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Analysis/AdjointSpace/HasAdjoint.lean",
+      "theorem": "Inner",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_scilean_hasadjointupdate_pi_rule",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Analysis/AdjointSpace/HasAdjoint.lean",
+      "theorem": "SciLean.HasAdjointUpdate.pi_rule",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_finset_2",
+      "before_revision": "60cd2b64a5cce70906698a856a87f668199d690d",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Analysis/Normed/IsContinuousLinearMap.lean",
+      "theorem": "Finset",
+      "change_revision": "13e60175c92989f141bae13f5183115a9e630224"
+    },
+    {
+      "id": "scilean_scilean_mul_gaussian_gaussian",
+      "before_revision": "52619edeaaff7d4482dd3385dffd312cd218928b",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Analysis/SpecialFunctions/Gaussian.lean",
+      "theorem": "SciLean.mul_gaussian_gaussian",
+      "change_revision": "bba7171c035e2ead6f111b16017dea638a9dc186"
+    },
+    {
+      "id": "scilean_scilean_scalar_add_cos2_sin2_eq_one",
+      "before_revision": "399f7cb545dd04fd6a170fc0928a5e878d1406ef",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Analysis/SpecialFunctions/Trigonometric.lean",
+      "theorem": "SciLean.Scalar.add_cos2_sin2_eq_one",
+      "change_revision": "bb936cb1c982f5b606b0c5925dac837f6e70bb60"
+    },
+    {
+      "id": "scilean_scilean_getelem_prod_inr",
+      "before_revision": "5a181b7b34f1a929c8ae7ec3d6dbbbe271e02ebf",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Data/ArrayOperations/Basic.lean",
+      "theorem": "SciLean.getElem_prod_inr",
+      "change_revision": "46e146bc5f537130feb61eba492cb33cd121fea8"
+    },
+    {
+      "id": "scilean_scilean_getelem_uncurry",
+      "before_revision": "b7ec75dde9156418747aa6e6bcf24c66913ab836",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Data/ArrayOperations/Basic.lean",
+      "theorem": "SciLean.getElem_uncurry",
+      "change_revision": "293f29a17c15fe0623348b78d0a0181c25f18d78"
+    },
+    {
+      "id": "scilean_scilean_arraytype_smul_offn",
+      "before_revision": "60cd2b64a5cce70906698a856a87f668199d690d",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Data/ArrayType/Basic.lean",
+      "theorem": "SciLean.ArrayType.smul_ofFn",
+      "change_revision": "13e60175c92989f141bae13f5183115a9e630224"
+    },
+    {
+      "id": "scilean_scilean_isomorph",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Logic/Isomorph/IsomorphicType.lean",
+      "theorem": "SciLean.isomorph",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_scilean_backwardeuler_isodestepper",
+      "before_revision": "e881e675fae2aefd5116aec0b9aa9bb4b2a55d75",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Numerics/ODE/BackwardEuler.lean",
+      "theorem": "SciLean.backwardEuler.isOdeStepper",
+      "change_revision": "cea68054f360dae6e1239e1215cab83d235d0302"
+    },
+    {
+      "id": "scilean_scilean_forwardeuler_isodestepper",
+      "before_revision": "52619edeaaff7d4482dd3385dffd312cd218928b",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Numerics/ODE/ForwardEuler.lean",
+      "theorem": "SciLean.forwardEuler.isOdeStepper",
+      "change_revision": "bba7171c035e2ead6f111b16017dea638a9dc186"
+    },
+    {
+      "id": "scilean_scilean_explicitsymplecticeuler_eq_implicitsymplecticeulerv1",
+      "before_revision": "52619edeaaff7d4482dd3385dffd312cd218928b",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Numerics/ODE/Solvers.lean",
+      "theorem": "SciLean.explicitSymplecticEuler_eq_implicitSymplecticEulerV1",
+      "change_revision": "bba7171c035e2ead6f111b16017dea638a9dc186"
+    },
+    {
+      "id": "scilean_scilean_rand_uniform",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Probability/Distributions/Uniform.lean",
+      "theorem": "SciLean.Rand.uniform",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_scilean_rand_pull_e_nat_rec",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Probability/PushPullExpectation.lean",
+      "theorem": "SciLean.Rand.pull_E_nat_rec",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_scilean_rand_bind_pdf",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Probability/Rand.lean",
+      "theorem": "SciLean.Rand.bind_pdf",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_scilean_rand_expectedvalue_as_mean",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Probability/Rand.lean",
+      "theorem": "SciLean.Rand.expectedValue_as_mean",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_scilean_rand_reparameterize",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Probability/Rand.lean",
+      "theorem": "SciLean.Rand.reparameterize",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_scilean_solvefun_solve_as_invfun_rhs",
+      "before_revision": "6398120c66718d8d992fd454d6bc03b8054ced53",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "SciLean/Util/SolveFun.lean",
+      "theorem": "SciLean.SolveFun.solve_as_invFun_rhs",
+      "change_revision": "52619edeaaff7d4482dd3385dffd312cd218928b"
+    },
+    {
+      "id": "scilean_tmap_snd_id",
+      "before_revision": "d2bb3ccc50164a0cd6ab22a9160df25ecf164c93",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "Test/basic_vec_fwd_fderiv.lean",
+      "theorem": "tmap_snd_id",
+      "change_revision": "b7ec75dde9156418747aa6e6bcf24c66913ab836"
+    },
+    {
+      "id": "scilean_forin",
+      "before_revision": "663bb45f46cc07c8aa8703d91a474427e50b8470",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "Test/calculus/monad_test.lean",
+      "theorem": "forIn",
+      "change_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5"
+    },
+    {
+      "id": "scilean_sadf",
+      "before_revision": "87d632d2179cf467c8d6e9d6bd570c850875f606",
+      "fixed_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "file": "examples/Profile/GMM.lean",
+      "theorem": "sadf",
+      "change_revision": "3f698dbe7ffd1b4bb5631b8e86eb3db55b36e7f0"
+    }
+  ]
+}

@@ -45,7 +45,7 @@ TRACER 刻意分开三套命名。它们对应不同层级的证据，不能拼�
 - **Compiler Feedback v1 与 Feedback Adoption v1**：冻结三层诊断协议和 15 个失败/基础设施夹具，并记录候选相关修改、缓存分离以及静态/动态 query 与 Top-k 变化。最新发布证据包含两批各 216 任务的审计结果：[DeepSeek Pro](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248)有 199 个成功证明，[DeepSeek Flash](published/feedback-study-562ad440-3446-4138-801e-59726ed0e108)有 209 个，并提供完整的[逐任务配对比较](published/feedback-cross-model-8ccb89dd-562ad440)。两份复核表均明确标注为 AI 辅助复核。
 - **Causal Feedback v1、Error-State Graph 与 Adaptive Router 原型**：先冻结一个首轮失败候选，再分叉到空反馈重试、真实反馈、同类无关反馈、反事实反馈、只检索和自适应路由。项目级试点已写入[机器可读预注册](experiments/preregistrations/tracer_real_causal_v1.json)，但尚未发布正式因果结论，详见[协议](docs/CAUSAL_FEEDBACK_V1.md)。
 - **TRACER-REAL v1**：包含三个独立上游项目的 11 条真实历史修复，Mathlib 用于开发、Batteries 用于验证、Aesop 作为项目外测试。每题都要求定理陈述不变、旧证明在固定环境失败、修复证明重新编译通过；参考证明与公开任务隔离。这是项目级试点，不是大规模效果基准。
-- **TRACER-REAL v2 已预注册纳入规则，但最终题库尚未形成**：[机器可读合同](benchmarks/real_repairs/tracer_real_v2.enrollment.json)要求至少 5 个全新测试项目、40 个测试任务、51 个总任务、4 类测试错误，并为每个项目冻结独立 Lake 环境。[两阶段协议](docs/TRACER_REAL_V2.md)在最终 manifest 和精确运行时预注册通过前禁止 v2 provider 调用。
+- **TRACER-REAL v2 已冻结纳入规则与候选历史，但最终题库尚未形成**：[机器可读合同](benchmarks/real_repairs/tracer_real_v2.enrollment.json)要求至少 5 个全新测试项目、40 个测试任务、51 个总任务、4 类测试错误，并为每个项目冻结独立 Lake 环境。六个独立上游及其端点在扫描前固定；[可审计清单](benchmarks/real_repairs/tracer_real_v2_candidates)含 1,576 个证明变化候选，而非 1,576 道已纳入修复题。首个完成全量筛查的 LeanAPAP 在[公开决定账本](benchmarks/real_repairs/tracer_real_v2_screening/leanapap.screen.json)中保留全部 51 条决定，其中 16 条通过、35 条拒绝。[两阶段协议](docs/TRACER_REAL_V2.md)要求全部候选完成编译门禁并冻结最终 manifest/运行时预注册后，才允许 v2 provider 调用。
 - **历史 18 题 smoke pilot**：保留为 provider 到编译器链路的工程证据，不再作为首页主结果。
 - **完整操作链**：单题 CLI、本地 HTTP API、批量评测、人工复核、报告校验与脱敏导出。
 - **独立六臂 repair24 研究套件（R-A～R-F）**：提供仅检索、动态查询与失败上下文对照；runner 与离线检查已实现，完整多模型重复实验待测。跳转至 [研究评测](#超越-smoke-test-的研究评测) 和 [相关工作](#相关工作)。
@@ -227,7 +227,7 @@ Pro 与 Flash 的逐任务最终结局一致率为：raw 94.4%、normalized 88.9
 | LeanCapsule | 覆盖 Std、Mathlib 和 project-local 的 24 案例复核 gallery，以及 12-core / 4-challenge 可行性工件 |
 | 安全 | [SP-1～SP-12 与 8 个正常对照](published/security-study-tracer-sp-v2)；冻结套件内危险候选误放行 0/12、正常对照误拒绝 0/8。[SP 隔离 v1](docs/SP_ISOLATION_V1.md)已冻结 14 项 Docker/低权限控制，但尚未发布原生 Linux 实测报告 |
 | 项目级因果试点 | [TRACER-REAL v1](benchmarks/real_repairs/tracer_real_v1/manifest.json)：11 条修复按三个上游项目互斥划分；Aesop 测试项目和 structured 对 content-free 的唯一主对比已经写入[机器可读预注册](experiments/preregistrations/tracer_real_causal_v1.json)。运行和审计完成前，provider 输出不算正式结果 |
-| 确认性题库纳入 | [TRACER-REAL v2](docs/TRACER_REAL_V2.md)已冻结第一阶段纳入与分析预注册：至少 5 个全新测试项目、40 个测试任务、51 个总任务和逐项目 Lake 环境。最终题库与 provider 运行尚不存在，因此这是设计工件而非性能证据 |
+| 确认性题库纳入 | [TRACER-REAL v2](docs/TRACER_REAL_V2.md)已冻结纳入规则、六项目候选池、1,576 个历史候选和分析预注册。LeanAPAP 已完成 51 条全量筛查（16 条通过、35 条拒绝）并公开完整决定账本；其余五项目、最终题库与 provider 运行尚不存在，因此仍是纳入证据而非性能证据 |
 | 更广修复研究 | R-A～R-F 的 repair24 题库、runner、预算控制和离线门禁已实现；六臂真实 provider 重复实验尚未执行 |
 
 软件门禁通过、证明编译通过、指定复核模式完成和研究效应成立是四种不同结论；TRACER 不将其中任何一项自动升级为另一项。带日期的统一证据登记见 [PROGRESS.md](PROGRESS.md)。
@@ -372,7 +372,7 @@ docs/                  使用说明与研究方法
 
 下一阶段的证据优先级是：
 
-1. 按 [TRACER-REAL v2 预注册](docs/TRACER_REAL_V2.md)纳入并独立验证全新测试项目，不把 Mathlib、Batteries 或 Aesop 重新作为测试项目；
+1. 完成 1,576 个冻结 [TRACER-REAL v2 候选](benchmarks/real_repairs/tracer_real_v2_candidates)的可续跑固定环境筛查，再只组装自动通过门禁的修复题，不把 Mathlib、Batteries 或 Aesop 重新作为测试项目；
 2. 冻结精确 v2 manifest 与逐项目 Lake 环境，生成不可覆盖的运行时预注册后才运行 provider；确认性结论仍要求至少 30 个合格首轮失败；
 3. 在因果对照稳定后，再用学习得到的预算策略替换或对照当前确定性 Adaptive Router；
 4. 在原生 Linux 与 Windows Docker Desktop 上分别运行并审计 [SP 隔离 v1](docs/SP_ISOLATION_V1.md)。

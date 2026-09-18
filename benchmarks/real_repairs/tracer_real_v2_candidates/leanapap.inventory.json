@@ -1,0 +1,425 @@
+{
+  "version": "tracer-real-candidate-inventory-v1",
+  "status": "deterministic-history-scan",
+  "project_id": "leanapap",
+  "source_repository": "https://github.com/YaelDillies/LeanAPAP",
+  "source_license": "Apache-2.0",
+  "endpoint_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+  "history_policy": {
+    "traversal": "first_parent",
+    "maximum_commits": 120,
+    "pairs_scanned": 120,
+    "modified_lean_files_considered": 487,
+    "candidate_rule": "same parsed declaration header; proof changed in window; endpoint proof differs"
+  },
+  "candidates": [
+    {
+      "id": "leanapap_ap_in_ff",
+      "before_revision": "78ba56dd33ce43c51d46a2cecf0a8fc4b2f68808",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/FiniteField.lean",
+      "theorem": "ap_in_ff",
+      "change_revision": "8261296e61a6895823bee87664a335c56ae10258"
+    },
+    {
+      "id": "leanapap_curlog_pow_le",
+      "before_revision": "86a7ccbaaef3ef5a25a6d2428965671b078622ab",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/FiniteField.lean",
+      "theorem": "curlog_pow_le",
+      "change_revision": "c96dae7a7da8154248035a416e338b7e4f2b73ee"
+    },
+    {
+      "id": "leanapap_measuretheory_elpnorm_mul_le_mul_elpnorm",
+      "before_revision": "ce27f3d432cf35d19c442223cbddceaa7e91c688",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Mathlib/MeasureTheory/Function/LpSeminorm/CompareExp.lean",
+      "theorem": "MeasureTheory.eLpNorm_mul_le_mul_eLpNorm",
+      "change_revision": "fe6a504455431142e607401636da3a69b1341b62"
+    },
+    {
+      "id": "leanapap_finset_big_shifts_step1",
+      "before_revision": "40a6a348fa3629d2faa0be428b1876e5c05fb6da",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Physics/AlmostPeriodicity.lean",
+      "theorem": "Finset.big_shifts_step1",
+      "change_revision": "d88d51452d738fc9c7834002ab9c07db22effb4c"
+    },
+    {
+      "id": "leanapap_big_shifts_step2",
+      "before_revision": "40a6a348fa3629d2faa0be428b1876e5c05fb6da",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Physics/AlmostPeriodicity.lean",
+      "theorem": "big_shifts_step2",
+      "change_revision": "d88d51452d738fc9c7834002ab9c07db22effb4c"
+    },
+    {
+      "id": "leanapap_drc",
+      "before_revision": "56041e8c7c58f5fd34031769dedae547bb73209f",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Physics/DRC.lean",
+      "theorem": "drc",
+      "change_revision": "86a7ccbaaef3ef5a25a6d2428965671b078622ab"
+    },
+    {
+      "id": "leanapap_sifting",
+      "before_revision": "3b4976f048aada24f95fe7a2f961c1a66fe4f284",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Physics/DRC.lean",
+      "theorem": "sifting",
+      "change_revision": "ce27f3d432cf35d19c442223cbddceaa7e91c688"
+    },
+    {
+      "id": "leanapap_bohrset_nnreal_smul_lt_top",
+      "before_revision": "e32d33617de237a1a4a8a76a9bd6ecb7eed3c115",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Bohr/Basic.lean",
+      "theorem": "BohrSet.nnreal_smul_lt_top",
+      "change_revision": "2daecd94615de96851d9124a8c095b6469a0426e"
+    },
+    {
+      "id": "leanapap_bohrset_nnreal_smul_ne_top",
+      "before_revision": "e32d33617de237a1a4a8a76a9bd6ecb7eed3c115",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Bohr/Basic.lean",
+      "theorem": "BohrSet.nnreal_smul_ne_top",
+      "change_revision": "2daecd94615de96851d9124a8c095b6469a0426e"
+    },
+    {
+      "id": "leanapap_adddissociated",
+      "before_revision": "1062db9972b56703700a19bb4bf60f9ed3505824",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Chang.lean",
+      "theorem": "AddDissociated",
+      "change_revision": "e284c45e1600213e076bf5406113eb96f40671f0"
+    },
+    {
+      "id": "leanapap_chang",
+      "before_revision": "56041e8c7c58f5fd34031769dedae547bb73209f",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Chang.lean",
+      "theorem": "chang",
+      "change_revision": "86a7ccbaaef3ef5a25a6d2428965671b078622ab"
+    },
+    {
+      "id": "leanapap_dddconv_mu",
+      "before_revision": "79a3301f8f1421eca120d37e02f4de46fc7a4147",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Convolution/Discrete/Basic.lean",
+      "theorem": "dddconv_mu",
+      "change_revision": "08b513b9a4f68323a72d250fecd849ea3e2c0cf0"
+    },
+    {
+      "id": "leanapap_dlpnorm_ddconv_le",
+      "before_revision": "56041e8c7c58f5fd34031769dedae547bb73209f",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Convolution/Norm.lean",
+      "theorem": "dLpNorm_ddconv_le",
+      "change_revision": "86a7ccbaaef3ef5a25a6d2428965671b078622ab"
+    },
+    {
+      "id": "leanapap_winner_one_dddconv",
+      "before_revision": "fe003f9015a82b80be11f34210eac33323009a25",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Convolution/Norm.lean",
+      "theorem": "wInner_one_dddconv",
+      "change_revision": "8e39fdc67497efbcf1f7401080079005ff035767"
+    },
+    {
+      "id": "leanapap_threeapfree",
+      "before_revision": "40a6a348fa3629d2faa0be428b1876e5c05fb6da",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Convolution/ThreeAP.lean",
+      "theorem": "ThreeAPFree",
+      "change_revision": "d88d51452d738fc9c7834002ab9c07db22effb4c"
+    },
+    {
+      "id": "leanapap_boringenergy_eq",
+      "before_revision": "e284c45e1600213e076bf5406113eb96f40671f0",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Energy.lean",
+      "theorem": "boringEnergy_eq",
+      "change_revision": "1d8e97fdb207f2875b8caea1373fed0aee2dd86c"
+    },
+    {
+      "id": "leanapap_clpnorm_dft_indicator_one_pow",
+      "before_revision": "fe003f9015a82b80be11f34210eac33323009a25",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Energy.lean",
+      "theorem": "cLpNorm_dft_indicator_one_pow",
+      "change_revision": "8e39fdc67497efbcf1f7401080079005ff035767"
+    },
+    {
+      "id": "leanapap_clpnorm_conv_le_clpnorm_dconv",
+      "before_revision": "56041e8c7c58f5fd34031769dedae547bb73209f",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/FourierTransform/Convolution.lean",
+      "theorem": "cLpNorm_conv_le_cLpNorm_dconv",
+      "change_revision": "86a7ccbaaef3ef5a25a6d2428965671b078622ab"
+    },
+    {
+      "id": "leanapap_dft_apply",
+      "before_revision": "8e39fdc67497efbcf1f7401080079005ff035767",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/FourierTransform/Discrete.lean",
+      "theorem": "dft_apply",
+      "change_revision": "79a3301f8f1421eca120d37e02f4de46fc7a4147"
+    },
+    {
+      "id": "leanapap_dft_comp_neg_apply",
+      "before_revision": "e284c45e1600213e076bf5406113eb96f40671f0",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/FourierTransform/Discrete.lean",
+      "theorem": "dft_comp_neg_apply",
+      "change_revision": "1d8e97fdb207f2875b8caea1373fed0aee2dd86c"
+    },
+    {
+      "id": "leanapap_dft_inversion",
+      "before_revision": "de42126c793c405647d05717e8d83dd6f778d094",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/FourierTransform/Discrete.lean",
+      "theorem": "dft_inversion",
+      "change_revision": "0c511223afd97247500852564b625bfb5572718e"
+    },
+    {
+      "id": "leanapap_mu_winner_one",
+      "before_revision": "1062db9972b56703700a19bb4bf60f9ed3505824",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Inner/Function.lean",
+      "theorem": "mu_wInner_one",
+      "change_revision": "e284c45e1600213e076bf5406113eb96f40671f0"
+    },
+    {
+      "id": "leanapap_winner_one_mu",
+      "before_revision": "1062db9972b56703700a19bb4bf60f9ed3505824",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Inner/Function.lean",
+      "theorem": "wInner_one_mu",
+      "change_revision": "e284c45e1600213e076bf5406113eb96f40671f0"
+    },
+    {
+      "id": "leanapap_measuretheory_clpnorm_mul_le",
+      "before_revision": "ce27f3d432cf35d19c442223cbddceaa7e91c688",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Inner/Hoelder/Compact.lean",
+      "theorem": "MeasureTheory.cLpNorm_mul_le",
+      "change_revision": "fe6a504455431142e607401636da3a69b1341b62"
+    },
+    {
+      "id": "leanapap_measuretheory_norm_winner_cweight_le_dlpnorm_mul_dlpnorm",
+      "before_revision": "90956cf362463f2f74037f937dc96e01487034ca",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Inner/Hoelder/Compact.lean",
+      "theorem": "MeasureTheory.norm_wInner_cWeight_le_dLpNorm_mul_dLpNorm",
+      "change_revision": "2d71c8573b2d5b8d59edc763f2a021538b08a7a7"
+    },
+    {
+      "id": "leanapap_measuretheory_winner_cweight_le_clpnorm_mul_clpnorm",
+      "before_revision": "0bd4adab0f80fd3754c82083458fa58038dbe1c2",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Inner/Hoelder/Compact.lean",
+      "theorem": "MeasureTheory.wInner_cWeight_le_cLpNorm_mul_cLpNorm",
+      "change_revision": "9f3ac3f5966498c1d8ec4b04a4ec1019313b530d"
+    },
+    {
+      "id": "leanapap_rclike_cl1norm_mul",
+      "before_revision": "e32d33617de237a1a4a8a76a9bd6ecb7eed3c115",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Inner/Hoelder/Compact.lean",
+      "theorem": "RCLike.cL1Norm_mul",
+      "change_revision": "2daecd94615de96851d9124a8c095b6469a0426e"
+    },
+    {
+      "id": "leanapap_measuretheory_dl1norm_mul_of_nonneg",
+      "before_revision": "0bd4adab0f80fd3754c82083458fa58038dbe1c2",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Inner/Hoelder/Discrete.lean",
+      "theorem": "MeasureTheory.dL1Norm_mul_of_nonneg",
+      "change_revision": "9f3ac3f5966498c1d8ec4b04a4ec1019313b530d"
+    },
+    {
+      "id": "leanapap_measuretheory_dlpnorm_mul_le",
+      "before_revision": "ce27f3d432cf35d19c442223cbddceaa7e91c688",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Inner/Hoelder/Discrete.lean",
+      "theorem": "MeasureTheory.dLpNorm_mul_le",
+      "change_revision": "fe6a504455431142e607401636da3a69b1341b62"
+    },
+    {
+      "id": "leanapap_measuretheory_dlpnorm_prod_le",
+      "before_revision": "0bd4adab0f80fd3754c82083458fa58038dbe1c2",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Inner/Hoelder/Discrete.lean",
+      "theorem": "MeasureTheory.dLpNorm_prod_le",
+      "change_revision": "9f3ac3f5966498c1d8ec4b04a4ec1019313b530d"
+    },
+    {
+      "id": "leanapap_measuretheory_winner_one_le_dlpnorm_mul_dlpnorm",
+      "before_revision": "0bd4adab0f80fd3754c82083458fa58038dbe1c2",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Inner/Hoelder/Discrete.lean",
+      "theorem": "MeasureTheory.wInner_one_le_dLpNorm_mul_dLpNorm",
+      "change_revision": "9f3ac3f5966498c1d8ec4b04a4ec1019313b530d"
+    },
+    {
+      "id": "leanapap_rclike_dl1norm_mul",
+      "before_revision": "e32d33617de237a1a4a8a76a9bd6ecb7eed3c115",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Inner/Hoelder/Discrete.lean",
+      "theorem": "RCLike.dL1Norm_mul",
+      "change_revision": "2daecd94615de96851d9124a8c095b6469a0426e"
+    },
+    {
+      "id": "leanapap_measuretheory_rclike",
+      "before_revision": "ce27f3d432cf35d19c442223cbddceaa7e91c688",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/LpNorm/Compact.lean",
+      "theorem": "MeasureTheory.RCLike",
+      "change_revision": "fe6a504455431142e607401636da3a69b1341b62"
+    },
+    {
+      "id": "leanapap_measuretheory_clpnorm_pow",
+      "before_revision": "0bd4adab0f80fd3754c82083458fa58038dbe1c2",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/LpNorm/Compact.lean",
+      "theorem": "MeasureTheory.cLpNorm_pow",
+      "change_revision": "9f3ac3f5966498c1d8ec4b04a4ec1019313b530d"
+    },
+    {
+      "id": "leanapap_measuretheory_clpnorm_rpow",
+      "before_revision": "0bd4adab0f80fd3754c82083458fa58038dbe1c2",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/LpNorm/Compact.lean",
+      "theorem": "MeasureTheory.cLpNorm_rpow",
+      "change_revision": "9f3ac3f5966498c1d8ec4b04a4ec1019313b530d"
+    },
+    {
+      "id": "leanapap_measuretheory_clpnorm_two_mul_sum_pow",
+      "before_revision": "56041e8c7c58f5fd34031769dedae547bb73209f",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/LpNorm/Compact.lean",
+      "theorem": "MeasureTheory.cLpNorm_two_mul_sum_pow",
+      "change_revision": "86a7ccbaaef3ef5a25a6d2428965671b078622ab"
+    },
+    {
+      "id": "leanapap_measuretheory_dlpnorm_mu",
+      "before_revision": "1062db9972b56703700a19bb4bf60f9ed3505824",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/LpNorm/Discrete/Basic.lean",
+      "theorem": "MeasureTheory.dLpNorm_mu",
+      "change_revision": "e284c45e1600213e076bf5406113eb96f40671f0"
+    },
+    {
+      "id": "leanapap_measuretheory_rclike_2",
+      "before_revision": "ce27f3d432cf35d19c442223cbddceaa7e91c688",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/LpNorm/Discrete/Defs.lean",
+      "theorem": "MeasureTheory.RCLike",
+      "change_revision": "fe6a504455431142e607401636da3a69b1341b62"
+    },
+    {
+      "id": "leanapap_measuretheory_dlpnorm_nnqsmul",
+      "before_revision": "e284c45e1600213e076bf5406113eb96f40671f0",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/LpNorm/Discrete/Defs.lean",
+      "theorem": "MeasureTheory.dLpNorm_nnqsmul",
+      "change_revision": "1d8e97fdb207f2875b8caea1373fed0aee2dd86c"
+    },
+    {
+      "id": "leanapap_measuretheory_dlpnorm_pow",
+      "before_revision": "0bd4adab0f80fd3754c82083458fa58038dbe1c2",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/LpNorm/Discrete/Defs.lean",
+      "theorem": "MeasureTheory.dLpNorm_pow",
+      "change_revision": "9f3ac3f5966498c1d8ec4b04a4ec1019313b530d"
+    },
+    {
+      "id": "leanapap_measuretheory_dlpnorm_rpow",
+      "before_revision": "0bd4adab0f80fd3754c82083458fa58038dbe1c2",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/LpNorm/Discrete/Defs.lean",
+      "theorem": "MeasureTheory.dLpNorm_rpow",
+      "change_revision": "9f3ac3f5966498c1d8ec4b04a4ec1019313b530d"
+    },
+    {
+      "id": "leanapap_measuretheory_dlpnorm_two_mul_sum_pow",
+      "before_revision": "56041e8c7c58f5fd34031769dedae547bb73209f",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/LpNorm/Discrete/Defs.lean",
+      "theorem": "MeasureTheory.dLpNorm_two_mul_sum_pow",
+      "change_revision": "86a7ccbaaef3ef5a25a6d2428965671b078622ab"
+    },
+    {
+      "id": "leanapap_wl1norm_eq_sum_norm",
+      "before_revision": "9f3ac3f5966498c1d8ec4b04a4ec1019313b530d",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/LpNorm/Weighted.lean",
+      "theorem": "wL1Norm_eq_sum_norm",
+      "change_revision": "1062db9972b56703700a19bb4bf60f9ed3505824"
+    },
+    {
+      "id": "leanapap_wlpnorm_eq_sum_norm",
+      "before_revision": "e284c45e1600213e076bf5406113eb96f40671f0",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/LpNorm/Weighted.lean",
+      "theorem": "wLpNorm_eq_sum_norm",
+      "change_revision": "1d8e97fdb207f2875b8caea1373fed0aee2dd86c"
+    },
+    {
+      "id": "leanapap_wlpnorm_mono_right",
+      "before_revision": "ce27f3d432cf35d19c442223cbddceaa7e91c688",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/LpNorm/Weighted.lean",
+      "theorem": "wLpNorm_mono_right",
+      "change_revision": "fe6a504455431142e607401636da3a69b1341b62"
+    },
+    {
+      "id": "leanapap_wlpnorm_one",
+      "before_revision": "0bd4adab0f80fd3754c82083458fa58038dbe1c2",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/LpNorm/Weighted.lean",
+      "theorem": "wLpNorm_one",
+      "change_revision": "9f3ac3f5966498c1d8ec4b04a4ec1019313b530d"
+    },
+    {
+      "id": "leanapap_wlpnorm_rpow_eq_sum_norm",
+      "before_revision": "0bd4adab0f80fd3754c82083458fa58038dbe1c2",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/LpNorm/Weighted.lean",
+      "theorem": "wLpNorm_rpow_eq_sum_norm",
+      "change_revision": "9f3ac3f5966498c1d8ec4b04a4ec1019313b530d"
+    },
+    {
+      "id": "leanapap_wlpnorm_sub_comm",
+      "before_revision": "ce27f3d432cf35d19c442223cbddceaa7e91c688",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/LpNorm/Weighted.lean",
+      "theorem": "wLpNorm_sub_comm",
+      "change_revision": "fe6a504455431142e607401636da3a69b1341b62"
+    },
+    {
+      "id": "leanapap_marcinkiewicz_zygmund_symmetric",
+      "before_revision": "ce27f3d432cf35d19c442223cbddceaa7e91c688",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/NewMarcinkiewiczZygmund.lean",
+      "theorem": "marcinkiewicz_zygmund_symmetric",
+      "change_revision": "fe6a504455431142e607401636da3a69b1341b62"
+    },
+    {
+      "id": "leanapap_rudin_exp_abs_ineq",
+      "before_revision": "56041e8c7c58f5fd34031769dedae547bb73209f",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Rudin.lean",
+      "theorem": "rudin_exp_abs_ineq",
+      "change_revision": "86a7ccbaaef3ef5a25a6d2428965671b078622ab"
+    },
+    {
+      "id": "leanapap_rudin_exp_ineq",
+      "before_revision": "3b4976f048aada24f95fe7a2f961c1a66fe4f284",
+      "fixed_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "file": "APAP/Prereqs/Rudin.lean",
+      "theorem": "rudin_exp_ineq",
+      "change_revision": "ce27f3d432cf35d19c442223cbddceaa7e91c688"
+    }
+  ]
+}

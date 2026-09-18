@@ -1,0 +1,267 @@
+{
+  "version": "tracer-real-candidate-screen-v1",
+  "project_id": "leanapap",
+  "endpoint_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+  "provider_calls_observed": 0,
+  "candidates": 51,
+  "accepted": 16,
+  "rejected": 35,
+  "decisions": [
+    {
+      "id": "leanapap_ap_in_ff",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "leanapap_curlog_pow_le",
+      "accepted": false,
+      "reason": "leanapap_curlog_pow_le: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "leanapap_measuretheory_elpnorm_mul_le_mul_elpnorm",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "leanapap_finset_big_shifts_step1",
+      "accepted": false,
+      "reason": "leanapap_finset_big_shifts_step1: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "leanapap_big_shifts_step2",
+      "accepted": false,
+      "reason": "禁止的本机执行构造：候选包含不允许的 Lean 元编程、本机执行入口或 unsafe 声明"
+    },
+    {
+      "id": "leanapap_drc",
+      "accepted": false,
+      "reason": "禁止的本机执行构造：候选包含不允许的 Lean 元编程、本机执行入口或 unsafe 声明"
+    },
+    {
+      "id": "leanapap_sifting",
+      "accepted": false,
+      "reason": "禁止的本机执行构造：候选包含不允许的 Lean 元编程、本机执行入口或 unsafe 声明"
+    },
+    {
+      "id": "leanapap_bohrset_nnreal_smul_lt_top",
+      "accepted": false,
+      "reason": "leanapap_bohrset_nnreal_smul_lt_top: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "leanapap_bohrset_nnreal_smul_ne_top",
+      "accepted": false,
+      "reason": "leanapap_bohrset_nnreal_smul_ne_top: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "leanapap_adddissociated",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "leanapap_chang",
+      "accepted": false,
+      "reason": "leanapap_chang: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "leanapap_dddconv_mu",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "leanapap_dlpnorm_ddconv_le",
+      "accepted": false,
+      "reason": "leanapap_dlpnorm_ddconv_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "leanapap_winner_one_dddconv",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "leanapap_threeapfree",
+      "accepted": false,
+      "reason": "禁止的本机执行构造：候选包含不允许的 Lean 元编程、本机执行入口或 unsafe 声明"
+    },
+    {
+      "id": "leanapap_boringenergy_eq",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "leanapap_clpnorm_dft_indicator_one_pow",
+      "accepted": false,
+      "reason": "leanapap_clpnorm_dft_indicator_one_pow: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "leanapap_clpnorm_conv_le_clpnorm_dconv",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: cLpNorm_conv_le_cLpNorm_dconv"
+    },
+    {
+      "id": "leanapap_dft_apply",
+      "accepted": false,
+      "reason": "leanapap_dft_apply: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "leanapap_dft_comp_neg_apply",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "leanapap_dft_inversion",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: dft_inversion"
+    },
+    {
+      "id": "leanapap_mu_winner_one",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "leanapap_winner_one_mu",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "leanapap_measuretheory_clpnorm_mul_le",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "leanapap_measuretheory_norm_winner_cweight_le_dlpnorm_mul_dlpnorm",
+      "accepted": false,
+      "reason": "leanapap_measuretheory_norm_winner_cweight_le_dlpnorm_mul_dlpnorm: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "leanapap_measuretheory_winner_cweight_le_clpnorm_mul_clpnorm",
+      "accepted": false,
+      "reason": "leanapap_measuretheory_winner_cweight_le_clpnorm_mul_clpnorm: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "leanapap_rclike_cl1norm_mul",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "leanapap_measuretheory_dl1norm_mul_of_nonneg",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "leanapap_measuretheory_dlpnorm_mul_le",
+      "accepted": false,
+      "reason": "leanapap_measuretheory_dlpnorm_mul_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "leanapap_measuretheory_dlpnorm_prod_le",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "leanapap_measuretheory_winner_one_le_dlpnorm_mul_dlpnorm",
+      "accepted": false,
+      "reason": "leanapap_measuretheory_winner_one_le_dlpnorm_mul_dlpnorm: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "leanapap_rclike_dl1norm_mul",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "leanapap_measuretheory_rclike",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "leanapap_measuretheory_clpnorm_pow",
+      "accepted": false,
+      "reason": "raw.compile_ok 与结构化类别不一致"
+    },
+    {
+      "id": "leanapap_measuretheory_clpnorm_rpow",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: MeasureTheory.cLpNorm_rpow"
+    },
+    {
+      "id": "leanapap_measuretheory_clpnorm_two_mul_sum_pow",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "leanapap_measuretheory_dlpnorm_mu",
+      "accepted": false,
+      "reason": "禁止的本机执行构造：候选包含不允许的 Lean 元编程、本机执行入口或 unsafe 声明"
+    },
+    {
+      "id": "leanapap_measuretheory_rclike_2",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "leanapap_measuretheory_dlpnorm_nnqsmul",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "leanapap_measuretheory_dlpnorm_pow",
+      "accepted": false,
+      "reason": "raw.compile_ok 与结构化类别不一致"
+    },
+    {
+      "id": "leanapap_measuretheory_dlpnorm_rpow",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: MeasureTheory.dLpNorm_rpow"
+    },
+    {
+      "id": "leanapap_measuretheory_dlpnorm_two_mul_sum_pow",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "leanapap_wl1norm_eq_sum_norm",
+      "accepted": false,
+      "reason": "leanapap_wl1norm_eq_sum_norm: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "leanapap_wlpnorm_eq_sum_norm",
+      "accepted": false,
+      "reason": "leanapap_wlpnorm_eq_sum_norm: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "leanapap_wlpnorm_mono_right",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "leanapap_wlpnorm_one",
+      "accepted": false,
+      "reason": "raw.compile_ok 与结构化类别不一致"
+    },
+    {
+      "id": "leanapap_wlpnorm_rpow_eq_sum_norm",
+      "accepted": false,
+      "reason": "raw.compile_ok 与结构化类别不一致"
+    },
+    {
+      "id": "leanapap_wlpnorm_sub_comm",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "leanapap_marcinkiewicz_zygmund_symmetric",
+      "accepted": false,
+      "reason": "leanapap_marcinkiewicz_zygmund_symmetric: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "leanapap_rudin_exp_abs_ineq",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "leanapap_rudin_exp_ineq",
+      "accepted": false,
+      "reason": "leanapap_rudin_exp_ineq: 修复后证明不能独立通过当前固定环境"
+    }
+  ],
+  "selection_policy": "all candidates passing the preregistered real-repair compile gate"
+}
