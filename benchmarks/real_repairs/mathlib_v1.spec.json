@@ -1,0 +1,29 @@
+{
+  "version": "tracer-real-repair-v1",
+  "benchmark_version": "tracer-real-mathlib-v1",
+  "source_repository": "https://github.com/leanprover-community/mathlib4",
+  "source_license": "Apache-2.0",
+  "cases": [
+    {
+      "id": "polynomial_root_multiplicity",
+      "before_revision": "2a52b15f892ee5fb4192435a0b6849207f6dbd4f",
+      "fixed_revision": "81a5d257c8e410db227a6665ed08f64fea08e997",
+      "file": "Mathlib/Algebra/Polynomial/Div.lean",
+      "theorem": "Polynomial.rootMultiplicity_eq_multiplicity"
+    },
+    {
+      "id": "net_maxcard_infinite",
+      "before_revision": "2a52b15f892ee5fb4192435a0b6849207f6dbd4f",
+      "fixed_revision": "81a5d257c8e410db227a6665ed08f64fea08e997",
+      "file": "Mathlib/Dynamics/TopologicalEntropy/NetEntropy.lean",
+      "theorem": "Dynamics.netMaxcard_infinite_iff"
+    },
+    {
+      "id": "ring_emultiplicity_mul",
+      "before_revision": "2a52b15f892ee5fb4192435a0b6849207f6dbd4f",
+      "fixed_revision": "81a5d257c8e410db227a6665ed08f64fea08e997",
+      "file": "Mathlib/RingTheory/Multiplicity.lean",
+      "theorem": "emultiplicity_mul"
+    }
+  ]
+}

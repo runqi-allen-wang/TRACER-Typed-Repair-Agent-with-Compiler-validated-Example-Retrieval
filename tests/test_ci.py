@@ -45,12 +45,17 @@ class ContinuousIntegrationTest(unittest.TestCase):
     def test_feedback_plan_and_sp_metrics_are_ci_gates(self):
         workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
         self.assertIn("run: python src/feedback_study.py plan", workflow)
+        self.assertIn("run: python src/tracer_real_v2.py audit", workflow)
         self.assertIn(
             "run: python src/security_study.py --check published/security-study-tracer-sp-v2/report.json",
             workflow,
         )
         self.assertLess(
             workflow.index("run: python src/feedback_study.py plan"),
+            workflow.index("- name: Run tests"),
+        )
+        self.assertLess(
+            workflow.index("run: python src/tracer_real_v2.py audit"),
             workflow.index("- name: Run tests"),
         )
 

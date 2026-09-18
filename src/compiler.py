@@ -68,7 +68,7 @@ LEAN_QUALIFIED_NAME_RE = re.compile(
 )
 _INCOMPLETE_PROOF_DIAGNOSTIC = re.compile(r"(?i)(?:uses?\s+['`]?sorry|\bsorryAx\b)")
 _COMMAND_START = re.compile(
-    r"(?m)^\s*(?:theorem|lemma|example|def|abbrev|opaque|axiom|structure|class|"
+    r"(?m)^\s*(?:@\[[^\]\n]+\]\s*)*(?:theorem|lemma|example|def|abbrev|opaque|axiom|structure|class|"
     r"inductive|instance|namespace|section|end|variable|open|local|attribute|"
     r"notation|infix|prefix|postfix)\b"
 )

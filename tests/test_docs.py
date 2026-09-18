@@ -29,6 +29,8 @@ class DocumentationConsistencyTest(unittest.TestCase):
             with self.subTest(language=name):
                 self.assertIn("docs/FEEDBACK_ADOPTION_V1.md", readme)
                 self.assertIn("docs/FEEDBACK_STUDY_V1.md", readme)
+                self.assertIn("docs/TRACER_REAL_V2.md", readme)
+                self.assertIn("tracer_real_v2.enrollment.json", readme)
                 self.assertIn("SP-1", readme)
                 self.assertIn("SP-12", readme)
 

@@ -1,0 +1,36 @@
+{
+  "version": "tracer-real-repair-v1",
+  "benchmark_version": "tracer-real-batteries-v1",
+  "source_repository": "https://github.com/leanprover-community/batteries",
+  "source_license": "Apache-2.0",
+  "cases": [
+    {
+      "id": "batteries_cons_subperm",
+      "before_revision": "be1a02994ae681d2676c068ebac67a08bf708f96",
+      "fixed_revision": "023ce7d62a0531e22a5331e20b587817a80d49ff",
+      "file": "Batteries/Data/List/Perm.lean",
+      "theorem": "cons_subperm_of_not_mem_of_mem"
+    },
+    {
+      "id": "batteries_scanl_to_list",
+      "before_revision": "77d10578945b31d794214a66937b75a6d4311674",
+      "fixed_revision": "023ce7d62a0531e22a5331e20b587817a80d49ff",
+      "file": "Batteries/Data/Array/Scan.lean",
+      "theorem": "scanl_eq_scanl_toList"
+    },
+    {
+      "id": "batteries_chain_pairwise",
+      "before_revision": "78a9bfe6b811fece2e00bf2c92e30729eeb8dc4e",
+      "fixed_revision": "023ce7d62a0531e22a5331e20b587817a80d49ff",
+      "file": "Batteries/Data/List/Lemmas.lean",
+      "theorem": "isChain_iff_pairwise"
+    },
+    {
+      "id": "batteries_compare_less_eq",
+      "before_revision": "6a49e4c22164b1d18665837cf1e148131c7a6c4d",
+      "fixed_revision": "023ce7d62a0531e22a5331e20b587817a80d49ff",
+      "file": "Batteries/Classes/Order.lean",
+      "theorem": "compareOfLessAndEq_eq_lt"
+    }
+  ]
+}

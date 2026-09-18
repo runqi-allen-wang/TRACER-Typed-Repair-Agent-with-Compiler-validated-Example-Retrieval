@@ -12,8 +12,10 @@ results/solutions/
 /results/archive/
 /results/research*/
 /results/feedback-study-*/
+/results/causal-*/
 /results/human-*/
 /results/sp-isolation-*/
+/private_references/
 /experiments/*.local.json
 results/handoff/
 results/work/

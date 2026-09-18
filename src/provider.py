@@ -279,32 +279,59 @@ def parse_generation(text: str, provider_name: str) -> Generation:
         body = json.loads(text)
     except json.JSONDecodeError:
         return Generation(clean_candidate(text), {}, provider_name)
+    if not isinstance(body, dict):
+        raise ValueError("provider 的 JSON 顶层必须为对象，不能为 null、数组或标量")
     if "candidate" in body:
-        return Generation(clean_candidate(str(body["candidate"])), body.get("usage", {}), provider_name, body)
+        content = body["candidate"]
+        if content is not None and not isinstance(content, str):
+            raise ValueError("provider 的 candidate 必须为文本或 null")
+        usage = body.get("usage") or {}
+        if not isinstance(usage, dict):
+            raise ValueError("provider 的 usage 必须为对象或 null")
+        return Generation(clean_candidate(content or ""), usage, provider_name, body)
     choices = body.get("choices") or []
+    if not isinstance(choices, list):
+        raise ValueError("provider 的 choices 必须为数组或 null")
     if choices:
-        content = choices[0].get("message", {}).get("content")
+        if not isinstance(choices[0], dict):
+            raise ValueError("provider 的 choice 必须为对象")
+        message = choices[0].get("message") or {}
+        if not isinstance(message, dict):
+            raise ValueError("provider 的 message 必须为对象或 null")
+        content = message.get("content")
         # 只有推理而没有最终答案时 content 可能为 null，不能把它变成 Lean 标识符 None。
         if content is None:
             content = ""
         if not isinstance(content, str):
             raise ValueError("provider 的最终证明 content 必须为文本或 null")
-        return Generation(clean_candidate(content), body.get("usage", {}), provider_name, body)
+        usage = body.get("usage") or {}
+        if not isinstance(usage, dict):
+            raise ValueError("provider 的 usage 必须为对象或 null")
+        return Generation(clean_candidate(content), usage, provider_name, body)
     if "output_text" in body:
         content = body["output_text"]
         if content is not None and not isinstance(content, str):
             raise ValueError("provider 的 output_text 必须为文本或 null")
-        return Generation(clean_candidate(content or ""), body.get("usage", {}), provider_name, body)
+        usage = body.get("usage") or {}
+        if not isinstance(usage, dict):
+            raise ValueError("provider 的 usage 必须为对象或 null")
+        return Generation(clean_candidate(content or ""), usage, provider_name, body)
+    output = body.get("output") or []
+    if not isinstance(output, list):
+        raise ValueError("provider 的 output 必须为数组或 null")
     output_text = "\n".join(
         str(content.get("text", ""))
-        for item in body.get("output", [])
+        for item in output
         if isinstance(item, dict) and item.get("type") == "message"
-        for content in item.get("content", [])
+        for content in (item.get("content") or [])
         if isinstance(content, dict) and content.get("type") == "output_text"
     ).strip()
     if output_text or isinstance(body.get("output"), list):
         # 未输出最终文本的 Responses 响应仍保留用量和终止原因。
-        return Generation(clean_candidate(output_text), body.get("usage", {}), provider_name, body)
+        usage = body.get("usage") or {}
+        if not isinstance(usage, dict):
+            raise ValueError("provider 的 usage 必须为对象或 null")
+        return Generation(clean_candidate(output_text), usage, provider_name, body)
     raise ValueError("provider 输出缺少 candidate/choices/output_text/output[].content[].text")
 
 

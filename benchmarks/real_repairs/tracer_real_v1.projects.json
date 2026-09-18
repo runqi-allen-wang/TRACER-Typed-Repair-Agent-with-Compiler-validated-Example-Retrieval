@@ -1,0 +1,22 @@
+{
+  "version": "tracer-real-project-split-v1",
+  "benchmark_version": "tracer-real-v1",
+  "split_policy": "upstream_project_disjoint",
+  "projects": [
+    {
+      "project_id": "mathlib",
+      "split": "development",
+      "manifest": "mathlib_v1/manifest.json"
+    },
+    {
+      "project_id": "batteries",
+      "split": "validation",
+      "manifest": "batteries_v1/manifest.json"
+    },
+    {
+      "project_id": "aesop",
+      "split": "test",
+      "manifest": "aesop_v1/manifest.json"
+    }
+  ]
+}

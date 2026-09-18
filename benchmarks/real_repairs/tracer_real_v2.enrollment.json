@@ -1,0 +1,85 @@
+{
+  "version": "tracer-real-v2-enrollment-v1",
+  "status": "frozen-before-new-test-project-enrollment",
+  "registered_at_utc": "2026-09-16T06:33:26Z",
+  "benchmark_version": "tracer-real-v2",
+  "split_policy": "upstream_project_disjoint",
+  "starting_inventory": {
+    "source_benchmark": "tracer-real-v1",
+    "projects": [
+      {
+        "project_id": "mathlib",
+        "v2_split": "development",
+        "source_manifest": "benchmarks/real_repairs/mathlib_v1/manifest.json"
+      },
+      {
+        "project_id": "batteries",
+        "v2_split": "validation",
+        "source_manifest": "benchmarks/real_repairs/batteries_v1/manifest.json"
+      },
+      {
+        "project_id": "aesop",
+        "v2_split": "validation",
+        "source_manifest": "benchmarks/real_repairs/aesop_v1/manifest.json"
+      }
+    ]
+  },
+  "selection": {
+    "minimum_projects_total": 8,
+    "minimum_test_projects": 5,
+    "minimum_total_tasks": 51,
+    "minimum_test_tasks": 40,
+    "minimum_tasks_per_test_project": 5,
+    "maximum_test_project_task_share": 0.35,
+    "minimum_test_error_categories": 4,
+    "excluded_test_project_ids": [
+      "mathlib",
+      "batteries",
+      "aesop"
+    ],
+    "excluded_test_repositories": [
+      "https://github.com/leanprover-community/mathlib4",
+      "https://github.com/leanprover-community/batteries",
+      "https://github.com/leanprover-community/aesop"
+    ],
+    "project_identity_unit": "canonical_upstream_repository",
+    "overflow_policy": "每个已登记测试项目纳入预定历史窗口内全部通过门禁的任务；不得根据模型结果删题、换题或截断到更好结果。"
+  },
+  "admissibility": [
+    "来源必须是公开、无凭据 HTTPS 地址可定位的独立 Lean 4 上游仓库。",
+    "旧证明与修复证明必须来自同一仓库两个明确版本，且定理陈述保持不变。",
+    "旧证明必须在修复版本的固定项目环境中稳定产生非基础设施 Lean 失败。",
+    "修复证明必须在同一固定环境中独立编译通过，且不得使用未完成证明机制。",
+    "来源仓库、许可、版本、文件、定理名和错误类别必须进入可读 provenance。",
+    "公开题目不得包含参考证明；参考证明只进入不公开、运行器不可读取的独立目录。",
+    "同一规范上游仓库只能属于一个划分；派生仓库或镜像不视为独立项目。",
+    "测试项目必须在本合同冻结后登记，且不得属于 TRACER-REAL v1 已使用项目。"
+  ],
+  "exclusions": [
+    "人工构造、教材改写或无法定位到公开版本历史的题目。",
+    "定理陈述、imports 或目标前必要上下文在修复前后发生不可分离变化的候选。",
+    "失败只能由网络、缺失工具链、超时、损坏依赖或本机路径引起的候选。",
+    "需要把参考答案、同题证明或测试项目源码加入检索语料才能通过的候选。",
+    "与既有项目共享同一规范上游仓库、仅名称不同的重复项目。",
+    "在任何 provider 输出后才新增、删除、重分类或更换的测试题目。"
+  ],
+  "freeze_sequence": [
+    "enrollment_contract",
+    "candidate_inventory",
+    "verified_benchmark_manifest",
+    "final_runtime_preregistration",
+    "provider_run"
+  ],
+  "provider_gate": {
+    "provider_calls_allowed_before_final_freeze": false,
+    "required_runtime_preregistration": "experiments/preregistrations/tracer_real_causal_v2.json",
+    "project_environment_policy": "每个项目必须绑定仓库内相对 Lake 根和精确 lean-toolchain；正式运行禁止用一个命令行项目根覆盖全部项目。",
+    "required_artifacts": [
+      "冻结且通过纳入门禁的 tracer-real-v2 manifest",
+      "逐项目固定编译环境及无网络回放记录",
+      "机器生成且拒绝覆盖的最终运行时预注册",
+      "按项目等权的确认性分析实现及离线测试",
+      "全仓库测试与发布审计通过记录"
+    ]
+  }
+}

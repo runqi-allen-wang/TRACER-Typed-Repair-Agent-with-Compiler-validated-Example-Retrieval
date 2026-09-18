@@ -1,0 +1,15 @@
+{
+  "version": "tracer-real-repair-v1",
+  "benchmark_version": "tracer-real-seed-v0",
+  "source_repository": "https://github.com/OWNER/REPOSITORY",
+  "source_license": "REPLACE_WITH_SOURCE_LICENSE",
+  "cases": [
+    {
+      "id": "replace_case_id",
+      "before_revision": "REPLACE_WITH_OLDER_REVISION",
+      "fixed_revision": "REPLACE_WITH_FIXED_REVISION",
+      "file": "Path/To/File.lean",
+      "theorem": "Namespace.theorem_name"
+    }
+  ]
+}
