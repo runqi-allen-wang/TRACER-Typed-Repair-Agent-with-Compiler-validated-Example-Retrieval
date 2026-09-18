@@ -20,7 +20,16 @@ from research import load_benchmark, write_json
 ROOT = Path(__file__).resolve().parents[1]
 PROTOCOL_VERSION = "tracer-real-repair-v1"
 PROJECT_SPLIT_VERSION = "tracer-real-project-split-v1"
+PROJECT_SPLIT_VERSION_V2 = "tracer-real-project-split-v2"
 PROJECT_SPLITS = ("development", "validation", "test")
+
+
+def _canonical_repository(value: str) -> str:
+    parsed = urlsplit(value)
+    path = parsed.path.rstrip("/")
+    if path.lower().endswith(".git"):
+        path = path[:-4]
+    return parsed.netloc.lower() + path.lower()
 
 
 def _git(repo: Path, *args: str) -> str:
@@ -285,22 +294,29 @@ def assemble_project_benchmark(spec_path: Path, out: Path) -> dict[str, Any]:
         raise ValueError("输出目录已存在；拒绝覆盖已冻结的项目级题库")
     spec = json.loads(spec_path.read_text(encoding="utf-8"))
     required_top = {"version", "benchmark_version", "split_policy", "projects"}
-    if set(spec) != required_top or spec.get("version") != PROJECT_SPLIT_VERSION:
+    if set(spec) != required_top or spec.get("version") not in {PROJECT_SPLIT_VERSION, PROJECT_SPLIT_VERSION_V2}:
         raise ValueError("项目级题库规范版本或顶层字段不匹配")
+    is_v2 = spec["version"] == PROJECT_SPLIT_VERSION_V2
     if spec.get("split_policy") != "upstream_project_disjoint":
-        raise ValueError("TRACER-REAL v1 必须按上游项目完全隔离")
+        raise ValueError("TRACER-REAL 必须按上游项目完全隔离")
     projects = spec.get("projects")
     if not isinstance(projects, list) or len(projects) < 3:
         raise ValueError("项目级题库至少需要三个独立上游项目")
 
     project_ids: set[str] = set()
+    source_repositories: set[str] = set()
     seen_splits: set[str] = set()
     problem_ids: set[str] = set()
     project_rows = []
+    project_environments = []
     problems = []
     source_rows: list[tuple[Path, Path]] = []
     for project in projects:
-        if set(project) != {"project_id", "split", "manifest"}:
+        expected_project_fields = (
+            {"project_id", "split", "manifest", "compile_project_root", "lean_toolchain"}
+            if is_v2 else {"project_id", "split", "manifest"}
+        )
+        if set(project) != expected_project_fields:
             raise ValueError("项目级题库项目字段不完整")
         project_id, split = project["project_id"], project["split"]
         if not re.fullmatch(r"[a-z0-9_]+", project_id) or project_id in project_ids:
@@ -316,6 +332,10 @@ def assemble_project_benchmark(spec_path: Path, out: Path) -> dict[str, Any]:
         }
         if len(repositories) != 1 or None in repositories:
             raise ValueError(f"{project_id}: 子集缺少唯一公开上游项目")
+        canonical_repository = _canonical_repository(str(next(iter(repositories))))
+        if canonical_repository in source_repositories:
+            raise ValueError("同一上游仓库不得以多个项目身份重复进入题库")
+        source_repositories.add(canonical_repository)
         project_rows.append({
             "project_id": project_id,
             "split": split,
@@ -323,6 +343,29 @@ def assemble_project_benchmark(spec_path: Path, out: Path) -> dict[str, Any]:
             "source_repository": next(iter(repositories)),
             "tasks": len(manifest["problems"]),
         })
+        if is_v2:
+            compile_root_value = project["compile_project_root"]
+            compile_root_path = Path(compile_root_value)
+            if compile_root_path.is_absolute() or not compile_root_path.parts or ".." in compile_root_path.parts:
+                raise ValueError(f"{project_id}: 编译项目根必须是仓库内相对路径")
+            compile_root = (ROOT / compile_root_path).resolve()
+            try:
+                compile_root.relative_to(ROOT.resolve())
+            except ValueError as exc:
+                raise ValueError(f"{project_id}: 编译项目根逃逸仓库") from exc
+            if not ((compile_root / "lakefile.toml").is_file() or (compile_root / "lakefile.lean").is_file()):
+                raise ValueError(f"{project_id}: 编译项目根缺少 lakefile")
+            toolchain_path = compile_root / "lean-toolchain"
+            if not toolchain_path.is_file():
+                raise ValueError(f"{project_id}: 编译项目根缺少 lean-toolchain")
+            toolchain = toolchain_path.read_text(encoding="utf-8").strip()
+            if toolchain != project["lean_toolchain"]:
+                raise ValueError(f"{project_id}: lean-toolchain 与冻结规范不一致")
+            project_environments.append({
+                "project_id": project_id,
+                "project_root": compile_root_path.as_posix(),
+                "lean_toolchain": toolchain,
+            })
         for problem in manifest["problems"]:
             if problem["id"] in problem_ids:
                 raise ValueError("跨项目题目 ID 重复：" + problem["id"])
@@ -350,11 +393,17 @@ def assemble_project_benchmark(spec_path: Path, out: Path) -> dict[str, Any]:
         "status": "frozen-project-disjoint-real-history",
         "license": "Each task retains the upstream license recorded in provenance.",
         "description": "真实公开 Git 历史修复对；开发、验证、测试按上游项目完全隔离。",
-        "lean_toolchain": (ROOT / "mathlib_project/lean-toolchain").read_text(encoding="utf-8").strip(),
+        "lean_toolchain": (
+            "per-project-frozen-in-project_environments"
+            if is_v2 else
+            (ROOT / "mathlib_project/lean-toolchain").read_text(encoding="utf-8").strip()
+        ),
         "split_policy": spec["split_policy"],
         "projects": project_rows,
         "problems": problems,
     }
+    if is_v2:
+        manifest["project_environments"] = project_environments
     write_json(out / "manifest.json", manifest)
     # 再经通用题库加载器核对文件内容、路径和局部证明区域。
     load_benchmark(out / "manifest.json")

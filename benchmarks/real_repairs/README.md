@@ -60,3 +60,19 @@ python src/real_repairs.py build --repo mathlib_project/.lake/packages/aesop --p
 ```
 
 项目筛选还检查了 Plausible、Qq、ProofWidgets、ImportGraph、LeanSearchClient 与 Cli：没有通过全部门禁的候选不会为凑项目数进入清单。构建器不修改来源仓库，也不覆盖已有输出；参考证明仅写入 `.gitignore` 排除的 `private_references/`。
+
+## TRACER-REAL v2：已预注册纳入规则，尚未形成最终题库
+
+v2 不把上述 11 题改名后重复发布。机器可读的[纳入合同](tracer_real_v2.enrollment.json)已在新增测试项目筛选和 v2 provider 调用前冻结，要求至少 5 个全新测试项目、40 个测试任务、51 个总任务和 4 类测试错误。Mathlib、Batteries 与 Aesop 不得重新进入 v2 test。
+
+当前状态只可执行离线审计：
+
+```powershell
+python src/tracer_real_v2.py audit
+```
+
+预期结果是纳入预注册有效，但 `ready_for_provider_run` 为 `false`。这表示最终项目和任务尚未完成，不应通过复制、改名或降低门槛绕过。
+
+v2 项目组合规范使用 `tracer-real-project-split-v2`。除了 v1 的 `project_id`、`split` 和 `manifest`，每个项目还必须提供仓库内相对的 `compile_project_root` 与精确 `lean_toolchain`。组装器会验证对应 Lake 环境并在最终 manifest 中写入一对一的 `project_environments`；因果 runner 随后按题目所属项目选择环境，禁止用一个统一 `--project-root` 覆盖全部测试项目。
+
+完整门槛、两阶段冻结顺序、最终预注册命令和结论边界见 [TRACER-REAL v2 协议](../../docs/TRACER_REAL_V2.md)。

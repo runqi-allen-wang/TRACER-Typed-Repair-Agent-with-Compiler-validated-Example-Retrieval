@@ -4,6 +4,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,6 +14,7 @@ from real_repairs import (  # noqa: E402
     PROJECT_SPLITS, assemble_project_benchmark, build_benchmark, declaration_parts,
     marked_source, validate_spec,
 )
+import real_repairs  # noqa: E402
 
 
 class RealRepairBuilderTest(unittest.TestCase):
@@ -151,6 +153,52 @@ end Demo
             spec_path.write_text(json.dumps(spec), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "项目 ID"):
                 assemble_project_benchmark(spec_path, root / "out")
+
+    def test_v2_project_assembler_freezes_one_environment_per_project(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            project_rows = []
+            for index, split in enumerate(PROJECT_SPLITS, 1):
+                project_id = f"project_{index}"
+                subset = root / "subsets" / project_id
+                tasks = subset / "tasks"
+                tasks.mkdir(parents=True)
+                source = "theorem target : True :=\n  -- PROOF_START\n  by exact missing\n  -- PROOF_END\n"
+                (tasks / "one.lean").write_text(source, encoding="utf-8")
+                (subset / "manifest.json").write_text(json.dumps({
+                    "version": f"{project_id}-v1", "status": "test", "license": "MIT",
+                    "problems": [{
+                        "id": f"case_{index}", "file": "tasks/one.lean", "theorem": "target",
+                        "source_text": source,
+                        "provenance": {"source_repository": f"https://example.invalid/{project_id}"},
+                    }],
+                }), encoding="utf-8")
+                environment = root / "environments" / project_id
+                environment.mkdir(parents=True)
+                (environment / "lakefile.toml").write_text("name = \"demo\"\n", encoding="utf-8")
+                (environment / "lean-toolchain").write_text("leanprover/lean4:v4.32.0\n", encoding="utf-8")
+                project_rows.append({
+                    "project_id": project_id, "split": split,
+                    "manifest": f"subsets/{project_id}/manifest.json",
+                    "compile_project_root": f"environments/{project_id}",
+                    "lean_toolchain": "leanprover/lean4:v4.32.0",
+                })
+            spec_path = root / "spec.json"
+            spec_path.write_text(json.dumps({
+                "version": "tracer-real-project-split-v2",
+                "benchmark_version": "combined-v2",
+                "split_policy": "upstream_project_disjoint",
+                "projects": project_rows,
+            }), encoding="utf-8")
+            with patch.object(real_repairs, "ROOT", root):
+                result = assemble_project_benchmark(spec_path, root / "out")
+            manifest = json.loads((root / "out/manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual(result["projects"], 3)
+            self.assertEqual(len(manifest["project_environments"]), 3)
+            self.assertEqual(
+                {row["project_id"] for row in manifest["project_environments"]},
+                {row["project_id"] for row in manifest["projects"]},
+            )
 
 
 if __name__ == "__main__":

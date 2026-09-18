@@ -45,6 +45,7 @@ Available artifacts:
 - **Compiler Feedback v1 and Feedback Adoption v1**, covering the frozen three-layer diagnostic protocol, 15 failure/infrastructure fixtures, candidate-change observations, cache separation, and static-versus-dynamic query/Top-k change metrics. The latest published evidence consists of two audited 216-task runs: [DeepSeek Pro](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248) with 199 successful proofs and [DeepSeek Flash](published/feedback-study-562ad440-3446-4138-801e-59726ed0e108) with 209, plus a complete [task-paired comparison](published/feedback-cross-model-8ccb89dd-562ad440). Both ledgers are explicitly AI-assisted.
 - **Causal Feedback v1, Error-State Graph, and Adaptive Router prototypes** freeze one first-round candidate before branching into content-free retry, true feedback, category-matched irrelevant feedback, counterfactual feedback, retrieval-only, and adaptive arms. A machine-readable project-level pilot is now [preregistered](experiments/preregistrations/tracer_real_causal_v1.json); no formal causal claim has been published. See the [protocol](docs/CAUSAL_FEEDBACK_V1.md).
 - **TRACER-REAL v1** contains 11 verified public-history repairs from three independent upstream projects: Mathlib for development, Batteries for validation, and Aesop for held-out test. Every task keeps the theorem statement fixed, reproduces the historical proof failure in the pinned environment, and recompiles the repair. Reference proofs stay outside the public task directory. This is a project-split pilot, not a large effectiveness benchmark.
+- **TRACER-REAL v2 enrollment is preregistered, not yet populated.** Its [machine-readable contract](benchmarks/real_repairs/tracer_real_v2.enrollment.json) requires at least five new held-out projects, 40 test repairs, 51 total repairs, four test error categories, and a separate frozen Lake environment for every project. The [two-stage protocol](docs/TRACER_REAL_V2.md) forbids v2 provider calls until the final manifest and exact runtime preregistration pass their offline gates.
 - **A historical 18-problem smoke pilot**, retained as engineering evidence for the provider-to-compiler pipeline but no longer treated as the headline experiment.
 - **An end-to-end workflow** covering a single-problem CLI, local HTTP API, batch evaluation, manual review, report validation, and sanitized export.
 - **A separate six-arm repair24 research suite (R-A through R-F)** with retrieval-only, diagnostic-query and failure-context controls. The runner and offline checks exist; the full multi-model repeated experiment is pending. Jump to [research evaluation](#research-evaluation-beyond-the-smoke-test) and [related work](#related-work).
@@ -75,9 +76,10 @@ These are verifiable engineering contributions and a combination of design choic
 | **Auditable compiler feedback** | Preserve raw, normalized, and structured diagnostics together; every extracted category and signal points to an exact raw excerpt | Support offline inspection of diagnostic transformations before testing whether a model uses them |
 | **Observable feedback adoption** | Compare adjacent candidates with prior diagnostic signals, separate cache reuse, and record query/Top-k changes for dynamic retrieval | Distinguish recorded behavioral changes from unsupported claims that a model causally understood feedback |
 | **Same-seed diagnostic interventions** | Freeze one failed first-round candidate, then branch into true, irrelevant, counterfactual, retrieval-only, and adaptive conditions | Separate feedback content from resampling and expose susceptibility to misleading diagnostics |
+| **Project-level confirmatory enrollment** | Preregister source inclusion, project balance, per-project Lake environments, a unique primary contrast, and project-equal analysis before selecting new test projects | Prevent a three-project pilot, repository aliases, or a single large project from being presented as cross-project evidence |
 | **Traceable experimental evidence** | Record model settings, candidates, actual retrieved examples, usage, and diagnostics; save proofs; validate before formal reporting | Reduce the risk of mistaking mixed batches, cache reuse, or infrastructure errors for improved model capability |
 
-Implementation: [repair loop](src/agent.py) · [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) · [feedback-adoption audit](docs/FEEDBACK_ADOPTION_V1.md) · [three-representation study](docs/FEEDBACK_STUDY_V1.md) · [same-seed causal protocol](docs/CAUSAL_FEEDBACK_V1.md) · [SP security suite](docs/security_policy.md) · [capsule packaging](src/leancapsule/pack.py) · [pilot validation](scripts/validate_pilot.py).
+Implementation: [repair loop](src/agent.py) · [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) · [feedback-adoption audit](docs/FEEDBACK_ADOPTION_V1.md) · [three-representation study](docs/FEEDBACK_STUDY_V1.md) · [same-seed causal protocol](docs/CAUSAL_FEEDBACK_V1.md) · [TRACER-REAL v2 enrollment](docs/TRACER_REAL_V2.md) · [SP security suite](docs/security_policy.md) · [capsule packaging](src/leancapsule/pack.py) · [pilot validation](scripts/validate_pilot.py).
 
 ## How it works
 
@@ -227,6 +229,7 @@ The complete task-paired final-outcome agreement between Pro and Flash is 94.4% 
 | LeanCapsule | A reviewed 24-case gallery across Std, Mathlib, and project-local dependencies, plus 12-core / 4-challenge feasibility artifacts |
 | Security | [SP-1–SP-12 with eight benign controls](published/security-study-tracer-sp-v2); dangerous-candidate false acceptance 0/12 and benign-control false rejection 0/8 in the frozen suite. [SP isolation v1](docs/SP_ISOLATION_V1.md) freezes fourteen Docker/low-privilege controls, but a native Linux execution report has not yet been published |
 | Project-level causal pilot | [TRACER-REAL v1](benchmarks/real_repairs/tracer_real_v1/manifest.json): 11 verified repairs across three project-disjoint splits; the Aesop test project and the unique structured-vs-content-free primary contrast are frozen in a [machine-readable preregistration](experiments/preregistrations/tracer_real_causal_v1.json). Provider output is not a result until the run and audit complete |
+| Confirmatory benchmark enrollment | [TRACER-REAL v2](docs/TRACER_REAL_V2.md) has a frozen first-stage enrollment and analysis preregistration: ≥5 new test projects, ≥40 test repairs, ≥51 total repairs, and per-project Lake environments. The final benchmark and provider run do not yet exist, so this is a design artifact rather than performance evidence |
 | Broader repair study | The R-A–R-F repair24 benchmark, runner, budget controls, and offline gates are implemented; the full six-arm repeated provider experiment has not been run |
 
 Passing a software gate, compiling a proof, completing a declared review mode, and establishing a research effect are different claims. TRACER does not promote one into another. The canonical dated evidence register is [PROGRESS.md](PROGRESS.md).
@@ -324,6 +327,7 @@ Keep these checks distinct:
 | Reproduce Feedback Study v1 with a second model | [Second-model replication protocol](docs/SECOND_MODEL_REPLICATION.md) |
 | Inspect the same-first-candidate causal protocol and adaptive router | [Causal Feedback v1](docs/CAUSAL_FEEDBACK_V1.md) |
 | Inspect or rebuild the project-split real-history benchmark | [TRACER-REAL v1 and builder](benchmarks/real_repairs/README.md) |
+| Inspect the confirmatory benchmark enrollment and final-freeze gate | [TRACER-REAL v2 protocol](docs/TRACER_REAL_V2.md) |
 | Understand condition controls and validity constraints | [Methodology](docs/methodology.md) |
 | Look up per-round record fields | [JSONL format](docs/jsonl_schema.md) |
 | Inspect or verify the three-layer compiler-diagnostic protocol | [Compiler Feedback v1](docs/COMPILER_FEEDBACK_V1.md) |
@@ -345,6 +349,8 @@ src/causal_feedback.py Same-first-candidate diagnostic interventions
 src/error_state_graph.py Source-linked diagnostic state representation
 src/adaptive_router.py Deterministic budget-aware routing prototype
 src/real_repairs.py    Real-history repair-task builder
+src/tracer_real_v2.py TRACER-REAL v2 enrollment and final-freeze gate
+src/causal_analysis_v2.py Preregistered project-weighted v2 analysis
 src/leancapsule/       Packaging, extraction, replay, audit, and issues
 capsule_schema/        Capsule manifest schema
 capsules/              Public failures, indexes, and review ledger
@@ -368,8 +374,8 @@ The two published Compiler Feedback v1 runs are the repository's current primary
 
 The next evidence priorities are:
 
-1. run and audit the preregistered TRACER-REAL project-level causal pilot without changing the frozen test project or primary contrast;
-2. expand TRACER-REAL to at least five genuinely held-out projects and 30 eligible first failures before any confirmatory cross-project claim;
+1. enroll and independently verify the new held-out projects required by the [TRACER-REAL v2 preregistration](docs/TRACER_REAL_V2.md), without reusing Mathlib, Batteries, or Aesop as test projects;
+2. freeze the exact v2 manifest and per-project Lake environments, generate the non-overwritable runtime preregistration, and only then run the provider batch; at least 30 eligible first failures are still required for a confirmatory claim;
 3. replace or compare the deterministic Adaptive Router with a learned budget-aware policy only after the causal controls are stable;
 4. run and audit [SP isolation v1](docs/SP_ISOLATION_V1.md) on native Linux and Windows Docker Desktop, reporting the two environments separately.
 

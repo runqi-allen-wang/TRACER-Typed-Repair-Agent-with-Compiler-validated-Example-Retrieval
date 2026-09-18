@@ -1,0 +1,77 @@
+{
+  "version": "tracer-causal-v2-enrollment-preregistration-v1",
+  "status": "frozen-before-test-project-enrollment",
+  "planned_experiment_family": "tracer-real-causal-v2",
+  "registered_at_utc": "2026-09-16T06:33:26Z",
+  "registration_medium": "版本控制仓库中的机器可读两阶段预注册；本记录冻结于新增测试项目筛选和任何 v2 provider 调用之前。",
+  "benchmark_contract": "benchmarks/real_repairs/tracer_real_v2.enrollment.json",
+  "causal_config": "experiments/causal_feedback.tracer_real_v2.json",
+  "design": {
+    "protocol_version": "tracer-causal-feedback-v1",
+    "arms": [
+      "content_free_retry",
+      "true_raw",
+      "true_normalized",
+      "true_structured",
+      "irrelevant_matched",
+      "counterfactual",
+      "retrieval_only",
+      "adaptive"
+    ],
+    "repeats": 3,
+    "branch_attempts": 1,
+    "benchmark_splits": [
+      "test"
+    ],
+    "order_seed": 20260916,
+    "compile_timeout": 180,
+    "prompt_files": [
+      "prompts/causal_seed.txt",
+      "prompts/causal_branch.txt",
+      "prompts/proof_contract.txt"
+    ]
+  },
+  "primary_analysis": {
+    "population": "eligible_first_failures_on_preregistered_v2_test_projects",
+    "contrast": "true_structured - content_free_retry",
+    "outcome": "one_branch_attempt_kernel_success",
+    "estimand": "测试项目等权的同一冻结首轮失败内平均配对成功率差",
+    "project_weighting": "equal_weight_per_test_project",
+    "missingness": "首轮成功不进入反馈效果人群；负对照供体不可用只影响对应负对照；任何 provider、策略或编译基础设施异常都会阻止确认性报告。"
+  },
+  "secondary_analyses": [
+    "true_raw、true_normalized、retrieval_only 与 adaptive 相对 content_free_retry 的项目等权配对差",
+    "irrelevant_matched 与 counterfactual 的误导率、服从率和错误类别转移",
+    "按错误类别、项目、token、墙钟时间和编译次数分层的描述性结果",
+    "Error-State Graph 变化、检索查询变化和反馈相关代码修改与成功的关联"
+  ],
+  "stopping_rule": {
+    "provider_calls_before_final_freeze": 0,
+    "final_call_limit": "由最终测试题数、模型数、三次重复和八个分支机械计算并写入最终运行时预注册。",
+    "performance_based_stopping": false,
+    "transport_policy": "传输状态不明时停止并保留目录；只允许严格续跑，不得删除失败记录后重开同名批次。"
+  },
+  "analysis_plan": {
+    "primary_point_estimate": "先在每个测试项目内计算 structured 减 content-free 的冻结候选配对成功率差，再对测试项目等权平均。",
+    "primary_test": "对项目级配对差执行单侧精确符号翻转检验；项目数不超过 20 时枚举全部符号组合。",
+    "more_than_20_projects": "使用 analysis_seed 执行 100000 次项目级符号翻转随机化，并采用加一修正。",
+    "uncertainty": "以测试项目为一级抽样单位、项目内冻结候选为二级抽样单位，执行 10000 次分层重采样并报告 95% 区间。",
+    "analysis_seed": 20260916,
+    "multiplicity": "唯一主对比不校正；所有其他对比明确标记为次要或探索性。",
+    "confirmatory_direction": "true_structured 的项目等权成功率高于 content_free_retry",
+    "decision_rule": "项目等权平均差为正且单侧符号翻转 p 值不大于 0.05；95% 分层重采样区间必须同时报告，但不替代预注册主检验。"
+  },
+  "amendment_policy": {
+    "before_final_manifest": "只允许修复实现错误或澄清文字；任何纳入门槛、主对比或分析规则变更必须追加带日期的公开修订记录，不得静默覆盖。",
+    "after_final_manifest": "不得更换测试项目、任务、模型、提示、生成参数、主对比、停止规则或分析方法。",
+    "after_provider_run": "只允许不改变原始记录的派生报告修复；所有修订必须保留旧报告并说明影响。"
+  },
+  "claim_gate": {
+    "minimum_test_projects": 5,
+    "minimum_test_tasks": 40,
+    "minimum_total_tasks": 51,
+    "minimum_eligible_first_failures": 30,
+    "final_runtime_preregistration_required": true,
+    "confirmatory_claim_allowed_before_final_freeze": false
+  }
+}

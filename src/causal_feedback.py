@@ -154,6 +154,51 @@ def build_plan(config: dict[str, Any], benchmark: dict[str, Any]) -> dict[str, A
     }
 
 
+def resolve_compile_environments(
+    benchmark: dict[str, Any], project_root: Path | None,
+) -> tuple[dict[str, Path], str | dict[str, str], str]:
+    """解析冻结编译环境；v2 必须逐项目绑定，v1 保持单项目兼容。"""
+
+    if benchmark.get("version") != "tracer-real-v2":
+        active_root = project_root.resolve() if project_root is not None else ROOT
+        if project_root is not None and not (
+            (active_root / "lakefile.toml").is_file() or (active_root / "lakefile.lean").is_file()
+        ):
+            raise ValueError("显式编译项目根缺少 lakefile")
+        toolchain_path = active_root / "lean-toolchain"
+        if not toolchain_path.is_file():
+            raise ValueError("编译项目根缺少 lean-toolchain")
+        return {}, toolchain_path.read_text(encoding="utf-8").strip(), (
+            "explicit_lake_project" if project_root is not None else "benchmark_project"
+        )
+
+    if project_root is not None:
+        raise ValueError("TRACER-REAL v2 必须使用 manifest 中逐项目冻结的编译环境；禁止统一覆盖")
+    from tracer_real_v2 import read_json as read_v2_json, validate_v2_benchmark
+
+    contract = read_v2_json(ROOT / "benchmarks/real_repairs/tracer_real_v2.enrollment.json")
+    validate_v2_benchmark(benchmark, contract)
+    roots: dict[str, Path] = {}
+    toolchains: dict[str, str] = {}
+    for row in benchmark["project_environments"]:
+        root = (ROOT / row["project_root"]).resolve()
+        try:
+            root.relative_to(ROOT.resolve())
+        except ValueError as exc:
+            raise ValueError("v2 项目编译根逃逸仓库") from exc
+        if not ((root / "lakefile.toml").is_file() or (root / "lakefile.lean").is_file()):
+            raise ValueError("v2 项目编译根缺少 lakefile：" + row["project_id"])
+        toolchain_path = root / "lean-toolchain"
+        if not toolchain_path.is_file():
+            raise ValueError("v2 项目编译根缺少 lean-toolchain：" + row["project_id"])
+        actual_toolchain = toolchain_path.read_text(encoding="utf-8").strip()
+        if actual_toolchain != row["lean_toolchain"]:
+            raise ValueError("v2 项目 lean-toolchain 与冻结记录不一致：" + row["project_id"])
+        roots[row["project_id"]] = root
+        toolchains[row["project_id"]] = actual_toolchain
+    return roots, toolchains, "manifest_project_lake_roots"
+
+
 def validate_preregistration(
     path: Path, config: dict[str, Any], benchmark: dict[str, Any],
 ) -> dict[str, Any]:
@@ -195,6 +240,12 @@ def validate_preregistration_record(
     )
     if projects != frozen_projects:
         raise ValueError("预注册的项目与题目数量发生漂移")
+    if benchmark.get("version") == "tracer-real-v2":
+        # v2 采用两阶段预注册：先冻结纳入规则，再冻结满足门槛的精确清单。
+        from tracer_real_v2 import read_json as read_v2_json, validate_v2_benchmark
+
+        contract = read_v2_json(ROOT / "benchmarks/real_repairs/tracer_real_v2.enrollment.json")
+        validate_v2_benchmark(benchmark, contract)
     frozen_models = prereg["models"]
     model_fields = (
         "id", "model", "api_url", "temperature", "max_tokens", "thinking", "reasoning_effort",
@@ -217,8 +268,13 @@ def validate_preregistration_record(
         raise ValueError("预注册设计与运行配置发生漂移")
     if prereg["primary_analysis"].get("contrast") != "true_structured - content_free_retry":
         raise ValueError("v1 主对比必须唯一冻结为 structured 对 content-free retry")
-    if prereg["primary_analysis"].get("population") != "eligible_first_failures_on_test_split":
-        raise ValueError("v1 主分析人群必须是测试项目上的合格首轮失败")
+    expected_population = (
+        "eligible_first_failures_on_preregistered_v2_test_projects"
+        if benchmark.get("version") == "tracer-real-v2"
+        else "eligible_first_failures_on_test_split"
+    )
+    if prereg["primary_analysis"].get("population") != expected_population:
+        raise ValueError("主分析人群必须是预注册测试项目上的合格首轮失败")
 
 
 def re_fullmatch_identifier(value: str) -> bool:
@@ -481,8 +537,9 @@ def run_matrix(
         validate_preregistration_record(preregistration, config, benchmark)
     if project_root is not None:
         project_root = project_root.resolve()
-        if not ((project_root / "lakefile.toml").is_file() or (project_root / "lakefile.lean").is_file()):
-            raise ValueError("显式编译项目根缺少 lakefile")
+    project_roots, toolchain_snapshot, compile_environment = resolve_compile_environments(
+        benchmark, project_root,
+    )
     plan = build_plan(config, benchmark)
     providers = _providers(config, api_keys, budget)
     examples = load_examples(ROOT / config.get("examples_dir", "examples"))
@@ -493,7 +550,6 @@ def run_matrix(
         preregistration["planned_experiment_id"]
         if preregistration is not None else "causal-feedback-" + str(uuid.uuid4())
     )
-    toolchain_path = (project_root or ROOT) / "lean-toolchain"
     plan_record = {
         "protocol_version": PROTOCOL_VERSION,
         "experiment_id": experiment_id,
@@ -501,8 +557,8 @@ def run_matrix(
         "config": config,
         "benchmark_version": benchmark["version"],
         "plan": plan,
-        "lean_toolchain": toolchain_path.read_text(encoding="utf-8").strip(),
-        "compile_environment": "explicit_lake_project" if project_root else "benchmark_project",
+        "lean_toolchain": toolchain_snapshot,
+        "compile_environment": compile_environment,
         "platform": platform.system(),
         "prompt_templates": {
             name: (ROOT / "prompts" / name).read_text(encoding="utf-8")
@@ -558,9 +614,10 @@ def run_matrix(
             continue
         problem = problems[task["problem_id"]]
         source_file = benchmark_path.parent / problem["file"]
+        active_project_root = project_roots.get(problem.get("project_id")) or project_root
         compile_anchor = (
-            project_root / f"TRACERCausal_{problem['id']}.lean"
-            if project_root is not None else source_file
+            active_project_root / f"TRACERCausal_{problem['id']}.lean"
+            if active_project_root is not None else source_file
         )
         provider = providers[task["model_id"]]
         prompt = _seed_prompt(problem)
@@ -603,9 +660,10 @@ def run_matrix(
         seed = by_id[item["seed_id"]]
         problem = problems[seed["problem_id"]]
         source_file = benchmark_path.parent / problem["file"]
+        active_project_root = project_roots.get(problem.get("project_id")) or project_root
         compile_anchor = (
-            project_root / f"TRACERCausal_{problem['id']}.lean"
-            if project_root is not None else source_file
+            active_project_root / f"TRACERCausal_{problem['id']}.lean"
+            if active_project_root is not None else source_file
         )
         target_text = problem["theorem"] + "\n" + problem["source_text"]
         retrieved = retrieve(target_text, examples, top_k=3, target=target_text) if item["arm"] in {"retrieval_only", "adaptive"} else []
@@ -653,7 +711,7 @@ def run_matrix(
                     solution_path.write_text(compiled.isolated_source, encoding="utf-8")
                     checked = run_lean_file(
                         solution_path, config["compile_timeout"],
-                        project_root or find_project_root(source_file),
+                        active_project_root or find_project_root(source_file),
                     )
                     if not checked.ok or diagnostics_use_sorry(checked.diagnostics):
                         raise RuntimeError("分支成功证明独立复编译失败")
@@ -667,7 +725,7 @@ def run_matrix(
                     "diagnostic": diagnostic,
                     "raw_diagnostics": redact_text(
                         redact_sensitive_text(compiled.diagnostics),
-                        tuple(path for path in (ROOT, source_file.parent, project_root) if path is not None),
+                        tuple(path for path in (ROOT, source_file.parent, active_project_root) if path is not None),
                     )[:8000],
                     "usage": generation.usage,
                     "estimated_cost_usd": estimate_cost(generation.usage, provider.metadata()),
@@ -845,11 +903,15 @@ def audit_run(run: Path) -> dict[str, Any]:
     prereg = plan_record.get("preregistration") or {}
     gate = prereg.get("claim_gate") or {}
     selected_projects = set(plan_record.get("plan", {}).get("selected_projects") or [])
+    claim_authorized = gate.get(
+        "confirmatory_claim_allowed",
+        gate.get("confirmatory_claim_allowed_for_v1"),
+    )
     confirmatory_gate = (
         not errors
         and len(selected_projects) >= gate.get("minimum_test_projects", 10**9)
         and len(eligible) >= gate.get("minimum_eligible_first_failures", 10**9)
-        and gate.get("confirmatory_claim_allowed_for_v1") is True
+        and claim_authorized is True
     )
     return {
         "ok": not errors,
