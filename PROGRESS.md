@@ -1,8 +1,8 @@
 # TRACER 当前进度与证据登记
 
-更新时间：2026-09-18。
+更新时间：2026-09-19。
 
-当前发布基线为 `main@e05e6c3`（PR #26）。本文是仓库内“完成到哪一步”的唯一当前口径；历史变更过程见 `CHANGELOG.md`，未来工作见 `docs/FUTURE_WORK_PLAN.md`。当旧报告、历史批次说明与本文冲突时，以各批次原始工件和本文的证据分层为准。
+当前发布基线为 `main@bad4f7b`；本分支在此基础上继续登记 TRACER-REAL v2 筛查证据。本文是仓库内“完成到哪一步”的唯一当前口径；历史变更过程见 `CHANGELOG.md`，未来工作见 `docs/FUTURE_WORK_PLAN.md`。当旧报告、历史批次说明与本文冲突时，以各批次原始工件和本文的证据分层为准。
 
 ## 口径规则
 
@@ -49,7 +49,7 @@
 | I-08 | `tracer-sp-isolation-v1`：Docker 非 root、只读根与仓库、noexec 临时目录、禁网、清空 capabilities、`no-new-privileges`、seccomp、内存/CPU/PID/墙钟限制，共 14 项 fail-closed 探针；含手动 Actions 工作流 | 当前机器没有 Docker，尚无 Windows Docker Desktop 或原生 Linux 的真实运行报告；未知容器逃逸与恶意依赖不在已验证范围 |
 | I-09 | `tracer-causal-feedback-v1`：冻结无反馈首轮候选后分叉到空反馈、三种真实反馈、同类无关反馈、反事实反馈、只检索和 adaptive；负对照禁止自配对，所有分支保留同一首轮候选；TRACER-REAL 试点已冻结机器可读预注册 | provider 批次与结果审计尚待完成；单 test 项目且最多 12 个合格失败，预注册明确禁止正式统计或跨项目因果结论 |
 | I-10 | Error-State Graph、确定性 Adaptive Router 与 TRACER-REAL v1：结构化信号保留原始证据边；Mathlib 3、Batteries 4、Aesop 4 共 11 题按 development/validation/test 上游项目互斥划分，均经旧证明失败与修复证明通过门禁，参考证明单独存放 | 当前 Router 尚未学习；11 题/3 项目仍是试点，确认性结论门禁要求至少 5 个 test 项目与 30 个合格首轮失败 |
-| I-11 | [TRACER-REAL v2](docs/TRACER_REAL_V2.md) 第一阶段两阶段预注册；六个独立候选上游、端点和 120 提交窗口已在扫描前冻结；确定性扫描保存 1,576 个候选并由审计器核对；LeanAPAP 51 个候选已全量筛查并公开 16 个通过、35 个拒绝的完整决定账本 | 其余五项目的 1,525 个候选尚未完成固定环境 Lean 门禁，候选数不能写成合格题数；最终 `tracer-real-v2` manifest 和运行时预注册不存在，`ready_for_provider_run` 必须为 false；没有 v2 provider 结果或因果结论 |
+| I-11 | [TRACER-REAL v2](docs/TRACER_REAL_V2.md) 第一阶段两阶段预注册；六个独立候选上游、端点和 120 提交窗口已在扫描前冻结；确定性扫描保存 1,576 个候选并由审计器核对；LeanAPAP 与 PFR 的 327 个候选已全量筛查并公开 60 个通过、267 个拒绝的完整决定账本 | 其余四项目的 1,249 个候选尚未完成固定环境 Lean 门禁，候选数不能写成合格题数；最终 `tracer-real-v2` manifest 和运行时预注册不存在，`ready_for_provider_run` 必须为 false；没有 v2 provider 结果或因果结论 |
 
 repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译→保存→独立复编译→报告校验”，但 mock 或参考候选不得计作模型实验结果。
 
@@ -79,7 +79,7 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 
 当前文档基线的本地 Windows 全量复审记录：
 
-- Python：共发现 315 项测试，313 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。覆盖 Compiler Feedback v1、同首轮候选因果分叉、项目级划分与预注册漂移门禁、合成 provider 预检、不完整批次审计、顶层 `null` provider 响应分类、严格续跑与预算账本一致性、长文件目标感知提示、Error-State Graph、自适应路由、11 题/3 项目 TRACER-REAL v1、TRACER-REAL v2 两阶段纳入、六项目候选冻结与 1,576 项扫描审计、完整筛查账本反向核对、`finalize` 不可绕过筛查门禁、可严格续跑的逐项筛查、逐项目 Lake 环境和项目等权确认性分析门禁、反馈采纳、三表示 runner、两份 Feedback Study 发布包与跨模型比较审计、第二模型冻结合同与完整 216 任务跨模型配对、直接 provider CLI、仅调用次数门禁、DeepSeek 思考参数和 Chat 存储字段披露、SP v2 双向指标及正常对照真编译、SP 隔离 v1 的 14 项静态 fail-closed 合同、证据分层和既有实验防回退。
+- Python：共发现 317 项测试，315 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。覆盖 Compiler Feedback v1、同首轮候选因果分叉、项目级划分与预注册漂移门禁、合成 provider 预检、不完整批次审计、顶层 `null` provider 响应分类、严格续跑与预算账本一致性、长文件目标感知提示、Error-State Graph、自适应路由、11 题/3 项目 TRACER-REAL v1、TRACER-REAL v2 两阶段纳入、六项目候选冻结与 1,576 项扫描审计、完整筛查账本反向核对、`finalize` 不可绕过筛查门禁、可严格续跑的逐项/并行筛查、逐项目 Lake 环境和项目等权确认性分析门禁、反馈采纳、三表示 runner、两份 Feedback Study 发布包与跨模型比较审计、第二模型冻结合同与完整 216 任务跨模型配对、直接 provider CLI、仅调用次数门禁、DeepSeek 思考参数和 Chat 存储字段披露、SP v2 双向指标及正常对照真编译、SP 隔离 v1 的 14 项静态 fail-closed 合同、证据分层和既有实验防回退。
 - `lake build`：通过；冻结 Evaluation18 输入中的 18 个 `sorry` 是预期占位警告，不代表题目已在原文件中修复。
 - `python -m leancapsule audit capsules`：24/24 通过。
 - `python -m leancapsule verify capsules`：24/24 通过，包含 4 个 Mathlib 案例。
@@ -118,6 +118,6 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 5. **隔离原型已完成、实测待完成：** 已冻结 14 项 Docker/低权限控制与手动 workflow；下一步分别生成 Windows Docker Desktop 和原生 Linux 报告并脱敏审计，不把计划、环境标签或静态参数称为隔离通过。
 6. **已完成公开导出：** raw/normalized/structured DeepSeek 批次已脱敏发布；保留 AI 辅助复核标识，未上传逐请求完整 prompts、历史归档原文或认证字段。
 7. 真人计时与独立机器跨环境研究单独立项，不与模型结果混算。
-8. **TRACER-REAL v2 候选池已冻结并开始固定环境筛查：** 六个上游共 1,576 个候选；LeanAPAP 51 条已全部处理，16 条通过、35 条拒绝，完整决定账本已进入版本化审计。下一步继续处理其余 1,525 条；达到至少 5 个全新 test 项目、40 个测试任务和 51 个总任务后，才生成最终运行时预注册。provider 必须晚于最终 manifest、逐项目 Lake 环境和分析实现的共同门禁；旧 v1 与 Feedback Study 保持原样，不回写为 v2。
+8. **TRACER-REAL v2 候选池已冻结并继续固定环境筛查：** 六个上游共 1,576 个候选；LeanAPAP 与 PFR 的 327 条已全部处理，60 条通过、267 条拒绝，两份完整决定账本已进入版本化审计。下一步继续处理其余 1,249 条；达到至少 5 个全新 test 项目、40 个测试任务和 51 个总任务后，才生成最终运行时预注册。provider 必须晚于最终 manifest、逐项目 Lake 环境和分析实现的共同门禁；旧 v1 与 Feedback Study 保持原样，不回写为 v2。
 
 新结果只有在包含冻结配置、原始轨迹、成功证明、独立重编译、明确标注的复核模式和发布审计后，才能从“可复验实现”升级为“已发布证据”。AI 辅助复核不能表述为纯人工复核。

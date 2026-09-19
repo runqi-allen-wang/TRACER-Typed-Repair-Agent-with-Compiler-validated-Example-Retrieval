@@ -102,9 +102,9 @@ class TracerRealV2Test(unittest.TestCase):
         screening = validate_candidate_screen_reports(
             self.candidates, CANDIDATE_SCANS, CANDIDATE_SCREENING,
         )
-        self.assertEqual(screening["screened_projects"], 1)
-        self.assertEqual(screening["screened_candidates"], 51)
-        self.assertEqual(screening["accepted_repairs"], 16)
+        self.assertEqual(screening["screened_projects"], 2)
+        self.assertEqual(screening["screened_candidates"], 327)
+        self.assertEqual(screening["accepted_repairs"], 60)
         result = audit_enrollment(CONTRACT_PATH, ENROLLMENT_PATH, CONFIG_PATH)
         self.assertTrue(result["ok"])
         self.assertFalse(result["ready_for_provider_run"])
@@ -112,9 +112,9 @@ class TracerRealV2Test(unittest.TestCase):
         self.assertEqual(result["candidate_projects_frozen"], 6)
         self.assertEqual(result["candidate_history_window"], 120)
         self.assertEqual(result["history_candidates"], 1576)
-        self.assertEqual(result["screened_projects"], 1)
-        self.assertEqual(result["screened_candidates"], 51)
-        self.assertEqual(result["accepted_repairs"], 16)
+        self.assertEqual(result["screened_projects"], 2)
+        self.assertEqual(result["screened_candidates"], 327)
+        self.assertEqual(result["accepted_repairs"], 60)
 
     def test_final_audit_requires_complete_screening_reports(self):
         with self.assertRaisesRegex(ValueError, "全部候选项目"):

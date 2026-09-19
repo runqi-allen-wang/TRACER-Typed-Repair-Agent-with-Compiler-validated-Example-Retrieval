@@ -95,13 +95,14 @@ python src/real_repair_inventory.py screen `
   --repo path/to/upstream `
   --inventory results/tracer-real-v2-candidates/example.inventory.json `
   --project-root path/to/upstream `
+  --workers 4 `
   --state results/tracer-real-v2-candidates/example.screen-state.jsonl `
   --spec-out benchmarks/real_repairs/example_v2.spec.json `
   --report-out results/tracer-real-v2-candidates/example.screen.json
 ```
 
-`scan` 与 `screen` 均不调用模型。`screen` 每完成一项就追加状态；中断后使用同一命令严格续跑，候选内容漂移时拒绝复用状态。某项目通过门禁的任务少于冻结下限时，应连同完整筛查报告排除该项目，不得手工补选或根据后续 provider 表现换题。
+`scan` 与 `screen` 均不调用模型。`screen` 每完成一项就追加状态；中断后使用同一命令严格续跑，候选内容漂移时拒绝复用状态。`--workers` 只并行独立临时编译，检查点保持单写入者，最终报告保持冻结候选顺序。某项目通过门禁的任务少于冻结下限时，应连同完整筛查报告排除该项目，不得手工补选或根据后续 provider 表现换题。
 
-当前已完成 LeanAPAP 的全部 51 个候选：16 个通过、35 个拒绝；[公开筛查账本](tracer_real_v2_screening/leanapap.screen.json)保留每项决定并由 `tracer_real_v2.py audit` 反向核对冻结候选清单。其余五个项目未完成，不得用 LeanAPAP 的比例外推最终题库规模。
+当前已完成 LeanAPAP 与 PFR 的全部 327 个候选：60 个通过、267 个拒绝；[LeanAPAP 账本](tracer_real_v2_screening/leanapap.screen.json)与 [PFR 账本](tracer_real_v2_screening/pfr.screen.json)保留每项决定并由 `tracer_real_v2.py audit` 反向核对冻结候选清单。其余四个项目未完成，不得用已筛查项目的比例外推最终题库规模。
 
 完整门槛、两阶段冻结顺序、最终预注册命令和结论边界见 [TRACER-REAL v2 协议](../../docs/TRACER_REAL_V2.md)。

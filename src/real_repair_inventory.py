@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import bisect
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
 import re
 import sys
@@ -220,22 +221,28 @@ def screen_inventory(
     timeout: float,
     completed: dict[str, dict[str, Any]] | None = None,
     on_decision: Any | None = None,
+    workers: int = 1,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """逐项执行真实修复门禁，并为每个排除项保存明确理由。"""
 
     if inventory.get("version") != INVENTORY_VERSION:
         raise ValueError("候选清单版本不匹配")
+    if workers <= 0:
+        raise ValueError("workers 必须为正整数")
     spec_base = {
         "version": PROTOCOL_VERSION,
         "benchmark_version": f"tracer-real-{inventory['project_id']}-v2",
         "source_repository": inventory["source_repository"],
         "source_license": inventory["source_license"],
     }
-    accepted: list[dict[str, Any]] = []
-    decisions: list[dict[str, Any]] = []
     completed = completed or {}
-    for candidate in inventory.get("candidates", []):
-        item = {key: candidate[key] for key in ("id", "before_revision", "fixed_revision", "file", "theorem")}
+    items = [
+        {key: candidate[key] for key in ("id", "before_revision", "fixed_revision", "file", "theorem")}
+        for candidate in inventory.get("candidates", [])
+    ]
+    outcomes: dict[str, dict[str, Any]] = {}
+    pending: list[dict[str, Any]] = []
+    for item in items:
         decision = completed.get(item["id"])
         if decision is not None:
             if decision.get("candidate") != item:
@@ -243,20 +250,44 @@ def screen_inventory(
             outcome = decision.get("outcome")
             if not isinstance(outcome, dict) or outcome.get("id") != item["id"]:
                 raise ValueError("续跑状态中的筛查结果损坏：" + item["id"])
+            outcomes[item["id"]] = outcome
         else:
-            try:
-                problem, _ = build_case(repo.resolve(), spec_base, item, timeout, project_root)
-            except (ValueError, OSError) as error:
-                outcome = {"id": item["id"], "accepted": False, "reason": str(error)}
-            else:
-                outcome = {
-                    "id": item["id"],
-                    "accepted": True,
-                    "error_category": problem["expected_error"],
-                }
-            decision = {"candidate": item, "outcome": outcome}
-            if on_decision is not None:
-                on_decision(decision)
+            pending.append(item)
+
+    def evaluate(item: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+        try:
+            problem, _ = build_case(repo.resolve(), spec_base, item, timeout, project_root)
+        except (ValueError, OSError) as error:
+            outcome = {"id": item["id"], "accepted": False, "reason": str(error)}
+        else:
+            outcome = {
+                "id": item["id"],
+                "accepted": True,
+                "error_category": problem["expected_error"],
+            }
+        return item, outcome
+
+    def record(item: dict[str, Any], outcome: dict[str, Any]) -> None:
+        decision = {"candidate": item, "outcome": outcome}
+        if on_decision is not None:
+            on_decision(decision)
+        outcomes[item["id"]] = outcome
+
+    if workers == 1:
+        for item in pending:
+            record(*evaluate(item))
+    else:
+        # 每个 build_case 都在独立临时目录中编译；Git 与 Lake 项目仅作只读访问。
+        # 检查点仍由主线程串行写入，最终报告按冻结清单顺序重建。
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = [executor.submit(evaluate, item) for item in pending]
+            for future in as_completed(futures):
+                record(*future.result())
+
+    accepted: list[dict[str, Any]] = []
+    decisions: list[dict[str, Any]] = []
+    for item in items:
+        outcome = outcomes[item["id"]]
         decisions.append(outcome)
         if outcome.get("accepted") is True:
             accepted.append(item)
@@ -325,6 +356,7 @@ def main() -> int:
     screen.add_argument("--inventory", type=Path, required=True)
     screen.add_argument("--project-root", type=Path)
     screen.add_argument("--timeout", type=float, default=180)
+    screen.add_argument("--workers", type=int, default=1)
     screen.add_argument("--state", type=Path, required=True)
     screen.add_argument("--spec-out", type=Path, required=True)
     screen.add_argument("--report-out", type=Path, required=True)
@@ -357,6 +389,7 @@ def main() -> int:
                 timeout=args.timeout,
                 completed=completed,
                 on_decision=lambda value: _append_screen_state(args.state, value),
+                workers=args.workers,
             )
             write_json(args.spec_out, spec)
             write_json(args.report_out, report)

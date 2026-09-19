@@ -111,6 +111,52 @@ class RealRepairInventoryTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "不一致"):
                 screen_inventory(Path.cwd(), drifted, project_root=None, timeout=1, completed=completed)
 
+    def test_parallel_screen_keeps_frozen_order_and_serializes_checkpoints(self):
+        inventory = {
+            "version": "tracer-real-candidate-inventory-v1",
+            "project_id": "demo",
+            "source_repository": "https://example.invalid/demo",
+            "source_license": "MIT",
+            "endpoint_revision": "fixed",
+            "candidates": [
+                {
+                    "id": f"demo_{index}", "before_revision": f"old-{index}",
+                    "fixed_revision": "fixed", "file": f"Demo{index}.lean", "theorem": f"Demo.t{index}",
+                }
+                for index in range(6)
+            ],
+        }
+        recorded = []
+
+        def fake_build(_repo, _spec, item, _timeout, _project_root):
+            if item["id"] == "demo_3":
+                raise ValueError("历史证明未形成失败")
+            return ({"expected_error": "type_mismatch"}, "by trivial")
+
+        with patch("real_repair_inventory.build_case", side_effect=fake_build):
+            spec, report = screen_inventory(
+                Path.cwd(), inventory, project_root=None, timeout=1,
+                on_decision=recorded.append, workers=3,
+            )
+        self.assertEqual(len(recorded), 6)
+        self.assertEqual(len({row["candidate"]["id"] for row in recorded}), 6)
+        self.assertEqual([row["id"] for row in report["decisions"]], [f"demo_{index}" for index in range(6)])
+        self.assertEqual([row["id"] for row in spec["cases"]], [
+            "demo_0", "demo_1", "demo_2", "demo_4", "demo_5",
+        ])
+
+    def test_screen_rejects_nonpositive_workers(self):
+        inventory = {
+            "version": "tracer-real-candidate-inventory-v1",
+            "project_id": "demo",
+            "source_repository": "https://example.invalid/demo",
+            "source_license": "MIT",
+            "endpoint_revision": "fixed",
+            "candidates": [],
+        }
+        with self.assertRaisesRegex(ValueError, "workers"):
+            screen_inventory(Path.cwd(), inventory, project_root=None, timeout=1, workers=0)
+
 
 if __name__ == "__main__":
     unittest.main()

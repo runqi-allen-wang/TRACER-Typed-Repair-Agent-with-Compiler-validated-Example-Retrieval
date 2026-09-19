@@ -1,0 +1,1392 @@
+{
+  "version": "tracer-real-candidate-screen-v1",
+  "project_id": "pfr",
+  "endpoint_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+  "provider_calls_observed": 0,
+  "candidates": 276,
+  "accepted": 44,
+  "rejected": 232,
+  "decisions": [
+    {
+      "id": "pfr_approx_hom_pfr",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: approx_hom_pfr"
+    },
+    {
+      "id": "pfr_card_of_dual_constrained",
+      "accepted": false,
+      "reason": "pfr_card_of_dual_constrained: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_card_of_slice",
+      "accepted": false,
+      "reason": "pfr_card_of_slice: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "pfr_multidist_of_cast",
+      "accepted": false,
+      "reason": "pfr_multidist_of_cast: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_mutual_information_le",
+      "accepted": false,
+      "reason": "pfr_mutual_information_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_cond_c_eq_integral",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "pfr_cond_construct_good",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "pfr_construct_good_prelim",
+      "accepted": false,
+      "reason": "pfr_construct_good_prelim: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_delta_eq_integral",
+      "accepted": false,
+      "reason": "pfr_delta_eq_integral: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_independencecondition6",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "pfr_sum_condmutual_le",
+      "accepted": false,
+      "reason": "pfr_sum_condmutual_le: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_sum_dist_diff_le",
+      "accepted": false,
+      "reason": "pfr_sum_dist_diff_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_sum_uvw_eq_zero",
+      "accepted": false,
+      "reason": "pfr_sum_uvw_eq_zero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_entropic_pfr_conjecture",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: entropic_PFR_conjecture"
+    },
+    {
+      "id": "pfr_rdist_le_sum_fibre",
+      "accepted": false,
+      "reason": "pfr_rdist_le_sum_fibre: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_sum_of_rdist_eq_step_condmutualinfo",
+      "accepted": false,
+      "reason": "pfr_sum_of_rdist_eq_step_condmutualinfo: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_diff_rdist_le_1",
+      "accepted": false,
+      "reason": "pfr_diff_rdist_le_1: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_ent_ofsum_le",
+      "accepted": false,
+      "reason": "pfr_ent_ofsum_le: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_first_estimate",
+      "accepted": false,
+      "reason": "pfr_first_estimate: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_rdist_add_rdist_add_condmutual_eq",
+      "accepted": false,
+      "reason": "pfr_rdist_add_rdist_add_condmutual_eq: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_rdist_of_sums_ge",
+      "accepted": false,
+      "reason": "pfr_rdist_of_sums_ge: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_condindepfun",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_condindepfun: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_condindep_copies",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.condIndep_copies"
+    },
+    {
+      "id": "pfr_probabilitytheory_isuniform_2",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.IsUniform"
+    },
+    {
+      "id": "pfr_probabilitytheory_chain_rule",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.chain_rule"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_comp_ge",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_condentropy_comp_ge: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_eq_kernel_entropy",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_eq_sum",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_condentropy_eq_sum: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_eq_sum_fintype",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_eq_sum_sum",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_condentropy_eq_sum_sum: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_le_entropy",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_condentropy_le_entropy: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_condmutualinfo_eq_kernel_mutualinfo",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "pfr_probabilitytheory_condmutualinfo_eq_sum",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.condMutualInfo_eq_sum"
+    },
+    {
+      "id": "pfr_probabilitytheory_condmutualinfo_eq_zero",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "pfr_probabilitytheory_condmutualinfo_of_inj",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.condMutualInfo_of_inj"
+    },
+    {
+      "id": "pfr_probabilitytheory_condmutual_comp_comp_le",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "pfr_probabilitytheory_ent_of_cond_indep",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_ent_of_cond_indep: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_add_entropy_sub_mutualinfo",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_entropy_add_entropy_sub_mutualinfo: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_assoc",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_entropy_assoc: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_def",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_entropy_def: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_eq_log_card",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_entropy_eq_log_card: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_le_log_card",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_entropy_le_log_card: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_le_log_card_of_mem",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_entropy_le_log_card_of_mem: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_le_log_card_of_mem_finite",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_entropy_le_log_card_of_mem_finite: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_pair_le_add",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_entropy_pair_le_add: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_sub_condentropy",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_entropy_sub_condentropy: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_iindepfun",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "pfr_probabilitytheory_mutualinfo_eq_zero",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_mutualinfo_eq_zero: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_div_left",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_condentropy_div_left: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_mul_left",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_condentropy_mul_left: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_mul_right",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_condentropy_mul_right: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_div_comm",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_entropy_div_comm: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_div_left",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.entropy_div_left"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_div_right",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.entropy_div_right"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_inv",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_entropy_inv: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_inv_left",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_entropy_inv_left: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_inv_right",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_entropy_inv_right: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_mul_const",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_entropy_mul_const: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_mul_left",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.entropy_mul_left"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_mul_right",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.entropy_mul_right"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_sub_mutualinfo_le_entropy_div",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.entropy_sub_mutualInfo_le_entropy_div"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_sub_mutualinfo_le_entropy_mul",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.entropy_sub_mutualInfo_le_entropy_mul"
+    },
+    {
+      "id": "pfr_probabilitytheory_max_condentropy_sub_condmutualinfo_le_condentropy_div",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "pfr_probabilitytheory_max_condentropy_sub_condmutualinfo_le_condentropy_mul",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_max_condentropy_sub_condmutualinfo_le_condentropy_mul: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_max_entropy_le_entropy_div",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_max_entropy_le_entropy_div: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_max_entropy_le_entropy_mul",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_max_entropy_le_entropy_mul: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_max_entropy_le_entropy_prod",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_max_entropy_le_entropy_prod: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_max_entropy_sub_mutualinfo_le_entropy_div",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_max_entropy_sub_mutualinfo_le_entropy_div: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_max_entropy_sub_mutualinfo_le_entropy_mul",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_max_entropy_sub_mutualinfo_le_entropy_mul: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_finitesupport",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_entropy_comap",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_entropy_comap_equiv",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_kernel_entropy_comap_equiv: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_entropy_compprod_aux",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_entropy_prodmkleft_unit",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_finitekernelsupport_of_const",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_kernel_finitekernelsupport_of_const: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_finitesupport_of_compprod",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.Kernel.finiteSupport_of_compProd"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_entropy_compprod_triple_add_entropy_le",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_kernel_entropy_compprod_triple_add_entropy_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_entropy_reverse",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_kernel_entropy_reverse: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_entropy_submodular_compprod",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_entropy_triple_add_entropy_le",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.Kernel.entropy_triple_add_entropy_le"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_mutualinfo_nonneg",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.Kernel.mutualInfo_nonneg"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_ent_of_diff_le",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_kernel_ent_of_diff_le: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_rdist_triangle_aux1",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_rdist_triangle_aux2",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "pfr_probabilitytheory_measure",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.Measure"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_of_uniformon",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_entropy_of_uniformon: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_finitesupport_of_comp",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "pfr_probabilitytheory_integrable_of_finitesupport",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_integrable_of_finitesupport: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_measureentropy_comap",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_measureentropy_comap: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_measureentropy_dirac",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_measureentropy_dirac: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_measureentropy_eq_card_iff_measure_eq_aux",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_measureentropy_eq_card_iff_measure_eq_aux: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_measureentropy_le_log_card",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_measureentropy_le_log_card: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_measureentropy_map_of_injective",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_measureentropy_map_of_injective: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_measureentropy_prod",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_measureentropy_prod: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_measuremutualinfo_nonneg_aux",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "pfr_probabilitytheory_measuremutualinfo_of_not_isfinitemeasure",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "pfr_probabilitytheory_measuremutualinfo_prod",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_measuremutualinfo_prod: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_measuremutualinfo_swap",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_measuremutualinfo_swap: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_measuremutualinfo_univ_smul",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "pfr_probabilitytheory_measure_compl_support",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_measure_compl_support: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_condruzsadist_eq_integral",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "pfr_condruzsadist_eq_sum",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: condRuzsaDist'_eq_sum"
+    },
+    {
+      "id": "pfr_condruzsadist_of_copy",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "pfr_condruzsadist_of_indep",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "pfr_condruzsadist_eq_sum_2",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: condRuzsaDist_eq_sum"
+    },
+    {
+      "id": "pfr_condruzsadist_nonneg",
+      "accepted": false,
+      "reason": "pfr_condruzsadist_nonneg: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_condruzsadist_of_const",
+      "accepted": false,
+      "reason": "pfr_condruzsadist_of_const: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_condruzsadist_of_copy_2",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "pfr_condruzsadist_of_indep_2",
+      "accepted": false,
+      "reason": "pfr_condruzsadist_of_indep_2: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_condruzsadist_of_inj_map",
+      "accepted": false,
+      "reason": "pfr_condruzsadist_of_inj_map: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_continuous_measureentropy_probabilitymeasure",
+      "accepted": false,
+      "reason": "pfr_continuous_measureentropy_probabilitymeasure: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_continuous_rdist_restrict_probabilitymeasure",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "pfr_diff_ent_le_rdist",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: diff_ent_le_rdist"
+    },
+    {
+      "id": "pfr_ent_of_proj_le",
+      "accepted": false,
+      "reason": "pfr_ent_of_proj_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_kaimanovich_vershik",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: kaimanovich_vershik"
+    },
+    {
+      "id": "pfr_rdist_add_const",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: rdist_add_const"
+    },
+    {
+      "id": "pfr_rdist_of_inj",
+      "accepted": false,
+      "reason": "pfr_rdist_of_inj: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_rdist_symm",
+      "accepted": false,
+      "reason": "pfr_rdist_symm: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_rdist_zero_eq_half_ent",
+      "accepted": false,
+      "reason": "pfr_rdist_zero_eq_half_ent: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_tendsto_rdist_probabilitymeasure",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "pfr_probabilitytheory_setruzsadist_add_const",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_setruzsadist_add_const: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_setruzsadist_le",
+      "accepted": false,
+      "reason": "禁止的本机执行构造：候选包含不允许的 Lean 元编程、本机执行入口或 unsafe 声明"
+    },
+    {
+      "id": "pfr_probabilitytheory_sum_meas_smul_cond_fiber",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_sum_meas_smul_cond_fiber: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_identdistrib_of_finiterange",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_identdistrib_of_finiterange: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_iindepfun_reindex_four_dbca",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_iindepfun_reindex_four_dbca: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_iindepfun_reindex_three_cba",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_iindepfun_reindex_three_cba: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_exists_isuniform",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_exists_isuniform: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_exists_isuniform_measurespace",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.exists_isUniform_measureSpace"
+    },
+    {
+      "id": "pfr_probabilitytheory_isuniform_iff_map_eq_uniformon",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "pfr_probabilitytheory_isuniform_uniformon",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_isuniform_uniformon: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_hahn_banach",
+      "accepted": false,
+      "reason": "pfr_hahn_banach: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_homomorphism_pfr",
+      "accepted": false,
+      "reason": "pfr_homomorphism_pfr: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_exists_isuniform_of_rdist_self_eq_zero",
+      "accepted": false,
+      "reason": "pfr_exists_isuniform_of_rdist_self_eq_zero: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_pfr_conjecture_improv_aux",
+      "accepted": false,
+      "reason": "pfr_pfr_conjecture_improv_aux: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_averaged_construct_good",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "pfr_construct_good_improved",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: construct_good_improved"
+    },
+    {
+      "id": "pfr_construct_good_prelim_2",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "pfr_dist_diff_bound_1",
+      "accepted": false,
+      "reason": "pfr_dist_diff_bound_1: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_dist_diff_bound_2",
+      "accepted": false,
+      "reason": "pfr_dist_diff_bound_2: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_gen_ineq_01",
+      "accepted": false,
+      "reason": "pfr_gen_ineq_01: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_gen_ineq_aux1",
+      "accepted": false,
+      "reason": "pfr_gen_ineq_aux1: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_gen_ineq_aux2",
+      "accepted": false,
+      "reason": "pfr_gen_ineq_aux2: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_tau_minimizer_exists_rdist_eq_zero",
+      "accepted": false,
+      "reason": "pfr_tau_minimizer_exists_rdist_eq_zero: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_tau_strictly_decreases",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "pfr_kldiv_add_le_kldiv_of_indep",
+      "accepted": false,
+      "reason": "pfr_kldiv_add_le_kldiv_of_indep: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_kldiv_eq_sum_negmullog",
+      "accepted": false,
+      "reason": "pfr_kldiv_eq_sum_negmullog: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_kldiv_eq_zero_iff_identdistrib",
+      "accepted": false,
+      "reason": "pfr_kldiv_eq_zero_iff_identdistrib: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_condkldiv_eq",
+      "accepted": false,
+      "reason": "pfr_condkldiv_eq: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_tendsto_kldiv_id_left",
+      "accepted": false,
+      "reason": "pfr_tendsto_kldiv_id_left: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_tendsto_kldiv_id_right",
+      "accepted": false,
+      "reason": "pfr_tendsto_kldiv_id_right: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_pfr_conjecture",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: PFR_conjecture"
+    },
+    {
+      "id": "pfr_pfr_conjecture_aux",
+      "accepted": false,
+      "reason": "pfr_pfr_conjecture_aux: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_isuniform",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.IsUniform"
+    },
+    {
+      "id": "pfr_rdist_le_of_isuniform_of_doubling",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "pfr_real_sum_mul_log_div_eq_iff_aux",
+      "accepted": false,
+      "reason": "pfr_real_sum_mul_log_div_eq_iff_aux: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_real_sum_mul_log_div_leq",
+      "accepted": false,
+      "reason": "pfr_real_sum_mul_log_div_leq: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_set_ncard_singleton_inter",
+      "accepted": false,
+      "reason": "pfr_set_ncard_singleton_inter: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_submodule_exists_equiv_fst_sndmodfst",
+      "accepted": false,
+      "reason": "pfr_submodule_exists_equiv_fst_sndmodfst: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_continuous_finitemeasure_apply_of_isclopen",
+      "accepted": false,
+      "reason": "pfr_continuous_finitemeasure_apply_of_isclopen: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_continuous_pmf_apply",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: continuous_pmf_apply"
+    },
+    {
+      "id": "pfr_tendsto_lintegral_of_forall_of_finite",
+      "accepted": false,
+      "reason": "pfr_tendsto_lintegral_of_forall_of_finite: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_measuretheory_measure_map_prod_comap_swap",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "pfr_measuretheory_measure",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: MeasureTheory.Measure"
+    },
+    {
+      "id": "pfr_probabilitytheory_aemeasurable",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "pfr_probabilitytheory_identdistrib_comp_fst",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_identdistrib_comp_fst: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_identdistrib_of_sum",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_identdistrib_of_sum: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_independent_copies",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.independent_copies"
+    },
+    {
+      "id": "pfr_probabilitytheory_iindepfun_iff",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_iindepfun_iff: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_indepfun_fst_snd",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_indepfun_fst_snd: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_iindepfun",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.Kernel.iIndepFun"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_aefinitekernelsupport_of_cond",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_kernel_aefinitekernelsupport_of_cond: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_condkernel_compprod_ae_eq",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_kernel_condkernel_compprod_ae_eq: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_condkernel_compprod_apply",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.Kernel.condKernel_compProd_apply"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_condkernel_map_prodmk_left",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_kernel_condkernel_map_prodmk_left: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_disintegration",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_kernel_disintegration: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_conddistrib_apply",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: ProbabilityTheory.condDistrib_apply"
+    },
+    {
+      "id": "pfr_probabilitytheory_map_compprod_conddistrib",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_map_compprod_conddistrib: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_probabilitytheory_swap_conddistrib_ae_eq",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "pfr_probabilitytheory_uniformon_apply_singleton_of_mem",
+      "accepted": false,
+      "reason": "pfr_probabilitytheory_uniformon_apply_singleton_of_mem: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_condmultidist_eq",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: condMultiDist_eq"
+    },
+    {
+      "id": "pfr_condmultidist_nonneg",
+      "accepted": false,
+      "reason": "pfr_condmultidist_nonneg: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_condmultidist_of_hom",
+      "accepted": false,
+      "reason": "pfr_condmultidist_of_hom: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_condmultidist_of_inj",
+      "accepted": false,
+      "reason": "pfr_condmultidist_of_inj: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_cond_entropy_indep",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "pfr_cond_multidist_chainrule",
+      "accepted": false,
+      "reason": "pfr_cond_multidist_chainrule: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_cor_multidist_chainrule",
+      "accepted": false,
+      "reason": "pfr_cor_multidist_chainrule: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_ent_of_sub_smul",
+      "accepted": false,
+      "reason": "pfr_ent_of_sub_smul: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_ent_of_sum_le_ent_of_sum",
+      "accepted": false,
+      "reason": "pfr_ent_of_sum_le_ent_of_sum: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_ent_sub_zsmul_le",
+      "accepted": false,
+      "reason": "pfr_ent_sub_zsmul_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_ent_sub_zsmul_sub_ent_le",
+      "accepted": false,
+      "reason": "pfr_ent_sub_zsmul_sub_ent_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_iter_multidist_chainrule",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: iter_multiDist_chainRule"
+    },
+    {
+      "id": "pfr_kvm_ineq_i",
+      "accepted": false,
+      "reason": "pfr_kvm_ineq_i: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_kvm_ineq_ii",
+      "accepted": false,
+      "reason": "pfr_kvm_ineq_ii: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_kvm_ineq_iii",
+      "accepted": false,
+      "reason": "pfr_kvm_ineq_iii: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_kvm_ineq_iii_aux",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: kvm_ineq_III_aux"
+    },
+    {
+      "id": "pfr_multidist_chainrule",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "pfr_multidist_indep",
+      "accepted": false,
+      "reason": "pfr_multidist_indep: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_multidist_of_hom",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: multiDist_of_hom"
+    },
+    {
+      "id": "pfr_multidist_of_perm",
+      "accepted": false,
+      "reason": "pfr_multidist_of_perm: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_multidist_eq_zero",
+      "accepted": false,
+      "reason": "pfr_multidist_eq_zero: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_multidist_ruzsa_iii",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: multidist_ruzsa_III"
+    },
+    {
+      "id": "pfr_multidist_ruzsa_iv",
+      "accepted": false,
+      "reason": "pfr_multidist_ruzsa_iv: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_offdiag_sum_add",
+      "accepted": false,
+      "reason": "pfr_offdiag_sum_add: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_offdiag_sum_const",
+      "accepted": false,
+      "reason": "pfr_offdiag_sum_const: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_offdiag_sum_div",
+      "accepted": false,
+      "reason": "pfr_offdiag_sum_div: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_offdiag_sum_le",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "pfr_rdist_of_neg_le",
+      "accepted": false,
+      "reason": "pfr_rdist_of_neg_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_multitau_continuous",
+      "accepted": false,
+      "reason": "pfr_multitau_continuous: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_multitau_min_exists",
+      "accepted": false,
+      "reason": "pfr_multitau_min_exists: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_multitau_of_ident",
+      "accepted": false,
+      "reason": "pfr_multitau_of_ident: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_sub_condmultidistance_le",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: sub_condMultiDistance_le"
+    },
+    {
+      "id": "pfr_i_two_aux",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: I_two_aux"
+    },
+    {
+      "id": "pfr_i_two_le",
+      "accepted": false,
+      "reason": "pfr_i_two_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_bddabove_card_inter_add",
+      "accepted": false,
+      "reason": "pfr_bddabove_card_inter_add: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_better_pfr_conjecture_aux",
+      "accepted": false,
+      "reason": "pfr_better_pfr_conjecture_aux: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_better_pfr_conjecture_aux0",
+      "accepted": false,
+      "reason": "pfr_better_pfr_conjecture_aux0: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_condrhominus_le",
+      "accepted": false,
+      "reason": "pfr_condrhominus_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_condrhoplus_le",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "pfr_condrho_le_condruzsadist_of_phiminimizes",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "pfr_condrho_of_translate",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "pfr_condrho_prod_eq_sum",
+      "accepted": false,
+      "reason": "pfr_condrho_prod_eq_sum: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_dist_le_of_sum_zero",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: dist_le_of_sum_zero"
+    },
+    {
+      "id": "pfr_dist_le_of_sum_zero_cond",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: dist_le_of_sum_zero_cond"
+    },
+    {
+      "id": "pfr_exists_card_inter_add_eq_ssup",
+      "accepted": false,
+      "reason": "pfr_exists_card_inter_add_eq_ssup: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_exists_mem_card_inter_add",
+      "accepted": false,
+      "reason": "pfr_exists_mem_card_inter_add: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_le_rdist_of_phiminimizes",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: le_rdist_of_phiMinimizes"
+    },
+    {
+      "id": "pfr_map_prod_uniformon_ne_zero",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "pfr_new_gen_ineq_aux2",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "pfr_nonempty_rhominusset",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "pfr_phiminimizer_exists_rdist_eq_zero",
+      "accepted": false,
+      "reason": "pfr_phiminimizer_exists_rdist_eq_zero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_phi_min_exists",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "pfr_rhominus_continuous",
+      "accepted": false,
+      "reason": "pfr_rhominus_continuous: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_rhominus_of_sum",
+      "accepted": false,
+      "reason": "pfr_rhominus_of_sum: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_rhominus_zero_measure",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "pfr_rhoplus_of_subgroup",
+      "accepted": false,
+      "reason": "pfr_rhoplus_of_subgroup: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "pfr_rhoplus_of_sum",
+      "accepted": false,
+      "reason": "pfr_rhoplus_of_sum: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_rho_pfr_conjecture",
+      "accepted": false,
+      "reason": "pfr_rho_pfr_conjecture: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_rho_of_subgroup",
+      "accepted": false,
+      "reason": "pfr_rho_of_subgroup: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_rho_of_sum_le",
+      "accepted": false,
+      "reason": "pfr_rho_of_sum_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_rho_of_translate",
+      "accepted": false,
+      "reason": "pfr_rho_of_translate: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_rho_of_uniform",
+      "accepted": false,
+      "reason": "pfr_rho_of_uniform: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_tendsto_rho_probabilitymeasure",
+      "accepted": false,
+      "reason": "pfr_tendsto_rho_probabilitymeasure: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_rdist_of_sums_ge_2",
+      "accepted": false,
+      "reason": "pfr_rdist_of_sums_ge_2: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_second_estimate",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "pfr_mathlib_tactic_rpowring_mul_pp_pf_overlap",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "pfr_continuous_tau_restrict_probabilitymeasure",
+      "accepted": false,
+      "reason": "pfr_continuous_tau_restrict_probabilitymeasure: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_q_dist",
+      "accepted": false,
+      "reason": "pfr_q_dist: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_dist_of_u_add_le",
+      "accepted": false,
+      "reason": "pfr_dist_of_u_add_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_dist_of_x_u_h_le",
+      "accepted": false,
+      "reason": "pfr_dist_of_x_u_h_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_entropy_of_w_le",
+      "accepted": false,
+      "reason": "pfr_entropy_of_w_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_entropy_of_z_two_le",
+      "accepted": false,
+      "reason": "pfr_entropy_of_z_two_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_indep_yj",
+      "accepted": false,
+      "reason": "pfr_indep_yj: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_k_eq_zero",
+      "accepted": false,
+      "reason": "pfr_k_eq_zero: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_mutual_information_le_t_12",
+      "accepted": false,
+      "reason": "pfr_mutual_information_le_t_12: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_mutual_information_le_t_13",
+      "accepted": false,
+      "reason": "pfr_mutual_information_le_t_13: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_mutual_information_le_t_23",
+      "accepted": false,
+      "reason": "pfr_mutual_information_le_t_23: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_mutual_of_w_z_two_le",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "pfr_rdist_le_of_isuniform_of_card_add_le",
+      "accepted": false,
+      "reason": "pfr_rdist_le_of_isuniform_of_card_add_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_sum_of_conditional_distance_le",
+      "accepted": false,
+      "reason": "pfr_sum_of_conditional_distance_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_torsion_pfr",
+      "accepted": false,
+      "reason": "禁止的本机执行构造：候选包含不允许的 Lean 元编程、本机执行入口或 unsafe 声明"
+    },
+    {
+      "id": "pfr_torsion_pfr_conjecture_aux",
+      "accepted": false,
+      "reason": "pfr_torsion_pfr_conjecture_aux: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_torsion_exists_subgroup_subset_card_le",
+      "accepted": false,
+      "reason": "pfr_torsion_exists_subgroup_subset_card_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_isshift",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: IsShift"
+    },
+    {
+      "id": "pfr_pfr_projection",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: PFR_projection"
+    },
+    {
+      "id": "pfr_app_ent_pfr",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: app_ent_PFR"
+    },
+    {
+      "id": "pfr_conclusion_transfers",
+      "accepted": false,
+      "reason": "pfr_conclusion_transfers: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_dimension_of_shift",
+      "accepted": false,
+      "reason": "pfr_dimension_of_shift: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_single_fibres",
+      "accepted": false,
+      "reason": "pfr_single_fibres: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_sum_prob_preimage",
+      "accepted": false,
+      "reason": "pfr_sum_prob_preimage: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_third_iso",
+      "accepted": false,
+      "reason": "pfr_third_iso: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_torsion_free_doubling",
+      "accepted": false,
+      "reason": "pfr_torsion_free_doubling: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_weak_pfr",
+      "accepted": false,
+      "reason": "pfr_weak_pfr: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_weak_pfr_asymm",
+      "accepted": false,
+      "reason": "pfr_weak_pfr_asymm: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_weak_pfr_asymm_prelim",
+      "accepted": false,
+      "reason": "pfr_weak_pfr_asymm_prelim: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "pfr_wlog_notincoset",
+      "accepted": false,
+      "reason": "pfr_wlog_notincoset: 修复后证明不能独立通过当前固定环境"
+    }
+  ],
+  "selection_policy": "all candidates passing the preregistered real-repair compile gate"
+}
