@@ -75,4 +75,34 @@ python src/tracer_real_v2.py audit
 
 v2 项目组合规范使用 `tracer-real-project-split-v2`。除了 v1 的 `project_id`、`split` 和 `manifest`，每个项目还必须提供仓库内相对的 `compile_project_root` 与精确 `lean_toolchain`。组装器会验证对应 Lake 环境并在最终 manifest 中写入一对一的 `project_environments`；因果 runner 随后按题目所属项目选择环境，禁止用一个统一 `--project-root` 覆盖全部测试项目。
 
+候选发现不允许手工只挑容易通过的提交。先固定上游项目的检出端点和 first-parent 历史窗口，再枚举窗口内所有“声明头不变、证明正文变化”的可解析候选：
+
+```powershell
+python src/real_repair_inventory.py scan `
+  --repo path/to/upstream `
+  --project-id example `
+  --source-repository https://github.com/example/project `
+  --source-license Apache-2.0 `
+  --endpoint HEAD `
+  --max-commits 120 `
+  --out results/tracer-real-v2-candidates/example.inventory.json
+```
+
+随后逐项执行冻结的真实修复门禁。筛查报告保留每个接受或排除决定；输出已存在时拒绝覆盖：
+
+```powershell
+python src/real_repair_inventory.py screen `
+  --repo path/to/upstream `
+  --inventory results/tracer-real-v2-candidates/example.inventory.json `
+  --project-root path/to/upstream `
+  --workers 4 `
+  --state results/tracer-real-v2-candidates/example.screen-state.jsonl `
+  --spec-out benchmarks/real_repairs/example_v2.spec.json `
+  --report-out results/tracer-real-v2-candidates/example.screen.json
+```
+
+`scan` 与 `screen` 均不调用模型。`screen` 每完成一项就追加状态；中断后使用同一命令严格续跑，候选内容漂移时拒绝复用状态。`--workers` 只并行独立临时编译，检查点保持单写入者，最终报告保持冻结候选顺序。某项目通过门禁的任务少于冻结下限时，应连同完整筛查报告排除该项目，不得手工补选或根据后续 provider 表现换题。
+
+当前已完成 LeanAPAP 与 PFR 的全部 327 个候选：60 个通过、267 个拒绝；[LeanAPAP 账本](tracer_real_v2_screening/leanapap.screen.json)与 [PFR 账本](tracer_real_v2_screening/pfr.screen.json)保留每项决定并由 `tracer_real_v2.py audit` 反向核对冻结候选清单。其余四个项目未完成，不得用已筛查项目的比例外推最终题库规模。
+
 完整门槛、两阶段冻结顺序、最终预注册命令和结论边界见 [TRACER-REAL v2 协议](../../docs/TRACER_REAL_V2.md)。

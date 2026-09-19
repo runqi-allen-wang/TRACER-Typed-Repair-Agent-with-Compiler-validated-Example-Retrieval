@@ -1,0 +1,2017 @@
+{
+  "version": "tracer-real-candidate-inventory-v1",
+  "status": "deterministic-history-scan",
+  "project_id": "equational_theories",
+  "source_repository": "https://github.com/teorth/equational_theories",
+  "source_license": "Apache-2.0",
+  "endpoint_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+  "history_policy": {
+    "traversal": "first_parent",
+    "maximum_commits": 120,
+    "pairs_scanned": 120,
+    "modified_lean_files_considered": 1159,
+    "candidate_rule": "same parsed declaration header; proof changed in window; endpoint proof differs"
+  },
+  "candidates": [
+    {
+      "id": "equational_theories_asterix_denumerable",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Asterix.lean",
+      "theorem": "Asterix.Denumerable",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_asterix_closure_eq_of_mem_e1",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Asterix.lean",
+      "theorem": "Asterix.closure_eq_of_mem_e1",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_asterix_mem_closureseq_e0",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Asterix.lean",
+      "theorem": "Asterix.mem_closureSeq_e0",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_freemagma_elementsofnumnodeseq_card_eq_catalan_mul_pow",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Counting.lean",
+      "theorem": "FreeMagma.elementsOfNumNodesEq_card_eq_catalan_mul_pow",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_definable_of_termdefinable",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Definability/Basic.lean",
+      "theorem": "definable_of_termDefinable",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_structural_of_termstructural",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Definability/Basic.lean",
+      "theorem": "structural_of_termStructural",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation46_termdefinablefrom_equalshape",
+      "before_revision": "7e276a2d05e84e3eef02432abfd0718e78f7abfa",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Definability/Law46.lean",
+      "theorem": "Equation46_termDefinableFrom_equalShape",
+      "change_revision": "9836b9b39dd39dd36dc0a20375ed95f3db6f0eac"
+    },
+    {
+      "id": "equational_theories_freemagma",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Definability/Simple.lean",
+      "theorem": "FreeMagma",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation43_structuralfrom_equation543",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Definability/Tarski543.lean",
+      "theorem": "Equation43_StructuralFrom_Equation543",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation4512_structuralfrom_equation543",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Definability/Tarski543.lean",
+      "theorem": "Equation4512_StructuralFrom_Equation543",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_list",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Equations/LawsComplete.lean",
+      "theorem": "List",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_testfreemagmas",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Equations/LawsComplete.lean",
+      "theorem": "TestFreeMagmas",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_freemagma_2",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/FreeComm.lean",
+      "theorem": "FreeMagma",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_freshgenerator_generatornames_append",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/FreshGenerator.lean",
+      "theorem": "FreshGenerator.generatorNames'_append",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_freshgenerator_generatornames_invrev",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/FreshGenerator.lean",
+      "theorem": "FreshGenerator.generatorNames'_invRev",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_freshgenerator_generatornames_sublist",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/FreshGenerator.lean",
+      "theorem": "FreshGenerator.generatorNames'_sublist",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_fullspectrum_full_spectrum_equation1482",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/FullSpectrum.lean",
+      "theorem": "FullSpectrum.full_spectrum_Equation1482",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_fullspectrum_full_spectrum_equation1682",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/FullSpectrum.lean",
+      "theorem": "FullSpectrum.full_spectrum_Equation1682",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_fullspectrum_full_spectrum_linear_cancellative2",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/FullSpectrum.lean",
+      "theorem": "FullSpectrum.full_spectrum_linear_cancellative2",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_fullspectrum_full_spectrum_square_cancellative",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/FullSpectrum.lean",
+      "theorem": "FullSpectrum.full_spectrum_square_cancellative",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_fullspectrum_not_full_spectrum_card2_2var",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/FullSpectrum.lean",
+      "theorem": "FullSpectrum.not_full_spectrum_card2_2var",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_fullspectrum_not_full_spectrum_card2_3var",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/FullSpectrum.lean",
+      "theorem": "FullSpectrum.not_full_spectrum_card2_3var",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1112_partialsolution",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1112.lean",
+      "theorem": "Eq1112.PartialSolution",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1112_root",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1112.lean",
+      "theorem": "Eq1112._root_",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1112_rule_0_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1112.lean",
+      "theorem": "Eq1112.rule_0_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1112_rule_1_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1112.lean",
+      "theorem": "Eq1112.rule_1_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1112_rule_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1112.lean",
+      "theorem": "Eq1112.rule_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1112_rule_3_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1112.lean",
+      "theorem": "Eq1112.rule_3_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1112_rule_finite_1_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1112.lean",
+      "theorem": "Eq1112.rule_finite_1_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1112_rule_finite_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1112.lean",
+      "theorem": "Eq1112.rule_finite_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1113_partialsolution",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1113.lean",
+      "theorem": "Eq1113.PartialSolution",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1113_root",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1113.lean",
+      "theorem": "Eq1113._root_",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1113_rule_0_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1113.lean",
+      "theorem": "Eq1113.rule_0_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1113_rule_1_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1113.lean",
+      "theorem": "Eq1113.rule_1_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1113_rule_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1113.lean",
+      "theorem": "Eq1113.rule_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1113_rule_3_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1113.lean",
+      "theorem": "Eq1113.rule_3_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq118_partialsolution",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq118.lean",
+      "theorem": "Eq118.PartialSolution",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq118_root",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq118.lean",
+      "theorem": "Eq118._root_",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq118_rule_0_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq118.lean",
+      "theorem": "Eq118.rule_0_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq118_rule_1_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq118.lean",
+      "theorem": "Eq118.rule_1_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq118_rule_3_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq118.lean",
+      "theorem": "Eq118.rule_3_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq118_rule_5_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq118.lean",
+      "theorem": "Eq118.rule_5_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq118_rule_8_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq118.lean",
+      "theorem": "Eq118.rule_8_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq118_rule_9_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq118.lean",
+      "theorem": "Eq118.rule_9_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq118_rule_finite_0_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq118.lean",
+      "theorem": "Eq118.rule_finite_0_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq118_rule_finite_1_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq118.lean",
+      "theorem": "Eq118.rule_finite_1_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq118_rule_finite_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq118.lean",
+      "theorem": "Eq118.rule_finite_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq124_partialsolution",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq124.lean",
+      "theorem": "Eq124.PartialSolution",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq124_root",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq124.lean",
+      "theorem": "Eq124._root_",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq124_rule_0_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq124.lean",
+      "theorem": "Eq124.rule_0_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq124_rule_1_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq124.lean",
+      "theorem": "Eq124.rule_1_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq124_rule_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq124.lean",
+      "theorem": "Eq124.rule_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq124_rule_5_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq124.lean",
+      "theorem": "Eq124.rule_5_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq124_rule_finite_0_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq124.lean",
+      "theorem": "Eq124.rule_finite_0_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq124_rule_finite_1_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq124.lean",
+      "theorem": "Eq124.rule_finite_1_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1648_partialsolution",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1648.lean",
+      "theorem": "Eq1648.PartialSolution",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1648_root",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1648.lean",
+      "theorem": "Eq1648._root_",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1648_rule_0_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1648.lean",
+      "theorem": "Eq1648.rule_0_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1648_rule_1_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1648.lean",
+      "theorem": "Eq1648.rule_1_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1648_rule_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1648.lean",
+      "theorem": "Eq1648.rule_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1648_rule_finite_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq1648.lean",
+      "theorem": "Eq1648.rule_finite_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq476_partialsolution",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq476.lean",
+      "theorem": "Eq476.PartialSolution",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq476_root",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq476.lean",
+      "theorem": "Eq476._root_",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq476_rule_0_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq476.lean",
+      "theorem": "Eq476.rule_0_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq476_rule_1_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq476.lean",
+      "theorem": "Eq476.rule_1_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq476_rule_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq476.lean",
+      "theorem": "Eq476.rule_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq476_rule_3_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq476.lean",
+      "theorem": "Eq476.rule_3_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq476_rule_4_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq476.lean",
+      "theorem": "Eq476.rule_4_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq476_rule_finite_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq476.lean",
+      "theorem": "Eq476.rule_finite_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq503_partialsolution",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq503.lean",
+      "theorem": "Eq503.PartialSolution",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq503_root",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq503.lean",
+      "theorem": "Eq503._root_",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq503_rule_0_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq503.lean",
+      "theorem": "Eq503.rule_0_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq503_rule_1_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq503.lean",
+      "theorem": "Eq503.rule_1_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq503_rule_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq503.lean",
+      "theorem": "Eq503.rule_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq503_rule_3_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq503.lean",
+      "theorem": "Eq503.rule_3_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq503_rule_4_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq503.lean",
+      "theorem": "Eq503.rule_4_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq503_rule_5_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq503.lean",
+      "theorem": "Eq503.rule_5_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq503_rule_6_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq503.lean",
+      "theorem": "Eq503.rule_6_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_partialsolution",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.PartialSolution",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_root",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511._root_",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_0_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_0_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_10_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_10_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_11_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_11_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_12_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_12_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_13_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_13_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_14_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_14_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_15_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_15_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_1_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_1_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_3_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_3_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_4_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_4_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_5_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_5_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_6_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_6_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_8_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_8_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_9_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_9_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_finite_1_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_finite_1_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq511_rule_finite_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq511.lean",
+      "theorem": "Eq511.rule_finite_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq677_partialsolution",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq677.lean",
+      "theorem": "Eq677.PartialSolution",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq677_root",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq677.lean",
+      "theorem": "Eq677._root_",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq677_rule_0_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq677.lean",
+      "theorem": "Eq677.rule_0_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq677_rule_1_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq677.lean",
+      "theorem": "Eq677.rule_1_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq677_rule_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq677.lean",
+      "theorem": "Eq677.rule_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq677_rule_3_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq677.lean",
+      "theorem": "Eq677.rule_3_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq677_rule_4_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq677.lean",
+      "theorem": "Eq677.rule_4_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq707_partialsolution",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq707.lean",
+      "theorem": "Eq707.PartialSolution",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq707_root",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq707.lean",
+      "theorem": "Eq707._root_",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq707_rule_0_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq707.lean",
+      "theorem": "Eq707.rule_0_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq707_rule_1_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq707.lean",
+      "theorem": "Eq707.rule_1_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq707_rule_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq707.lean",
+      "theorem": "Eq707.rule_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq707_rule_3_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq707.lean",
+      "theorem": "Eq707.rule_3_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq883_partialsolution",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq883.lean",
+      "theorem": "Eq883.PartialSolution",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq883_root",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq883.lean",
+      "theorem": "Eq883._root_",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq883_rule_0_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq883.lean",
+      "theorem": "Eq883.rule_0_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq883_rule_1_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq883.lean",
+      "theorem": "Eq883.rule_1_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq883_rule_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq883.lean",
+      "theorem": "Eq883.rule_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq883_rule_3_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq883.lean",
+      "theorem": "Eq883.rule_3_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq883_rule_4_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq883.lean",
+      "theorem": "Eq883.rule_4_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq883_rule_finite_0_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq883.lean",
+      "theorem": "Eq883.rule_finite_0_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq883_rule_finite_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq883.lean",
+      "theorem": "Eq883.rule_finite_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq906_partialsolution",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq906.lean",
+      "theorem": "Eq906.PartialSolution",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq906_root",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq906.lean",
+      "theorem": "Eq906._root_",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq906_rule_0_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq906.lean",
+      "theorem": "Eq906.rule_0_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq906_rule_1_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq906.lean",
+      "theorem": "Eq906.rule_1_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq906_rule_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq906.lean",
+      "theorem": "Eq906.rule_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq906_rule_3_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq906.lean",
+      "theorem": "Eq906.rule_3_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq906_rule_4_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq906.lean",
+      "theorem": "Eq906.rule_4_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq906_rule_5_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq906.lean",
+      "theorem": "Eq906.rule_5_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq906_rule_finite_0_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq906.lean",
+      "theorem": "Eq906.rule_finite_0_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq906_rule_finite_2_preserved",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Generated/Greedy/Eq906.lean",
+      "theorem": "Eq906.rule_finite_2_preserved",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_infmodel_equation28770_not_implies_equation2",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/InfModel.lean",
+      "theorem": "InfModel.Equation28770_not_implies_Equation2",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_infmodel_equation3994_not_implies_equation3588",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/InfModel.lean",
+      "theorem": "InfModel.Equation3994_not_implies_Equation3588",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_infmodel_zero_lt_degree_word_polynomial",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/InfModel.lean",
+      "theorem": "InfModel.zero_lt_degree_word_polynomial",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_law_magmalaw_satisfiesphi_dual",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/MagmaOp.lean",
+      "theorem": "Law.MagmaLaw.satisfiesPhi_dual",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_evalinmagmaop",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/MagmaOp.lean",
+      "theorem": "evalInMagmaOp",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_models",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/MagmaOp.lean",
+      "theorem": "models",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1076_greedy_extension1_next_ok",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1076.lean",
+      "theorem": "Eq1076.Greedy.Extension1.next_ok",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed1",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1076.lean",
+      "theorem": "Eq1076.refute_seed1",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed2",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1076.lean",
+      "theorem": "Eq1076.refute_seed2",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed3",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1076.lean",
+      "theorem": "Eq1076.refute_seed3",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed4",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1076.lean",
+      "theorem": "Eq1076.refute_seed4",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed5",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1076.lean",
+      "theorem": "Eq1076.refute_seed5",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed6",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1076.lean",
+      "theorem": "Eq1076.refute_seed6",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed7",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1076.lean",
+      "theorem": "Eq1076.refute_seed7",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed8",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1076.lean",
+      "theorem": "Eq1076.refute_seed8",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed9",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1076.lean",
+      "theorem": "Eq1076.refute_seed9",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1289_greedy_extension1_next_ok",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1289.lean",
+      "theorem": "Eq1289.Greedy.Extension1.next_ok",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1289_not_3116_4435",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1289.lean",
+      "theorem": "Eq1289.not_3116_4435",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1323_reprscomplete",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1323.lean",
+      "theorem": "Eq1323.reprsComplete",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1323_roots_lyry",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1323.lean",
+      "theorem": "Eq1323.roots_LyRy",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1323_seed_lhs_disjoint",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1323.lean",
+      "theorem": "Eq1323.seed_lhs_disjoint",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation1447_pnat_s_refutes_equation4269",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1447.lean",
+      "theorem": "Equation1447.PNat_S_refutes_Equation4269",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation1447_arbitraryroot_root",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1447.lean",
+      "theorem": "Equation1447.arbitraryRoot_root",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation1447_square_root_iff_neq",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1447.lean",
+      "theorem": "Equation1447.square_root_iff_neq",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation1447_square_root_times_square_root_eq_elem",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1447.lean",
+      "theorem": "Equation1447.square_root_times_square_root_eq_elem",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation1447_square_roots_elem_iff_square_root",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1447.lean",
+      "theorem": "Equation1447.square_roots_elem_iff_square_root",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1516_extensiontask_disjoint_old_e1",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1516.lean",
+      "theorem": "Eq1516.ExtensionTask.disjoint_old_e1",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1516_extensiontask_newe_dom_and_inv",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1516.lean",
+      "theorem": "Eq1516.ExtensionTask.newE_dom_and_inv",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1516_greedyac_extension_exists_not_in_domain_range",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1516.lean",
+      "theorem": "Eq1516.GreedyAC.Extension.exists_not_in_domain_range",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1516_greedyb_extension2_next2_h_1516",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1516.lean",
+      "theorem": "Eq1516.GreedyB.Extension2.next2_h_1516",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1516_greedyb_extension2_next2_le_encard",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1516.lean",
+      "theorem": "Eq1516.GreedyB.Extension2.next2_le_encard",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1516_seed_ok",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1516.lean",
+      "theorem": "Eq1516.seed_ok",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1518_greedy_extension1_c_ne_c_inv",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1518.lean",
+      "theorem": "Eq1518.Greedy.Extension1.c_ne_c_inv",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1526_greedy_extension1_c_ne_c_inv",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1526.lean",
+      "theorem": "Eq1526.Greedy.Extension1.c_ne_c_inv",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation1648_facts",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1648.lean",
+      "theorem": "Equation1648_facts",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation1648_not_implies_equation206",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1648.lean",
+      "theorem": "Equation1648_not_implies_Equation206",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation1659_facts",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1659.lean",
+      "theorem": "Equation1659_facts",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation1692_not_implies_equation1832",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "Equation1692_not_implies_Equation1832",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation1692_not_implies_equation23",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "Equation1692_not_implies_Equation23",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation1692_not_implies_equation2441",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "Equation1692_not_implies_Equation2441",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation1692_not_implies_equation3050",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "Equation1692_not_implies_Equation3050",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation1692_not_implies_equation3456",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "Equation1692_not_implies_Equation3456",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation1692_not_implies_equation4065",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "Equation1692_not_implies_Equation4065",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_equation1692_not_implies_equation47",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "Equation1692_not_implies_Equation47",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_basis_n_injective",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "basis_n_injective",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_common_ancestor_helper",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "common_ancestor_helper",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_cross_eq_same_parent",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "cross_eq_same_parent",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_diamond_law",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "diamond_law",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_f_equation_1692",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "f_equation_1692",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_f_neg_b",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "f_neg_b",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_f_zero_eq",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "f_zero_eq",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_left_tree_supp_increasing",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "left_tree_supp_increasing",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_nonpos_not_tree_right",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "nonpos_not_tree_right",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_not_equation_1832",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "not_equation_1832",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_not_equation_23",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "not_equation_23",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_not_equation_2441",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "not_equation_2441",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_not_equation_3050",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "not_equation_3050",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_not_equation_4065",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "not_equation_4065",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_partial_function",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "partial_function",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_partial_function_inner",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "partial_function_inner",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_sum_1_3_eq_tree",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "sum_1_3_eq_tree",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_tree_b_neq_root_mul",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "tree_b_neq_root_mul",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_tree_supp_disjoint",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "tree_supp_disjoint",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_x_vals_zero_left_b",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "x_vals_zero_left_b",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_xseq_zero_neq_b",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1692.lean",
+      "theorem": "xseq_zero_neq_b",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1722_greedy_extension1_next_ok",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1722.lean",
+      "theorem": "Eq1722.Greedy.Extension1.next_ok",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1722_not_1832_2644_3050",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1722.lean",
+      "theorem": "Eq1722.not_1832_2644_3050",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_function_embedding_edit_of_avoids",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/Edit.lean",
+      "theorem": "Function.Embedding.edit_of_avoids",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_enlarge_s_induction",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/MagmaConstruction.lean",
+      "theorem": "Eq1729.enlarge_S'_induction",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_enlarge_s_induction_with_axioms",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/MagmaConstruction.lean",
+      "theorem": "Eq1729.enlarge_S'_induction_with_axioms",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_enlarge_op",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/MagmaConstruction.lean",
+      "theorem": "Eq1729.enlarge_op",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_gen_fresh_not_in_fill",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/MagmaConstruction.lean",
+      "theorem": "Eq1729.gen_fresh_not_in_fill",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_gen_fresh_not_rel_extra",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/MagmaConstruction.lean",
+      "theorem": "Eq1729.gen_fresh_not_rel_extra",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_zpow_of_e_inj",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/MagmaConstruction.lean",
+      "theorem": "Eq1729.zpow_of_e_inj",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_e_inj",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.E_inj",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_e_ne_s",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.E_ne_S",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_r0_mem_fill_iff",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.R0_mem_fill_iff",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_sm_char_four",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.SM_char_four",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_sm_satisfies_1729",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.SM_satisfies_1729",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_sfresh_not_in_generators",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.Sfresh_not_in_generators",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_basis_elements_of_inv",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.basis_elements_of_inv",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_cancel_lemma",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.cancel_lemma",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_generators_mono",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.generators_mono",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_generators_union",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.generators_union",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_nonbasis_fixes",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.nonbasis_fixes",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_parent_of_adjacent",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.parent_of_adjacent",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_parent_toword",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.parent_toWord",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_repr_of_self",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.repr_of_self",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_repr_of_self_pow",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.repr_of_self_pow",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_val_e",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.val_e",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq1729_val_of_nonsupp_eq_zero",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation1729/SmallMagma.lean",
+      "theorem": "Eq1729.val_of_nonsupp_eq_zero",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_refutation_3308_greedy_extension2_next_func",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation3308.lean",
+      "theorem": "Refutation_3308.Greedy.Extension2.next_func",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_refutation_3308_greedy_extension3_next_eq3308",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation3308.lean",
+      "theorem": "Refutation_3308.Greedy.Extension3.next_eq3308",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_refutation_3308_greedy_extension3_next_func",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation3308.lean",
+      "theorem": "Refutation_3308.Greedy.Extension3.next_func",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_refutation_3308_not_3456_3511",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation3308.lean",
+      "theorem": "Refutation_3308.not_3456_3511",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq63_greedy_extension_mem_old",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation63.lean",
+      "theorem": "Eq63.Greedy.Extension.mem_old",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq713_greedy_extension1_next_ok",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation713.lean",
+      "theorem": "Eq713.Greedy.Extension1.next_ok",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq713_not_817_1426_3862_4065",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation713.lean",
+      "theorem": "Eq713.not_817_1426_3862_4065",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq73_greedy_extension1_c_ne_c_inv",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation73.lean",
+      "theorem": "Eq73.Greedy.Extension1.c_ne_c_inv",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_refutation_854_greedy_extension1_lt_c",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation854.lean",
+      "theorem": "Refutation_854.Greedy.Extension1.lt_c",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_refutation_854_greedy_extension1_mem_dom",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation854.lean",
+      "theorem": "Refutation_854.Greedy.Extension1.mem_dom",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_refutation_854_not_413_1045",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation854.lean",
+      "theorem": "Refutation_854.not_413_1045",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq906_finite",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation906.lean",
+      "theorem": "Eq906.Finite",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_eq917_greedy_extension1_c_ne_c_inv",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ManuallyProved/Equation917.lean",
+      "theorem": "Eq917.Greedy.Extension1.c_ne_c_inv",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_obelix_partialsolution_dfinsuppinfinite_not_finite",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Obelix.lean",
+      "theorem": "Obelix.PartialSolution.DFinsuppInfinite_not_Finite",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_obelix_partialsolution_equation1491_facts",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Obelix.lean",
+      "theorem": "Obelix.PartialSolution.Equation1491_facts",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_obelix_partialsolution_extendimg",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Obelix.lean",
+      "theorem": "Obelix.PartialSolution.ExtendImg",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_obelix_partialsolution_closureseq_asc",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Obelix.lean",
+      "theorem": "Obelix.PartialSolution.closureSeq_asc",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_obelix_partialsolution_closureseq_ascdom",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Obelix.lean",
+      "theorem": "Obelix.PartialSolution.closureSeq_ascDom",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_obelix_partialsolution_fresh_ne_sum",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Obelix.lean",
+      "theorem": "Obelix.PartialSolution.fresh_ne_sum",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_partialmagma_extensionbase_lt_dom_bound",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/PartialMagma.lean",
+      "theorem": "PartialMagma.ExtensionBase.lt_dom_bound",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_partialmagma_extensionbase_mem_dom",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/PartialMagma.lean",
+      "theorem": "PartialMagma.ExtensionBase.mem_dom",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_sheffer",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ShefferAlgebra.lean",
+      "theorem": "Sheffer",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_stringmagmas_equation3102_not_implies_equation270",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/StringMagmas.lean",
+      "theorem": "StringMagmas.Equation3102_not_implies_Equation270",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_stringmagmas_equation3102_not_implies_equation3176",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/StringMagmas.lean",
+      "theorem": "StringMagmas.Equation3102_not_implies_Equation3176",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_subgraph_equation387_not_implies_equation4512",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Subgraph.lean",
+      "theorem": "Subgraph.Equation387_not_implies_Equation4512",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_subgraph_equation5_not_implies_equation42",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/Subgraph.lean",
+      "theorem": "Subgraph.Equation5_not_implies_Equation42",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_threec2_red_eq_of_isred",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/ThreeC2.lean",
+      "theorem": "ThreeC2.red_eq_of_IsRed",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_refutation_1485_not_2087_2124",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/WeakCentralGroupoids.lean",
+      "theorem": "Refutation_1485.not_2087_2124",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_refutation_1485_not_3457",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/WeakCentralGroupoids.lean",
+      "theorem": "Refutation_1485.not_3457",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    },
+    {
+      "id": "equational_theories_refutation_1485_not_3511",
+      "before_revision": "da52e3a6283203a7d5d7765a919b5cbd84437d2e",
+      "fixed_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "file": "equational_theories/WeakCentralGroupoids.lean",
+      "theorem": "Refutation_1485.not_3511",
+      "change_revision": "3c7f9e77d08504f84f623e6f868ea6c5b9ea6435"
+    }
+  ]
+}

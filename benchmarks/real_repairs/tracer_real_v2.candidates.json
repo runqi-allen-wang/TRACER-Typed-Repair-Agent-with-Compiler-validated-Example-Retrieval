@@ -1,0 +1,60 @@
+{
+  "version": "tracer-real-v2-candidate-inventory-v1",
+  "status": "frozen-before-candidate-history-scan",
+  "registered_at_utc": "2026-09-18T11:02:48Z",
+  "enrollment_contract": "benchmarks/real_repairs/tracer_real_v2.enrollment.json",
+  "history_policy": {
+    "traversal": "first_parent",
+    "maximum_commits": 120,
+    "endpoint_policy": "登记时公开默认分支的检出版本",
+    "candidate_rule": "声明头在旧版本、变化版本与登记端点保持一致，证明正文发生变化且端点证明不同",
+    "screen_policy": "纳入窗口内所有通过旧证明失败、新证明通过和无未完成证明门禁的候选",
+    "performance_blind": true
+  },
+  "projects": [
+    {
+      "project_id": "leanapap",
+      "source_repository": "https://github.com/YaelDillies/LeanAPAP",
+      "source_license": "Apache-2.0",
+      "endpoint_revision": "7d7c40343132f6ccb443f44c5db6e97bfdcd9182",
+      "lean_toolchain": "leanprover/lean4:v4.35.0-rc1"
+    },
+    {
+      "project_id": "physlean",
+      "source_repository": "https://github.com/HEPLean/PhysLean",
+      "source_license": "Apache-2.0",
+      "endpoint_revision": "891d5972436a47ab5c64ec30bc7682e5caed4f46",
+      "lean_toolchain": "leanprover/lean4:v4.33.0"
+    },
+    {
+      "project_id": "equational_theories",
+      "source_repository": "https://github.com/teorth/equational_theories",
+      "source_license": "Apache-2.0",
+      "endpoint_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "lean_toolchain": "leanprover/lean4:v4.29.1"
+    },
+    {
+      "project_id": "flt",
+      "source_repository": "https://github.com/ImperialCollegeLondon/FLT",
+      "source_license": "Apache-2.0",
+      "endpoint_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "lean_toolchain": "leanprover/lean4:v4.34.0-rc2"
+    },
+    {
+      "project_id": "pfr",
+      "source_repository": "https://github.com/teorth/pfr",
+      "source_license": "Apache-2.0",
+      "endpoint_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "lean_toolchain": "leanprover/lean4:v4.35.0-rc1"
+    },
+    {
+      "project_id": "scilean",
+      "source_repository": "https://github.com/lecopivo/SciLean",
+      "source_license": "Apache-2.0",
+      "endpoint_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "lean_toolchain": "leanprover/lean4:v4.28.0-rc1"
+    }
+  ],
+  "provider_calls_observed": 0,
+  "replacement_policy": "只有公开来源、许可、Lean 4 项目结构或冻结门槛失败时才能排除；不得依据任何 provider 结果替换项目。"
+}

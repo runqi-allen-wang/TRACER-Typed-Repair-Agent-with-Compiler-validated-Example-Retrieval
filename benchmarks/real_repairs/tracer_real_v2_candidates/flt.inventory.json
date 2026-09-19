@@ -1,0 +1,2177 @@
+{
+  "version": "tracer-real-candidate-inventory-v1",
+  "status": "deterministic-history-scan",
+  "project_id": "flt",
+  "source_repository": "https://github.com/ImperialCollegeLondon/FLT",
+  "source_license": "Apache-2.0",
+  "endpoint_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+  "history_policy": {
+    "traversal": "first_parent",
+    "maximum_commits": 120,
+    "pairs_scanned": 120,
+    "modified_lean_files_considered": 473,
+    "candidate_rule": "same parsed declaration header; proof changed in window; endpoint proof differs"
+  },
+  "candidates": [
+    {
+      "id": "flt_map_inv_eq_map_comm",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/AutomorphicForm/GroupTheoryStuff.lean",
+      "theorem": "map_inv_eq_map_comm",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_weighttwoautomorphicform_levelstruct_form_map",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/AutomorphicForm/QuaternionAlgebra/Basic.lean",
+      "theorem": "TotallyDefiniteQuaternionAlgebra.WeightTwoAutomorphicForm.LevelStruct.form_map",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_weighttwoautomorphicform_levelstruct_inf_u_eq_iff",
+      "before_revision": "8cbca6f231704233a81a50060b97d789df4bf3e6",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/AutomorphicForm/QuaternionAlgebra/Basic.lean",
+      "theorem": "TotallyDefiniteQuaternionAlgebra.WeightTwoAutomorphicForm.LevelStruct.inf_U_eq_iff",
+      "change_revision": "8ec873aab84b21c4faaef849d5afd56ef79f684d"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_weighttwoautomorphicform_levelstruct_restrict_le",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/AutomorphicForm/QuaternionAlgebra/Basic.lean",
+      "theorem": "TotallyDefiniteQuaternionAlgebra.WeightTwoAutomorphicForm.LevelStruct.restrict_le",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_weighttwoautomorphicform_locallevelstruct_iscompact_us",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/AutomorphicForm/QuaternionAlgebra/Basic.lean",
+      "theorem": "TotallyDefiniteQuaternionAlgebra.WeightTwoAutomorphicForm.LocalLevelStruct.isCompact_US",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_abstractheckeoperator_eq_finsum_quotient_out_of_bijon",
+      "before_revision": "4bbe19234e7f8eaf7795852237b125b6d7fb9bb7",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/AutomorphicForm/QuaternionAlgebra/HeckeOperators/Abstract.lean",
+      "theorem": "AbstractHeckeOperator.eq_finsum_quotient_out_of_bijOn",
+      "change_revision": "941f909b31864cd3cc59547551db4e1b1f62a342"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_heckealgebra_t_smul_def",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/AutomorphicForm/QuaternionAlgebra/HeckeOperators/Concrete.lean",
+      "theorem": "TotallyDefiniteQuaternionAlgebra.HeckeAlgebra.T_smul_def",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_heckealgebra_u_smul_def",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/AutomorphicForm/QuaternionAlgebra/HeckeOperators/Concrete.lean",
+      "theorem": "TotallyDefiniteQuaternionAlgebra.HeckeAlgebra.U_smul_def",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_heckealgebra_formmap_smul",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/AutomorphicForm/QuaternionAlgebra/HeckeOperators/Concrete.lean",
+      "theorem": "TotallyDefiniteQuaternionAlgebra.HeckeAlgebra.formMap_smul",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_heckeoperator_u_apply",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/AutomorphicForm/QuaternionAlgebra/HeckeOperators/Concrete.lean",
+      "theorem": "TotallyDefiniteQuaternionAlgebra.HeckeOperator.U_apply",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_heckeoperator_u_smul",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/AutomorphicForm/QuaternionAlgebra/HeckeOperators/Concrete.lean",
+      "theorem": "TotallyDefiniteQuaternionAlgebra.HeckeOperator.U_smul",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_weighttwoautomorphicform_root",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/AutomorphicForm/QuaternionAlgebra/HeckeOperators/Concrete.lean",
+      "theorem": "TotallyDefiniteQuaternionAlgebra.WeightTwoAutomorphicForm._root_",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_weighttwoautomorphicform_measure",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/AutomorphicForm/QuaternionAlgebra/InnerProduct.lean",
+      "theorem": "TotallyDefiniteQuaternionAlgebra.WeightTwoAutomorphicForm.Measure",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_hurwitz_exists_near",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Data/Hurwitz.lean",
+      "theorem": "Hurwitz.exists_near",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_hurwitz_leftinvon_toquaternion_fromquaternion",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Data/Hurwitz.lean",
+      "theorem": "Hurwitz.leftInvOn_toQuaternion_fromQuaternion",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_hurwitz_left_ideal_princ",
+      "before_revision": "c541ddcef7c95308113bed83c0c9460926bcb706",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Data/Hurwitz.lean",
+      "theorem": "Hurwitz.left_ideal_princ",
+      "change_revision": "8009e3496a5d1bd32ba938765deb1c1db208ef1e"
+    },
+    {
+      "id": "flt_hurwitz_normsq_toquaternion",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Data/Hurwitz.lean",
+      "theorem": "Hurwitz.normSq_toQuaternion",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_hurwitz_toquaternion_one",
+      "before_revision": "8cbca6f231704233a81a50060b97d789df4bf3e6",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Data/Hurwitz.lean",
+      "theorem": "Hurwitz.toQuaternion_one",
+      "change_revision": "8ec873aab84b21c4faaef849d5afd56ef79f684d"
+    },
+    {
+      "id": "flt_hurwitz_toquaternion_sub",
+      "before_revision": "f30ec5dc256df9d259e3470ea7bcbce83be9b3f4",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Data/Hurwitz.lean",
+      "theorem": "Hurwitz.toQuaternion_sub",
+      "change_revision": "6cffefeb368ca4cfabc907f86f96783a49ae4033"
+    },
+    {
+      "id": "flt_hurwitz_toquaternion_zero",
+      "before_revision": "8cbca6f231704233a81a50060b97d789df4bf3e6",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Data/Hurwitz.lean",
+      "theorem": "Hurwitz.toQuaternion_zero",
+      "change_revision": "8ec873aab84b21c4faaef849d5afd56ef79f684d"
+    },
+    {
+      "id": "flt_qhat_canonicalform",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Data/QHat.lean",
+      "theorem": "QHat.canonicalForm",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_qhat_injective_zhat",
+      "before_revision": "fa42521b0360498552efa3be5fbddcf41d190871",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Data/QHat.lean",
+      "theorem": "QHat.injective_zHat",
+      "change_revision": "5cb37b0416d2953c97dc2445326d2a3323ca5d4d"
+    },
+    {
+      "id": "flt_qhat_lowestterms",
+      "before_revision": "d9f71aec240f1202b7264720a9eed683a318b43d",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Data/QHat.lean",
+      "theorem": "QHat.lowestTerms",
+      "change_revision": "a7dbce8494c29858093974a612a72b6454fc5cba"
+    },
+    {
+      "id": "flt_zhat_e_not_in_int",
+      "before_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Data/QHat.lean",
+      "theorem": "ZHat.e_not_in_Int",
+      "change_revision": "734592ecc43341af82b6cb4f2de72714d983b2cc"
+    },
+    {
+      "id": "flt_zhat_pnat_mul_apply",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Data/QHat.lean",
+      "theorem": "ZHat.pnat_mul_apply",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_adiccompletion_uniformizer_ne_zero",
+      "before_revision": "05affa1c7567e9bce22a1db92318acfdb6aa4113",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/AdicValuation.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.adicCompletion.uniformizer_ne_zero",
+      "change_revision": "aab47a0f5e80ca72d515c85460cf542ae0f88eef"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_adiccompletion_uniformizer_not_isunit",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/AdicValuation.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.adicCompletion.uniformizer_not_isUnit",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_closurealgebramapintegers_eq_integers",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/AdicValuation.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.closureAlgebraMapIntegers_eq_integers",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_closurealgebramapintegers_eq_prodintegers",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/AdicValuation.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.closureAlgebraMapIntegers_eq_prodIntegers",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_exists_adicvalued_mul_sub_le",
+      "before_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/AdicValuation.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.exists_adicValued_mul_sub_le",
+      "change_revision": "bf70705a77242545d931db4923f2975cf7c9177d"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_exists_adicvalued_sub_lt_of_adiccompletioninteger",
+      "before_revision": "6cffefeb368ca4cfabc907f86f96783a49ae4033",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/AdicValuation.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.exists_adicValued_sub_lt_of_adicCompletionInteger",
+      "change_revision": "f178a1fc94fd8054db53fdeee063c286f6dab329"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_exists_adicvalued_sub_lt_of_adicvalued_le_one",
+      "before_revision": "a7f953b92c99e8b061fee3867e5f4ca6847a4039",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/AdicValuation.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.exists_adicValued_sub_lt_of_adicValued_le_one",
+      "change_revision": "44df7744a2a65cdc111875dc1b6f0db85477348f"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_exists_ofadd_natcast_of_le_one",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/AdicValuation.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.exists_ofAdd_natCast_of_le_one",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_extension_adiccompletionsemialghom_coe",
+      "before_revision": "a7f953b92c99e8b061fee3867e5f4ca6847a4039",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/Completion/BaseChange.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.Extension.adicCompletionSemialgHom_coe",
+      "change_revision": "44df7744a2a65cdc111875dc1b6f0db85477348f"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_extension_adiccompletionsemialghom_continuous",
+      "before_revision": "a7f953b92c99e8b061fee3867e5f4ca6847a4039",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/Completion/BaseChange.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.Extension.adicCompletionSemialgHom_continuous",
+      "change_revision": "44df7744a2a65cdc111875dc1b6f0db85477348f"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_extension_tensoradiccompletionintegerstoadiccompletion_range_eq_integers",
+      "before_revision": "fa42521b0360498552efa3be5fbddcf41d190871",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/Completion/BaseChange.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.Extension.tensorAdicCompletionIntegersToAdicCompletion_range_eq_integers",
+      "change_revision": "5cb37b0416d2953c97dc2445326d2a3323ca5d4d"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_extension_valued_adiccompletionsemialghom",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/Completion/BaseChange.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.Extension.valued_adicCompletionSemialgHom",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_adiccompletion_root",
+      "before_revision": "d18b563029f32a6855f46cdd0edaab39ccc5b8f5",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/Completion/BaseChange.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.adicCompletion._root_",
+      "change_revision": "f879a81165c0a18d52d9db2138879c159286ca91"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_adiccompletion_basechange_bijective",
+      "before_revision": "a7f953b92c99e8b061fee3867e5f4ca6847a4039",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/Completion/BaseChange.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.adicCompletion.baseChange_bijective",
+      "change_revision": "44df7744a2a65cdc111875dc1b6f0db85477348f"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_adiccompletion_finrank_tensorproduct_adiccompletion_eq_finrank_pi_adiccompletion",
+      "before_revision": "d18b563029f32a6855f46cdd0edaab39ccc5b8f5",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/Completion/BaseChange.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.adicCompletion.finrank_tensorProduct_adicCompletion_eq_finrank_pi_adicCompletion",
+      "change_revision": "f879a81165c0a18d52d9db2138879c159286ca91"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_adicvalued",
+      "before_revision": "d18b563029f32a6855f46cdd0edaab39ccc5b8f5",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/Completion/BaseChange.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.adicValued",
+      "change_revision": "f879a81165c0a18d52d9db2138879c159286ca91"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_tensoradiccompletionintegersto_range_subset_closure",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/Completion/BaseChange.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.tensorAdicCompletionIntegersTo_range_subset_closure",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_basechange",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/FiniteAdeleRing/BaseChange.lean",
+      "theorem": "IsDedekindDomain.FiniteAdeleRing.BaseChange",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_algebramap_apply_eq_algebramap",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/FiniteAdeleRing/BaseChange.lean",
+      "theorem": "IsDedekindDomain.FiniteAdeleRing.algebraMap_apply_eq_algebraMap",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_basechangelinearequiv_tmul",
+      "before_revision": "a7f953b92c99e8b061fee3867e5f4ca6847a4039",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/FiniteAdeleRing/BaseChange.lean",
+      "theorem": "IsDedekindDomain.FiniteAdeleRing.baseChangeLinearEquiv_tmul",
+      "change_revision": "44df7744a2a65cdc111875dc1b6f0db85477348f"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_basechange_bijective",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/FiniteAdeleRing/BaseChange.lean",
+      "theorem": "IsDedekindDomain.FiniteAdeleRing.baseChange_bijective",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_restrictedproduct_pi_ismoduletopology",
+      "before_revision": "a7f953b92c99e8b061fee3867e5f4ca6847a4039",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/FiniteAdeleRing/BaseChange.lean",
+      "theorem": "IsDedekindDomain.FiniteAdeleRing.restrictedProduct_pi_isModuleTopology",
+      "change_revision": "44df7744a2a65cdc111875dc1b6f0db85477348f"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_restrictedproduct_prod_equiv_apply",
+      "before_revision": "a7f953b92c99e8b061fee3867e5f4ca6847a4039",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/FiniteAdeleRing/BaseChange.lean",
+      "theorem": "IsDedekindDomain.FiniteAdeleRing.restrictedProduct_prod_equiv_apply",
+      "change_revision": "44df7744a2a65cdc111875dc1b6f0db85477348f"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_restrictedproduct_tensorproduct_equiv_restrictedproduct_prod_apply",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/FiniteAdeleRing/BaseChange.lean",
+      "theorem": "IsDedekindDomain.FiniteAdeleRing.restrictedProduct_tensorProduct_equiv_restrictedProduct_prod_apply",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_tensorequivrestrictedproduct_tmul",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/FiniteAdeleRing/BaseChange.lean",
+      "theorem": "IsDedekindDomain.FiniteAdeleRing.tensorEquivRestrictedProduct_tmul",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_tensorequivtensor_tmul",
+      "before_revision": "a7f953b92c99e8b061fee3867e5f4ca6847a4039",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/FiniteAdeleRing/BaseChange.lean",
+      "theorem": "IsDedekindDomain.FiniteAdeleRing.tensorEquivTensor_tmul",
+      "change_revision": "44df7744a2a65cdc111875dc1b6f0db85477348f"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_adiccompletionuniformizer_ne_zero",
+      "before_revision": "4bbe19234e7f8eaf7795852237b125b6d7fb9bb7",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/FiniteAdeleRing/LocalUnits.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.adicCompletionUniformizer_ne_zero",
+      "change_revision": "941f909b31864cd3cc59547551db4e1b1f62a342"
+    },
+    {
+      "id": "flt_module",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/FiniteAdeleRing/TensorPi.lean",
+      "theorem": "Module",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_tensorpi_equiv_pitensor_apply",
+      "before_revision": "9eceacd3099760bdcdb5103de724e6f6813bb5a2",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/FiniteAdeleRing/TensorPi.lean",
+      "theorem": "tensorPi_equiv_piTensor_apply",
+      "change_revision": "16194cd5580467b86921293247328933b413b400"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_tensorproduct",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/FiniteAdeleRing/TensorProduct.lean",
+      "theorem": "IsDedekindDomain.FiniteAdeleRing.TensorProduct",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_restrictedproduct_coe_ltensorleft_eq_ltensor",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/FiniteAdeleRing/TensorRestrictedProduct.lean",
+      "theorem": "RestrictedProduct.coe_lTensorLeft_eq_lTensor",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_restrictedproduct_ltensor_tmul",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/FiniteAdeleRing/TensorRestrictedProduct.lean",
+      "theorem": "RestrictedProduct.lTensor_tmul",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_extension",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/IntegralClosure.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.Extension",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_root",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/IntegralClosure.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum._root_",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_intvaluation_comap",
+      "before_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/IntegralClosure.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.intValuation_comap",
+      "change_revision": "734592ecc43341af82b6cb4f2de72714d983b2cc"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_preimage_comap_finite",
+      "before_revision": "d18b563029f32a6855f46cdd0edaab39ccc5b8f5",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/IntegralClosure.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.preimage_comap_finite",
+      "change_revision": "f879a81165c0a18d52d9db2138879c159286ca91"
+    },
+    {
+      "id": "flt_isdedekinddomain_linearequivtensorproduct_symm_one_tmul",
+      "before_revision": "e0dc4ea302cb31b2dccf2cc93e41ec08b50b81f8",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/IntegralClosure.lean",
+      "theorem": "IsDedekindDomain.LinearEquivTensorProduct_symm_one_tmul",
+      "change_revision": "0c303f64defa138003f403a2835ae62148738c83"
+    },
+    {
+      "id": "flt_root",
+      "before_revision": "fa42521b0360498552efa3be5fbddcf41d190871",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DedekindDomain/IntegralClosure.lean",
+      "theorem": "_root_",
+      "change_revision": "5cb37b0416d2953c97dc2445326d2a3323ca5d4d"
+    },
+    {
+      "id": "flt_inverselimit_lift_def",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Deformations/Algebra/InverseLimit/Basic.lean",
+      "theorem": "InverseLimit.lift_def",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_deformation_proartiniancat_to_residuefield_apply",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Deformations/Categories.lean",
+      "theorem": "Deformation.ProartinianCat.to_residueField_apply",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_iscontinuous_of_isproartinian_of_islocalhom",
+      "before_revision": "98bca77dbb0010408b4cbe016ea5866a63528a79",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Deformations/IsProartinian.lean",
+      "theorem": "isContinuous_of_isProartinian_of_isLocalHom",
+      "change_revision": "168c04a1a69f03c7263115de4ffd1d5040fe770f"
+    },
+    {
+      "id": "flt_algebraicclosure",
+      "before_revision": "e00fe1c46fe2e56a666ceba55aebba66737edbce",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Deformations/Lemmas.lean",
+      "theorem": "AlgebraicClosure",
+      "change_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc"
+    },
+    {
+      "id": "flt_ismoduletopology",
+      "before_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Deformations/Lemmas.lean",
+      "theorem": "IsModuleTopology",
+      "change_revision": "734592ecc43341af82b6cb4f2de72714d983b2cc"
+    },
+    {
+      "id": "flt_ringhom_2",
+      "before_revision": "4bbe19234e7f8eaf7795852237b125b6d7fb9bb7",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Deformations/Lemmas.lean",
+      "theorem": "RingHom",
+      "change_revision": "941f909b31864cd3cc59547551db4e1b1f62a342"
+    },
+    {
+      "id": "flt_field",
+      "before_revision": "e99f1674cfa761bb0289000c0e2484a5c325f4b4",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Deformations/RepresentationTheory/AbsoluteGaloisGroup.lean",
+      "theorem": "Field",
+      "change_revision": "58f25c6f305e1cf794c7666f89adcd0375bcc047"
+    },
+    {
+      "id": "flt_isarithfrobat_exists_of_isinvariant_of_profinite",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Deformations/RepresentationTheory/Frobenius.lean",
+      "theorem": "IsArithFrobAt.exists_of_isInvariant_of_profinite",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_isarithfrobat_exists_primesover_isconj_of_profinite",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Deformations/RepresentationTheory/Frobenius.lean",
+      "theorem": "IsArithFrobAt.exists_primesOver_isConj_of_profinite",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_not_isfield_integralclosure",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Deformations/RepresentationTheory/IntegralClosure.lean",
+      "theorem": "not_isField_integralClosure",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_adelering_divisionalgebra_aux_e_family_nonempty_interior",
+      "before_revision": "185a60d89ab93a9d01acb020815d9a70fdcd9b05",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DivisionAlgebra/Finiteness.lean",
+      "theorem": "AdeleRing.DivisionAlgebra.Aux.E_family_nonempty_interior",
+      "change_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499"
+    },
+    {
+      "id": "flt_adelering_divisionalgebra_aux_e_family_unbounded",
+      "before_revision": "185a60d89ab93a9d01acb020815d9a70fdcd9b05",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DivisionAlgebra/Finiteness.lean",
+      "theorem": "AdeleRing.DivisionAlgebra.Aux.E_family_unbounded",
+      "change_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499"
+    },
+    {
+      "id": "flt_adelering_divisionalgebra_aux_m_compact",
+      "before_revision": "185a60d89ab93a9d01acb020815d9a70fdcd9b05",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DivisionAlgebra/Finiteness.lean",
+      "theorem": "AdeleRing.DivisionAlgebra.Aux.M_compact",
+      "change_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499"
+    },
+    {
+      "id": "flt_adelering_divisionalgebra_aux_t_finite",
+      "before_revision": "185a60d89ab93a9d01acb020815d9a70fdcd9b05",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DivisionAlgebra/Finiteness.lean",
+      "theorem": "AdeleRing.DivisionAlgebra.Aux.T_finite",
+      "change_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499"
+    },
+    {
+      "id": "flt_adelering_divisionalgebra_aux_t_finite_extracted1",
+      "before_revision": "185a60d89ab93a9d01acb020815d9a70fdcd9b05",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DivisionAlgebra/Finiteness.lean",
+      "theorem": "AdeleRing.DivisionAlgebra.Aux.T_finite_extracted1",
+      "change_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499"
+    },
+    {
+      "id": "flt_adelering_divisionalgebra_aux_x_compact",
+      "before_revision": "941f909b31864cd3cc59547551db4e1b1f62a342",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DivisionAlgebra/Finiteness.lean",
+      "theorem": "AdeleRing.DivisionAlgebra.Aux.X_compact",
+      "change_revision": "91d59f2eb39cbea51b5808145386dd762ce62378"
+    },
+    {
+      "id": "flt_adelering_divisionalgebra_aux_toquot_surjective",
+      "before_revision": "185a60d89ab93a9d01acb020815d9a70fdcd9b05",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DivisionAlgebra/Finiteness.lean",
+      "theorem": "AdeleRing.DivisionAlgebra.Aux.toQuot_surjective",
+      "change_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499"
+    },
+    {
+      "id": "flt_infiniteadelering_algebramap_completion",
+      "before_revision": "185a60d89ab93a9d01acb020815d9a70fdcd9b05",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DivisionAlgebra/Finiteness.lean",
+      "theorem": "InfiniteAdeleRing.algebraMap_completion",
+      "change_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499"
+    },
+    {
+      "id": "flt_infiniteadelering_iscentralsimple_infinite_addhaarscalarfactor_left_mul_eq_right_mul",
+      "before_revision": "185a60d89ab93a9d01acb020815d9a70fdcd9b05",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DivisionAlgebra/Finiteness.lean",
+      "theorem": "InfiniteAdeleRing.isCentralSimple_infinite_addHaarScalarFactor_left_mul_eq_right_mul",
+      "change_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499"
+    },
+    {
+      "id": "flt_infiniteadelering_tensorpi_equiv_pitensor_map_mul",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DivisionAlgebra/Finiteness.lean",
+      "theorem": "InfiniteAdeleRing.tensorPi_equiv_piTensor_map_mul",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_numberfield_adelering_divisionalgebra_aux_d_discrete",
+      "before_revision": "185a60d89ab93a9d01acb020815d9a70fdcd9b05",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DivisionAlgebra/Finiteness.lean",
+      "theorem": "NumberField.AdeleRing.DivisionAlgebra.Aux.D_discrete",
+      "change_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499"
+    },
+    {
+      "id": "flt_numberfield_adelering_divisionalgebra_aux_not_injective_of_large_measure",
+      "before_revision": "185a60d89ab93a9d01acb020815d9a70fdcd9b05",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/DivisionAlgebra/Finiteness.lean",
+      "theorem": "NumberField.AdeleRing.DivisionAlgebra.Aux.not_injective_of_large_measure",
+      "change_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499"
+    },
+    {
+      "id": "flt_weierstrasscurve",
+      "before_revision": "7523cbe52986a39a1018bd9bc229ae562a0795e9",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/EllipticCurve/Torsion.lean",
+      "theorem": "WeierstrassCurve",
+      "change_revision": "c9ee54dffd92883165f60d39a0c780d087ec6ef7"
+    },
+    {
+      "id": "flt_freycurve_map",
+      "before_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/FreyCurve/Basic.lean",
+      "theorem": "FreyCurve.map",
+      "change_revision": "734592ecc43341af82b6cb4f2de72714d983b2cc"
+    },
+    {
+      "id": "flt_freypackage_hgcdbc",
+      "before_revision": "7523cbe52986a39a1018bd9bc229ae562a0795e9",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/FreyCurve/FreyPackage.lean",
+      "theorem": "FreyPackage.hgcdbc",
+      "change_revision": "c9ee54dffd92883165f60d39a0c780d087ec6ef7"
+    },
+    {
+      "id": "flt_isdedekinddomain_diamond_fix",
+      "before_revision": "fa42521b0360498552efa3be5fbddcf41d190871",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/GlobalLanglandsConjectures/GLnDefs.lean",
+      "theorem": "IsDedekindDomain.diamond_fix",
+      "change_revision": "5cb37b0416d2953c97dc2445326d2a3323ca5d4d"
+    },
+    {
+      "id": "flt_measuretheory_mulequivhaarchar_map_open",
+      "before_revision": "c541ddcef7c95308113bed83c0c9460926bcb706",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/AddEquiv.lean",
+      "theorem": "MeasureTheory.mulEquivHaarChar_map_open",
+      "change_revision": "8009e3496a5d1bd32ba938765deb1c1db208ef1e"
+    },
+    {
+      "id": "flt_measuretheory_mulequivhaarchar_prodcongr",
+      "before_revision": "c541ddcef7c95308113bed83c0c9460926bcb706",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/AddEquiv.lean",
+      "theorem": "MeasureTheory.mulEquivHaarChar_prodCongr",
+      "change_revision": "8009e3496a5d1bd32ba938765deb1c1db208ef1e"
+    },
+    {
+      "id": "flt_measuretheory_mulequivhaarchar_restrictedproductcongrright",
+      "before_revision": "fa42521b0360498552efa3be5fbddcf41d190871",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/AddEquiv.lean",
+      "theorem": "MeasureTheory.mulEquivHaarChar_restrictedProductCongrRight",
+      "change_revision": "5cb37b0416d2953c97dc2445326d2a3323ca5d4d"
+    },
+    {
+      "id": "flt_measuretheory",
+      "before_revision": "f30ec5dc256df9d259e3470ea7bcbce83be9b3f4",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/AdeleRing.lean",
+      "theorem": "MeasureTheory",
+      "change_revision": "6cffefeb368ca4cfabc907f86f96783a49ae4033"
+    },
+    {
+      "id": "flt_numberfield",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/AdeleRing.lean",
+      "theorem": "NumberField",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_finiteadelering",
+      "before_revision": "185a60d89ab93a9d01acb020815d9a70fdcd9b05",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/FiniteAdeleRing.lean",
+      "theorem": "FiniteAdeleRing",
+      "change_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499"
+    },
+    {
+      "id": "flt_basis_eq_single",
+      "before_revision": "a7f953b92c99e8b061fee3867e5f4ca6847a4039",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/FiniteAdeleRing.lean",
+      "theorem": "basis_eq_single",
+      "change_revision": "44df7744a2a65cdc111875dc1b6f0db85477348f"
+    },
+    {
+      "id": "flt_basis_eq_single_global",
+      "before_revision": "a7f953b92c99e8b061fee3867e5f4ca6847a4039",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/FiniteAdeleRing.lean",
+      "theorem": "basis_eq_single_global",
+      "change_revision": "44df7744a2a65cdc111875dc1b6f0db85477348f"
+    },
+    {
+      "id": "flt_basis_repr_eq",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/FiniteAdeleRing.lean",
+      "theorem": "basis_repr_eq",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_basis_repr_eq_global",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/FiniteAdeleRing.lean",
+      "theorem": "basis_repr_eq_global",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_localcomponent_matrix",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/FiniteAdeleRing.lean",
+      "theorem": "localcomponent_matrix",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_localcomponent_mulleft",
+      "before_revision": "c9ee54dffd92883165f60d39a0c780d087ec6ef7",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/FiniteAdeleRing.lean",
+      "theorem": "localcomponent_mulLeft",
+      "change_revision": "acb49feafe516bb6665d781458f6b64f257b063e"
+    },
+    {
+      "id": "flt_localcomponent_mulright",
+      "before_revision": "a7f953b92c99e8b061fee3867e5f4ca6847a4039",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/FiniteAdeleRing.lean",
+      "theorem": "localcomponent_mulRight",
+      "change_revision": "44df7744a2a65cdc111875dc1b6f0db85477348f"
+    },
+    {
+      "id": "flt_tomatrix_f",
+      "before_revision": "a7f953b92c99e8b061fee3867e5f4ca6847a4039",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/FiniteAdeleRing.lean",
+      "theorem": "toMatrix_f",
+      "change_revision": "44df7744a2a65cdc111875dc1b6f0db85477348f"
+    },
+    {
+      "id": "flt_measuretheory_addequivaddhaarchar_eq_ringhaarchar_det_diagonal",
+      "before_revision": "c3419ff6cbe42bf54c1ae45a2835761e65b0beae",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/FiniteDimensional.lean",
+      "theorem": "MeasureTheory.addEquivAddHaarChar_eq_ringHaarChar_det_diagonal",
+      "change_revision": "dfa1e315b3b4d1bc6ac7158a9b57783e80df7d76"
+    },
+    {
+      "id": "flt_measuretheory_ringhaarchar_modulefinite",
+      "before_revision": "185a60d89ab93a9d01acb020815d9a70fdcd9b05",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/Ring.lean",
+      "theorem": "MeasureTheory.ringHaarChar_ModuleFinite",
+      "change_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499"
+    },
+    {
+      "id": "flt_measuretheory_ringhaarchar_modulefinite_unit",
+      "before_revision": "fa42521b0360498552efa3be5fbddcf41d190871",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HaarMeasure/HaarChar/Ring.lean",
+      "theorem": "MeasureTheory.ringHaarChar_ModuleFinite_unit",
+      "change_revision": "5cb37b0416d2953c97dc2445326d2a3323ca5d4d"
+    },
+    {
+      "id": "flt_tensorproduct_rightactions_smul_def",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Hacks/RightActionInstances.lean",
+      "theorem": "TensorProduct.RightActions.smul_def",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_algebra_ncard_primesover_quotient_singleton_lt_of_notmem",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/HenselianLocalRing/EtaleDecomposition.lean",
+      "theorem": "Algebra.ncard_primesOver_quotient_singleton_lt_of_notMem",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_weierstrasscurve_hasmultiplicativereduction_basechange",
+      "before_revision": "b937805dca7ce29f7e602cca3a6172658cdaa980",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/ReductionBaseChange.lean",
+      "theorem": "WeierstrassCurve.hasMultiplicativeReduction_baseChange",
+      "change_revision": "bc2fe8ff7396469a16c2a6d51d6117f5825d93a0"
+    },
+    {
+      "id": "flt_weierstrasscurve_hassplitmultiplicativereduction_basechange",
+      "before_revision": "b937805dca7ce29f7e602cca3a6172658cdaa980",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/ReductionBaseChange.lean",
+      "theorem": "WeierstrassCurve.hasSplitMultiplicativeReduction_baseChange",
+      "change_revision": "bc2fe8ff7396469a16c2a6d51d6117f5825d93a0"
+    },
+    {
+      "id": "flt_tatecurve_valuation_evalint_sub_sum_le",
+      "before_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveBaseChange.lean",
+      "theorem": "TateCurve.valuation_evalInt_sub_sum_le",
+      "change_revision": "734592ecc43341af82b6cb4f2de72714d983b2cc"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_derivweierstrassp_q_expansion",
+      "before_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.derivWeierstrassP_q_expansion",
+      "change_revision": "734592ecc43341af82b6cb4f2de72714d983b2cc"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_e_add",
+      "before_revision": "7306f71f6160e98927fd96074d91631f7a173efe",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.e_add",
+      "change_revision": "47fbd98106c1e8fa9a4ce8d4614175a5b24ae34c"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_e_intcast_mul_natabs",
+      "before_revision": "7306f71f6160e98927fd96074d91631f7a173efe",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.e_intCast_mul_natAbs",
+      "change_revision": "47fbd98106c1e8fa9a4ce8d4614175a5b24ae34c"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_e_intmul",
+      "before_revision": "7306f71f6160e98927fd96074d91631f7a173efe",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.e_intMul",
+      "change_revision": "47fbd98106c1e8fa9a4ce8d4614175a5b24ae34c"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_e_neg",
+      "before_revision": "7306f71f6160e98927fd96074d91631f7a173efe",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.e_neg",
+      "change_revision": "47fbd98106c1e8fa9a4ce8d4614175a5b24ae34c"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_e_neg_intcast_mul_natabs",
+      "before_revision": "7306f71f6160e98927fd96074d91631f7a173efe",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.e_neg_intCast_mul_natAbs",
+      "change_revision": "47fbd98106c1e8fa9a4ce8d4614175a5b24ae34c"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_e_sub_intcast_mul",
+      "before_revision": "7306f71f6160e98927fd96074d91631f7a173efe",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.e_sub_intCast_mul",
+      "change_revision": "47fbd98106c1e8fa9a4ce8d4614175a5b24ae34c"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_eq_zero_of_forall_hassum_zero",
+      "before_revision": "7306f71f6160e98927fd96074d91631f7a173efe",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.eq_zero_of_forall_hasSum_zero",
+      "change_revision": "47fbd98106c1e8fa9a4ce8d4614175a5b24ae34c"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_hassum_x_eval",
+      "before_revision": "7306f71f6160e98927fd96074d91631f7a173efe",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.hasSum_X_eval",
+      "change_revision": "47fbd98106c1e8fa9a4ce8d4614175a5b24ae34c"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_hassum_y_eval",
+      "before_revision": "7306f71f6160e98927fd96074d91631f7a173efe",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.hasSum_Y_eval",
+      "change_revision": "47fbd98106c1e8fa9a4ce8d4614175a5b24ae34c"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_norm_e",
+      "before_revision": "7306f71f6160e98927fd96074d91631f7a173efe",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.norm_e",
+      "change_revision": "47fbd98106c1e8fa9a4ce8d4614175a5b24ae34c"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_norm_e_lt_norm_e",
+      "before_revision": "7306f71f6160e98927fd96074d91631f7a173efe",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.norm_e_lt_norm_e",
+      "change_revision": "47fbd98106c1e8fa9a4ce8d4614175a5b24ae34c"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_norm_e_lt_one",
+      "before_revision": "7306f71f6160e98927fd96074d91631f7a173efe",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.norm_e_lt_one",
+      "change_revision": "47fbd98106c1e8fa9a4ce8d4614175a5b24ae34c"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_riemannzeta_six",
+      "before_revision": "7306f71f6160e98927fd96074d91631f7a173efe",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.riemannZeta_six",
+      "change_revision": "47fbd98106c1e8fa9a4ce8d4614175a5b24ae34c"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_sum_int_inv_cube",
+      "before_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.sum_int_inv_cube",
+      "change_revision": "734592ecc43341af82b6cb4f2de72714d983b2cc"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_sum_int_inv_sq",
+      "before_revision": "7306f71f6160e98927fd96074d91631f7a173efe",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.sum_int_inv_sq",
+      "change_revision": "47fbd98106c1e8fa9a4ce8d4614175a5b24ae34c"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_two_pi_i_ne_zero",
+      "before_revision": "7306f71f6160e98927fd96074d91631f7a173efe",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.two_pi_I_ne_zero",
+      "change_revision": "47fbd98106c1e8fa9a4ce8d4614175a5b24ae34c"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_weierstrassp_q_expansion",
+      "before_revision": "7306f71f6160e98927fd96074d91631f7a173efe",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.Blueprint.weierstrassP_q_expansion",
+      "change_revision": "47fbd98106c1e8fa9a4ce8d4614175a5b24ae34c"
+    },
+    {
+      "id": "flt_tatecurve_weierstrass_equation",
+      "before_revision": "d8dedaa877e151a88075515dbd5f71a08121ace6",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateCurveConstruction.lean",
+      "theorem": "TateCurve.weierstrass_equation",
+      "change_revision": "cfeeede716a728393eaf6c0ad882d647ae609def"
+    },
+    {
+      "id": "flt_tatecurve_evalint_mul",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateParameter.lean",
+      "theorem": "TateCurve.evalInt_mul",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_tatecurve_summable_evalint",
+      "before_revision": "7e5a4f21b2dc0a332fe4a68d86504f077197fd94",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateParameter.lean",
+      "theorem": "TateCurve.summable_evalInt",
+      "change_revision": "dd385597a6a656c01d5f36682d8df57b6027f7c9"
+    },
+    {
+      "id": "flt_tatecurve_summable_of_valuation_le_pow",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateParameter.lean",
+      "theorem": "TateCurve.summable_of_valuation_le_pow",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_tatecurve_valuation_evalint_eq",
+      "before_revision": "7e5a4f21b2dc0a332fe4a68d86504f077197fd94",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateParameter.lean",
+      "theorem": "TateCurve.valuation_evalInt_eq",
+      "change_revision": "dd385597a6a656c01d5f36682d8df57b6027f7c9"
+    },
+    {
+      "id": "flt_tatecurve_valuation_evalint_le_pow",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/EllipticCurves/TateParameter.lean",
+      "theorem": "TateCurve.valuation_evalInt_le_pow",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_dickson_classification_tame_proof",
+      "before_revision": "af9e6e48afe857ec01f3bc2aeba436f707ad222d",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/PGL2/Proofs.lean",
+      "theorem": "Dickson.classification_tame_proof",
+      "change_revision": "96fad4603179a10d7ceacc08589d9694dae0a575"
+    },
+    {
+      "id": "flt_dickson_classification_wild_proof",
+      "before_revision": "af9e6e48afe857ec01f3bc2aeba436f707ad222d",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/KnownIn1980s/PGL2/Proofs.lean",
+      "theorem": "Dickson.classification_wild_proof",
+      "change_revision": "96fad4603179a10d7ceacc08589d9694dae0a575"
+    },
+    {
+      "id": "flt_semialghom",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Algebra/Algebra/Bilinear.lean",
+      "theorem": "SemialgHom",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_subalgebra",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Algebra/Central/TensorProduct.lean",
+      "theorem": "Subalgebra",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_submodule",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Algebra/Central/TensorProduct.lean",
+      "theorem": "Submodule",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_mulaction_fixedpoints_coe_add",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Algebra/FixedPoints/Basic.lean",
+      "theorem": "MulAction.FixedPoints.coe_add",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_mulaction_fixedpoints_smul_neg",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Algebra/FixedPoints/Basic.lean",
+      "theorem": "MulAction.FixedPoints.smul_neg",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_isdirectlimit_module_compatibility_module",
+      "before_revision": "185a60d89ab93a9d01acb020815d9a70fdcd9b05",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Algebra/IsDirectLimit.lean",
+      "theorem": "IsDirectLimit.Module.compatibility_module",
+      "change_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499"
+    },
+    {
+      "id": "flt_isdirectlimit_is_surjective",
+      "before_revision": "185a60d89ab93a9d01acb020815d9a70fdcd9b05",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Algebra/IsDirectLimit.lean",
+      "theorem": "IsDirectLimit.is_surjective",
+      "change_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499"
+    },
+    {
+      "id": "flt_isdirectlimit_lift_of",
+      "before_revision": "185a60d89ab93a9d01acb020815d9a70fdcd9b05",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Algebra/IsDirectLimit.lean",
+      "theorem": "IsDirectLimit.lift_of",
+      "change_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499"
+    },
+    {
+      "id": "flt_matrix_generallineargroup_gl2_unipotent_def",
+      "before_revision": "4bbe19234e7f8eaf7795852237b125b6d7fb9bb7",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/LinearAlgebra/Matrix/GeneralLinearGroup/Defs.lean",
+      "theorem": "Matrix.GeneralLinearGroup.GL2.unipotent_def",
+      "change_revision": "941f909b31864cd3cc59547551db4e1b1f62a342"
+    },
+    {
+      "id": "flt_matrix_generallineargroup_gl2_unipotent_inv",
+      "before_revision": "4bbe19234e7f8eaf7795852237b125b6d7fb9bb7",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/LinearAlgebra/Matrix/GeneralLinearGroup/Defs.lean",
+      "theorem": "Matrix.GeneralLinearGroup.GL2.unipotent_inv",
+      "change_revision": "941f909b31864cd3cc59547551db4e1b1f62a342"
+    },
+    {
+      "id": "flt_measuretheory_index_mul_haar_subgroup_eq_haar_subgroup",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/MeasureTheory/Group/Action.lean",
+      "theorem": "MeasureTheory.index_mul_haar_subgroup_eq_haar_subgroup",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_topology_isopenembedding_outerregular_comap",
+      "before_revision": "0e600fdd1c943d2e5fd752a99a6788bc50346acc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/MeasureTheory/Measure/Regular.lean",
+      "theorem": "Topology.IsOpenEmbedding.outerRegular_comap",
+      "change_revision": "f86dba496a56aad6542e0807c2d9cfd97a880137"
+    },
+    {
+      "id": "flt_padicint_smul_submodule_one_isfiniterelindex",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/NumberTheory/Padics/PadicIntegers.lean",
+      "theorem": "PadicInt.smul_submodule_one_isFiniteRelIndex",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_filter",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Order/Filter/Cofinite.lean",
+      "theorem": "Filter",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_representation_comp_def",
+      "before_revision": "185a60d89ab93a9d01acb020815d9a70fdcd9b05",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/RepresentationTheory/Basic.lean",
+      "theorem": "Representation.comp_def",
+      "change_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_intvaluation_eq_coe_neg_multiplicity",
+      "before_revision": "d18b563029f32a6855f46cdd0edaab39ccc5b8f5",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/RingTheory/DedekindDomain/AdicValuation.lean",
+      "theorem": "IsDedekindDomain.HeightOneSpectrum.intValuation_eq_coe_neg_multiplicity",
+      "change_revision": "f879a81165c0a18d52d9db2138879c159286ca91"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_exists_mul_mem_integraladeles",
+      "before_revision": "a7f953b92c99e8b061fee3867e5f4ca6847a4039",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/RingTheory/DedekindDomain/FiniteAdeleRing.lean",
+      "theorem": "IsDedekindDomain.FiniteAdeleRing.exists_mul_mem_integralAdeles",
+      "change_revision": "44df7744a2a65cdc111875dc1b6f0db85477348f"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_singlecontinuousalgebramap_comp_evalcontinuouslinearmap",
+      "before_revision": "a7f953b92c99e8b061fee3867e5f4ca6847a4039",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/RingTheory/DedekindDomain/FiniteAdeleRing.lean",
+      "theorem": "IsDedekindDomain.FiniteAdeleRing.singleContinuousAlgebraMap_comp_evalContinuousLinearMap",
+      "change_revision": "44df7744a2a65cdc111875dc1b6f0db85477348f"
+    },
+    {
+      "id": "flt_islocalization_tensorproduct_ext",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/RingTheory/Localization/BaseChange.lean",
+      "theorem": "IsLocalization.tensorProduct_ext",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_tensorproduct",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/RingTheory/SimpleRing/TensorProduct.lean",
+      "theorem": "TensorProduct",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_twosidedideal",
+      "before_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/RingTheory/SimpleRing/TensorProduct.lean",
+      "theorem": "TwoSidedIdeal",
+      "change_revision": "734592ecc43341af82b6cb4f2de72714d983b2cc"
+    },
+    {
+      "id": "flt_valuativerel_exists_pow_valuation_lt",
+      "before_revision": "7e5a4f21b2dc0a332fe4a68d86504f077197fd94",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/RingTheory/Valuation/ValuativeRel/Basic.lean",
+      "theorem": "ValuativeRel.exists_pow_valuation_lt",
+      "change_revision": "dd385597a6a656c01d5f36682d8df57b6027f7c9"
+    },
+    {
+      "id": "flt_istopologicalgroup",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Topology/Algebra/IsUniformGroup/Basic.lean",
+      "theorem": "IsTopologicalGroup",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_ismoduletopology_root",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Topology/Algebra/Module/ModuleTopology.lean",
+      "theorem": "IsModuleTopology._root_",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_ismoduletopology_of_continuous_isopenmap_algebramap",
+      "before_revision": "47460bcca27ea05fe7dc410e6ea7c58b7bd34389",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Topology/Algebra/Module/ModuleTopology.lean",
+      "theorem": "IsModuleTopology.of_continuous_isOpenMap_algebraMap",
+      "change_revision": "4aeab9d7dafb4a75bcb1fa3ad209d261401b041e"
+    },
+    {
+      "id": "flt_ismoduletopology_t2space",
+      "before_revision": "47460bcca27ea05fe7dc410e6ea7c58b7bd34389",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Topology/Algebra/Module/ModuleTopology.lean",
+      "theorem": "IsModuleTopology.t2Space",
+      "change_revision": "4aeab9d7dafb4a75bcb1fa3ad209d261401b041e"
+    },
+    {
+      "id": "flt_absolutevalue_exists_rpow_of_one_lt",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Topology/Algebra/Order/Field.lean",
+      "theorem": "AbsoluteValue.exists_rpow_of_one_lt",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_absolutevalue_log_div_image_eq_singleton_of_le_one_iff",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Topology/Algebra/Order/Field.lean",
+      "theorem": "AbsoluteValue.log_div_image_eq_singleton_of_le_one_iff",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_absolutevalue_lt_one_iff_of_lt_one_imp",
+      "before_revision": "5446b1b7e5e8ddc6d6e280bcd9d56f48aafc3499",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Topology/Algebra/Order/Field.lean",
+      "theorem": "AbsoluteValue.lt_one_iff_of_lt_one_imp",
+      "change_revision": "790624e02dd303dd3355b2be007d1c778951d355"
+    },
+    {
+      "id": "flt_restrictedproduct",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Topology/Algebra/RestrictedProduct/TopologicalSpace.lean",
+      "theorem": "RestrictedProduct",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_valued",
+      "before_revision": "f30ec5dc256df9d259e3470ea7bcbce83be9b3f4",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Topology/Algebra/Valued/ValuationTopology.lean",
+      "theorem": "Valued",
+      "change_revision": "6cffefeb368ca4cfabc907f86f96783a49ae4033"
+    },
+    {
+      "id": "flt_valued_withzeromulint_finite_cover_of_uniformity_basis",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Topology/Algebra/Valued/WithZeroMulInt.lean",
+      "theorem": "Valued.WithZeroMulInt.finite_cover_of_uniformity_basis",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_valued_withzeromulint_integer_compactspace",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Topology/Algebra/Valued/WithZeroMulInt.lean",
+      "theorem": "Valued.WithZeroMulInt.integer_compactSpace",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_valued_withzeromulint_irreducible_valuation_le_ofadd_neg_one",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Topology/Algebra/Valued/WithZeroMulInt.lean",
+      "theorem": "Valued.WithZeroMulInt.irreducible_valuation_le_ofAdd_neg_one",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_homdiscrete_iff_discrete",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Topology/HomToDiscrete.lean",
+      "theorem": "HomDiscrete_iff_Discrete",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_polish_of_locally_compact_second_countable",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Mathlib/Topology/Polish.lean",
+      "theorem": "polish_of_locally_compact_second_countable",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_numberfield_2",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/NumberField/AdeleRing.lean",
+      "theorem": "NumberField",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_numberfield_adelering_basechangeadelealghom_bijective",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/NumberField/AdeleRing.lean",
+      "theorem": "NumberField.AdeleRing.baseChangeAdeleAlgHom_bijective",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_rat",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/NumberField/AdeleRing.lean",
+      "theorem": "Rat",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_numberfield_infiniteplace_completion_basechangeequiv_tmul",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/NumberField/Completion/Infinite.lean",
+      "theorem": "NumberField.InfinitePlace.Completion.baseChangeEquiv_tmul",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_numberfield_infiniteplace_completion_comaphom_cont",
+      "before_revision": "1a310ae505e6af31534de4002d1955e8168ee2e1",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/NumberField/Completion/Infinite.lean",
+      "theorem": "NumberField.InfinitePlace.Completion.comapHom_cont",
+      "change_revision": "aa5d605da29151d35f42571a8e970bf870b6ca0c"
+    },
+    {
+      "id": "flt_numberfield_infiniteplace_completion_denserange_algebramap_subtype_pi",
+      "before_revision": "fda37699263c7514a927262793066e5859c22f8c",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/NumberField/Completion/Infinite.lean",
+      "theorem": "NumberField.InfinitePlace.Completion.denseRange_algebraMap_subtype_pi",
+      "change_revision": "ee47fd2abea29d0007dfed9c3c7cad2b1f4d642b"
+    },
+    {
+      "id": "flt_numberfield_infiniteplace_completion_mem_placesover_iff_comap",
+      "before_revision": "1a310ae505e6af31534de4002d1955e8168ee2e1",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/NumberField/Completion/Infinite.lean",
+      "theorem": "NumberField.InfinitePlace.Completion.mem_placesOver_iff_comap",
+      "change_revision": "aa5d605da29151d35f42571a8e970bf870b6ca0c"
+    },
+    {
+      "id": "flt_strictmonoon_ioi_nat_of_lt_succ",
+      "before_revision": "f30ec5dc256df9d259e3470ea7bcbce83be9b3f4",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/NumberField/DiscriminantBounds.lean",
+      "theorem": "strictMonoOn_Ioi_nat_of_lt_succ",
+      "change_revision": "6cffefeb368ca4cfabc907f86f96783a49ae4033"
+    },
+    {
+      "id": "flt_numberfield_infiniteplace_extension_isextension_or_isextension_conjugate",
+      "before_revision": "f30ec5dc256df9d259e3470ea7bcbce83be9b3f4",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/NumberField/InfinitePlace/Extension.lean",
+      "theorem": "NumberField.InfinitePlace.Extension.isExtension_or_isExtension_conjugate",
+      "change_revision": "6cffefeb368ca4cfabc907f86f96783a49ae4033"
+    },
+    {
+      "id": "flt_restrictedproduct_padicnatden_ne_zero",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/NumberField/Padics/RestrictedProduct.lean",
+      "theorem": "RestrictedProduct.padicNatDen_ne_zero",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_restrictedproduct_padicnatden_norm_mul_le_one",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/NumberField/Padics/RestrictedProduct.lean",
+      "theorem": "RestrictedProduct.padicNatDen_norm_mul_le_one",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_restrictedproduct_padicnatden_norm_of_mem",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/NumberField/Padics/RestrictedProduct.lean",
+      "theorem": "RestrictedProduct.padicNatDen_norm_of_mem",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_restrictedproduct_padicnatden_norm_of_notmem",
+      "before_revision": "fa42521b0360498552efa3be5fbddcf41d190871",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/NumberField/Padics/RestrictedProduct.lean",
+      "theorem": "RestrictedProduct.padicNatDen_norm_of_notMem",
+      "change_revision": "5cb37b0416d2953c97dc2445326d2a3323ca5d4d"
+    },
+    {
+      "id": "flt_restrictedproduct_padic_exists_sub_mem_padicint",
+      "before_revision": "fa42521b0360498552efa3be5fbddcf41d190871",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/NumberField/Padics/RestrictedProduct.lean",
+      "theorem": "RestrictedProduct.padic_exists_sub_mem_padicInt",
+      "change_revision": "5cb37b0416d2953c97dc2445326d2a3323ca5d4d"
+    },
+    {
+      "id": "flt_restrictedproduct_padic_exists_sub_mem_structuresubring",
+      "before_revision": "fa42521b0360498552efa3be5fbddcf41d190871",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/NumberField/Padics/RestrictedProduct.lean",
+      "theorem": "RestrictedProduct.padic_exists_sub_mem_structureSubring",
+      "change_revision": "5cb37b0416d2953c97dc2445326d2a3323ca5d4d"
+    },
+    {
+      "id": "flt_ringhom",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Patching/Algebra.lean",
+      "theorem": "RingHom",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_patchingmodule",
+      "before_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Patching/Over.lean",
+      "theorem": "PatchingModule",
+      "change_revision": "734592ecc43341af82b6cb4f2de72714d983b2cc"
+    },
+    {
+      "id": "flt_patchingalgebra",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Patching/System.lean",
+      "theorem": "PatchingAlgebra",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_ultrafilter",
+      "before_revision": "3121287750718417b2fd6383602d0838a04957a2",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Patching/System.lean",
+      "theorem": "Ultrafilter",
+      "change_revision": "05affa1c7567e9bce22a1db92318acfdb6aa4113"
+    },
+    {
+      "id": "flt_support_eq_top",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Patching/System.lean",
+      "theorem": "support_eq_top",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_eventuallyprod_eq_sup",
+      "before_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Patching/Ultraproduct.lean",
+      "theorem": "eventuallyProd_eq_sup",
+      "change_revision": "734592ecc43341af82b6cb4f2de72714d983b2cc"
+    },
+    {
+      "id": "flt_islocalring_continuous",
+      "before_revision": "98bca77dbb0010408b4cbe016ea5866a63528a79",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Patching/Utils/AdicTopology.lean",
+      "theorem": "IsLocalRing.Continuous",
+      "change_revision": "168c04a1a69f03c7263115de4ffd1d5040fe770f"
+    },
+    {
+      "id": "flt_islocalring_compactspace_of_finite_residuefield",
+      "before_revision": "070867aa3bf698a3f98b5678d6049338c485e750",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Patching/Utils/AdicTopology.lean",
+      "theorem": "IsLocalRing.compactSpace_of_finite_residueField",
+      "change_revision": "6d61c4ed0ca8ad8e5955708fe2746df492cf9888"
+    },
+    {
+      "id": "flt_commgroup",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Patching/Utils/CompactHausdorffRings.lean",
+      "theorem": "CommGroup",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_islocalring",
+      "before_revision": "fa42521b0360498552efa3be5fbddcf41d190871",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Patching/Utils/Lemmas.lean",
+      "theorem": "IsLocalRing",
+      "change_revision": "5cb37b0416d2953c97dc2445326d2a3323ca5d4d"
+    },
+    {
+      "id": "flt_wellfoundedlt",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Patching/Utils/Lemmas.lean",
+      "theorem": "WellFoundedLT",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_eventually_vanishingfilter_not_isunit",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Patching/VanishingFilter.lean",
+      "theorem": "eventually_vanishingFilter_not_isUnit",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_dimensiontheorem_colength_coe",
+      "before_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/DimensionTheorem/Defs.lean",
+      "theorem": "DimensionTheorem.colength_coe",
+      "change_revision": "bf70705a77242545d931db4923f2975cf7c9177d"
+    },
+    {
+      "id": "flt_dimensiontheorem_mingenprimary_le_ringkrulldim",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/DimensionTheorem/DimEqDelta.lean",
+      "theorem": "DimensionTheorem.minGenPrimary_le_ringKrullDim",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dimensiontheorem_ringkrulldim_le_of_forall_minimalprimes",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/DimensionTheorem/DimLeGrowth.lean",
+      "theorem": "DimensionTheorem.ringKrullDim_le_of_forall_minimalPrimes",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dimensiontheorem_ringkrulldim_le_of_growthle",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/DimensionTheorem/DimLeGrowth.lean",
+      "theorem": "DimensionTheorem.ringKrullDim_le_of_growthLE",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dimensiontheorem_ringkrulldim_le_zero_of_growthle_zero",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/DimensionTheorem/DimLeGrowth.lean",
+      "theorem": "DimensionTheorem.ringKrullDim_le_zero_of_growthLE_zero",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dimensiontheorem_colength_pow_le",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/DimensionTheorem/GrowthLeDelta.lean",
+      "theorem": "DimensionTheorem.colength_pow_le",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dimensiontheorem_growthle_hilbertsamuel_spanfinrank",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/DimensionTheorem/GrowthLeDelta.lean",
+      "theorem": "DimensionTheorem.growthLE_hilbertSamuel_spanFinrank",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_card_elements_orderof_prime",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/CyclicPartition.lean",
+      "theorem": "Dickson.card_elements_orderOf_prime",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_card_ge_45_of_orders_3_and_5",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/CyclicPartition.lean",
+      "theorem": "Dickson.card_ge_45_of_orders_3_and_5",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_dickson_card_sylow3_of_non_normal_order3",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/CyclicPartition.lean",
+      "theorem": "Dickson.card_sylow3_of_non_normal_order3",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_dihedralrecognition",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/CyclicPartition.lean",
+      "theorem": "Dickson.dihedralRecognition",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_dihedral_of_hascyclicpartition_even",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/CyclicPartition.lean",
+      "theorem": "Dickson.dihedral_of_hasCyclicPartition_even",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_dihedral_of_hascyclicpartition_odd",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/CyclicPartition.lean",
+      "theorem": "Dickson.dihedral_of_hasCyclicPartition_odd",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_issimple_of_hascyclicpartition_a5",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/CyclicPartition.lean",
+      "theorem": "Dickson.isSimple_of_hasCyclicPartition_A5",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_not_normal_of_card_lt",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/CyclicPartition.lean",
+      "theorem": "Dickson.not_normal_of_card_lt",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_dickson_not_normal_order6_of_card_sylow3_4",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/CyclicPartition.lean",
+      "theorem": "Dickson.not_normal_order6_of_card_sylow3_4",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_dickson_classification",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/DicksonClassification.lean",
+      "theorem": "Dickson.dickson_classification",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_f_q_neg",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/FieldReconstruction.lean",
+      "theorem": "Dickson.F_q_neg",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_dickson_additive_subgroup_eq_f_q",
+      "before_revision": "af9e6e48afe857ec01f3bc2aeba436f707ad222d",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/FieldReconstruction.lean",
+      "theorem": "Dickson.additive_subgroup_eq_F_q",
+      "change_revision": "96fad4603179a10d7ceacc08589d9694dae0a575"
+    },
+    {
+      "id": "flt_dickson_exists_conj_sylow_fixing_infty",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/FieldReconstruction.lean",
+      "theorem": "Dickson.exists_conj_sylow_fixing_infty",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_normdilationparam_image_card",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/FieldReconstruction.lean",
+      "theorem": "Dickson.normDilationParam_image_card",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_dickson_normdilationparam_of_p",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/FieldReconstruction.lean",
+      "theorem": "Dickson.normDilationParam_of_P",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_orbitinfty_conj_of_fixes_infty",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/FieldReconstruction.lean",
+      "theorem": "Dickson.orbitInfty_conj_of_fixes_infty",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_dickson_orbit_infty_eq_p1fq",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/FieldReconstruction.lean",
+      "theorem": "Dickson.orbit_infty_eq_P1Fq",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_translationset_card_eq_p",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/FieldReconstruction.lean",
+      "theorem": "Dickson.translationSet_card_eq_P",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_card_conjclasselements",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/NatClassEquation.lean",
+      "theorem": "Dickson.card_conjClassElements",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_dickson_card_eigenvalues",
+      "before_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PGLBasic.lean",
+      "theorem": "Dickson.card_eigenvalues",
+      "change_revision": "734592ecc43341af82b6cb4f2de72714d983b2cc"
+    },
+    {
+      "id": "flt_dickson_exists_finite_subfield_conjugate",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PGLBasic.lean",
+      "theorem": "Dickson.exists_finite_subfield_conjugate",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_finite_of_closure_finite",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PGLBasic.lean",
+      "theorem": "Dickson.finite_of_closure_finite",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_ispgroup_exists_common_fixedpoint",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PGLBasic.lean",
+      "theorem": "Dickson.isPGroup_exists_common_fixedPoint",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_ncard_fixedpoints_eq_one_of_discrim_zero",
+      "before_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PGLBasic.lean",
+      "theorem": "Dickson.ncard_fixedPoints_eq_one_of_discrim_zero",
+      "change_revision": "734592ecc43341af82b6cb4f2de72714d983b2cc"
+    },
+    {
+      "id": "flt_dickson_ncard_fixedpoints_eq_two_of_discrim_ne_zero",
+      "before_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PGLBasic.lean",
+      "theorem": "Dickson.ncard_fixedPoints_eq_two_of_discrim_ne_zero",
+      "change_revision": "734592ecc43341af82b6cb4f2de72714d983b2cc"
+    },
+    {
+      "id": "flt_dickson_orderof_coprime_of_discrim_ne_zero",
+      "before_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PGLBasic.lean",
+      "theorem": "Dickson.orderOf_coprime_of_discrim_ne_zero",
+      "change_revision": "734592ecc43341af82b6cb4f2de72714d983b2cc"
+    },
+    {
+      "id": "flt_a4_iso_psl2_f3",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PSLBasic.lean",
+      "theorem": "A4_iso_PSL2_F3",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_n_p_gt_one_of_psl_order",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PSLRecognition.lean",
+      "theorem": "Dickson.n_p_gt_one_of_psl_order",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_orbit_eq_infty_union_translations_psl",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PSLRecognition.lean",
+      "theorem": "Dickson.orbit_eq_infty_union_translations_psl",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_orbit_infty_eq_p1fq_psl",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PSLRecognition.lean",
+      "theorem": "Dickson.orbit_infty_eq_P1Fq_psl",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_count_order_p_elements",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PartitionHelpers.lean",
+      "theorem": "Dickson.count_order_p_elements",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_dickson_normalizer_complement_divides_main",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PartitionHelpers.lean",
+      "theorem": "Dickson.normalizer_complement_divides_main",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_stabilizer_conj_eq_p",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PartitionHelpers.lean",
+      "theorem": "Dickson.stabilizer_conj_eq_P",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_sylow_element_order_p",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PartitionHelpers.lean",
+      "theorem": "Dickson.sylow_element_order_p",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_sylow_unique_fixedpoint",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PartitionHelpers.lean",
+      "theorem": "Dickson.sylow_unique_fixedPoint",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_phi_card_le",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PartitionProof.lean",
+      "theorem": "Dickson.Phi_card_le",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_dickson_phi_smul_mem",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PartitionProof.lean",
+      "theorem": "Dickson.Phi_smul_mem",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_dickson_element_fixedpt_sum",
+      "before_revision": "0996e0c76ea248a676fba363be3ea8f04bdf3d44",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/PartitionProof.lean",
+      "theorem": "Dickson.element_fixedPt_sum",
+      "change_revision": "c6ed6c236fc1ddcb9b35b37a41a414637f4a895b"
+    },
+    {
+      "id": "flt_dickson_element_dichotomy",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/RecognitionA5.lean",
+      "theorem": "Dickson.element_dichotomy",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_element_partition_count",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/RecognitionA5.lean",
+      "theorem": "Dickson.element_partition_count",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_order_30_unique_sylow_3",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/RecognitionA5.lean",
+      "theorem": "Dickson.order_30_unique_sylow_3",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_order_30_unique_sylow_5",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/RecognitionA5.lean",
+      "theorem": "Dickson.order_30_unique_sylow_5",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_simple_60_n2_ne_15",
+      "before_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/RecognitionA5.lean",
+      "theorem": "Dickson.simple_60_n2_ne_15",
+      "change_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc"
+    },
+    {
+      "id": "flt_dickson_dihedral2_of_hascyclicpartition",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/TameClassification.lean",
+      "theorem": "Dickson.dihedral2_of_hasCyclicPartition",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_exists_unique_normalizedlift",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/TameClassification.lean",
+      "theorem": "Dickson.exists_unique_normalizedLift",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_dickson_fixedpoints_determined",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/TameClassification.lean",
+      "theorem": "Dickson.fixedPoints_determined",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_dickson_scalar_eq_one_in_pgl",
+      "before_revision": "8dd8088882957dfe93d5b7f81dffd4dc701f43cc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/TameClassification.lean",
+      "theorem": "Dickson.scalar_eq_one_in_PGL",
+      "change_revision": "4025558e4756e7ab9e1552f957706a7caf86cb42"
+    },
+    {
+      "id": "flt_dickson_branch1_semidirect",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/WildClassification.lean",
+      "theorem": "Dickson.branch1_semidirect",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_complement_iscyclic",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/WildClassification.lean",
+      "theorem": "Dickson.complement_isCyclic",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_complement_order_coprime",
+      "before_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/WildClassification.lean",
+      "theorem": "Dickson.complement_order_coprime",
+      "change_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc"
+    },
+    {
+      "id": "flt_dickson_dickson_branch2_z1_eq_1",
+      "before_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/WildClassification.lean",
+      "theorem": "Dickson.dickson_branch2_z1_eq_1",
+      "change_revision": "734592ecc43341af82b6cb4f2de72714d983b2cc"
+    },
+    {
+      "id": "flt_dickson_fixes_infinity_coprime_iscyclic",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/WildClassification.lean",
+      "theorem": "Dickson.fixes_infinity_coprime_isCyclic",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_fixes_point_coprime_iscyclic",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/WildClassification.lean",
+      "theorem": "Dickson.fixes_point_coprime_isCyclic",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_mul_elem_abelian_iso",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/WildClassification.lean",
+      "theorem": "Dickson.mul_elem_abelian_iso",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_partition_equation",
+      "before_revision": "45eb9afc55ce36516fc98ba10618c010fdced7dc",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/WildClassification.lean",
+      "theorem": "Dickson.partition_equation",
+      "change_revision": "734592ecc43341af82b6cb4f2de72714d983b2cc"
+    },
+    {
+      "id": "flt_dickson_recognition_pgl_iso",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/WildClassification.lean",
+      "theorem": "Dickson.recognition_PGL_iso",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_dickson_sylow_comm_exp_p",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/PGL2/FiniteSubgroups/WildClassification.lean",
+      "theorem": "Dickson.sylow_comm_exp_p",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_slop_oddreporig_smul_tmul_mem_range_iff",
+      "before_revision": "dd385597a6a656c01d5f36682d8df57b6027f7c9",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/RepresentationTheory/OddAbsIrredOrig.lean",
+      "theorem": "Slop.OddRepOrig.smul_tmul_mem_range_iff",
+      "change_revision": "35af8ce6b6b79ab8f21fd03faf93a18f2953f41c"
+    },
+    {
+      "id": "flt_slop_oddrep_adjoinrange_eq_top",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/RepresentationTheory/OddAbsIrredSlop.lean",
+      "theorem": "Slop.OddRep.adjoinRange_eq_top",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_slop_oddrep_isirreducible_basechange_of_finrank_eigenspace_eq_one",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/RepresentationTheory/OddAbsIrredSlop.lean",
+      "theorem": "Slop.OddRep.isIrreducible_baseChange_of_finrank_eigenspace_eq_one",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_slop_oddrep_isirreducible_iff_forall",
+      "before_revision": "f879a81165c0a18d52d9db2138879c159286ca91",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/RepresentationTheory/OddAbsIrredSlop.lean",
+      "theorem": "Slop.OddRep.isIrreducible_iff_forall",
+      "change_revision": "dfe9da7b9322e8da0ca62fdf1c4d6ea19366a10c"
+    },
+    {
+      "id": "flt_slop_oddrep_isirreducible_of_basechange",
+      "before_revision": "81d8bee0f708ac41cb975da76ed3c43ad99fae72",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FLT/Slop/RepresentationTheory/OddAbsIrredSlop.lean",
+      "theorem": "Slop.OddRep.isIrreducible_of_baseChange",
+      "change_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6"
+    },
+    {
+      "id": "flt_pnat",
+      "before_revision": "7523cbe52986a39a1018bd9bc229ae562a0795e9",
+      "fixed_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "file": "FermatsLastTheorem.lean",
+      "theorem": "PNat",
+      "change_revision": "c9ee54dffd92883165f60d39a0c780d087ec6ef7"
+    }
+  ]
+}

@@ -1,0 +1,2225 @@
+{
+  "version": "tracer-real-candidate-inventory-v1",
+  "status": "deterministic-history-scan",
+  "project_id": "pfr",
+  "source_repository": "https://github.com/teorth/pfr",
+  "source_license": "Apache-2.0",
+  "endpoint_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+  "history_policy": {
+    "traversal": "first_parent",
+    "maximum_commits": 120,
+    "pairs_scanned": 120,
+    "modified_lean_files_considered": 501,
+    "candidate_rule": "same parsed declaration header; proof changed in window; endpoint proof differs"
+  },
+  "candidates": [
+    {
+      "id": "pfr_approx_hom_pfr",
+      "before_revision": "1ac3910baea44632b786077c3928238079fe95b2",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ApproxHomPFR.lean",
+      "theorem": "approx_hom_pfr",
+      "change_revision": "65691129be2d8ca3e164c0822d95a456b88ee259"
+    },
+    {
+      "id": "pfr_card_of_dual_constrained",
+      "before_revision": "a177b2e4abe4b31c8024b9afebe646bf6bb8f91b",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ApproxHomPFR.lean",
+      "theorem": "card_of_dual_constrained",
+      "change_revision": "68730da4cb35f07c6928e3b5b32e177b7ab97c36"
+    },
+    {
+      "id": "pfr_card_of_slice",
+      "before_revision": "0811856fd51caca800c7786d85b79541e8704f54",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ApproxHomPFR.lean",
+      "theorem": "card_of_slice",
+      "change_revision": "3f1033097ea26b0c8312513e829e5afd5ee7f9ec"
+    },
+    {
+      "id": "pfr_probabilitytheory",
+      "before_revision": "a177b2e4abe4b31c8024b9afebe646bf6bb8f91b",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/BoundingMutual.lean",
+      "theorem": "ProbabilityTheory",
+      "change_revision": "68730da4cb35f07c6928e3b5b32e177b7ab97c36"
+    },
+    {
+      "id": "pfr_multidist_of_cast",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/BoundingMutual.lean",
+      "theorem": "multiDist_of_cast",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_mutual_information_le",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/BoundingMutual.lean",
+      "theorem": "mutual_information_le",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_cond_c_eq_integral",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Endgame.lean",
+      "theorem": "cond_c_eq_integral",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_cond_construct_good",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Endgame.lean",
+      "theorem": "cond_construct_good",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_construct_good_prelim",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Endgame.lean",
+      "theorem": "construct_good_prelim",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_delta_eq_integral",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Endgame.lean",
+      "theorem": "delta'_eq_integral",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_independencecondition6",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Endgame.lean",
+      "theorem": "independenceCondition6",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_sum_condmutual_le",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Endgame.lean",
+      "theorem": "sum_condMutual_le",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_sum_dist_diff_le",
+      "before_revision": "3f1033097ea26b0c8312513e829e5afd5ee7f9ec",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Endgame.lean",
+      "theorem": "sum_dist_diff_le",
+      "change_revision": "ad25c2a1d360a29a68eaa5daf31945795fd730dc"
+    },
+    {
+      "id": "pfr_sum_uvw_eq_zero",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Endgame.lean",
+      "theorem": "sum_uvw_eq_zero",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_entropic_pfr_conjecture",
+      "before_revision": "23f0ac71c3f89eb977deae845d474add90a027f7",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/EntropyPFR.lean",
+      "theorem": "entropic_PFR_conjecture",
+      "change_revision": "251c9e214e6a46a1aacffe6774ae1481a5d4d41a"
+    },
+    {
+      "id": "pfr_rdist_le_sum_fibre",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Fibring.lean",
+      "theorem": "rdist_le_sum_fibre",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_sum_of_rdist_eq_step_condmutualinfo",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Fibring.lean",
+      "theorem": "sum_of_rdist_eq_step_condMutualInfo",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_diff_rdist_le_1",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/FirstEstimate.lean",
+      "theorem": "diff_rdist_le_1",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_ent_ofsum_le",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/FirstEstimate.lean",
+      "theorem": "ent_ofsum_le",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_first_estimate",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/FirstEstimate.lean",
+      "theorem": "first_estimate",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_rdist_add_rdist_add_condmutual_eq",
+      "before_revision": "23f0ac71c3f89eb977deae845d474add90a027f7",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/FirstEstimate.lean",
+      "theorem": "rdist_add_rdist_add_condMutual_eq",
+      "change_revision": "251c9e214e6a46a1aacffe6774ae1481a5d4d41a"
+    },
+    {
+      "id": "pfr_rdist_of_sums_ge",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/FirstEstimate.lean",
+      "theorem": "rdist_of_sums_ge",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_condindepfun",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/ConditionalIndependence.lean",
+      "theorem": "ProbabilityTheory.CondIndepFun",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_condindep_copies",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/ConditionalIndependence.lean",
+      "theorem": "ProbabilityTheory.condIndep_copies",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_probabilitytheory_isuniform_2",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.IsUniform",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_chain_rule",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.chain_rule",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_comp_ge",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.condEntropy_comp_ge",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_eq_kernel_entropy",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.condEntropy_eq_kernel_entropy",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_eq_sum",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.condEntropy_eq_sum",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_eq_sum_fintype",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.condEntropy_eq_sum_fintype",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_eq_sum_sum",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.condEntropy_eq_sum_sum",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_le_entropy",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.condEntropy_le_entropy",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_condmutualinfo_eq_kernel_mutualinfo",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.condMutualInfo_eq_kernel_mutualInfo",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_probabilitytheory_condmutualinfo_eq_sum",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.condMutualInfo_eq_sum",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_probabilitytheory_condmutualinfo_eq_zero",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.condMutualInfo_eq_zero",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_condmutualinfo_of_inj",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.condMutualInfo_of_inj",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_condmutual_comp_comp_le",
+      "before_revision": "f80f70ec4b1c8566660ed770ddeb96e84c8645e1",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.condMutual_comp_comp_le",
+      "change_revision": "450f4d6e5e25d8742de5be6ec51c3b498ce8ad7f"
+    },
+    {
+      "id": "pfr_probabilitytheory_ent_of_cond_indep",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.ent_of_cond_indep",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_add_entropy_sub_mutualinfo",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.entropy_add_entropy_sub_mutualInfo",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_assoc",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.entropy_assoc",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_def",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.entropy_def",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_eq_log_card",
+      "before_revision": "b591447b3ad6e52d95dbb4d56ed3538ded985471",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.entropy_eq_log_card",
+      "change_revision": "f1635c0167e7a722d821fbf3fb3eec28ec3e115a"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_le_log_card",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.entropy_le_log_card",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_le_log_card_of_mem",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.entropy_le_log_card_of_mem",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_le_log_card_of_mem_finite",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.entropy_le_log_card_of_mem_finite",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_pair_le_add",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.entropy_pair_le_add",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_sub_condentropy",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.entropy_sub_condEntropy",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_iindepfun",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.iIndepFun",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_probabilitytheory_mutualinfo_eq_zero",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Basic.lean",
+      "theorem": "ProbabilityTheory.mutualInfo_eq_zero",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_div_left",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.condEntropy_div_left",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_mul_left",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.condEntropy_mul_left",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_condentropy_mul_right",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.condEntropy_mul_right",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_div_comm",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.entropy_div_comm",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_div_left",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.entropy_div_left",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_div_right",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.entropy_div_right",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_inv",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.entropy_inv",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_inv_left",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.entropy_inv_left",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_inv_right",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.entropy_inv_right",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_mul_const",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.entropy_mul_const",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_mul_left",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.entropy_mul_left",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_mul_right",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.entropy_mul_right",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_sub_mutualinfo_le_entropy_div",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.entropy_sub_mutualInfo_le_entropy_div",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_sub_mutualinfo_le_entropy_mul",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.entropy_sub_mutualInfo_le_entropy_mul",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_max_condentropy_sub_condmutualinfo_le_condentropy_div",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.max_condEntropy_sub_condMutualInfo_le_condEntropy_div",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_probabilitytheory_max_condentropy_sub_condmutualinfo_le_condentropy_mul",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.max_condEntropy_sub_condMutualInfo_le_condEntropy_mul",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_probabilitytheory_max_entropy_le_entropy_div",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.max_entropy_le_entropy_div",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_max_entropy_le_entropy_mul",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.max_entropy_le_entropy_mul",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_max_entropy_le_entropy_prod",
+      "before_revision": "901bc69df2318ab450221886a92fc8f41b31e037",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.max_entropy_le_entropy_prod",
+      "change_revision": "a7fec39013bafd7cb51e75907909c41ac3c88298"
+    },
+    {
+      "id": "pfr_probabilitytheory_max_entropy_sub_mutualinfo_le_entropy_div",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.max_entropy_sub_mutualInfo_le_entropy_div",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_max_entropy_sub_mutualinfo_le_entropy_mul",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Group.lean",
+      "theorem": "ProbabilityTheory.max_entropy_sub_mutualInfo_le_entropy_mul",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_finitesupport",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Kernel/Basic.lean",
+      "theorem": "ProbabilityTheory.Kernel.FiniteSupport",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_entropy_comap",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Kernel/Basic.lean",
+      "theorem": "ProbabilityTheory.Kernel.entropy_comap",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_entropy_comap_equiv",
+      "before_revision": "85d5879ae144170098815201491639f6e7d3c352",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Kernel/Basic.lean",
+      "theorem": "ProbabilityTheory.Kernel.entropy_comap_equiv",
+      "change_revision": "a177b2e4abe4b31c8024b9afebe646bf6bb8f91b"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_entropy_compprod_aux",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Kernel/Basic.lean",
+      "theorem": "ProbabilityTheory.Kernel.entropy_compProd_aux",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_entropy_prodmkleft_unit",
+      "before_revision": "c97400a061372bef06098cfd462ac2ba7cc3992c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Kernel/Basic.lean",
+      "theorem": "ProbabilityTheory.Kernel.entropy_prodMkLeft_unit",
+      "change_revision": "111b2de36b0cd8ce8bd42eff8d4e1fd71e0d5376"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_finitekernelsupport_of_const",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Kernel/Basic.lean",
+      "theorem": "ProbabilityTheory.Kernel.finiteKernelSupport_of_const",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_finitesupport_of_compprod",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Kernel/Basic.lean",
+      "theorem": "ProbabilityTheory.Kernel.finiteSupport_of_compProd",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_entropy_compprod_triple_add_entropy_le",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Kernel/MutualInfo.lean",
+      "theorem": "ProbabilityTheory.Kernel.entropy_compProd_triple_add_entropy_le",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_entropy_reverse",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Kernel/MutualInfo.lean",
+      "theorem": "ProbabilityTheory.Kernel.entropy_reverse",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_entropy_submodular_compprod",
+      "before_revision": "85d5879ae144170098815201491639f6e7d3c352",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Kernel/MutualInfo.lean",
+      "theorem": "ProbabilityTheory.Kernel.entropy_submodular_compProd",
+      "change_revision": "a177b2e4abe4b31c8024b9afebe646bf6bb8f91b"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_entropy_triple_add_entropy_le",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Kernel/MutualInfo.lean",
+      "theorem": "ProbabilityTheory.Kernel.entropy_triple_add_entropy_le",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_mutualinfo_nonneg",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Kernel/MutualInfo.lean",
+      "theorem": "ProbabilityTheory.Kernel.mutualInfo_nonneg",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_ent_of_diff_le",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Kernel/RuzsaDist.lean",
+      "theorem": "ProbabilityTheory.Kernel.ent_of_diff_le",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_rdist_triangle_aux1",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Kernel/RuzsaDist.lean",
+      "theorem": "ProbabilityTheory.Kernel.rdist_triangle_aux1",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_rdist_triangle_aux2",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Kernel/RuzsaDist.lean",
+      "theorem": "ProbabilityTheory.Kernel.rdist_triangle_aux2",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_probabilitytheory_measure",
+      "before_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Measure.lean",
+      "theorem": "ProbabilityTheory.Measure",
+      "change_revision": "38e94172b72c8ee8ad64b6365dfc22e559c62ebe"
+    },
+    {
+      "id": "pfr_probabilitytheory_entropy_of_uniformon",
+      "before_revision": "7a3d5d49abc8b334bb7813bf253ab01299ef0b85",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Measure.lean",
+      "theorem": "ProbabilityTheory.entropy_of_uniformOn",
+      "change_revision": "e1095d58b7c6f10734988816f7764f2103b9bf29"
+    },
+    {
+      "id": "pfr_probabilitytheory_finitesupport_of_comp",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Measure.lean",
+      "theorem": "ProbabilityTheory.finiteSupport_of_comp",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_probabilitytheory_integrable_of_finitesupport",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Measure.lean",
+      "theorem": "ProbabilityTheory.integrable_of_finiteSupport",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_measureentropy_comap",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Measure.lean",
+      "theorem": "ProbabilityTheory.measureEntropy_comap",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_measureentropy_dirac",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Measure.lean",
+      "theorem": "ProbabilityTheory.measureEntropy_dirac",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_measureentropy_eq_card_iff_measure_eq_aux",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Measure.lean",
+      "theorem": "ProbabilityTheory.measureEntropy_eq_card_iff_measure_eq_aux",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_measureentropy_le_log_card",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Measure.lean",
+      "theorem": "ProbabilityTheory.measureEntropy_le_log_card",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_measureentropy_map_of_injective",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Measure.lean",
+      "theorem": "ProbabilityTheory.measureEntropy_map_of_injective",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_measureentropy_prod",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Measure.lean",
+      "theorem": "ProbabilityTheory.measureEntropy_prod",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_measuremutualinfo_nonneg_aux",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Measure.lean",
+      "theorem": "ProbabilityTheory.measureMutualInfo_nonneg_aux",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_probabilitytheory_measuremutualinfo_of_not_isfinitemeasure",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Measure.lean",
+      "theorem": "ProbabilityTheory.measureMutualInfo_of_not_isFiniteMeasure",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_probabilitytheory_measuremutualinfo_prod",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Measure.lean",
+      "theorem": "ProbabilityTheory.measureMutualInfo_prod",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_measuremutualinfo_swap",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Measure.lean",
+      "theorem": "ProbabilityTheory.measureMutualInfo_swap",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_measuremutualinfo_univ_smul",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Measure.lean",
+      "theorem": "ProbabilityTheory.measureMutualInfo_univ_smul",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_probabilitytheory_measure_compl_support",
+      "before_revision": "a177b2e4abe4b31c8024b9afebe646bf6bb8f91b",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/Measure.lean",
+      "theorem": "ProbabilityTheory.measure_compl_support",
+      "change_revision": "68730da4cb35f07c6928e3b5b32e177b7ab97c36"
+    },
+    {
+      "id": "pfr_condruzsadist_eq_integral",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "condRuzsaDist'_eq_integral",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_condruzsadist_eq_sum",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "condRuzsaDist'_eq_sum",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_condruzsadist_of_copy",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "condRuzsaDist'_of_copy",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_condruzsadist_of_indep",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "condRuzsaDist'_of_indep",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_condruzsadist_eq_sum_2",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "condRuzsaDist_eq_sum",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_condruzsadist_nonneg",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "condRuzsaDist_nonneg",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_condruzsadist_of_const",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "condRuzsaDist_of_const",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_condruzsadist_of_copy_2",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "condRuzsaDist_of_copy",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_condruzsadist_of_indep_2",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "condRuzsaDist_of_indep",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_condruzsadist_of_inj_map",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "condRuzsaDist_of_inj_map",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_continuous_measureentropy_probabilitymeasure",
+      "before_revision": "901bc69df2318ab450221886a92fc8f41b31e037",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "continuous_measureEntropy_probabilityMeasure",
+      "change_revision": "a7fec39013bafd7cb51e75907909c41ac3c88298"
+    },
+    {
+      "id": "pfr_continuous_rdist_restrict_probabilitymeasure",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "continuous_rdist_restrict_probabilityMeasure",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_diff_ent_le_rdist",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "diff_ent_le_rdist",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_ent_of_proj_le",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "ent_of_proj_le",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_kaimanovich_vershik",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "kaimanovich_vershik",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_rdist_add_const",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "rdist_add_const",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_rdist_of_inj",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "rdist_of_inj",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_rdist_symm",
+      "before_revision": "3f1033097ea26b0c8312513e829e5afd5ee7f9ec",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "rdist_symm",
+      "change_revision": "ad25c2a1d360a29a68eaa5daf31945795fd730dc"
+    },
+    {
+      "id": "pfr_rdist_zero_eq_half_ent",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "rdist_zero_eq_half_ent",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_tendsto_rdist_probabilitymeasure",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaDist.lean",
+      "theorem": "tendsto_rdist_probabilityMeasure",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_probabilitytheory_setruzsadist_add_const",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaSetDist.lean",
+      "theorem": "ProbabilityTheory.setRuzsaDist_add_const",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_probabilitytheory_setruzsadist_le",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Entropy/RuzsaSetDist.lean",
+      "theorem": "ProbabilityTheory.setRuzsaDist_le",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_probabilitytheory_sum_meas_smul_cond_fiber",
+      "before_revision": "901bc69df2318ab450221886a92fc8f41b31e037",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/FiniteRange/ConditionalProbability.lean",
+      "theorem": "ProbabilityTheory.sum_meas_smul_cond_fiber",
+      "change_revision": "a7fec39013bafd7cb51e75907909c41ac3c88298"
+    },
+    {
+      "id": "pfr_probabilitytheory_identdistrib_of_finiterange",
+      "before_revision": "85d5879ae144170098815201491639f6e7d3c352",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/FiniteRange/IdentDistrib.lean",
+      "theorem": "ProbabilityTheory.identDistrib_of_finiteRange",
+      "change_revision": "a177b2e4abe4b31c8024b9afebe646bf6bb8f91b"
+    },
+    {
+      "id": "pfr_probabilitytheory_iindepfun_reindex_four_dbca",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/FourVariables.lean",
+      "theorem": "ProbabilityTheory.iIndepFun.reindex_four_dbca",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_probabilitytheory_iindepfun_reindex_three_cba",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/ThreeVariables.lean",
+      "theorem": "ProbabilityTheory.iIndepFun.reindex_three_cba",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_probabilitytheory_exists_isuniform",
+      "before_revision": "901bc69df2318ab450221886a92fc8f41b31e037",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Uniform.lean",
+      "theorem": "ProbabilityTheory.exists_isUniform",
+      "change_revision": "a7fec39013bafd7cb51e75907909c41ac3c88298"
+    },
+    {
+      "id": "pfr_probabilitytheory_exists_isuniform_measurespace",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Uniform.lean",
+      "theorem": "ProbabilityTheory.exists_isUniform_measureSpace",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_isuniform_iff_map_eq_uniformon",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Uniform.lean",
+      "theorem": "ProbabilityTheory.isUniform_iff_map_eq_uniformOn",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_isuniform_uniformon",
+      "before_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ForMathlib/Uniform.lean",
+      "theorem": "ProbabilityTheory.isUniform_uniformOn",
+      "change_revision": "c92c1284bfb1fabff9e77826c26a7cca7b34bdcf"
+    },
+    {
+      "id": "pfr_hahn_banach",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/HomPFR.lean",
+      "theorem": "hahn_banach",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_homomorphism_pfr",
+      "before_revision": "a177b2e4abe4b31c8024b9afebe646bf6bb8f91b",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/HomPFR.lean",
+      "theorem": "homomorphism_pfr",
+      "change_revision": "68730da4cb35f07c6928e3b5b32e177b7ab97c36"
+    },
+    {
+      "id": "pfr_exists_isuniform_of_rdist_self_eq_zero",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/HundredPercent.lean",
+      "theorem": "exists_isUniform_of_rdist_self_eq_zero",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_pfr_conjecture_improv_aux",
+      "before_revision": "dc2291513cc1020a91fc5024d8f78a17b8c8b746",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ImprovedPFR.lean",
+      "theorem": "PFR_conjecture_improv_aux",
+      "change_revision": "47299fac2eb0a561f093204237dc6a5a82babf81"
+    },
+    {
+      "id": "pfr_averaged_construct_good",
+      "before_revision": "23f0ac71c3f89eb977deae845d474add90a027f7",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ImprovedPFR.lean",
+      "theorem": "averaged_construct_good",
+      "change_revision": "251c9e214e6a46a1aacffe6774ae1481a5d4d41a"
+    },
+    {
+      "id": "pfr_construct_good_improved",
+      "before_revision": "a9c61e6abb71dabc261e246d1673697c6fd350b9",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ImprovedPFR.lean",
+      "theorem": "construct_good_improved",
+      "change_revision": "06a1af23d2a7efd895a930f8e9dc5c1c589dabe9"
+    },
+    {
+      "id": "pfr_construct_good_prelim_2",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ImprovedPFR.lean",
+      "theorem": "construct_good_prelim",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_dist_diff_bound_1",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ImprovedPFR.lean",
+      "theorem": "dist_diff_bound_1",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_dist_diff_bound_2",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ImprovedPFR.lean",
+      "theorem": "dist_diff_bound_2",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_gen_ineq_01",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ImprovedPFR.lean",
+      "theorem": "gen_ineq_01",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_gen_ineq_aux1",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ImprovedPFR.lean",
+      "theorem": "gen_ineq_aux1",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_gen_ineq_aux2",
+      "before_revision": "3f1033097ea26b0c8312513e829e5afd5ee7f9ec",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ImprovedPFR.lean",
+      "theorem": "gen_ineq_aux2",
+      "change_revision": "ad25c2a1d360a29a68eaa5daf31945795fd730dc"
+    },
+    {
+      "id": "pfr_tau_minimizer_exists_rdist_eq_zero",
+      "before_revision": "dc2291513cc1020a91fc5024d8f78a17b8c8b746",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ImprovedPFR.lean",
+      "theorem": "tau_minimizer_exists_rdist_eq_zero",
+      "change_revision": "47299fac2eb0a561f093204237dc6a5a82babf81"
+    },
+    {
+      "id": "pfr_tau_strictly_decreases",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/ImprovedPFR.lean",
+      "theorem": "tau_strictly_decreases",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_kldiv_add_le_kldiv_of_indep",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Kullback.lean",
+      "theorem": "KLDiv_add_le_KLDiv_of_indep",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_kldiv_eq_sum_negmullog",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Kullback.lean",
+      "theorem": "KLDiv_eq_sum_negMulLog",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_kldiv_eq_zero_iff_identdistrib",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Kullback.lean",
+      "theorem": "KLDiv_eq_zero_iff_identDistrib",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_condkldiv_eq",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Kullback.lean",
+      "theorem": "condKLDiv_eq",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_tendsto_kldiv_id_left",
+      "before_revision": "901bc69df2318ab450221886a92fc8f41b31e037",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Kullback.lean",
+      "theorem": "tendsto_KLDiv_id_left",
+      "change_revision": "a7fec39013bafd7cb51e75907909c41ac3c88298"
+    },
+    {
+      "id": "pfr_tendsto_kldiv_id_right",
+      "before_revision": "901bc69df2318ab450221886a92fc8f41b31e037",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Kullback.lean",
+      "theorem": "tendsto_KLDiv_id_right",
+      "change_revision": "a7fec39013bafd7cb51e75907909c41ac3c88298"
+    },
+    {
+      "id": "pfr_pfr_conjecture",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Main.lean",
+      "theorem": "PFR_conjecture",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_pfr_conjecture_aux",
+      "before_revision": "e3c61a4e49218fca303f79fe48eaef2f513962d0",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Main.lean",
+      "theorem": "PFR_conjecture_aux",
+      "change_revision": "1ac3910baea44632b786077c3928238079fe95b2"
+    },
+    {
+      "id": "pfr_probabilitytheory_isuniform",
+      "before_revision": "23f0ac71c3f89eb977deae845d474add90a027f7",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Main.lean",
+      "theorem": "ProbabilityTheory.IsUniform",
+      "change_revision": "251c9e214e6a46a1aacffe6774ae1481a5d4d41a"
+    },
+    {
+      "id": "pfr_rdist_le_of_isuniform_of_doubling",
+      "before_revision": "e3c61a4e49218fca303f79fe48eaef2f513962d0",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Main.lean",
+      "theorem": "rdist_le_of_isUniform_of_doubling",
+      "change_revision": "1ac3910baea44632b786077c3928238079fe95b2"
+    },
+    {
+      "id": "pfr_real_sum_mul_log_div_eq_iff_aux",
+      "before_revision": "c92c1284bfb1fabff9e77826c26a7cca7b34bdcf",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Analysis/SpecialFunctions/NegMulLog.lean",
+      "theorem": "Real.sum_mul_log_div_eq_iff_aux",
+      "change_revision": "feb4a47ae7ad4bdc4fb9cb10142f31f84652e484"
+    },
+    {
+      "id": "pfr_real_sum_mul_log_div_leq",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Analysis/SpecialFunctions/NegMulLog.lean",
+      "theorem": "Real.sum_mul_log_div_leq",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_set_ncard_singleton_inter",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Data/Set/Card.lean",
+      "theorem": "Set.ncard_singleton_inter",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_submodule_exists_equiv_fst_sndmodfst",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/LinearAlgebra/Basis/VectorSpace.lean",
+      "theorem": "Submodule.exists_equiv_fst_sndModFst",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_continuous_finitemeasure_apply_of_isclopen",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/MeasureTheory/Measure/ProbabilityMeasure.lean",
+      "theorem": "continuous_finiteMeasure_apply_of_isClopen",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_continuous_pmf_apply",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/MeasureTheory/Measure/ProbabilityMeasure.lean",
+      "theorem": "continuous_pmf_apply",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_tendsto_lintegral_of_forall_of_finite",
+      "before_revision": "901bc69df2318ab450221886a92fc8f41b31e037",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/MeasureTheory/Measure/ProbabilityMeasure.lean",
+      "theorem": "tendsto_lintegral_of_forall_of_finite",
+      "change_revision": "a7fec39013bafd7cb51e75907909c41ac3c88298"
+    },
+    {
+      "id": "pfr_measuretheory_measure_map_prod_comap_swap",
+      "before_revision": "f80f70ec4b1c8566660ed770ddeb96e84c8645e1",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/MeasureTheory/Measure/Prod.lean",
+      "theorem": "MeasureTheory.Measure.map_prod_comap_swap",
+      "change_revision": "450f4d6e5e25d8742de5be6ec51c3b498ce8ad7f"
+    },
+    {
+      "id": "pfr_measuretheory_measure",
+      "before_revision": "26798ef233121d507cdf3d2c69b2c2133ded5306",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/MeasureTheory/Measure/Real.lean",
+      "theorem": "MeasureTheory.Measure",
+      "change_revision": "bc3808257cb04bc2bf6c594ff50b1d459970fe17"
+    },
+    {
+      "id": "pfr_probabilitytheory_aemeasurable",
+      "before_revision": "3ccb3cf33a6c156298019a39334b957bf837b618",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Probability/IdentDistrib.lean",
+      "theorem": "ProbabilityTheory.AEMeasurable",
+      "change_revision": "3a3e20cb71942aefe62ada0dc0b6416645b1b0e8"
+    },
+    {
+      "id": "pfr_probabilitytheory_identdistrib_comp_fst",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Probability/IdentDistrib.lean",
+      "theorem": "ProbabilityTheory.identDistrib_comp_fst",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_identdistrib_of_sum",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Probability/IdentDistrib.lean",
+      "theorem": "ProbabilityTheory.identDistrib_of_sum",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_probabilitytheory_independent_copies",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Probability/IdentDistrib.lean",
+      "theorem": "ProbabilityTheory.independent_copies",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_probabilitytheory_iindepfun_iff",
+      "before_revision": "7d6404b79b11b1a89dd1b6f997a10b14c208c4ed",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Probability/Independence/Basic.lean",
+      "theorem": "ProbabilityTheory.iIndepFun_iff",
+      "change_revision": "9ddf979a1486aa32b306a590b20ede056d82aff3"
+    },
+    {
+      "id": "pfr_probabilitytheory_indepfun_fst_snd",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Probability/Independence/Basic.lean",
+      "theorem": "ProbabilityTheory.indepFun_fst_snd",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_iindepfun",
+      "before_revision": "a177b2e4abe4b31c8024b9afebe646bf6bb8f91b",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Probability/Independence/Kernel/IndepFun.lean",
+      "theorem": "ProbabilityTheory.Kernel.iIndepFun",
+      "change_revision": "68730da4cb35f07c6928e3b5b32e177b7ab97c36"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_aefinitekernelsupport_of_cond",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Probability/Kernel/Disintegration.lean",
+      "theorem": "ProbabilityTheory.Kernel.aefiniteKernelSupport_of_cond",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_condkernel_compprod_ae_eq",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Probability/Kernel/Disintegration.lean",
+      "theorem": "ProbabilityTheory.Kernel.condKernel_compProd_ae_eq",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_condkernel_compprod_apply",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Probability/Kernel/Disintegration.lean",
+      "theorem": "ProbabilityTheory.Kernel.condKernel_compProd_apply",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_condkernel_map_prodmk_left",
+      "before_revision": "a177b2e4abe4b31c8024b9afebe646bf6bb8f91b",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Probability/Kernel/Disintegration.lean",
+      "theorem": "ProbabilityTheory.Kernel.condKernel_map_prodMk_left",
+      "change_revision": "68730da4cb35f07c6928e3b5b32e177b7ab97c36"
+    },
+    {
+      "id": "pfr_probabilitytheory_kernel_disintegration",
+      "before_revision": "a177b2e4abe4b31c8024b9afebe646bf6bb8f91b",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Probability/Kernel/Disintegration.lean",
+      "theorem": "ProbabilityTheory.Kernel.disintegration",
+      "change_revision": "68730da4cb35f07c6928e3b5b32e177b7ab97c36"
+    },
+    {
+      "id": "pfr_probabilitytheory_conddistrib_apply",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Probability/Kernel/Disintegration.lean",
+      "theorem": "ProbabilityTheory.condDistrib_apply",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_probabilitytheory_map_compprod_conddistrib",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Probability/Kernel/Disintegration.lean",
+      "theorem": "ProbabilityTheory.map_compProd_condDistrib",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_probabilitytheory_swap_conddistrib_ae_eq",
+      "before_revision": "450f4d6e5e25d8742de5be6ec51c3b498ce8ad7f",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Probability/Kernel/Disintegration.lean",
+      "theorem": "ProbabilityTheory.swap_condDistrib_ae_eq",
+      "change_revision": "7a3d5d49abc8b334bb7813bf253ab01299ef0b85"
+    },
+    {
+      "id": "pfr_probabilitytheory_uniformon_apply_singleton_of_mem",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Mathlib/Probability/UniformOn.lean",
+      "theorem": "ProbabilityTheory.uniformOn_apply_singleton_of_mem",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_condmultidist_eq",
+      "before_revision": "3ccb3cf33a6c156298019a39334b957bf837b618",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "condMultiDist_eq",
+      "change_revision": "3a3e20cb71942aefe62ada0dc0b6416645b1b0e8"
+    },
+    {
+      "id": "pfr_condmultidist_nonneg",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "condMultiDist_nonneg",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_condmultidist_of_hom",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "condMultiDist_of_hom",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_condmultidist_of_inj",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "condMultiDist_of_inj",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_cond_entropy_indep",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "cond_entropy_indep",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_cond_multidist_chainrule",
+      "before_revision": "3ccb3cf33a6c156298019a39334b957bf837b618",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "cond_multiDist_chainRule",
+      "change_revision": "3a3e20cb71942aefe62ada0dc0b6416645b1b0e8"
+    },
+    {
+      "id": "pfr_cor_multidist_chainrule",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "cor_multiDist_chainRule",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_ent_of_sub_smul",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "ent_of_sub_smul",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_ent_of_sum_le_ent_of_sum",
+      "before_revision": "68730da4cb35f07c6928e3b5b32e177b7ab97c36",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "ent_of_sum_le_ent_of_sum",
+      "change_revision": "7f35a98f761531380ad6da6e367eab5245ed0135"
+    },
+    {
+      "id": "pfr_ent_sub_zsmul_le",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "ent_sub_zsmul_le",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_ent_sub_zsmul_sub_ent_le",
+      "before_revision": "761a18c8d30f1c0ab88e6b04983d6021c8b24257",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "ent_sub_zsmul_sub_ent_le",
+      "change_revision": "346ef5b0609538f3fb49dc36c8adc52a0b2db4bb"
+    },
+    {
+      "id": "pfr_iter_multidist_chainrule",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "iter_multiDist_chainRule",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_kvm_ineq_i",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "kvm_ineq_I",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_kvm_ineq_ii",
+      "before_revision": "901bc69df2318ab450221886a92fc8f41b31e037",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "kvm_ineq_II",
+      "change_revision": "a7fec39013bafd7cb51e75907909c41ac3c88298"
+    },
+    {
+      "id": "pfr_kvm_ineq_iii",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "kvm_ineq_III",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_kvm_ineq_iii_aux",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "kvm_ineq_III_aux",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_multidist_chainrule",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "multiDist_chainRule",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_multidist_indep",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "multiDist_indep",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_multidist_of_hom",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "multiDist_of_hom",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_multidist_of_perm",
+      "before_revision": "3ccb3cf33a6c156298019a39334b957bf837b618",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "multiDist_of_perm",
+      "change_revision": "3a3e20cb71942aefe62ada0dc0b6416645b1b0e8"
+    },
+    {
+      "id": "pfr_multidist_eq_zero",
+      "before_revision": "72b76e7f05d21924dfc1c017bd9c33d9455f41fb",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "multidist_eq_zero",
+      "change_revision": "b54cc32a8f1e8f17fb6af36c784f9514eb5ce0ea"
+    },
+    {
+      "id": "pfr_multidist_ruzsa_iii",
+      "before_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "multidist_ruzsa_III",
+      "change_revision": "38e94172b72c8ee8ad64b6365dfc22e559c62ebe"
+    },
+    {
+      "id": "pfr_multidist_ruzsa_iv",
+      "before_revision": "68730da4cb35f07c6928e3b5b32e177b7ab97c36",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "multidist_ruzsa_IV",
+      "change_revision": "7f35a98f761531380ad6da6e367eab5245ed0135"
+    },
+    {
+      "id": "pfr_offdiag_sum_add",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "offDiag_sum_add",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_offdiag_sum_const",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "offDiag_sum_const",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_offdiag_sum_div",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "offDiag_sum_div",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_offdiag_sum_le",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "offDiag_sum_le",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_rdist_of_neg_le",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MoreRuzsaDist.lean",
+      "theorem": "rdist_of_neg_le",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_multitau_continuous",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MultiTauFunctional.lean",
+      "theorem": "multiTau_continuous",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_multitau_min_exists",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MultiTauFunctional.lean",
+      "theorem": "multiTau_min_exists",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_multitau_of_ident",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MultiTauFunctional.lean",
+      "theorem": "multiTau_of_ident",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_sub_condmultidistance_le",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/MultiTauFunctional.lean",
+      "theorem": "sub_condMultiDistance_le",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_i_two_aux",
+      "before_revision": "23f0ac71c3f89eb977deae845d474add90a027f7",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "I_two_aux",
+      "change_revision": "251c9e214e6a46a1aacffe6774ae1481a5d4d41a"
+    },
+    {
+      "id": "pfr_i_two_le",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "I_two_le",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_bddabove_card_inter_add",
+      "before_revision": "a177b2e4abe4b31c8024b9afebe646bf6bb8f91b",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "bddAbove_card_inter_add",
+      "change_revision": "68730da4cb35f07c6928e3b5b32e177b7ab97c36"
+    },
+    {
+      "id": "pfr_better_pfr_conjecture_aux",
+      "before_revision": "85d5879ae144170098815201491639f6e7d3c352",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "better_PFR_conjecture_aux",
+      "change_revision": "a177b2e4abe4b31c8024b9afebe646bf6bb8f91b"
+    },
+    {
+      "id": "pfr_better_pfr_conjecture_aux0",
+      "before_revision": "802b521bf6f35504b4097e9ae1a7b513f50175df",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "better_PFR_conjecture_aux0",
+      "change_revision": "6f8ea7ea9054c82667568730bb4d27c4d66642e3"
+    },
+    {
+      "id": "pfr_condrhominus_le",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "condRhoMinus_le",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_condrhoplus_le",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "condRhoPlus_le",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_condrho_le_condruzsadist_of_phiminimizes",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "condRho_le_condRuzsaDist_of_phiMinimizes",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_condrho_of_translate",
+      "before_revision": "23f0ac71c3f89eb977deae845d474add90a027f7",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "condRho_of_translate",
+      "change_revision": "251c9e214e6a46a1aacffe6774ae1481a5d4d41a"
+    },
+    {
+      "id": "pfr_condrho_prod_eq_sum",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "condRho_prod_eq_sum",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_dist_le_of_sum_zero",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "dist_le_of_sum_zero",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_dist_le_of_sum_zero_cond",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "dist_le_of_sum_zero_cond",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_exists_card_inter_add_eq_ssup",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "exists_card_inter_add_eq_sSup",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_exists_mem_card_inter_add",
+      "before_revision": "a177b2e4abe4b31c8024b9afebe646bf6bb8f91b",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "exists_mem_card_inter_add",
+      "change_revision": "68730da4cb35f07c6928e3b5b32e177b7ab97c36"
+    },
+    {
+      "id": "pfr_le_rdist_of_phiminimizes",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "le_rdist_of_phiMinimizes",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_map_prod_uniformon_ne_zero",
+      "before_revision": "e7278b10821f3b0fef1ed500f6666ef414931dbb",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "map_prod_uniformOn_ne_zero",
+      "change_revision": "d91e467880100a96e1c728fcd1894e96f67a153e"
+    },
+    {
+      "id": "pfr_new_gen_ineq_aux2",
+      "before_revision": "3f1033097ea26b0c8312513e829e5afd5ee7f9ec",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "new_gen_ineq_aux2",
+      "change_revision": "ad25c2a1d360a29a68eaa5daf31945795fd730dc"
+    },
+    {
+      "id": "pfr_nonempty_rhominusset",
+      "before_revision": "e7278b10821f3b0fef1ed500f6666ef414931dbb",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "nonempty_rhoMinusSet",
+      "change_revision": "d91e467880100a96e1c728fcd1894e96f67a153e"
+    },
+    {
+      "id": "pfr_phiminimizer_exists_rdist_eq_zero",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "phiMinimizer_exists_rdist_eq_zero",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_phi_min_exists",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "phi_min_exists",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_rhominus_continuous",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "rhoMinus_continuous",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_rhominus_of_sum",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "rhoMinus_of_sum",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_rhominus_zero_measure",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "rhoMinus_zero_measure",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_rhoplus_of_subgroup",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "rhoPlus_of_subgroup",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_rhoplus_of_sum",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "rhoPlus_of_sum",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_rho_pfr_conjecture",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "rho_PFR_conjecture",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_rho_of_subgroup",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "rho_of_subgroup",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_rho_of_sum_le",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "rho_of_sum_le",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_rho_of_translate",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "rho_of_translate",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_rho_of_uniform",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "rho_of_uniform",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_tendsto_rho_probabilitymeasure",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/RhoFunctional.lean",
+      "theorem": "tendsto_rho_probabilityMeasure",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_rdist_of_sums_ge_2",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/SecondEstimate.lean",
+      "theorem": "rdist_of_sums_ge",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_second_estimate",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/SecondEstimate.lean",
+      "theorem": "second_estimate",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_mathlib_tactic_rpowring_mul_pp_pf_overlap",
+      "before_revision": "01c9b666945eaf73b3f7d8b20ffe003f8640e630",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/Tactic/RPowSimp.lean",
+      "theorem": "Mathlib.Tactic.RPowRing.mul_pp_pf_overlap",
+      "change_revision": "b56e834b18079e9ff756a0f5f2b7f392431c804e"
+    },
+    {
+      "id": "pfr_continuous_tau_restrict_probabilitymeasure",
+      "before_revision": "a9c61e6abb71dabc261e246d1673697c6fd350b9",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TauFunctional.lean",
+      "theorem": "continuous_tau_restrict_probabilityMeasure",
+      "change_revision": "06a1af23d2a7efd895a930f8e9dc5c1c589dabe9"
+    },
+    {
+      "id": "pfr_q_dist",
+      "before_revision": "a9c61e6abb71dabc261e246d1673697c6fd350b9",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TorsionEndgame.lean",
+      "theorem": "Q_dist",
+      "change_revision": "06a1af23d2a7efd895a930f8e9dc5c1c589dabe9"
+    },
+    {
+      "id": "pfr_dist_of_u_add_le",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TorsionEndgame.lean",
+      "theorem": "dist_of_U_add_le",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_dist_of_x_u_h_le",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TorsionEndgame.lean",
+      "theorem": "dist_of_X_U_H_le",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_entropy_of_w_le",
+      "before_revision": "c97400a061372bef06098cfd462ac2ba7cc3992c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TorsionEndgame.lean",
+      "theorem": "entropy_of_W_le",
+      "change_revision": "111b2de36b0cd8ce8bd42eff8d4e1fd71e0d5376"
+    },
+    {
+      "id": "pfr_entropy_of_z_two_le",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TorsionEndgame.lean",
+      "theorem": "entropy_of_Z_two_le",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_indep_yj",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TorsionEndgame.lean",
+      "theorem": "indep_yj",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_k_eq_zero",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TorsionEndgame.lean",
+      "theorem": "k_eq_zero",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_mutual_information_le_t_12",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TorsionEndgame.lean",
+      "theorem": "mutual_information_le_t_12",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_mutual_information_le_t_13",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TorsionEndgame.lean",
+      "theorem": "mutual_information_le_t_13",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_mutual_information_le_t_23",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TorsionEndgame.lean",
+      "theorem": "mutual_information_le_t_23",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_mutual_of_w_z_two_le",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TorsionEndgame.lean",
+      "theorem": "mutual_of_W_Z_two_le",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_rdist_le_of_isuniform_of_card_add_le",
+      "before_revision": "47299fac2eb0a561f093204237dc6a5a82babf81",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TorsionEndgame.lean",
+      "theorem": "rdist_le_of_isUniform_of_card_add_le",
+      "change_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9"
+    },
+    {
+      "id": "pfr_sum_of_conditional_distance_le",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TorsionEndgame.lean",
+      "theorem": "sum_of_conditional_distance_le",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_torsion_pfr",
+      "before_revision": "72b76e7f05d21924dfc1c017bd9c33d9455f41fb",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TorsionEndgame.lean",
+      "theorem": "torsion_PFR",
+      "change_revision": "b54cc32a8f1e8f17fb6af36c784f9514eb5ce0ea"
+    },
+    {
+      "id": "pfr_torsion_pfr_conjecture_aux",
+      "before_revision": "47299fac2eb0a561f093204237dc6a5a82babf81",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TorsionEndgame.lean",
+      "theorem": "torsion_PFR_conjecture_aux",
+      "change_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9"
+    },
+    {
+      "id": "pfr_torsion_exists_subgroup_subset_card_le",
+      "before_revision": "47299fac2eb0a561f093204237dc6a5a82babf81",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/TorsionEndgame.lean",
+      "theorem": "torsion_exists_subgroup_subset_card_le",
+      "change_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9"
+    },
+    {
+      "id": "pfr_isshift",
+      "before_revision": "de5fad033316d25c290d72a8d6f13ee13daf5947",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/WeakPFR.lean",
+      "theorem": "IsShift",
+      "change_revision": "9a587ebf08971d84f3be1f919cdcf8fc9162d045"
+    },
+    {
+      "id": "pfr_pfr_projection",
+      "before_revision": "a177b2e4abe4b31c8024b9afebe646bf6bb8f91b",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/WeakPFR.lean",
+      "theorem": "PFR_projection",
+      "change_revision": "68730da4cb35f07c6928e3b5b32e177b7ab97c36"
+    },
+    {
+      "id": "pfr_app_ent_pfr",
+      "before_revision": "dc2291513cc1020a91fc5024d8f78a17b8c8b746",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/WeakPFR.lean",
+      "theorem": "app_ent_PFR",
+      "change_revision": "47299fac2eb0a561f093204237dc6a5a82babf81"
+    },
+    {
+      "id": "pfr_conclusion_transfers",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/WeakPFR.lean",
+      "theorem": "conclusion_transfers",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_dimension_of_shift",
+      "before_revision": "d787a70f4634d1415a31b0d942751540db039a2c",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/WeakPFR.lean",
+      "theorem": "dimension_of_shift",
+      "change_revision": "5dc6bc6aece0b0c545aac9cf9ff7a1c5d87ff948"
+    },
+    {
+      "id": "pfr_single_fibres",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/WeakPFR.lean",
+      "theorem": "single_fibres",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_sum_prob_preimage",
+      "before_revision": "a177b2e4abe4b31c8024b9afebe646bf6bb8f91b",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/WeakPFR.lean",
+      "theorem": "sum_prob_preimage",
+      "change_revision": "68730da4cb35f07c6928e3b5b32e177b7ab97c36"
+    },
+    {
+      "id": "pfr_third_iso",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/WeakPFR.lean",
+      "theorem": "third_iso",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_torsion_free_doubling",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/WeakPFR.lean",
+      "theorem": "torsion_free_doubling",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_weak_pfr",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/WeakPFR.lean",
+      "theorem": "weak_PFR",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    },
+    {
+      "id": "pfr_weak_pfr_asymm",
+      "before_revision": "a177b2e4abe4b31c8024b9afebe646bf6bb8f91b",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/WeakPFR.lean",
+      "theorem": "weak_PFR_asymm",
+      "change_revision": "68730da4cb35f07c6928e3b5b32e177b7ab97c36"
+    },
+    {
+      "id": "pfr_weak_pfr_asymm_prelim",
+      "before_revision": "cd12d6cb432d56f13c066bbc7d1e07d05a0fd68e",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/WeakPFR.lean",
+      "theorem": "weak_PFR_asymm_prelim",
+      "change_revision": "d739a872abdffc0e008f64b0cd46d334c8e67fa0"
+    },
+    {
+      "id": "pfr_wlog_notincoset",
+      "before_revision": "bc312a6a9db4a3dc1bea712ab5537c38361fa6db",
+      "fixed_revision": "fbc9f34d3b540286adcfe560a8430a31ddc4fcd9",
+      "file": "PFR/WeakPFR.lean",
+      "theorem": "wlog_notInCoset",
+      "change_revision": "594de2bed3e02ffb2ba11c603bfafd91dec7f94b"
+    }
+  ]
+}

@@ -17,6 +17,9 @@ CONTRACT_VERSION = "tracer-real-v2-enrollment-v1"
 ENROLLMENT_PREREGISTRATION_VERSION = "tracer-causal-v2-enrollment-preregistration-v1"
 FINAL_PREREGISTRATION_VERSION = "tracer-causal-preregistration-v1"
 BENCHMARK_VERSION = "tracer-real-v2"
+CANDIDATE_INVENTORY_VERSION = "tracer-real-v2-candidate-inventory-v1"
+CANDIDATE_SCAN_VERSION = "tracer-real-candidate-inventory-v1"
+CANDIDATE_SCREEN_VERSION = "tracer-real-candidate-screen-v1"
 PROJECT_SPLITS = ("development", "validation", "test")
 CAUSAL_ARMS = (
     "content_free_retry",
@@ -203,10 +206,212 @@ def validate_enrollment_preregistration(
         raise ValueError("v2 不允许按中间效果提前停止")
 
 
-def validate_v2_benchmark(benchmark: dict[str, Any], contract: dict[str, Any]) -> dict[str, Any]:
+def validate_candidate_inventory(inventory: dict[str, Any], contract: dict[str, Any]) -> None:
+    """核对在历史扫描前冻结的候选项目、端点和确定性窗口。"""
+
+    required = {
+        "version", "status", "registered_at_utc", "enrollment_contract",
+        "history_policy", "projects", "provider_calls_observed", "replacement_policy",
+    }
+    if set(inventory) != required or inventory.get("version") != CANDIDATE_INVENTORY_VERSION:
+        raise ValueError("v2 候选项目清单版本或顶层字段不匹配")
+    if inventory.get("status") != "frozen-before-candidate-history-scan":
+        raise ValueError("v2 候选项目必须在历史扫描前冻结")
+    if inventory.get("enrollment_contract") != "benchmarks/real_repairs/tracer_real_v2.enrollment.json":
+        raise ValueError("v2 候选项目清单指向错误的纳入合同")
+    if inventory.get("provider_calls_observed") != 0:
+        raise ValueError("v2 候选登记前不得存在 provider 调用")
+    policy = inventory.get("history_policy")
+    expected_policy_fields = {
+        "traversal", "maximum_commits", "endpoint_policy", "candidate_rule",
+        "screen_policy", "performance_blind",
+    }
+    if not isinstance(policy, dict) or set(policy) != expected_policy_fields:
+        raise ValueError("v2 候选历史窗口策略字段不完整")
+    if policy.get("traversal") != "first_parent":
+        raise ValueError("v2 候选扫描必须使用固定 first-parent 窗口")
+    if type(policy.get("maximum_commits")) is not int or policy["maximum_commits"] <= 0:
+        raise ValueError("v2 候选扫描窗口必须为正整数")
+    if policy.get("performance_blind") is not True:
+        raise ValueError("v2 候选项目登记必须与 provider 表现隔离")
+    projects = inventory.get("projects")
+    if not isinstance(projects, list) or len(projects) < contract["selection"]["minimum_test_projects"]:
+        raise ValueError("v2 候选项目数低于冻结测试项目门槛")
+    required_project_fields = {
+        "project_id", "source_repository", "source_license", "endpoint_revision", "lean_toolchain",
+    }
+    ids: set[str] = set()
+    repositories: set[str] = set()
+    excluded_ids = set(contract["selection"]["excluded_test_project_ids"])
+    excluded_repositories = {
+        canonical_repository(value) for value in contract["selection"]["excluded_test_repositories"]
+    }
+    for project in projects:
+        if not isinstance(project, dict) or set(project) != required_project_fields:
+            raise ValueError("v2 候选项目字段不完整")
+        project_id = project.get("project_id")
+        repository = project.get("source_repository")
+        canonical = canonical_repository(repository)
+        if not isinstance(project_id, str) or not re.fullmatch(r"[a-z0-9_]+", project_id):
+            raise ValueError("v2 候选项目 ID 非法")
+        if project_id in ids or project_id in excluded_ids:
+            raise ValueError("v2 候选项目 ID 重复或复用 v1 项目")
+        if not _https_repository(repository) or canonical in repositories or canonical in excluded_repositories:
+            raise ValueError("v2 候选项目来源非法、重复或复用 v1 上游仓库")
+        if not isinstance(project.get("source_license"), str) or not project["source_license"].strip():
+            raise ValueError("v2 候选项目许可证不能为空")
+        if not re.fullmatch(r"[0-9a-f]{40}", str(project.get("endpoint_revision"))):
+            raise ValueError("v2 候选项目端点版本必须是完整 Git revision")
+        if not isinstance(project.get("lean_toolchain"), str) or not project["lean_toolchain"].strip():
+            raise ValueError("v2 候选项目 Lean 工具链不能为空")
+        ids.add(project_id)
+        repositories.add(canonical)
+
+
+def validate_candidate_scans(
+    inventory: dict[str, Any], scan_dir: Path,
+) -> dict[str, Any]:
+    """核对所有冻结项目的确定性扫描输出与登记端点完全一致。"""
+
+    expected = {project["project_id"]: project for project in inventory["projects"]}
+    files = sorted(scan_dir.glob("*.inventory.json")) if scan_dir.is_dir() else []
+    if {path.stem.removesuffix(".inventory") for path in files} != set(expected):
+        raise ValueError("v2 候选扫描文件没有唯一覆盖全部冻结项目")
+    total = 0
+    candidate_ids: set[str] = set()
+    per_project: dict[str, int] = {}
+    for path in files:
+        scan = read_json(path)
+        project_id = scan.get("project_id")
+        project = expected.get(project_id)
+        if project is None or scan.get("version") != CANDIDATE_SCAN_VERSION:
+            raise ValueError("v2 候选扫描版本或项目不匹配")
+        if scan.get("status") != "deterministic-history-scan":
+            raise ValueError("v2 候选扫描状态无效")
+        if canonical_repository(scan.get("source_repository")) != canonical_repository(project["source_repository"]):
+            raise ValueError("v2 候选扫描上游来源与冻结清单不一致")
+        if scan.get("source_license") != project["source_license"]:
+            raise ValueError("v2 候选扫描许可证与冻结清单不一致")
+        if scan.get("endpoint_revision") != project["endpoint_revision"]:
+            raise ValueError("v2 候选扫描端点与冻结清单不一致")
+        policy = scan.get("history_policy") or {}
+        if (
+            policy.get("traversal") != inventory["history_policy"]["traversal"]
+            or policy.get("maximum_commits") != inventory["history_policy"]["maximum_commits"]
+        ):
+            raise ValueError("v2 候选扫描窗口与冻结清单不一致")
+        candidates = scan.get("candidates")
+        if not isinstance(candidates, list):
+            raise ValueError("v2 候选扫描缺少候选列表")
+        for candidate in candidates:
+            candidate_id = candidate.get("id") if isinstance(candidate, dict) else None
+            if not isinstance(candidate_id, str) or candidate_id in candidate_ids:
+                raise ValueError("v2 候选扫描含非法或重复任务 ID")
+            if candidate.get("fixed_revision") != project["endpoint_revision"]:
+                raise ValueError("v2 候选任务未使用冻结项目端点")
+            candidate_ids.add(candidate_id)
+        per_project[project_id] = len(candidates)
+        total += len(candidates)
+    return {"candidate_scans": len(files), "history_candidates": total, "per_project": per_project}
+
+
+def validate_candidate_screen_reports(
+    inventory: dict[str, Any], scan_dir: Path, screen_dir: Path,
+    *, require_complete: bool = False,
+) -> dict[str, Any]:
+    """逐项核对公开筛查决定，防止只发布通过项或改写冻结候选。"""
+
+    expected_projects = {project["project_id"]: project for project in inventory["projects"]}
+    scans: dict[str, dict[str, Any]] = {}
+    for path in sorted(scan_dir.glob("*.inventory.json")) if scan_dir.is_dir() else []:
+        scan = read_json(path)
+        project_id = scan.get("project_id")
+        if not isinstance(project_id, str) or project_id in scans:
+            raise ValueError("v2 候选扫描项目非法或重复")
+        scans[project_id] = scan
+
+    files = sorted(screen_dir.glob("*.screen.json")) if screen_dir.is_dir() else []
+    seen: set[str] = set()
+    accepted_total = 0
+    rejected_total = 0
+    candidate_total = 0
+    per_project: dict[str, dict[str, int]] = {}
+    for path in files:
+        report = read_json(path)
+        project_id = report.get("project_id")
+        if project_id not in expected_projects or project_id in seen:
+            raise ValueError("v2 筛查报告含未知或重复项目")
+        if report.get("version") != CANDIDATE_SCREEN_VERSION:
+            raise ValueError("v2 筛查报告版本不匹配")
+        project = expected_projects[project_id]
+        if report.get("endpoint_revision") != project["endpoint_revision"]:
+            raise ValueError("v2 筛查报告端点与冻结清单不一致")
+        if report.get("provider_calls_observed") != 0:
+            raise ValueError("v2 候选筛查阶段不得发生 provider 调用")
+        scan = scans.get(project_id)
+        if scan is None:
+            raise ValueError("v2 筛查报告缺少对应的冻结候选扫描")
+        candidates = scan.get("candidates")
+        decisions = report.get("decisions")
+        if not isinstance(candidates, list) or not isinstance(decisions, list):
+            raise ValueError("v2 筛查报告或候选扫描缺少列表")
+        candidate_ids = [row.get("id") for row in candidates if isinstance(row, dict)]
+        decision_ids = [row.get("id") for row in decisions if isinstance(row, dict)]
+        if (
+            len(candidate_ids) != len(candidates)
+            or len(decision_ids) != len(decisions)
+            or len(set(decision_ids)) != len(decision_ids)
+            or set(decision_ids) != set(candidate_ids)
+        ):
+            raise ValueError("v2 筛查决定没有唯一覆盖对应冻结候选")
+        accepted = 0
+        for decision in decisions:
+            if decision.get("accepted") is True:
+                if not isinstance(decision.get("error_category"), str):
+                    raise ValueError("v2 接受决定缺少错误类别")
+                accepted += 1
+            elif decision.get("accepted") is False:
+                if not isinstance(decision.get("reason"), str) or not decision["reason"].strip():
+                    raise ValueError("v2 拒绝决定缺少可读理由")
+            else:
+                raise ValueError("v2 筛查决定缺少布尔接受状态")
+        rejected = len(decisions) - accepted
+        if (
+            report.get("candidates") != len(candidates)
+            or report.get("accepted") != accepted
+            or report.get("rejected") != rejected
+            or report.get("selection_policy")
+            != "all candidates passing the preregistered real-repair compile gate"
+        ):
+            raise ValueError("v2 筛查报告汇总与逐项决定不一致")
+        per_project[project_id] = {
+            "candidates": len(candidates), "accepted": accepted, "rejected": rejected,
+        }
+        candidate_total += len(candidates)
+        accepted_total += accepted
+        rejected_total += rejected
+        seen.add(project_id)
+
+    if require_complete and seen != set(expected_projects):
+        raise ValueError("最终 v2 题库冻结前必须公开全部候选项目的完整筛查报告")
+    return {
+        "screened_projects": len(seen),
+        "screened_candidates": candidate_total,
+        "accepted_repairs": accepted_total,
+        "rejected_candidates": rejected_total,
+        "per_project_screening": per_project,
+    }
+
+
+def validate_v2_benchmark(
+    benchmark: dict[str, Any], contract: dict[str, Any],
+    candidate_inventory: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """核对最终 v2 manifest 是否达到预注册纳入门槛。"""
 
     validate_contract(contract)
+    if candidate_inventory is not None:
+        validate_candidate_inventory(candidate_inventory, contract)
     if benchmark.get("version") != contract["benchmark_version"]:
         raise ValueError("最终题库版本与 v2 纳入合同不一致")
     if benchmark.get("status") != "frozen-project-disjoint-real-history":
@@ -319,6 +524,20 @@ def validate_v2_benchmark(benchmark: dict[str, Any], contract: dict[str, Any]) -
         raise ValueError("最终 v2 单个测试项目题数未达到预注册门槛")
     if any(project["tasks"] / test_tasks > selection["maximum_test_project_task_share"] for project in test_projects):
         raise ValueError("最终 v2 测试任务被单个项目过度主导")
+    if candidate_inventory is not None:
+        candidates = {row["project_id"]: row for row in candidate_inventory["projects"]}
+        for project in test_projects:
+            candidate = candidates.get(project["project_id"])
+            if candidate is None:
+                raise ValueError("最终 v2 测试项目不在冻结候选清单中")
+            if canonical_repository(project["source_repository"]) != canonical_repository(candidate["source_repository"]):
+                raise ValueError("最终 v2 测试项目与冻结候选来源不一致")
+            fixed_revisions = {
+                problem["provenance"].get("fixed_revision")
+                for problem in problems if problem["project_id"] == project["project_id"]
+            }
+            if fixed_revisions != {candidate["endpoint_revision"]}:
+                raise ValueError("最终 v2 测试题未统一使用冻结候选端点")
     if len(test_categories) < selection["minimum_test_error_categories"]:
         raise ValueError("最终 v2 测试错误类别数未达到预注册门槛")
 
@@ -336,11 +555,12 @@ def validate_v2_benchmark(benchmark: dict[str, Any], contract: dict[str, Any]) -
 def build_final_preregistration(
     contract: dict[str, Any], enrollment: dict[str, Any], config: dict[str, Any],
     benchmark: dict[str, Any], *, experiment_id: str, registered_at_utc: str,
+    candidate_inventory: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """在最终 manifest 通过门禁后生成 runner 可读取的精确预注册。"""
 
     validate_enrollment_preregistration(enrollment, contract, config)
-    counts = validate_v2_benchmark(benchmark, contract)
+    counts = validate_v2_benchmark(benchmark, contract, candidate_inventory)
     if not re.fullmatch(r"[A-Za-z0-9_-]+", experiment_id):
         raise ValueError("v2 正式实验 ID 非法")
     model_fields = ("id", "model", "api_url", "temperature", "max_tokens", "thinking", "reasoning_effort")
@@ -385,6 +605,9 @@ def build_final_preregistration(
 def audit_enrollment(
     contract_path: Path, preregistration_path: Path, config_path: Path,
     benchmark_path: Path | None = None,
+    candidate_path: Path = ROOT / "benchmarks/real_repairs/tracer_real_v2.candidates.json",
+    scan_dir: Path = ROOT / "benchmarks/real_repairs/tracer_real_v2_candidates",
+    screen_dir: Path = ROOT / "benchmarks/real_repairs/tracer_real_v2_screening",
 ) -> dict[str, Any]:
     contract = read_json(contract_path)
     enrollment = read_json(preregistration_path)
@@ -393,6 +616,12 @@ def audit_enrollment(
     config = validate_config(config_path)
     validate_contract(contract)
     validate_enrollment_preregistration(enrollment, contract, config)
+    candidates = read_json(candidate_path)
+    validate_candidate_inventory(candidates, contract)
+    scan_summary = validate_candidate_scans(candidates, scan_dir)
+    screen_summary = validate_candidate_screen_reports(
+        candidates, scan_dir, screen_dir, require_complete=benchmark_path is not None,
+    )
     final_path = ROOT / contract["provider_gate"]["required_runtime_preregistration"]
     result = {
         "ok": True,
@@ -400,13 +629,17 @@ def audit_enrollment(
         "benchmark_version": contract["benchmark_version"],
         "provider_calls_allowed": False,
         "final_runtime_preregistration_exists": final_path.is_file(),
+        "candidate_projects_frozen": len(candidates["projects"]),
+        "candidate_history_window": candidates["history_policy"]["maximum_commits"],
+        **scan_summary,
+        **screen_summary,
     }
     if benchmark_path is None:
         result["ready_for_provider_run"] = False
         result["next_gate"] = "纳入并验证至少五个全新测试项目，再冻结最终 manifest 与运行时预注册。"
         return result
     benchmark = read_json(benchmark_path)
-    result.update(validate_v2_benchmark(benchmark, contract))
+    result.update(validate_v2_benchmark(benchmark, contract, candidates))
     if final_path.is_file():
         from causal_feedback import validate_preregistration_record
 
@@ -425,18 +658,27 @@ def main() -> int:
     audit.add_argument("--contract", type=Path, default=ROOT / "benchmarks/real_repairs/tracer_real_v2.enrollment.json")
     audit.add_argument("--preregistration", type=Path, default=ROOT / "experiments/preregistrations/tracer_real_causal_v2_enrollment.json")
     audit.add_argument("--config", type=Path, default=ROOT / "experiments/causal_feedback.tracer_real_v2.json")
+    audit.add_argument("--candidates", type=Path, default=ROOT / "benchmarks/real_repairs/tracer_real_v2.candidates.json")
+    audit.add_argument("--candidate-scans", type=Path, default=ROOT / "benchmarks/real_repairs/tracer_real_v2_candidates")
+    audit.add_argument("--candidate-screening", type=Path, default=ROOT / "benchmarks/real_repairs/tracer_real_v2_screening")
     audit.add_argument("--benchmark", type=Path)
     finalize = sub.add_parser("finalize", help="通过纳入门禁后生成最终运行时预注册；不调用 provider")
     finalize.add_argument("--contract", type=Path, default=ROOT / "benchmarks/real_repairs/tracer_real_v2.enrollment.json")
     finalize.add_argument("--preregistration", type=Path, default=ROOT / "experiments/preregistrations/tracer_real_causal_v2_enrollment.json")
     finalize.add_argument("--config", type=Path, default=ROOT / "experiments/causal_feedback.tracer_real_v2.json")
+    finalize.add_argument("--candidates", type=Path, default=ROOT / "benchmarks/real_repairs/tracer_real_v2.candidates.json")
+    finalize.add_argument("--candidate-scans", type=Path, default=ROOT / "benchmarks/real_repairs/tracer_real_v2_candidates")
+    finalize.add_argument("--candidate-screening", type=Path, default=ROOT / "benchmarks/real_repairs/tracer_real_v2_screening")
     finalize.add_argument("--benchmark", type=Path, required=True)
     finalize.add_argument("--experiment-id", required=True)
     finalize.add_argument("--out", type=Path, default=ROOT / "experiments/preregistrations/tracer_real_causal_v2.json")
     args = parser.parse_args()
     try:
         if args.command == "audit":
-            result = audit_enrollment(args.contract, args.preregistration, args.config, args.benchmark)
+            result = audit_enrollment(
+                args.contract, args.preregistration, args.config, args.benchmark,
+                args.candidates, args.candidate_scans, args.candidate_screening,
+            )
         else:
             if args.out.exists():
                 raise ValueError("最终运行时预注册已存在；拒绝覆盖")
@@ -445,11 +687,19 @@ def main() -> int:
             from causal_feedback import validate_config, validate_preregistration_record
 
             config = validate_config(args.config)
+            candidates = read_json(args.candidates)
+            validate_candidate_inventory(candidates, contract)
+            validate_candidate_scans(candidates, args.candidate_scans)
+            validate_candidate_screen_reports(
+                candidates, args.candidate_scans, args.candidate_screening,
+                require_complete=True,
+            )
             benchmark = read_json(args.benchmark)
             result = build_final_preregistration(
                 contract, enrollment, config, benchmark,
                 experiment_id=args.experiment_id,
                 registered_at_utc=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                candidate_inventory=candidates,
             )
             validate_preregistration_record(result, config, benchmark)
             write_json(args.out, result)

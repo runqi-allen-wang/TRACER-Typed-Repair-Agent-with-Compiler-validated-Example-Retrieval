@@ -2,16 +2,19 @@
 
 ## 当前状态
 
-TRACER-REAL v2 已完成**第一阶段预注册**，但尚未形成最终题库，也没有执行任何 v2 provider 调用。
+TRACER-REAL v2 已完成**第一阶段预注册和候选历史扫描**，并完成两个项目的全量固定环境筛查，但尚未形成最终题库，也没有执行任何 v2 provider 调用。
 
 - [纳入合同](../benchmarks/real_repairs/tracer_real_v2.enrollment.json)冻结了项目、任务与结论门槛；
+- [候选项目清单](../benchmarks/real_repairs/tracer_real_v2.candidates.json)已在候选历史扫描前冻结 6 个独立上游、各自端点版本和 120 个 first-parent 提交窗口；
+- [六份扫描清单](../benchmarks/real_repairs/tracer_real_v2_candidates)完整保存 1,576 个可解析纯证明变化候选：LeanAPAP 51、PhysLean 675、Equational Theories 250、FLT 270、PFR 276、SciLean 54；这些只是编译前候选，不是 1,576 道合格题；
+- [LeanAPAP 筛查账本](../benchmarks/real_repairs/tracer_real_v2_screening/leanapap.screen.json)与 [PFR 筛查账本](../benchmarks/real_repairs/tracer_real_v2_screening/pfr.screen.json)已完整覆盖 327 个候选：60 个通过旧证明失败/新证明成功门禁，267 个带理由拒绝，provider 调用为零；其余四个项目仍待同样筛查；
 - [实验配置](../experiments/causal_feedback.tracer_real_v2.json)冻结了模型、生成参数、三次重复和八个干预分支；
 - [纳入预注册](../experiments/preregistrations/tracer_real_causal_v2_enrollment.json)冻结了主对比、项目等权分析、停止规则和修订政策；
 - [`src/tracer_real_v2.py`](../src/tracer_real_v2.py)负责离线审计，并只在最终题库达到门槛后生成不可覆盖的运行时预注册；
 - [`src/causal_analysis_v2.py`](../src/causal_analysis_v2.py)在看到 v2 结果前实现项目等权主估计、项目级符号翻转检验和分层重采样区间；
 - 因果 runner 已支持每个上游项目各自绑定相对 Lake 根和精确 `lean-toolchain`，不允许用一个命令行项目根覆盖全部 v2 项目。
 
-当前离线审计应明确返回 `ready_for_provider_run: false`：
+当前离线审计会核对候选项目、端点、扫描窗口和候选总数，并仍应明确返回 `ready_for_provider_run: false`：
 
 ```powershell
 python src/tracer_real_v2.py audit
@@ -60,6 +63,8 @@ v2 不通过复制题目或拆分同一仓库来凑项目数。Mathlib 保留为
 
 对每个候选上游项目使用 [`src/real_repairs.py`](../src/real_repairs.py) 构建子集。参考证明写入被版本控制排除的独立目录。完成候选池后，使用 `tracer-real-project-split-v2` 规范组装项目级清单；每个项目条目额外记录：
 
+项目内候选必须先经 [`src/real_repair_inventory.py`](../src/real_repair_inventory.py) 的确定性两步流程：`scan` 固定端点与 first-parent 窗口并枚举全部可解析纯证明变化，`screen` 对每项执行旧证明失败/新证明通过门禁并保留每个接受或排除理由。筛查每完成一项即追加续跑状态；候选漂移时拒绝复用旧状态。`screen --workers N` 只并行相互隔离的临时编译，检查点仍由主线程串行追加，最终报告仍按冻结清单顺序生成。不得只把人工挑中的成功候选写进 spec。
+
 - `compile_project_root`：仓库内相对 Lake 根；
 - `lean_toolchain`：该环境的精确工具链文本。
 
@@ -101,5 +106,6 @@ python src/causal_analysis_v2.py `
 - 目前已预注册的是**纳入和分析设计**，不是最终 benchmark，也不是实验结果；
 - v1 的 11 条任务与其运行记录保持原样，不回写成 v2；
 - 当前代码没有替用户选择或伪造五个测试项目；
+- 当前已冻结并扫描六个候选上游；LeanAPAP 与 PFR 的 327 个候选已完成固定环境编译门禁并公开全部决定，但其余 1,249 个候选仍未完成；依赖下载或环境构建中断不计为项目或题目通过；
 - 当前没有 v2 API 成本、成功率或因果增益；
 - 若后续必须改变门槛或主分析，应追加带日期的修订记录，不能静默覆盖本预注册。
