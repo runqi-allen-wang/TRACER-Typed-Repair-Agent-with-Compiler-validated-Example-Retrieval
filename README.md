@@ -153,15 +153,3 @@ These are plans, not completed results.
 For research or teaching use, cite [CITATION.cff](CITATION.cff) and identify the exact repository version and experiment batch. TRACER is released under the [MIT License](LICENSE); individual capsules retain their recorded source licenses.
 
 Thanks to [SJTU AI4Math Summer School 2026](https://sjtu-ai4math.github.io/summer-school/2026/) for the learning and collaboration environment, and to [subfish-zhou](https://github.com/subfish-zhou) and [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) for feedback that sharpened the compiler-feedback and SP research directions.
-
-
-<div align="center">
-
-<!-- star-history:start -->
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/star-history/star-history-dark.svg">
-  <img alt="Star history" src="docs/star-history/star-history-light.svg">
-</picture>
-<!-- star-history:end -->
-
-</div>
