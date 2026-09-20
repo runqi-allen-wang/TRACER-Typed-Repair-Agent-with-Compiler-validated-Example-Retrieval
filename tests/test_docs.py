@@ -126,12 +126,12 @@ class DocumentationConsistencyTest(unittest.TestCase):
                 self.assertIn("C_failure", front)
 
     def test_readme_commands_match_between_languages(self):
-        # 仅比较执行命令；图中标签、目录注释和报错提示允许翻译。
+        # 首页只保留核心运行场景；执行命令必须在两个语言版本中保持一致。
         commands = []
         for name, readme in self.readmes().items():
             blocks = [match[1] for match in re.findall(r"^(```|~~~)[^\n]*\n(.*?)^\1", readme, re.MULTILINE | re.DOTALL)]
             with self.subTest(language=name):
-                self.assertGreaterEqual(len(blocks), 15)
+                self.assertGreaterEqual(len(blocks), 5)
             commands.append([
                 line for block in blocks for line in block.splitlines()
                 if line.startswith(("python ", "lake ", "git ", "cd ", "$env:", "./scripts/", "bash "))
