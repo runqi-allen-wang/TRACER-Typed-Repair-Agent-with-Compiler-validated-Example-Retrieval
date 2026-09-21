@@ -44,6 +44,11 @@ jobs:
         run: python scripts/audit_feedback_comparison.py published/feedback-cross-model-8ccb89dd-562ad440
       - name: Audit published six-arm research
         run: python scripts/audit_research_release.py published/research-six-arm-313f437f
+      # README 图表由已发布 summary.json 确定性生成；避免图、表与发布结果分叉。
+      - name: Verify README results chart
+        run: |
+          python scripts/render_six_arm_chart.py
+          git diff --exit-code -- docs/assets/repair24-six-arm-results.svg
       - name: Verify second-model replication contract
         run: python scripts/plan_feedback_replication.py --model-id ci-second-model --api-url https://example.invalid/v1/chat/completions --model ci-second-model
       - name: Verify SP security metrics

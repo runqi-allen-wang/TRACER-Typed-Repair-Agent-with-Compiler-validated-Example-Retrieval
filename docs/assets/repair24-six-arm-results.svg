@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="700" viewBox="0 0 1280 700" role="img" aria-labelledby="title desc">
+<title id="title">repair24 first-candidate and three-round success rates</title>
+<desc id="desc">Two panels compare first-candidate success with success within three rounds for six TRACER research arms and two DeepSeek model configurations.</desc>
+<style>
+        .background { fill: #ffffff; }
+        .panel { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1; }
+        .title { font: 700 26px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #0f172a; }
+        .subtitle { font: 14px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #475569; }
+        .panel-title { font: 700 17px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #0f172a; }
+        .axis { font: 12px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #64748b; }
+        .arm { font: 700 13px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #334155; }
+        .value { font: 700 11px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #0f172a; }
+        .delta { font: 12px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #475569; }
+        .legend { font: 13px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #334155; }
+        .note { font: 12px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #64748b; }
+        .grid { stroke: #e2e8f0; stroke-width: 1; }
+        .baseline { stroke: #64748b; stroke-width: 1.2; stroke-dasharray: 5 4; }
+        .baseline-label { font: 11px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #475569; }
+        </style>
+<rect width="1280" height="700" class="background"/>
+<text x="52.0" y="43.0" class="title" text-anchor="start">repair24: first candidate vs. up to three repair rounds</text>
+<text x="52.0" y="70.0" class="subtitle" text-anchor="start">24 problems × 3 repeats per model and arm; bars are descriptive paired outcomes</text>
+<rect x="860" y="34" width="16" height="16" rx="2" fill="#dbeafe"/>
+<text x="884.0" y="47.0" class="legend" text-anchor="start">First candidate</text>
+<rect x="1001" y="34" width="16" height="16" rx="2" fill="#1d4ed8"/>
+<text x="1025.0" y="47.0" class="legend" text-anchor="start">Within 3 rounds</text>
+<rect x="52.0" y="122" width="510.0" height="480" rx="12" class="panel"/>
+<text x="74.0" y="151.0" class="panel-title" text-anchor="start">DeepSeek Flash v4.1</text>
+<line x1="100.0" y1="556.0" x2="542.0" y2="556.0" class="grid"/>
+<text x="91.0" y="560.0" class="axis" text-anchor="end">70%</text>
+<line x1="100.0" y1="426.0" x2="542.0" y2="426.0" class="grid"/>
+<text x="91.0" y="430.0" class="axis" text-anchor="end">80%</text>
+<line x1="100.0" y1="296.0" x2="542.0" y2="296.0" class="grid"/>
+<text x="91.0" y="300.0" class="axis" text-anchor="end">90%</text>
+<line x1="100.0" y1="166.0" x2="542.0" y2="166.0" class="grid"/>
+<text x="91.0" y="170.0" class="axis" text-anchor="end">100%</text>
+<rect x="103.0" y="310.4" width="22" height="245.6" rx="3" fill="#bfdbfe" data-model="deepseek_flash_v41" data-arm="A" data-stage="first" data-value="88.888889"/>
+<rect x="129.0" y="220.2" width="22" height="335.8" rx="3" fill="#2563eb" data-model="deepseek_flash_v41" data-arm="A" data-stage="within_3" data-value="95.833333"/>
+<text x="127.0" y="581.0" class="arm" text-anchor="middle">R-A</text>
+<text x="140.0" y="212.2" class="value" text-anchor="middle">95.8%</text>
+<text x="127.0" y="622.0" class="delta" text-anchor="middle">+6.9 pp</text>
+<rect x="173.0" y="310.4" width="22" height="245.6" rx="3" fill="#bfdbfe" data-model="deepseek_flash_v41" data-arm="B" data-stage="first" data-value="88.888889"/>
+<rect x="199.0" y="220.2" width="22" height="335.8" rx="3" fill="#2563eb" data-model="deepseek_flash_v41" data-arm="B" data-stage="within_3" data-value="95.833333"/>
+<text x="197.0" y="581.0" class="arm" text-anchor="middle">R-B</text>
+<text x="210.0" y="212.2" class="value" text-anchor="middle">95.8%</text>
+<text x="197.0" y="622.0" class="delta" text-anchor="middle">+6.9 pp</text>
+<rect x="243.0" y="292.4" width="22" height="263.6" rx="3" fill="#bfdbfe" data-model="deepseek_flash_v41" data-arm="C" data-stage="first" data-value="90.277778"/>
+<rect x="269.0" y="220.2" width="22" height="335.8" rx="3" fill="#2563eb" data-model="deepseek_flash_v41" data-arm="C" data-stage="within_3" data-value="95.833333"/>
+<text x="267.0" y="581.0" class="arm" text-anchor="middle">R-C</text>
+<text x="280.0" y="212.2" class="value" text-anchor="middle">95.8%</text>
+<text x="267.0" y="622.0" class="delta" text-anchor="middle">+5.6 pp</text>
+<rect x="313.0" y="364.6" width="22" height="191.4" rx="3" fill="#bfdbfe" data-model="deepseek_flash_v41" data-arm="D" data-stage="first" data-value="84.722222"/>
+<rect x="339.0" y="238.2" width="22" height="317.8" rx="3" fill="#2563eb" data-model="deepseek_flash_v41" data-arm="D" data-stage="within_3" data-value="94.444444"/>
+<text x="337.0" y="581.0" class="arm" text-anchor="middle">R-D</text>
+<text x="350.0" y="230.2" class="value" text-anchor="middle">94.4%</text>
+<text x="337.0" y="622.0" class="delta" text-anchor="middle">+9.7 pp</text>
+<rect x="383.0" y="274.3" width="22" height="281.7" rx="3" fill="#bfdbfe" data-model="deepseek_flash_v41" data-arm="C_dynamic" data-stage="first" data-value="91.666667"/>
+<rect x="409.0" y="202.1" width="22" height="353.9" rx="3" fill="#2563eb" data-model="deepseek_flash_v41" data-arm="C_dynamic" data-stage="within_3" data-value="97.222222"/>
+<text x="407.0" y="581.0" class="arm" text-anchor="middle">R-E</text>
+<text x="420.0" y="194.1" class="value" text-anchor="middle">97.2%</text>
+<text x="407.0" y="622.0" class="delta" text-anchor="middle">+5.6 pp</text>
+<rect x="453.0" y="310.4" width="22" height="245.6" rx="3" fill="#bfdbfe" data-model="deepseek_flash_v41" data-arm="C_failure" data-stage="first" data-value="88.888889"/>
+<rect x="479.0" y="202.1" width="22" height="353.9" rx="3" fill="#2563eb" data-model="deepseek_flash_v41" data-arm="C_failure" data-stage="within_3" data-value="97.222222"/>
+<text x="477.0" y="581.0" class="arm" text-anchor="middle">R-F</text>
+<text x="490.0" y="194.1" class="value" text-anchor="middle">97.2%</text>
+<text x="477.0" y="622.0" class="delta" text-anchor="middle">+8.3 pp</text>
+<line x1="100.0" y1="220.2" x2="542.0" y2="220.2" class="baseline"/>
+<text x="538.0" y="214.2" class="baseline-label" text-anchor="end">R-A final baseline</text>
+<rect x="688.0" y="122" width="510.0" height="480" rx="12" class="panel"/>
+<text x="710.0" y="151.0" class="panel-title" text-anchor="start">DeepSeek Pro 0813</text>
+<line x1="736.0" y1="556.0" x2="1178.0" y2="556.0" class="grid"/>
+<text x="727.0" y="560.0" class="axis" text-anchor="end">70%</text>
+<line x1="736.0" y1="426.0" x2="1178.0" y2="426.0" class="grid"/>
+<text x="727.0" y="430.0" class="axis" text-anchor="end">80%</text>
+<line x1="736.0" y1="296.0" x2="1178.0" y2="296.0" class="grid"/>
+<text x="727.0" y="300.0" class="axis" text-anchor="end">90%</text>
+<line x1="736.0" y1="166.0" x2="1178.0" y2="166.0" class="grid"/>
+<text x="727.0" y="170.0" class="axis" text-anchor="end">100%</text>
+<rect x="739.0" y="364.6" width="22" height="191.4" rx="3" fill="#fed7aa" data-model="deepseek_v4_pro_0813" data-arm="A" data-stage="first" data-value="84.722222"/>
+<rect x="765.0" y="256.3" width="22" height="299.7" rx="3" fill="#c2410c" data-model="deepseek_v4_pro_0813" data-arm="A" data-stage="within_3" data-value="93.055556"/>
+<text x="763.0" y="581.0" class="arm" text-anchor="middle">R-A</text>
+<text x="776.0" y="248.3" class="value" text-anchor="middle">93.1%</text>
+<text x="763.0" y="622.0" class="delta" text-anchor="middle">+8.3 pp</text>
+<rect x="809.0" y="454.9" width="22" height="101.1" rx="3" fill="#fed7aa" data-model="deepseek_v4_pro_0813" data-arm="B" data-stage="first" data-value="77.777778"/>
+<rect x="835.0" y="292.4" width="22" height="263.6" rx="3" fill="#c2410c" data-model="deepseek_v4_pro_0813" data-arm="B" data-stage="within_3" data-value="90.277778"/>
+<text x="833.0" y="581.0" class="arm" text-anchor="middle">R-B</text>
+<text x="846.0" y="284.4" class="value" text-anchor="middle">90.3%</text>
+<text x="833.0" y="622.0" class="delta" text-anchor="middle">+12.5 pp</text>
+<rect x="879.0" y="382.7" width="22" height="173.3" rx="3" fill="#fed7aa" data-model="deepseek_v4_pro_0813" data-arm="C" data-stage="first" data-value="83.333333"/>
+<rect x="905.0" y="256.3" width="22" height="299.7" rx="3" fill="#c2410c" data-model="deepseek_v4_pro_0813" data-arm="C" data-stage="within_3" data-value="93.055556"/>
+<text x="903.0" y="581.0" class="arm" text-anchor="middle">R-C</text>
+<text x="916.0" y="248.3" class="value" text-anchor="middle">93.1%</text>
+<text x="903.0" y="622.0" class="delta" text-anchor="middle">+9.7 pp</text>
+<rect x="949.0" y="454.9" width="22" height="101.1" rx="3" fill="#fed7aa" data-model="deepseek_v4_pro_0813" data-arm="D" data-stage="first" data-value="77.777778"/>
+<rect x="975.0" y="292.4" width="22" height="263.6" rx="3" fill="#c2410c" data-model="deepseek_v4_pro_0813" data-arm="D" data-stage="within_3" data-value="90.277778"/>
+<text x="973.0" y="581.0" class="arm" text-anchor="middle">R-D</text>
+<text x="986.0" y="284.4" class="value" text-anchor="middle">90.3%</text>
+<text x="973.0" y="622.0" class="delta" text-anchor="middle">+12.5 pp</text>
+<rect x="1019.0" y="364.6" width="22" height="191.4" rx="3" fill="#fed7aa" data-model="deepseek_v4_pro_0813" data-arm="C_dynamic" data-stage="first" data-value="84.722222"/>
+<rect x="1045.0" y="256.3" width="22" height="299.7" rx="3" fill="#c2410c" data-model="deepseek_v4_pro_0813" data-arm="C_dynamic" data-stage="within_3" data-value="93.055556"/>
+<text x="1043.0" y="581.0" class="arm" text-anchor="middle">R-E</text>
+<text x="1056.0" y="248.3" class="value" text-anchor="middle">93.1%</text>
+<text x="1043.0" y="622.0" class="delta" text-anchor="middle">+8.3 pp</text>
+<rect x="1089.0" y="436.8" width="22" height="119.2" rx="3" fill="#fed7aa" data-model="deepseek_v4_pro_0813" data-arm="C_failure" data-stage="first" data-value="79.166667"/>
+<rect x="1115.0" y="292.4" width="22" height="263.6" rx="3" fill="#c2410c" data-model="deepseek_v4_pro_0813" data-arm="C_failure" data-stage="within_3" data-value="90.277778"/>
+<text x="1113.0" y="581.0" class="arm" text-anchor="middle">R-F</text>
+<text x="1126.0" y="284.4" class="value" text-anchor="middle">90.3%</text>
+<text x="1113.0" y="622.0" class="delta" text-anchor="middle">+11.1 pp</text>
+<line x1="736.0" y1="256.3" x2="1178.0" y2="256.3" class="baseline"/>
+<text x="1174.0" y="250.3" class="baseline-label" text-anchor="end">R-A final baseline</text>
+<text x="52.0" y="666.0" class="note" text-anchor="start">Delta labels show within-task improvement from the first candidate to the final three-round outcome.</text>
+<text x="52.0" y="684.0" class="note" text-anchor="start">R-A is the no-feedback/no-retrieval baseline. Differences between arms are not causal or significance estimates.</text>
+</svg>
