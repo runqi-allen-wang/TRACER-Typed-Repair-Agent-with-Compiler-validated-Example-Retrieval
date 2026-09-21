@@ -1,0 +1,3356 @@
+{
+  "format": "tracer-repair24-six-arm-release-v1",
+  "experiment_id": "research-313f437f-70cf-49ad-82ea-6fed676c2602",
+  "counts": {
+    "tasks": 864,
+    "attempts": 1066,
+    "successes": 811,
+    "failed_tasks": 53,
+    "proof_files": 811,
+    "review_rows": 864,
+    "reported_retry_attempts": 5,
+    "archived_retry_attempts": 6,
+    "archived_retry_round_records": 10,
+    "attempted_call_reservations": 1077,
+    "unmatched_call_reservations": 1
+  },
+  "privacy": {
+    "included": [
+      "task summaries",
+      "sanitized attempts",
+      "successful proofs",
+      "AI-assisted review",
+      "frozen prompt templates"
+    ],
+    "excluded": [
+      "per-request prompt",
+      "provider response ID",
+      "authentication fields",
+      "local absolute paths",
+      "retry_history contents"
+    ],
+    "inventory_method": "relative path and byte size"
+  },
+  "files": [
+    {
+      "path": "ai_assisted_review.csv",
+      "size_bytes": 272076
+    },
+    {
+      "path": "ai_review_report.json",
+      "size_bytes": 622
+    },
+    {
+      "path": "attempts.sanitized.jsonl",
+      "size_bytes": 4376860
+    },
+    {
+      "path": "benchmark.json",
+      "size_bytes": 14736
+    },
+    {
+      "path": "completion.sanitized.json",
+      "size_bytes": 508
+    },
+    {
+      "path": "examples.sanitized.json",
+      "size_bytes": 1459
+    },
+    {
+      "path": "failure_notes.sanitized.json",
+      "size_bytes": 1760
+    },
+    {
+      "path": "FILES.md",
+      "size_bytes": 47498
+    },
+    {
+      "path": "initial_compilation.sanitized.json",
+      "size_bytes": 20135
+    },
+    {
+      "path": "plan.sanitized.json",
+      "size_bytes": 115154
+    },
+    {
+      "path": "preregistration.json",
+      "size_bytes": 2462
+    },
+    {
+      "path": "protocol/feedback.txt",
+      "size_bytes": 119
+    },
+    {
+      "path": "protocol/feedback_retrieval.txt",
+      "size_bytes": 169
+    },
+    {
+      "path": "protocol/proof_contract.txt",
+      "size_bytes": 661
+    },
+    {
+      "path": "protocol/retrieval_only.txt",
+      "size_bytes": 134
+    },
+    {
+      "path": "protocol/theorem_only.txt",
+      "size_bytes": 81
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 2048
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/double_add.lean",
+      "size_bytes": 311
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/double_even.lean",
+      "size_bytes": 538
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/double_value.lean",
+      "size_bytes": 330
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/exists_or.lean",
+      "size_bytes": 438
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/fold_stitch.lean",
+      "size_bytes": 536
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/forall_and.lean",
+      "size_bytes": 353
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/left_inverse.lean",
+      "size_bytes": 246
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/map_comp.lean",
+      "size_bytes": 399
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/map_stitch.lean",
+      "size_bytes": 580
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/not_exists.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/omap_bind.lean",
+      "size_bytes": 461
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/scale_value.lean",
+      "size_bytes": 299
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/size_map.lean",
+      "size_bytes": 470
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/size_stitch.lean",
+      "size_bytes": 528
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/stitch_assoc.lean",
+      "size_bytes": 369
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/surjective_comp.lean",
+      "size_bytes": 323
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/A/tri_lower.lean",
+      "size_bytes": 298
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/double_add.lean",
+      "size_bytes": 516
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/double_value.lean",
+      "size_bytes": 303
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/exists_or.lean",
+      "size_bytes": 540
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/fold_stitch.lean",
+      "size_bytes": 563
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/forall_and.lean",
+      "size_bytes": 353
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/map_stitch.lean",
+      "size_bytes": 529
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/not_exists.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/scale_add.lean",
+      "size_bytes": 411
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/scale_value.lean",
+      "size_bytes": 299
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/size_stitch.lean",
+      "size_bytes": 487
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/stitch_assoc.lean",
+      "size_bytes": 375
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/surjective_comp.lean",
+      "size_bytes": 323
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/B/tri_lower.lean",
+      "size_bytes": 303
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/double_add.lean",
+      "size_bytes": 311
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/double_even.lean",
+      "size_bytes": 413
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/exists_or.lean",
+      "size_bytes": 511
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/fold_stitch.lean",
+      "size_bytes": 536
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/forall_and.lean",
+      "size_bytes": 367
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/map_stitch.lean",
+      "size_bytes": 535
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/not_exists.lean",
+      "size_bytes": 285
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/obind_assoc.lean",
+      "size_bytes": 342
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/omap_bind.lean",
+      "size_bytes": 494
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/omap_comp.lean",
+      "size_bytes": 348
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/scale_value.lean",
+      "size_bytes": 313
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/size_map.lean",
+      "size_bytes": 518
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/size_stitch.lean",
+      "size_bytes": 488
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/stitch_assoc.lean",
+      "size_bytes": 379
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/surjective_comp.lean",
+      "size_bytes": 323
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C/tri_lower.lean",
+      "size_bytes": 359
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/double_add.lean",
+      "size_bytes": 360
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/double_even.lean",
+      "size_bytes": 630
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/double_value.lean",
+      "size_bytes": 286
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/fold_stitch.lean",
+      "size_bytes": 568
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/forall_and.lean",
+      "size_bytes": 378
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/injective_comp.lean",
+      "size_bytes": 279
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/left_inverse.lean",
+      "size_bytes": 269
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/map_stitch.lean",
+      "size_bytes": 535
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/not_exists.lean",
+      "size_bytes": 263
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/scale_add.lean",
+      "size_bytes": 387
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/size_stitch.lean",
+      "size_bytes": 488
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/stitch_assoc.lean",
+      "size_bytes": 375
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/surjective_comp.lean",
+      "size_bytes": 346
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_dynamic/tri_lower.lean",
+      "size_bytes": 298
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/double_even.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/double_value.lean",
+      "size_bytes": 292
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/exists_or.lean",
+      "size_bytes": 498
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/fold_stitch.lean",
+      "size_bytes": 549
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/forall_and.lean",
+      "size_bytes": 353
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/left_inverse.lean",
+      "size_bytes": 257
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/map_stitch.lean",
+      "size_bytes": 535
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/not_exists.lean",
+      "size_bytes": 292
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/omap_comp.lean",
+      "size_bytes": 348
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/scale_add.lean",
+      "size_bytes": 427
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/size_stitch.lean",
+      "size_bytes": 609
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/stitch_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/surjective_comp.lean",
+      "size_bytes": 329
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/C_failure/tri_lower.lean",
+      "size_bytes": 298
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/double_add.lean",
+      "size_bytes": 508
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/double_even.lean",
+      "size_bytes": 425
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/fold_stitch.lean",
+      "size_bytes": 563
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/forall_and.lean",
+      "size_bytes": 392
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/left_inverse.lean",
+      "size_bytes": 246
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/map_comp.lean",
+      "size_bytes": 422
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/map_stitch.lean",
+      "size_bytes": 535
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/not_exists.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/scale_add.lean",
+      "size_bytes": 409
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/size_map.lean",
+      "size_bytes": 455
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/size_stitch.lean",
+      "size_bytes": 477
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/stitch_assoc.lean",
+      "size_bytes": 369
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/surjective_comp.lean",
+      "size_bytes": 323
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/1/D/tri_lower.lean",
+      "size_bytes": 303
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/double_even.lean",
+      "size_bytes": 369
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/double_value.lean",
+      "size_bytes": 388
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/fold_stitch.lean",
+      "size_bytes": 569
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/forall_and.lean",
+      "size_bytes": 343
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/left_inverse.lean",
+      "size_bytes": 257
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/map_stitch.lean",
+      "size_bytes": 639
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/not_exists.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/omap_comp.lean",
+      "size_bytes": 315
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/scale_add.lean",
+      "size_bytes": 401
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/scale_value.lean",
+      "size_bytes": 326
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/size_map.lean",
+      "size_bytes": 451
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/size_stitch.lean",
+      "size_bytes": 522
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/stitch_assoc.lean",
+      "size_bytes": 375
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/surjective_comp.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/A/tri_lower.lean",
+      "size_bytes": 298
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/double_add.lean",
+      "size_bytes": 321
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/double_even.lean",
+      "size_bytes": 414
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/double_value.lean",
+      "size_bytes": 286
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/exists_and.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/fold_stitch.lean",
+      "size_bytes": 542
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/forall_and.lean",
+      "size_bytes": 270
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/map_stitch.lean",
+      "size_bytes": 550
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/not_exists.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/right_inverse.lean",
+      "size_bytes": 201
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/size_map.lean",
+      "size_bytes": 455
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/size_stitch.lean",
+      "size_bytes": 528
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/stitch_assoc.lean",
+      "size_bytes": 375
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/surjective_comp.lean",
+      "size_bytes": 323
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/B/tri_lower.lean",
+      "size_bytes": 298
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/double_add.lean",
+      "size_bytes": 553
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/double_even.lean",
+      "size_bytes": 376
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/double_value.lean",
+      "size_bytes": 288
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/exists_or.lean",
+      "size_bytes": 506
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/fold_stitch.lean",
+      "size_bytes": 563
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/forall_and.lean",
+      "size_bytes": 270
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/injective_comp.lean",
+      "size_bytes": 279
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/map_stitch.lean",
+      "size_bytes": 529
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/not_exists.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/omap_bind.lean",
+      "size_bytes": 494
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/size_stitch.lean",
+      "size_bytes": 528
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/stitch_assoc.lean",
+      "size_bytes": 468
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/surjective_comp.lean",
+      "size_bytes": 331
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C/tri_lower.lean",
+      "size_bytes": 347
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/double_add.lean",
+      "size_bytes": 311
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/double_even.lean",
+      "size_bytes": 409
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/double_value.lean",
+      "size_bytes": 322
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/fold_stitch.lean",
+      "size_bytes": 563
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/forall_and.lean",
+      "size_bytes": 378
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/left_inverse.lean",
+      "size_bytes": 290
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/map_stitch.lean",
+      "size_bytes": 535
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/not_exists.lean",
+      "size_bytes": 262
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/omap_bind.lean",
+      "size_bytes": 494
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/scale_value.lean",
+      "size_bytes": 299
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/size_stitch.lean",
+      "size_bytes": 529
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/stitch_assoc.lean",
+      "size_bytes": 375
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/surjective_comp.lean",
+      "size_bytes": 329
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_dynamic/tri_lower.lean",
+      "size_bytes": 315
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/double_add.lean",
+      "size_bytes": 508
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/double_even.lean",
+      "size_bytes": 375
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/double_value.lean",
+      "size_bytes": 293
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/fold_stitch.lean",
+      "size_bytes": 563
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/forall_and.lean",
+      "size_bytes": 308
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/left_inverse.lean",
+      "size_bytes": 257
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/map_stitch.lean",
+      "size_bytes": 550
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/not_exists.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/omap_bind.lean",
+      "size_bytes": 494
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/scale_add.lean",
+      "size_bytes": 431
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/size_stitch.lean",
+      "size_bytes": 742
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/stitch_assoc.lean",
+      "size_bytes": 375
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/surjective_comp.lean",
+      "size_bytes": 333
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/C_failure/tri_lower.lean",
+      "size_bytes": 298
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/double_add.lean",
+      "size_bytes": 311
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/double_even.lean",
+      "size_bytes": 386
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/double_value.lean",
+      "size_bytes": 345
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/exists_or.lean",
+      "size_bytes": 540
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/fold_stitch.lean",
+      "size_bytes": 563
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/forall_and.lean",
+      "size_bytes": 378
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/map_stitch.lean",
+      "size_bytes": 535
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/not_exists.lean",
+      "size_bytes": 285
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/omap_bind.lean",
+      "size_bytes": 494
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/omap_comp.lean",
+      "size_bytes": 348
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/size_map.lean",
+      "size_bytes": 455
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/size_stitch.lean",
+      "size_bytes": 482
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/stitch_assoc.lean",
+      "size_bytes": 393
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/surjective_comp.lean",
+      "size_bytes": 323
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/2/D/tri_lower.lean",
+      "size_bytes": 380
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/double_add.lean",
+      "size_bytes": 362
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/double_even.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/double_value.lean",
+      "size_bytes": 324
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/exists_and.lean",
+      "size_bytes": 335
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/fold_stitch.lean",
+      "size_bytes": 542
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/forall_and.lean",
+      "size_bytes": 270
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/injective_comp.lean",
+      "size_bytes": 279
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/left_inverse.lean",
+      "size_bytes": 257
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/map_comp.lean",
+      "size_bytes": 399
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/map_stitch.lean",
+      "size_bytes": 535
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/not_exists.lean",
+      "size_bytes": 262
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/omap_bind.lean",
+      "size_bytes": 494
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/omap_identity.lean",
+      "size_bytes": 277
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/size_map.lean",
+      "size_bytes": 476
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/size_stitch.lean",
+      "size_bytes": 487
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/stitch_assoc.lean",
+      "size_bytes": 369
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/surjective_comp.lean",
+      "size_bytes": 323
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/A/tri_lower.lean",
+      "size_bytes": 303
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/double_add.lean",
+      "size_bytes": 586
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/double_even.lean",
+      "size_bytes": 407
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/exists_and.lean",
+      "size_bytes": 322
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/fold_stitch.lean",
+      "size_bytes": 542
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/forall_and.lean",
+      "size_bytes": 353
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/map_stitch.lean",
+      "size_bytes": 550
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/not_exists.lean",
+      "size_bytes": 288
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/scale_add.lean",
+      "size_bytes": 345
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/size_stitch.lean",
+      "size_bytes": 528
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/stitch_assoc.lean",
+      "size_bytes": 375
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/surjective_comp.lean",
+      "size_bytes": 323
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/B/tri_lower.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/double_add.lean",
+      "size_bytes": 361
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/double_even.lean",
+      "size_bytes": 407
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/double_value.lean",
+      "size_bytes": 329
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/exists_or.lean",
+      "size_bytes": 540
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/fold_stitch.lean",
+      "size_bytes": 542
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/forall_and.lean",
+      "size_bytes": 392
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/map_stitch.lean",
+      "size_bytes": 529
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/not_exists.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/omap_comp.lean",
+      "size_bytes": 348
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/scale_add.lean",
+      "size_bytes": 409
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/scale_value.lean",
+      "size_bytes": 468
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/size_stitch.lean",
+      "size_bytes": 528
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/stitch_assoc.lean",
+      "size_bytes": 375
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/surjective_comp.lean",
+      "size_bytes": 329
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C/tri_lower.lean",
+      "size_bytes": 487
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/double_add.lean",
+      "size_bytes": 315
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/double_even.lean",
+      "size_bytes": 371
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/double_value.lean",
+      "size_bytes": 397
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/exists_or.lean",
+      "size_bytes": 514
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/fold_stitch.lean",
+      "size_bytes": 563
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/forall_and.lean",
+      "size_bytes": 392
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/map_stitch.lean",
+      "size_bytes": 535
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/not_exists.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/obind_assoc.lean",
+      "size_bytes": 342
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/size_stitch.lean",
+      "size_bytes": 488
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/stitch_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/surjective_comp.lean",
+      "size_bytes": 329
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_dynamic/tri_lower.lean",
+      "size_bytes": 319
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/double_add.lean",
+      "size_bytes": 361
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/double_even.lean",
+      "size_bytes": 392
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/fold_stitch.lean",
+      "size_bytes": 542
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/forall_and.lean",
+      "size_bytes": 378
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/left_inverse.lean",
+      "size_bytes": 257
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/map_stitch.lean",
+      "size_bytes": 535
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/not_exists.lean",
+      "size_bytes": 285
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/scale_add.lean",
+      "size_bytes": 462
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/size_map.lean",
+      "size_bytes": 491
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/size_stitch.lean",
+      "size_bytes": 488
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/stitch_assoc.lean",
+      "size_bytes": 375
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/surjective_comp.lean",
+      "size_bytes": 341
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/C_failure/tri_lower.lean",
+      "size_bytes": 347
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/double_even.lean",
+      "size_bytes": 407
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/double_value.lean",
+      "size_bytes": 303
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/exists_and.lean",
+      "size_bytes": 322
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/fold_stitch.lean",
+      "size_bytes": 536
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/forall_and.lean",
+      "size_bytes": 378
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/map_comp.lean",
+      "size_bytes": 432
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/map_stitch.lean",
+      "size_bytes": 535
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/not_exists.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/omap_bind.lean",
+      "size_bytes": 494
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/scale_value.lean",
+      "size_bytes": 377
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/size_stitch.lean",
+      "size_bytes": 488
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/stitch_assoc.lean",
+      "size_bytes": 375
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/surjective_comp.lean",
+      "size_bytes": 331
+    },
+    {
+      "path": "solutions/deepseek_flash_v41/3/D/tri_lower.lean",
+      "size_bytes": 303
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/double_even.lean",
+      "size_bytes": 369
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/double_value.lean",
+      "size_bytes": 286
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/exists_or.lean",
+      "size_bytes": 444
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/fold_stitch.lean",
+      "size_bytes": 536
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/forall_and.lean",
+      "size_bytes": 343
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/injective_comp.lean",
+      "size_bytes": 279
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/map_comp.lean",
+      "size_bytes": 399
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/map_stitch.lean",
+      "size_bytes": 529
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/not_exists.lean",
+      "size_bytes": 285
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/omap_bind.lean",
+      "size_bytes": 461
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/scale_add.lean",
+      "size_bytes": 603
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/scale_value.lean",
+      "size_bytes": 299
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/size_stitch.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/stitch_assoc.lean",
+      "size_bytes": 375
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/A/surjective_comp.lean",
+      "size_bytes": 322
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/double_even.lean",
+      "size_bytes": 367
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/double_value.lean",
+      "size_bytes": 391
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/exists_and.lean",
+      "size_bytes": 328
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/fold_stitch.lean",
+      "size_bytes": 537
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/forall_and.lean",
+      "size_bytes": 343
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/left_inverse.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/map_stitch.lean",
+      "size_bytes": 550
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/not_exists.lean",
+      "size_bytes": 285
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/omap_bind.lean",
+      "size_bytes": 461
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/scale_value.lean",
+      "size_bytes": 295
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/size_map.lean",
+      "size_bytes": 474
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/stitch_assoc.lean",
+      "size_bytes": 379
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/surjective_comp.lean",
+      "size_bytes": 331
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/B/tri_lower.lean",
+      "size_bytes": 296
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/double_even.lean",
+      "size_bytes": 357
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/double_value.lean",
+      "size_bytes": 322
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/fold_stitch.lean",
+      "size_bytes": 617
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/forall_and.lean",
+      "size_bytes": 308
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/map_comp.lean",
+      "size_bytes": 399
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/map_stitch.lean",
+      "size_bytes": 550
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/not_exists.lean",
+      "size_bytes": 285
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/omap_comp.lean",
+      "size_bytes": 348
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/size_stitch.lean",
+      "size_bytes": 473
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/stitch_assoc.lean",
+      "size_bytes": 369
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/surjective_comp.lean",
+      "size_bytes": 340
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C/tri_lower.lean",
+      "size_bytes": 339
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/double_even.lean",
+      "size_bytes": 551
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/double_value.lean",
+      "size_bytes": 356
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/exists_and.lean",
+      "size_bytes": 338
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/fold_stitch.lean",
+      "size_bytes": 542
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/forall_and.lean",
+      "size_bytes": 353
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/map_stitch.lean",
+      "size_bytes": 550
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/not_exists.lean",
+      "size_bytes": 285
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/omap_comp.lean",
+      "size_bytes": 348
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/right_inverse.lean",
+      "size_bytes": 201
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/scale_add.lean",
+      "size_bytes": 372
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/scale_value.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/size_map.lean",
+      "size_bytes": 470
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/size_stitch.lean",
+      "size_bytes": 508
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/stitch_assoc.lean",
+      "size_bytes": 369
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/surjective_comp.lean",
+      "size_bytes": 332
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_dynamic/tri_lower.lean",
+      "size_bytes": 307
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/exists_and.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/fold_stitch.lean",
+      "size_bytes": 557
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/forall_and.lean",
+      "size_bytes": 378
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/left_inverse.lean",
+      "size_bytes": 246
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/map_comp.lean",
+      "size_bytes": 403
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/map_stitch.lean",
+      "size_bytes": 529
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/not_exists.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/omap_comp.lean",
+      "size_bytes": 315
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/scale_add.lean",
+      "size_bytes": 341
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/size_map.lean",
+      "size_bytes": 455
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/size_stitch.lean",
+      "size_bytes": 528
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/stitch_assoc.lean",
+      "size_bytes": 564
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/surjective_comp.lean",
+      "size_bytes": 331
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/C_failure/tri_lower.lean",
+      "size_bytes": 347
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/double_add.lean",
+      "size_bytes": 348
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/exists_and.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/exists_or.lean",
+      "size_bytes": 516
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/fold_stitch.lean",
+      "size_bytes": 557
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/forall_and.lean",
+      "size_bytes": 378
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/left_inverse.lean",
+      "size_bytes": 290
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/map_comp.lean",
+      "size_bytes": 399
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/map_stitch.lean",
+      "size_bytes": 529
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/not_exists.lean",
+      "size_bytes": 247
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/omap_bind.lean",
+      "size_bytes": 461
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/scale_add.lean",
+      "size_bytes": 341
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/scale_value.lean",
+      "size_bytes": 299
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/size_stitch.lean",
+      "size_bytes": 482
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/stitch_assoc.lean",
+      "size_bytes": 375
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/surjective_comp.lean",
+      "size_bytes": 336
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/1/D/tri_lower.lean",
+      "size_bytes": 372
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/double_even.lean",
+      "size_bytes": 401
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/double_value.lean",
+      "size_bytes": 287
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/exists_and.lean",
+      "size_bytes": 322
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/fold_stitch.lean",
+      "size_bytes": 549
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/forall_and.lean",
+      "size_bytes": 333
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/map_stitch.lean",
+      "size_bytes": 550
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/not_exists.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/obind_assoc.lean",
+      "size_bytes": 371
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/omap_bind.lean",
+      "size_bytes": 461
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/right_inverse.lean",
+      "size_bytes": 201
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/scale_add.lean",
+      "size_bytes": 345
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/size_map.lean",
+      "size_bytes": 451
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/size_stitch.lean",
+      "size_bytes": 512
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/stitch_assoc.lean",
+      "size_bytes": 379
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/surjective_comp.lean",
+      "size_bytes": 323
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/A/tri_lower.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/double_even.lean",
+      "size_bytes": 371
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/double_value.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/exists_and.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/exists_or.lean",
+      "size_bytes": 491
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/fold_stitch.lean",
+      "size_bytes": 536
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/forall_and.lean",
+      "size_bytes": 368
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/left_inverse.lean",
+      "size_bytes": 246
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/map_stitch.lean",
+      "size_bytes": 550
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/not_exists.lean",
+      "size_bytes": 285
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/omap_bind.lean",
+      "size_bytes": 461
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/omap_comp.lean",
+      "size_bytes": 315
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/scale_value.lean",
+      "size_bytes": 299
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/size_map.lean",
+      "size_bytes": 451
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/size_stitch.lean",
+      "size_bytes": 488
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/stitch_assoc.lean",
+      "size_bytes": 385
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/surjective_comp.lean",
+      "size_bytes": 323
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/B/tri_lower.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/double_even.lean",
+      "size_bytes": 376
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/double_value.lean",
+      "size_bytes": 323
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/exists_and.lean",
+      "size_bytes": 332
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/fold_stitch.lean",
+      "size_bytes": 563
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/forall_and.lean",
+      "size_bytes": 333
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/map_stitch.lean",
+      "size_bytes": 550
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/not_exists.lean",
+      "size_bytes": 285
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/scale_add.lean",
+      "size_bytes": 341
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/scale_value.lean",
+      "size_bytes": 409
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/size_stitch.lean",
+      "size_bytes": 488
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/stitch_assoc.lean",
+      "size_bytes": 379
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/surjective_comp.lean",
+      "size_bytes": 331
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C/tri_lower.lean",
+      "size_bytes": 303
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/double_even.lean",
+      "size_bytes": 378
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/exists_and.lean",
+      "size_bytes": 322
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/fold_stitch.lean",
+      "size_bytes": 617
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/forall_and.lean",
+      "size_bytes": 343
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/map_stitch.lean",
+      "size_bytes": 535
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/not_exists.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/omap_comp.lean",
+      "size_bytes": 348
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/scale_add.lean",
+      "size_bytes": 341
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/scale_value.lean",
+      "size_bytes": 295
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/size_stitch.lean",
+      "size_bytes": 487
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/stitch_assoc.lean",
+      "size_bytes": 385
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/surjective_comp.lean",
+      "size_bytes": 319
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_dynamic/tri_lower.lean",
+      "size_bytes": 470
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/double_value.lean",
+      "size_bytes": 292
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/fold_stitch.lean",
+      "size_bytes": 536
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/forall_and.lean",
+      "size_bytes": 363
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/left_inverse.lean",
+      "size_bytes": 249
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/map_stitch.lean",
+      "size_bytes": 535
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/not_exists.lean",
+      "size_bytes": 285
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/omap_bind.lean",
+      "size_bytes": 461
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/scale_add.lean",
+      "size_bytes": 624
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/size_stitch.lean",
+      "size_bytes": 482
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/stitch_assoc.lean",
+      "size_bytes": 375
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/surjective_comp.lean",
+      "size_bytes": 336
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/C_failure/tri_lower.lean",
+      "size_bytes": 303
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/double_add.lean",
+      "size_bytes": 356
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/double_even.lean",
+      "size_bytes": 516
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/fold_stitch.lean",
+      "size_bytes": 563
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/forall_and.lean",
+      "size_bytes": 308
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/left_inverse.lean",
+      "size_bytes": 290
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/map_stitch.lean",
+      "size_bytes": 550
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/not_exists.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/omap_bind.lean",
+      "size_bytes": 461
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/right_inverse.lean",
+      "size_bytes": 201
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/size_stitch.lean",
+      "size_bytes": 483
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/stitch_assoc.lean",
+      "size_bytes": 369
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/surjective_comp.lean",
+      "size_bytes": 323
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/2/D/tri_lower.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/double_even.lean",
+      "size_bytes": 375
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/double_value.lean",
+      "size_bytes": 288
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/exists_and.lean",
+      "size_bytes": 328
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/fold_stitch.lean",
+      "size_bytes": 563
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/forall_and.lean",
+      "size_bytes": 368
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/injective_comp.lean",
+      "size_bytes": 279
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/map_stitch.lean",
+      "size_bytes": 535
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/not_exists.lean",
+      "size_bytes": 285
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/obind_assoc.lean",
+      "size_bytes": 342
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/omap_bind.lean",
+      "size_bytes": 494
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/scale_value.lean",
+      "size_bytes": 299
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/size_stitch.lean",
+      "size_bytes": 487
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/stitch_assoc.lean",
+      "size_bytes": 342
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/surjective_comp.lean",
+      "size_bytes": 326
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/A/tri_lower.lean",
+      "size_bytes": 304
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/double_even.lean",
+      "size_bytes": 315
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/double_value.lean",
+      "size_bytes": 288
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/exists_and.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/exists_or.lean",
+      "size_bytes": 510
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/fold_stitch.lean",
+      "size_bytes": 563
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/forall_and.lean",
+      "size_bytes": 368
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/injective_comp.lean",
+      "size_bytes": 279
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/map_comp.lean",
+      "size_bytes": 405
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/map_stitch.lean",
+      "size_bytes": 533
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/not_exists.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/omap_bind.lean",
+      "size_bytes": 461
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/size_map.lean",
+      "size_bytes": 451
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/size_stitch.lean",
+      "size_bytes": 523
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/stitch_assoc.lean",
+      "size_bytes": 369
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/surjective_comp.lean",
+      "size_bytes": 321
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/B/tri_lower.lean",
+      "size_bytes": 336
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/double_value.lean",
+      "size_bytes": 288
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/fold_stitch.lean",
+      "size_bytes": 582
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/forall_and.lean",
+      "size_bytes": 308
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/left_inverse.lean",
+      "size_bytes": 231
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/map_comp.lean",
+      "size_bytes": 631
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/map_stitch.lean",
+      "size_bytes": 550
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/not_exists.lean",
+      "size_bytes": 283
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/obind_assoc.lean",
+      "size_bytes": 340
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/omap_bind.lean",
+      "size_bytes": 461
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/scale_add.lean",
+      "size_bytes": 327
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/scale_value.lean",
+      "size_bytes": 409
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/size_map.lean",
+      "size_bytes": 451
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/size_stitch.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/stitch_assoc.lean",
+      "size_bytes": 387
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/surjective_comp.lean",
+      "size_bytes": 323
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C/tri_lower.lean",
+      "size_bytes": 314
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/double_add.lean",
+      "size_bytes": 550
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/double_even.lean",
+      "size_bytes": 477
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/exists_and.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/exists_or.lean",
+      "size_bytes": 506
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/fold_stitch.lean",
+      "size_bytes": 542
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/forall_and.lean",
+      "size_bytes": 270
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/left_inverse.lean",
+      "size_bytes": 258
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/map_comp.lean",
+      "size_bytes": 399
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/map_stitch.lean",
+      "size_bytes": 535
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/not_exists.lean",
+      "size_bytes": 285
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/omap_comp.lean",
+      "size_bytes": 348
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/omap_identity.lean",
+      "size_bytes": 279
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/right_inverse.lean",
+      "size_bytes": 201
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/scale_value.lean",
+      "size_bytes": 410
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/size_map.lean",
+      "size_bytes": 457
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/size_stitch.lean",
+      "size_bytes": 488
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/stitch_assoc.lean",
+      "size_bytes": 379
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/surjective_comp.lean",
+      "size_bytes": 329
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_dynamic/tri_lower.lean",
+      "size_bytes": 299
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/double_even.lean",
+      "size_bytes": 462
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/double_value.lean",
+      "size_bytes": 288
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/exists_and.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/exists_or.lean",
+      "size_bytes": 524
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/fold_stitch.lean",
+      "size_bytes": 548
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/forall_and.lean",
+      "size_bytes": 308
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/injective_comp.lean",
+      "size_bytes": 291
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/left_inverse.lean",
+      "size_bytes": 235
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/map_comp.lean",
+      "size_bytes": 399
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/map_stitch.lean",
+      "size_bytes": 550
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/not_exists.lean",
+      "size_bytes": 285
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/omap_bind.lean",
+      "size_bytes": 494
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/omap_comp.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/scale_value.lean",
+      "size_bytes": 317
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/size_map.lean",
+      "size_bytes": 465
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/size_stitch.lean",
+      "size_bytes": 506
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/stitch_assoc.lean",
+      "size_bytes": 332
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/surjective_comp.lean",
+      "size_bytes": 336
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/C_failure/tri_lower.lean",
+      "size_bytes": 377
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/exists_and.lean",
+      "size_bytes": 316
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/exists_or.lean",
+      "size_bytes": 502
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/fold_stitch.lean",
+      "size_bytes": 536
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/forall_and.lean",
+      "size_bytes": 343
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/injective_comp.lean",
+      "size_bytes": 279
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/left_inverse.lean",
+      "size_bytes": 249
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/map_comp.lean",
+      "size_bytes": 401
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/map_stitch.lean",
+      "size_bytes": 550
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/not_exists.lean",
+      "size_bytes": 230
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/obind_assoc.lean",
+      "size_bytes": 373
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/omap_bind.lean",
+      "size_bytes": 463
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/omap_comp.lean",
+      "size_bytes": 348
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/omap_identity.lean",
+      "size_bytes": 310
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/right_inverse.lean",
+      "size_bytes": 213
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/scale_add.lean",
+      "size_bytes": 341
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/scale_value.lean",
+      "size_bytes": 301
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/size_map.lean",
+      "size_bytes": 455
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/size_stitch.lean",
+      "size_bytes": 508
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/stitch_assoc.lean",
+      "size_bytes": 375
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/surjective_comp.lean",
+      "size_bytes": 323
+    },
+    {
+      "path": "solutions/deepseek_v4_pro_0813/3/D/tri_lower.lean",
+      "size_bytes": 303
+    },
+    {
+      "path": "summary.json",
+      "size_bytes": 20071
+    },
+    {
+      "path": "trials.jsonl",
+      "size_bytes": 288187
+    }
+  ]
+}

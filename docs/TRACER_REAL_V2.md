@@ -14,6 +14,35 @@ TRACER-REAL v2 已完成**第一阶段预注册和候选历史扫描**，并完�
 - [`src/causal_analysis_v2.py`](../src/causal_analysis_v2.py)在看到 v2 结果前实现项目等权主估计、项目级符号翻转检验和分层重采样区间；
 - 因果 runner 已支持每个上游项目各自绑定相对 Lake 根和精确 `lean-toolchain`，不允许用一个命令行项目根覆盖全部 v2 项目。
 
+剩余筛查已有独立的[机器可读运行计划](../experiments/tracer_real_v2_screening.plan.json)：按冻结候选数升序处理 SciLean 54、Equational Theories 250、FLT 270、PhysLean 675，共 1,249 项。这个顺序只降低环境故障的试错成本，不改变纳入规则。默认单 worker、逐候选写入续跑状态，只有完整结束后才发布项目报告；全流程不调用 provider。
+
+当 repair24 正式实验仍在运行时，只执行轻量状态检查：
+
+```powershell
+.\scripts\run_tracer_real_v2_screening.ps1 -Mode Status
+```
+
+入口会报告下一个项目和本地检出状态；若检测到 `src/research.py run` 或 `resume` 进程，`Prepare` 与 `Screen` 会硬拒绝，避免两个实验争用 CPU、磁盘和 Lake 缓存而污染耗时证据。repair24 完成后，对每个项目依次运行：
+
+```powershell
+.\scripts\run_tracer_real_v2_screening.ps1 -Mode Prepare -Project next
+.\scripts\run_tracer_real_v2_screening.ps1 -Mode Screen -Project next
+.\scripts\run_tracer_real_v2_screening.ps1 -Mode Build -Project scilean
+```
+
+`Prepare` 要求固定端点、干净工作树和精确工具链，且 `lake update` 不得改写版本库中的 `lake-manifest.json`；`Screen` 要求依赖已经准备，并固定使用 `--workers 1 --timeout 180`。中断后重复同一条 `Screen` 命令会读取逐项状态继续，不能改候选或覆盖完整报告。`Build` 只能用于已有完整公开筛查报告的指定项目，它会重新验证所有纳入题，公开任务写入 `benchmarks/real_repairs/<project>_v2/`，参考证明隔离写入被版本控制排除的 `private_references/<project>_v2/`；两类输出均拒绝覆盖。每完成一个项目，`tracer_real_v2.py audit` 会重新核对所有已发布决定。这里的运行计划与状态审计不是筛查结果。
+
+`Status` 还会给出只基于已公开完整报告的 `enrollment_projection`。当前两项目共有 60 个暂定通过项和 4 类错误，题数与类别门槛在已筛查池中已达到，但只有 2 个合格测试项目，距离项目数门槛还差 3 个；PFR 暂占 44/60，超过 35% 上限。若 PFR 仍是最大项目，至少还需 66 个其他项目通过项才能仅从算术上满足占比。这些数字不外推其余四项目，不代表最终题库已达标。
+
+最终组合另有 fail-closed 入口。它只读取完整筛查报告和已构建子题库，不运行 Lean、不调用 provider；当前应列出阻断项且拒绝写文件：
+
+```powershell
+python src/tracer_real_v2_assembly.py status
+python src/tracer_real_v2_assembly.py write-spec
+```
+
+只有六项目全筛完、至少五个新项目各有五题、总题数/四类错误/35% 项目占比同时达标，且每个合格项目的公开子题库与报告题数和上游来源一致时，`write-spec` 才会生成 `benchmarks/real_repairs/tracer_real_v2.projects.json`。随后才允许执行它返回的 `assemble-projects` 命令；最终 manifest 仍须通过下文的 v2 audit，不能仅凭 spec 存在放开 provider。
+
 当前离线审计会核对候选项目、端点、扫描窗口和候选总数，并仍应明确返回 `ready_for_provider_run: false`：
 
 ```powershell

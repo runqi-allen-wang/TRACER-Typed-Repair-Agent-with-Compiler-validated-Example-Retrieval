@@ -1,0 +1,19 @@
+{
+  "format": "tracer-research-ai-assisted-review-v1",
+  "experiment_id": "research-313f437f-70cf-49ad-82ea-6fed676c2602",
+  "review_mode": "ai_assisted",
+  "tasks": 864,
+  "successful_tasks": 811,
+  "failed_tasks_not_proof_reviewed": 53,
+  "reviewed_successes": 811,
+  "successes_with_linter_warnings": 27,
+  "checks": [
+    "任务与独立 Lean 编译状态",
+    "保存证明与最终成功候选一致",
+    "证明区域之外源码不变",
+    "未完成证明、额外公理、命令注入及本机执行构造",
+    "检索内容不含目标标识或完整成功候选"
+  ],
+  "errors": [],
+  "complete": true
+}

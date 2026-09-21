@@ -42,6 +42,8 @@ jobs:
         run: python scripts/audit_feedback_study.py published/feedback-study-562ad440-3446-4138-801e-59726ed0e108
       - name: Audit published cross-model comparison
         run: python scripts/audit_feedback_comparison.py published/feedback-cross-model-8ccb89dd-562ad440
+      - name: Audit published six-arm research
+        run: python scripts/audit_research_release.py published/research-six-arm-313f437f
       - name: Verify second-model replication contract
         run: python scripts/plan_feedback_replication.py --model-id ci-second-model --api-url https://example.invalid/v1/chat/completions --model ci-second-model
       - name: Verify SP security metrics

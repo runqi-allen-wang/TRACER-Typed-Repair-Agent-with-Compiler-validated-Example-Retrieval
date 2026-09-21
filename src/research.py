@@ -11,6 +11,7 @@ import os
 import platform
 import random
 import re
+import shutil
 import statistics
 import sys
 import time
@@ -115,6 +116,22 @@ def load_config(path):
     return config
 
 
+def load_preregistration(path, config, benchmark):
+    """核对正式六臂运行的机器可读预注册；不允许运行时漂移。"""
+
+    record = read_json(path)
+    tasks = build_plan(config, benchmark)
+    if record.get("version") != "tracer-repair24-six-arm-preregistration-v1":
+        raise ValueError("六臂预注册版本不受支持")
+    if record.get("benchmark_version") != benchmark["version"] or record.get("config") != config:
+        raise ValueError("六臂预注册与题库或配置不一致")
+    if record.get("planned_tasks") != len(tasks) or record.get("max_generations") != len(tasks) * config["max_rounds"]:
+        raise ValueError("六臂预注册的任务或生成上限不一致")
+    if record.get("primary_comparison") != "B - A":
+        raise ValueError("六臂预注册缺少唯一主对比 B - A")
+    return record
+
+
 def build_plan(config, benchmark):
     tasks = [
         {"model_id": model["id"], "repeat": repeat, "arm": arm, "problem_id": problem["id"]}
@@ -185,6 +202,79 @@ class PricedProvider:
     def metadata(self):
         return {**self.provider.metadata(), **{key: self.model.get(key) for key in
                 ("input_price_per_1k", "output_price_per_1k", "pricing_note")}}
+
+
+def _providers(config, api_keys=None, budget=None):
+    providers = {}
+    for model in config["models"]:
+        if "REPLACE" in model["model"] or "实际模型" in model["model"]:
+            raise ValueError("请先替换配置中的示例模型名称")
+        key = (api_keys or {}).get(model["api_key_env"], os.environ.get(model["api_key_env"], "")).strip()
+        if not key:
+            raise ValueError("未设置密钥环境变量：" + model["api_key_env"])
+        provider = OpenAICompatibleProvider(
+            url=model["api_url"], api_key=key, model=model["model"], wire_api="chat_completions",
+            temperature=model["temperature"], max_tokens=model["max_tokens"],
+            thinking=model.get("thinking"), reasoning_effort=model.get("reasoning_effort"),
+            max_attempts=1, request_timeout=180,
+        )
+        providers[model["id"]] = PricedProvider(provider, model, budget)
+    return providers
+
+
+def preflight_provider(config, api_keys=None):
+    """仅用合成 True 定理检查两模型连接、候选解析与 Lean 编译。"""
+
+    providers = _providers(config, api_keys, None)
+    source = (
+        "import Std\n\n"
+        "theorem tracerSixArmProviderPreflight : True :=\n"
+        "  -- PROOF_START\n"
+        "  by trivial\n"
+        "  -- PROOF_END\n"
+    )
+    prompt = (
+        "这是连接预检，不是实验任务。请只返回 Lean 证明体，使下列定理成立；"
+        "不要返回 Markdown 或解释。\n\n" + source
+    )
+    rows = []
+    for model in config["models"]:
+        provider = providers[model["id"]]
+        try:
+            generation = provider.generate(prompt)
+            candidate = generation.candidate.strip()
+            compiled = compile_candidate(
+                ROOT / "lean_project/TRACERSixArmProviderPreflight.lean", source, candidate,
+                "tracerSixArmProviderPreflight", timeout=config["compile_timeout"],
+            )
+            rows.append({
+                "model_id": model["id"],
+                "provider_ok": True,
+                "candidate_parsed": bool(candidate),
+                "lean_compile_ok": bool(compiled.ok and not diagnostics_use_sorry(compiled.diagnostics)),
+                "usage": generation.usage,
+            })
+        except Exception as exc:
+            rows.append({"model_id": model["id"], "provider_ok": False, "error": redact_sensitive_text(exc)})
+    return {
+        "ok": all(row.get("provider_ok") and row.get("candidate_parsed") and row.get("lean_compile_ok") for row in rows),
+        "scope": "合成 True 定理连接预检；不读取 repair24，不属于预注册实验调用数。",
+        "models": rows,
+    }
+
+
+def _archive_failed_trial(out, destination):
+    """续跑前保留失败或中断任务的全部原始工件。"""
+
+    relative = destination.relative_to(out / "trials")
+    root = out / "retry_history" / relative
+    attempt = 1
+    while (root / f"attempt-{attempt}").exists():
+        attempt += 1
+    archived = root / f"attempt-{attempt}"
+    archived.parent.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(destination), str(archived))
+    return archived
 
 
 class CallBudget:
@@ -271,7 +361,7 @@ def prompt_api_keys(config, show_confirmation=False):
     return keys
 
 
-def run_matrix(config, benchmark_path, out, api_keys=None, budget=None):
+def run_matrix(config, benchmark_path, out, api_keys=None, budget=None, resume=False, preregistration=None):
     benchmark = load_benchmark(benchmark_path)
     template_names = set(PROMPT_TEMPLATES.values()) | {"proof_contract.txt"}
     prompt_snapshot = {name: (ROOT / "prompts" / name).read_text(encoding="utf-8") for name in sorted(template_names)}
@@ -296,50 +386,77 @@ def run_matrix(config, benchmark_path, out, api_keys=None, budget=None):
                                 [Example(name, (), text) for name, text in notes.items()]):
             raise ValueError("失败上下文包含冻结题目声明")
     # 配置缺失在创建运行目录之前报告；不会归档或清除历史 pilot。
-    providers = {}
-    for model in config["models"]:
-        if "REPLACE" in model["model"] or "实际模型" in model["model"]:
-            raise ValueError("请先替换配置中的示例模型名称")
-        key = (api_keys or {}).get(model["api_key_env"], os.environ.get(model["api_key_env"], "")).strip()
-        if not key:
-            raise ValueError("未设置密钥环境变量：" + model["api_key_env"])
-        # 冻结矩阵只使用 Chat 协议；不继承用户终端中其他实验的协议或推理参数。
-        providers[model["id"]] = PricedProvider(OpenAICompatibleProvider(
-            url=model["api_url"], api_key=key, model=model["model"], wire_api="chat_completions",
-            temperature=model["temperature"], max_tokens=model["max_tokens"],
-            thinking=model.get("thinking"), reasoning_effort=model.get("reasoning_effort"),
-            max_attempts=1, request_timeout=180), model, budget)
+    providers = _providers(config, api_keys, budget)
     initial = {row["problem_id"]: row for row in check_benchmark(benchmark_path, config.get("compile_timeout", 60))}
-    out.mkdir(parents=True, exist_ok=False)
+    tasks = build_plan(config, benchmark)
+    examples_snapshot = [{"path": ex.path, "tags": list(ex.tags), "text": ex.text} for ex in examples]
+    lean_toolchain = (ROOT / "lean-toolchain").read_text().strip()
+    if resume:
+        if not out.is_dir():
+            raise ValueError("续跑目录不存在")
+        plan = read_json(out / "plan.json")
+        if (
+            plan.get("config") != config or plan.get("proof_protocol") != PROOF_PROTOCOL
+            or plan.get("prompt_templates") != prompt_snapshot or plan.get("benchmark_version") != benchmark["version"]
+            or plan.get("tasks") != tasks or plan.get("lean_toolchain") != lean_toolchain
+            or plan.get("preregistration") != preregistration
+            or read_json(out / "benchmark.json") != benchmark
+            or read_json(out / "examples.json") != examples_snapshot
+            or read_json(out / "failure_notes.json") != notes
+        ):
+            raise ValueError("续跑配置、题库、语料、提示模板或预注册与原批次不一致")
+        if not (out / "manual_review.csv").is_file():
+            raise ValueError("续跑批次缺少复核表")
+        experiment_id = plan["experiment_id"]
+        if budget is not None:
+            budget.restore(read_json(out / "budget.json"))
+    else:
+        out.mkdir(parents=True, exist_ok=False)
+        experiment_id = "research-" + str(uuid.uuid4())
+        write_json(out / "plan.json", {"experiment_id": experiment_id, "config": config,
+                   "proof_protocol": dict(PROOF_PROTOCOL), "prompt_templates": prompt_snapshot,
+                   "benchmark_version": benchmark["version"], "tasks": tasks, "status": "running",
+                   "platform": platform.system(), "python": platform.python_version(),
+                   "approved_budget": budget.snapshot() if budget else None,
+                   "lean_toolchain": lean_toolchain, "preregistration": preregistration})
+        write_json(out / "benchmark.json", benchmark)
+        write_json(out / "examples.json", examples_snapshot)
+        write_json(out / "failure_notes.json", notes)
+        write_json(out / "initial_compilation.json", redact_value(initial))
+        with (out / "manual_review.csv").open("w", newline="", encoding="utf-8") as handle:
+            fields = ["experiment_id", "model_id", "repeat", "arm", "problem_id", "kernel_pass", "inappropriate_assumption", "leakage_risk", "review_mode", "reviewer_note"]
+            writer = csv.DictWriter(handle, fieldnames=fields)
+            writer.writeheader()
+            review_mode = (preregistration or {}).get("review_mode", "unspecified")
+            writer.writerows({"experiment_id": experiment_id, **task, "review_mode": review_mode} for task in tasks)
     if budget is not None:
         budget.ledger_path = out / "budget.json"
-        write_json(budget.ledger_path, budget.snapshot())
-    tasks = build_plan(config, benchmark)
-    experiment_id = "research-" + str(uuid.uuid4())
-    write_json(out / "plan.json", {"experiment_id": experiment_id, "config": config,
-               "proof_protocol": dict(PROOF_PROTOCOL), "prompt_templates": prompt_snapshot,
-               "benchmark_version": benchmark["version"], "tasks": tasks, "status": "running",
-               "platform": platform.system(), "python": platform.python_version(),
-               "approved_budget": budget.snapshot() if budget else None,
-               "lean_toolchain": (ROOT / "lean-toolchain").read_text().strip()})
-    write_json(out / "benchmark.json", benchmark)
-    write_json(out / "examples.json", [{"path": ex.path, "tags": ex.tags, "text": ex.text} for ex in examples])
+        if not resume:
+            write_json(budget.ledger_path, budget.snapshot())
     # 后续读取本批次快照，避免实验中编辑 examples 改变某一组的语料。
     examples_dir = out / "corpus"
-    examples_dir.mkdir()
-    for example in examples:
-        (examples_dir / example.path).write_text(example.text, encoding="utf-8")
-    write_json(out / "failure_notes.json", notes)
-    write_json(out / "initial_compilation.json", redact_value(initial))
-    with (out / "manual_review.csv").open("w", newline="", encoding="utf-8") as handle:
-        fields = ["experiment_id", "model_id", "repeat", "arm", "problem_id", "kernel_pass", "inappropriate_assumption", "leakage_risk", "reviewer_note"]
-        writer = csv.DictWriter(handle, fieldnames=fields)
-        writer.writeheader()
-        writer.writerows({"experiment_id": experiment_id, **task} for task in tasks)
+    if not resume:
+        examples_dir.mkdir()
+        for example in examples:
+            (examples_dir / example.path).write_text(example.text, encoding="utf-8")
     problems = {p["id"]: p for p in benchmark["problems"]}
     completed = []
     for index, task in enumerate(tasks, 1):
         dest = trial_path(out, task)
+        if resume and dest.exists():
+            trial_file, runs_file = dest / "trial.json", dest / "runs.jsonl"
+            previous = read_json(trial_file) if trial_file.is_file() else None
+            if (
+                previous and not previous.get("error")
+                and previous.get("experiment_id") == experiment_id
+                and all(previous.get(key) == value for key, value in task.items())
+                and runs_file.is_file()
+            ):
+                completed.append(previous)
+                print(f"{index}/{len(tasks)} {task['model_id']} r{task['repeat']} {task['arm']} {task['problem_id']}: SKIP", flush=True)
+                continue
+            archived = _archive_failed_trial(out, dest)
+            print("已保留失败尝试: " + str(archived.relative_to(out)), flush=True)
         dest.mkdir(parents=True)
         problem = problems[task["problem_id"]]
         source_path = Path(benchmark_path).parent / problem["file"]
@@ -390,6 +507,7 @@ def run_matrix(config, benchmark_path, out, api_keys=None, budget=None):
             break
     write_json(out / "completion.json", {"planned": len(tasks), "completed": len(completed),
                "complete": len(completed) == len(tasks), "infrastructure_errors": sum(bool(x["error"]) for x in completed),
+               "archived_retry_attempts": len(list((out / "retry_history").rglob("trial.json"))) if (out / "retry_history").exists() else 0,
                "budget": budget.snapshot() if budget else None})
     return not any(x["error"] for x in completed) and len(completed) == len(tasks)
 
@@ -526,11 +644,14 @@ def summarize(out, allow_partial=False):
         })
     review_path = out / "manual_review.csv"
     reviewed = set()
+    review_mode_counts = defaultdict(int)
     if review_path.exists():
         with review_path.open(encoding="utf-8", newline="") as handle:
             for row in csv.DictReader(handle):
-                if row.get("experiment_id") == plan["experiment_id"] and row.get("kernel_pass") == "yes" and row.get("inappropriate_assumption") == "no" and row.get("leakage_risk") == "no" and row.get("reviewer_note", "").strip():
+                mode = row.get("review_mode")
+                if row.get("experiment_id") == plan["experiment_id"] and mode in {"human", "ai_assisted"} and row.get("kernel_pass") == "yes" and row.get("inappropriate_assumption") == "no" and row.get("leakage_risk") == "no" and row.get("reviewer_note", "").strip():
                     reviewed.add((row["model_id"], row["repeat"], row["arm"], row["problem_id"]))
+                    review_mode_counts[mode] += 1
     successes = {(t["model_id"], str(t["repeat"]), t["arm"], t["problem_id"]) for t, _ in trials if t["compile_ok"]}
     design_complete = (len(plan["config"]["models"]) >= 2 and plan["config"]["repeats"] >= 3
                        and plan["config"].get("max_rounds", 3) == 3
@@ -553,13 +674,16 @@ def summarize(out, allow_partial=False):
                                "mean_success_delta": statistics.mean(d[0] for d in differences),
                                "mean_rounds_delta": statistics.mean(d[1] for d in differences),
                                "interpretation": "描述性配对差异，不是显著性检验"})
+    completion = read_json(out / "completion.json") if (out / "completion.json").is_file() else {}
     report = {"experiment_id": plan["experiment_id"], "trajectory_valid": not errors,
               "protocol_version": protocol_version,
               "metric_definition": ("完整生成且 Lean 验证通过；普通警告另记，未完成证明拒绝。" if plan.get("proof_protocol") == PROOF_PROTOCOL
                                     else "历史严格警告口径：保留原始 compile_ok，不按新协议改判。"),
               "full_research_design": design_complete,
               "manual_review_complete": successes <= reviewed,
+              "review_mode_counts": dict(review_mode_counts),
               "release_ready": design_complete and not errors and bool(successes) and successes <= reviewed,
+              "archived_transport_retry_attempts": completion.get("archived_retry_attempts", 0),
               "errors": errors, "summary": summary,
               "paired_comparisons": paired,
               "scope": "条件内重复成功率；非独立题目的重复不能当成新题扩大样本量。价格估算不是账单。"}
@@ -579,9 +703,11 @@ def main():
         command = sub.add_parser(name)
         command.add_argument("--config", type=Path, default=ROOT / "experiments/research.example.json")
         command.add_argument("--benchmark", type=Path, default=ROOT / "benchmarks/repair24/manifest.json")
+        command.add_argument("--preregistration", type=Path)
         if name == "run":
             command.add_argument("--out", type=Path, required=True)
             command.add_argument("--api-key-prompt", action="store_true")
+            command.add_argument("--resume", action="store_true", help="严格续跑已有目录；跳过已完成任务并归档失败尝试")
             command.add_argument("--max-calls", type=int, required=True, help="用户批准的 HTTP 调用上限；不自动重试")
             command.add_argument("--max-reserved-usd", type=float, required=True, help="保守费用预留上限，不是实际账单")
     check = sub.add_parser("check-benchmark")
@@ -590,22 +716,35 @@ def main():
     report = sub.add_parser("report")
     report.add_argument("--run", type=Path, required=True)
     report.add_argument("--allow-partial", action="store_true")
+    preflight = sub.add_parser("preflight")
+    preflight.add_argument("--config", type=Path, default=ROOT / "experiments/research.example.json")
+    preflight.add_argument("--api-key-prompt", action="store_true")
     args = parser.parse_args()
     try:
+        if args.command == "preflight":
+            config = load_config(args.config)
+            keys = prompt_api_keys(config) if args.api_key_prompt else None
+            result = preflight_provider(config, keys)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return 0 if result["ok"] else 1
         if args.command in {"plan", "run"}:
             config = load_config(args.config)
             benchmark = load_benchmark(args.benchmark)
+            preregistration = load_preregistration(args.preregistration, config, benchmark) if args.preregistration else None
             if args.command == "run":
                 budget = CallBudget(args.max_calls, args.max_reserved_usd)
-                if args.out.exists():
+                if args.resume and not args.out.exists():
+                    raise ValueError("续跑目录不存在")
+                if not args.resume and args.out.exists():
                     raise ValueError("输出目录已存在，不覆盖旧研究")
                 keys = prompt_api_keys(config) if args.api_key_prompt else None
-                return 0 if run_matrix(config, args.benchmark, args.out.resolve(), keys, budget) else 1
+                return 0 if run_matrix(config, args.benchmark, args.out.resolve(), keys, budget, args.resume, preregistration) else 1
             tasks = build_plan(config, benchmark)
             result = {"benchmark": benchmark["version"], "models": len(config["models"]),
                       "proof_protocol": dict(PROOF_PROTOCOL),
                       "repeats": config["repeats"], "arms": config["arms"], "tasks": len(tasks),
                       "max_generations": len(tasks) * config.get("max_rounds", 3),
+                      "preregistration": preregistration.get("version") if preregistration else None,
                       "network_calls": 0, "warning": "plan 不调用 API；示例配置需填真实模型。"}
         elif args.command == "check-benchmark":
             rows = check_benchmark(args.benchmark, args.timeout)
@@ -614,7 +753,7 @@ def main():
             result = summarize(args.run.resolve(), args.allow_partial)
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0
-    except (ValueError, OSError, KeyError) as exc:
+    except (ValueError, OSError, KeyError, RuntimeError) as exc:
         print(json.dumps({"ok": False, "error": redact_sensitive_text(exc)}, ensure_ascii=False), file=sys.stderr)
         return 1
 

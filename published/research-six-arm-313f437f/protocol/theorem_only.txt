@@ -1,0 +1,2 @@
+定理：{theorem}
+请只输出局部 Lean proof term，不要输出 markdown。

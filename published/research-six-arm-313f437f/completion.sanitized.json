@@ -1,0 +1,19 @@
+{
+  "planned": 864,
+  "completed": 864,
+  "complete": true,
+  "infrastructure_errors": 0,
+  "archived_retry_attempts": 5,
+  "budget": {
+    "attempted_calls": 1077,
+    "max_calls": 2592,
+    "reserved_usd": 37.208938500000045,
+    "max_reserved_usd": 120.0,
+    "scope": "保守预留，非实际账单；服务方额外费用或价格变化不受本地控制"
+  },
+  "publication_retry_inventory": {
+    "reported_attempts": 5,
+    "observed_attempt_directories": 6,
+    "observed_round_records": 10
+  }
+}

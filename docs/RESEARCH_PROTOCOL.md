@@ -48,6 +48,14 @@ python src/research.py plan --config experiments/research.local.json
 
 默认：24 题 × 2 模型 × 3 重复 × 6 组 = 864 任务，最多 2592 次生成。plan 不联网、不读取 Key。研究入口禁用自动 HTTP 重试；单题/旧 pilot 保留自己的重试设置，不得混为一谈。
 
+### 3.1 已完成的 2026-09-20 正式批次
+
+批次 `research-313f437f-70cf-49ad-82ea-6fed676c2602` 已完成 864/864 个任务，并以 `published/research-six-arm-313f437f/` 发布：1,066 条脱敏逐轮记录、811 个成功证明、53 个失败任务、864 行复核账本和机器可读 AI 辅助复核报告。全部成功证明均独立复编译；复核模式是 `ai_assisted`，不是纯人工复核。
+
+Flash 的 R-A～R-F 三轮内成功数为 69、69、69、68、70、70，Pro 为 67、65、67、65、67、65。唯一预注册主比较 R-B−R-A 分别为 0/72 和 −2/72，因此当前证据没有显示稳定的正向编译反馈处理效应。R-E/R-F 的动态查询确实随错误变化，但最高成功数只在 Flash 出现，不能写成跨模型稳定增益。上述数字是 24 道独立题上的配对描述性结果；三重复和六臂不能被当成 864 道独立题，不能自动支持因果、显著性、跨供应商或 SOTA 结论。
+
+发布时运行期字段报告 5 次归档重试，而目录盘点发现 6 个归档尝试目录、10 条失败轮次和 1 次无轮次记录的调用预留。发布包同时披露两种计数，不回写原始运行记录。5,116,954 个已记录 token 和约 13.39 美元的配置估算也只用于复查，不是供应商账单。
+
 先用单模型、单重复、少数组调试，不能把它混入正式矩阵。正式配置运行前冻结，不按中途分数更换模型或挑选最佳重复。
 
 使用隐藏输入，不把 Key 写入配置、命令历史或持久环境。下面是待用户批准的 48 个 R-B 任务预跑（存储 arm 为 `B`），不是正式六臂实验：
@@ -59,11 +67,25 @@ python src/research.py run --config experiments/research.deepseek.preflight.json
 
 run 才调用付费 API；执行即授权指定来源、任务数及预算。价格字段是每千输入/输出 token 的美元估计。CLI 的预算模式要求价格已配置，不能使用 null。每次调用前按输入字节数＋封装余量与最大输出额度保守预留，失败或超时不退回该预留、不自动重试；达到任一上限停止并保留部分批次。这是本地估算保护，不是服务方硬账单上限；价格变更、额外收费需另行核对。需要硬消费限制时使用服务方账号限额。密钥只在进程内使用，同服务共享变量只询问一次，不显示后缀，不使用历史对话中的 Key。
 
-完整配置 [research.deepseek.json](../experiments/research.deepseek.json) 是 Flash/Pro 两模型、三重复、六组。预跑结果不可混入完整实验；完整运行前重新批准预算并选择新目录。两种模型来自同一模型家族，不代表跨厂商泛化。
+2026-09-20 正式六臂配置为 [research.deepseek.six_arm_20260920.json](../experiments/research.deepseek.six_arm_20260920.json)，对应的[机器可读预注册](../experiments/preregistrations/repair24_six_arm_deepseek_20260920.json)冻结 Flash/Pro 两模型、三重复、六组、180 秒编译预算、唯一主对比 `B - A` 和 AI 辅助复核模式。历史 [research.deepseek.json](../experiments/research.deepseek.json)保留旧模型别名、旧价格与 60 秒预算，只用于追溯，不得用于本次正式运行。两种模型来自同一模型家族，不代表跨厂商泛化。
+
+推荐通过统一 PowerShell 入口运行。它先执行离线计划、repair24 编译门禁和仅含合成 `True` 定理的两模型连接预检，再开始 864 任务正式矩阵；API key 只存在于当前 PowerShell 进程并在 `finally` 中清除。
+
+~~~powershell
+./scripts/run_repair24_six_arm.ps1 -BudgetUsd 120
+~~~
+
+`BudgetUsd` 是每次请求前按最大输出额度进行的本地保守预留，不是供应商硬账单限额。脚本固定 2,592 次最大调用，不能用调小调用数的方式制造“完成”批次。若网络或基础设施错误导致停止，保留原目录并使用完全相同的预算续跑：
+
+~~~powershell
+./scripts/run_repair24_six_arm.ps1 -BudgetUsd 120 -Out "results/research-six-arm-deepseek-实际批次目录" -Resume
+~~~
+
+续跑会跳过已完成任务，把失败或中断任务原样移入 `retry_history`，并在报告中披露归档次数；不会把失败尝试静默删除。统一入口还会对本次新产生且明确分类为 HTTP 429/500/502/503/504、连接重置或超时的瞬时故障做有限次延迟续跑。默认最多自动续跑 20 次、每次等待 60 秒；每个 provider 请求仍只发送一次，未知错误、配置漂移、预算耗尽和审计失败立即停止。可用 `-TransportResumeAttempts` 与 `-TransportResumeDelaySeconds` 调整有限恢复策略，但不能改变冻结实验配置、题库、调用上限或预算账本。修改配置、预算或题库时必须新建批次，不能续写旧目录。
 
 当前 48 任务预跑的编译时限统一为 180 秒：本机曾在 60 秒预检时发生工具链超时，180 秒复检后 24 题均形成有效修复输入。该调整发生在任何收费生成之前；它不是放宽证明正确性，也不修改 Lean 声明。完整矩阵仍需单独核准配置，不能混合不同编译预算的运行。
 
-截至 2026-08-28，[DeepSeek 官方价格](https://api-docs.deepseek.com/quick_start/pricing/) 的峰时每百万输入未命中/输出美元价格分别为 Flash 0.44/1.32、Pro 1.32/3.96。配置按峰时且全部输入未命中估算，未减去缓存与低谷折扣，所以不是实际账单。完整矩阵若每次输出均达 12000 token，仅输出按此价格约 82.11 美元，另加输入；不是预测实际花费。
+截至 2026-09-20，[DeepSeek 官方价格](https://api-docs.deepseek.com/quick_start/pricing/) 的峰时每百万输入未命中/输出美元价格分别为 V4.1-Flash 0.30/1.20、V4-Pro 1.32/3.96。正式配置使用当前推荐的 `deepseek-flash` 与仍受支持的 `deepseek-v4-pro` 名称，按峰时且全部输入未命中保守估算，不减去缓存与低谷折扣。完整矩阵若每次输出均达到 12000 token，仅输出预留为 80.24832 美元，输入另计；这不是实际账单预测。
 
 两模型显式固定 thinking=enabled、reasoning_effort=high。官方说明[思考模式会忽略 temperature](https://api-docs.deepseek.com/guides/thinking_mode/)，因此不能把配置中的 0 写成确定性生成保证。日志同时保存请求参数与服务端返回的 model/id/finish_reason；别名版本仍可能随供应商更新。
 
@@ -122,7 +144,21 @@ python src/research.py report --run results/research-run-001
 
 summary.json / summary.csv 包含首轮/三轮成功率、重复均值和标准差、轮数、生成/编译/总耗时、输入/输出/总 token 及费用。价格或 usage 缺失显示 null；已知费用小计不是完整账单。供应商缓存分层、推理 token 计价或折扣须在 pricing_note 说明，双单价估计不替代发票。
 
-人工检查成功证明后填写 kernel_pass=yes、inappropriate_assumption=no、leakage_risk=no 和 reviewer_note，不得未经检查批量 PASS。trajectory_valid 是自动轨迹校验；release_ready 另需完整多模型、重复六臂设计及成功题复核。旧 validate_pilot.py / export_pilot.py 只支持旧 18×3 格式，不用于新矩阵。新轨迹默认本地保存，发布前另行脱敏审计，勿使用 git add . 强行加入运行目录。
+AI 辅助检查成功证明后填写 kernel_pass=yes、inappropriate_assumption=no、leakage_risk=no、review_mode=ai_assisted 和 reviewer_note；不得未经逐项检查批量 PASS，也不得表述为纯人工复核。trajectory_valid 是自动轨迹校验；release_ready 另需完整多模型、重复六臂设计及成功题复核。旧 validate_pilot.py / export_pilot.py 只支持旧 18×3 格式，不用于新矩阵。新轨迹默认本地保存，发布前另行脱敏审计，勿使用 git add . 强行加入运行目录。
+
+完整批次和 AI 辅助复核通过后，使用六臂专用导出与审计入口：
+
+~~~powershell
+python scripts/export_research_release.py `
+  --run "results/research-six-arm-deepseek-实际批次" `
+  --out "published/research-six-arm-实验编号"
+
+python scripts/audit_research_release.py `
+  "published/research-six-arm-实验编号" `
+  --compile-solutions
+~~~
+
+导出器不公开逐请求完整 prompt、供应商响应 ID、认证字段、本机绝对路径或 `retry_history` 原文；但会分别披露有效逐轮记录、归档失败轮次和无对应轮次的调用预留。发布清单只使用相对路径和字节数盘点。审计器要求精确 864 任务、六臂矩阵、预注册、完整复核表和成功证明一一对应；`--compile-solutions` 会再次独立编译全部公开成功证明。
 
 比较按同模型、同题、同重复配对。重复不是新数学题，不扩大独立样本数；论文建议按题聚类 bootstrap 并披露各次重复。脚本提供描述统计，不输出显著性结论。失败、不利结果和基础设施中断都须披露。
 

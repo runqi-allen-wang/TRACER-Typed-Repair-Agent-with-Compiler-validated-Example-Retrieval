@@ -15,7 +15,7 @@ from agent import estimate_cost, prompt_for, solve_problem
 from compiler import CompileResult
 from provider import Generation
 from retriever import Example, diagnostic_query, find_retrieval_leaks, load_examples, retrieve
-from research import ARMS, build_plan, load_benchmark, load_config, load_trials, run_matrix, summarize, trial_path, write_json
+from research import ARMS, build_plan, load_benchmark, load_config, load_preregistration, load_trials, run_matrix, summarize, trial_path, write_json
 from capsule_metrics import reduction, summarize_diagnoses, summarize_replays
 
 
@@ -34,6 +34,19 @@ class CapturingProvider:
 
 
 class ResearchTest(unittest.TestCase):
+    def test_formal_six_arm_preregistration_matches_current_config(self):
+        config = load_config(ROOT / "experiments/research.deepseek.six_arm_20260920.json")
+        benchmark = load_benchmark(ROOT / "benchmarks/repair24/manifest.json")
+        preregistration = load_preregistration(
+            ROOT / "experiments/preregistrations/repair24_six_arm_deepseek_20260920.json",
+            config, benchmark,
+        )
+        self.assertEqual(len(build_plan(config, benchmark)), 864)
+        self.assertEqual(config["compile_timeout"], 180)
+        self.assertEqual(config["models"][0]["model"], "deepseek-flash")
+        self.assertEqual(preregistration["primary_comparison"], "B - A")
+        self.assertEqual(preregistration["review_mode"], "ai_assisted")
+
     def test_frozen_corpora_do_not_overlap_repair_statements(self):
         benchmark = load_benchmark(ROOT / "benchmarks/repair24/manifest.json")
         statements = [(p["id"], p["source_text"]) for p in benchmark["problems"]]
@@ -205,6 +218,45 @@ class ResearchTest(unittest.TestCase):
                 self.assertFalse(run_matrix(config, ROOT / "benchmarks/repair24/manifest.json", out))
                 self.assertEqual(solve.call_count, 1)
                 self.assertFalse(json.loads((out / "completion.json").read_text())["complete"])
+
+    def test_resume_archives_failed_task_and_keeps_experiment_id(self):
+        config = load_config(ROOT / "experiments/research.example.json")
+        config.update(models=config["models"][:1], repeats=1, arms=["A"])
+        config["models"][0]["model"] = "offline-test-only"
+        manifest_path = ROOT / "benchmarks/repair24/manifest.json"
+        benchmark = load_benchmark(manifest_path)
+        benchmark["problems"] = [problem for problem in benchmark["problems"] if problem["id"] == "forall_and"]
+        initial = [{"problem_id": "forall_and", "diagnostic": {}, "raw_diagnostics": ""}]
+        references = json.loads((ROOT / "tests/fixtures/repair24_reference.json").read_text(encoding="utf-8"))
+
+        class OfflineProvider(CapturingProvider):
+            name = "openai_compatible"
+
+            def generate(self, prompt):
+                return Generation(references["forall_and"], {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2}, self.name)
+
+            def metadata(self):
+                model = config["models"][0]
+                return {"provider": self.name, "url": model["api_url"],
+                        **{key: model[key] for key in ("model", "temperature", "max_tokens")}}
+
+        with tempfile.TemporaryDirectory() as directory:
+            out = Path(directory) / "research"
+            environment = {config["models"][0]["api_key_env"]: "offline-test-only"}
+            with patch.dict(os.environ, environment), patch("research.load_benchmark", return_value=benchmark), \
+                 patch("research.check_benchmark", return_value=initial), \
+                 patch("research.OpenAICompatibleProvider", return_value=CapturingProvider()), \
+                 patch("research.solve_problem", return_value={"compile_ok": False, "provider_error": "temporary outage"}):
+                self.assertFalse(run_matrix(config, manifest_path, out))
+            experiment_id = json.loads((out / "plan.json").read_text(encoding="utf-8"))["experiment_id"]
+            with patch.dict(os.environ, environment), patch("research.load_benchmark", return_value=benchmark), \
+                 patch("research.check_benchmark", return_value=initial), \
+                 patch("research.OpenAICompatibleProvider", return_value=OfflineProvider()):
+                self.assertTrue(run_matrix(config, manifest_path, out, resume=True))
+            self.assertEqual(json.loads((out / "plan.json").read_text(encoding="utf-8"))["experiment_id"], experiment_id)
+            self.assertEqual(json.loads((out / "completion.json").read_text(encoding="utf-8"))["archived_retry_attempts"], 1)
+            self.assertEqual(len(list((out / "retry_history").rglob("trial.json"))), 1)
+            self.assertEqual(summarize(out)["archived_transport_retry_attempts"], 1)
 
     def make_trace(self, base):
         config = load_config(ROOT / "experiments/research.example.json")
