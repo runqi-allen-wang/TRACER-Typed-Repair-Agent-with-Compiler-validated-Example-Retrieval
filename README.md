@@ -22,15 +22,15 @@ TRACER is a research toolkit for **Lean 4 proof repair, compiler-feedback experi
 
 | Namespace | Meaning | Status |
 | --- | --- | --- |
-| **P-A / P-B / P-C** | Historical 18-task smoke pilot; stored as `A/B/C` | Retained only as pipeline evidence |
-| **R-A / R-B / R-C / R-D / R-E / R-F** | repair24 research arms for feedback and retrieval | Runner exists; the full six-arm study is pending |
+| **R-A / R-B / R-C / R-D / R-E / R-F** | repair24 research arms for feedback and retrieval | The preregistered 864-task matrix is complete and released |
 | **SP-1 through SP-12** | Pre-compilation security policies with benign controls | Offline policy suite published; OS isolation evidence is pending |
 
 Research-arm storage values remain `A/B/C/D/C_dynamic/C_failure` for compatibility. Public discussion uses R-A through R-F; SP identifiers are policies, not extra experimental arms. See the [research protocol](docs/RESEARCH_PROTOCOL.md) and [security policy](docs/security_policy.md).
 
 ## Current state
 
-- **Compiler Feedback Study v1:** two audited 216-task runs compare raw, normalized, and structured diagnostics on repair24. The releases contain 408 independently recompiled successful proofs and AI-assisted review ledgers.
+- **Six-arm repair24 study:** the preregistered 864-task matrix is complete. Its release contains 1,066 sanitized attempts, 811 successful proofs, an AI-assisted review ledger, and a reproducible audit contract.
+- **Compiler Feedback Study v1:** the earlier two 216-task releases remain supporting representation studies; their 408 successful proofs were independently recompiled.
 - **TRACER-REAL v2:** six upstream projects and 1,576 history candidates are frozen. LeanAPAP and PFR have been fully screened: **327 candidates, 60 admitted, 267 rejected**. The remaining four projects are incomplete, so provider execution is still prohibited. See the [protocol](docs/TRACER_REAL_V2.md) and [machine-readable enrollment](benchmarks/real_repairs/tracer_real_v2.enrollment.json).
 - **LeanCapsule:** 24 reviewed cases cover Std, Mathlib, and project-local environments; a separate 12-core / 4-challenge suite checks clean-directory replay.
 - **Feedback and security:** the three-layer diagnostic protocol, [feedback-adoption audit](docs/FEEDBACK_ADOPTION_V1.md), [study protocol](docs/FEEDBACK_STUDY_V1.md), and SP-1–SP-12 gates are implemented. Container and low-privilege isolation remain future evidence.
@@ -88,31 +88,38 @@ Agent success means a candidate passed Lean and incomplete-proof checks. Capsule
 
 ## Latest published results
 
-Each model-family release contains 24 tasks × three feedback representations × three repeats = 216 task instances, with at most three repair rounds.
+The latest release freezes 24 repair24 problems × two DeepSeek-family model configurations × three repeats × six research arms = **864 task instances**, with at most three rounds per task.
 
-| Model-family run | Feedback representation | Tasks | pass@1 | Success within three rounds |
-| --- | --- | ---: | ---: | ---: |
-| DeepSeek Pro | Raw | 72 | 56/72 (77.8%) | 67/72 (93.1%) |
-| DeepSeek Pro | Normalized | 72 | 56/72 (77.8%) | 65/72 (90.3%) |
-| DeepSeek Pro | Structured | 72 | 60/72 (83.3%) | 67/72 (93.1%) |
-| DeepSeek Flash | Raw | 72 | 67/72 (93.1%) | 69/72 (95.8%) |
-| DeepSeek Flash | Normalized | 72 | 63/72 (87.5%) | 69/72 (95.8%) |
-| DeepSeek Flash | Structured | 72 | 66/72 (91.7%) | 71/72 (98.6%) |
+| Model configuration | Arm | Information supplied after a failure | pass@1 | Success within three rounds |
+| --- | --- | --- | ---: | ---: |
+| DeepSeek Flash v4.1 | R-A | none | 64/72 (88.9%) | 69/72 (95.8%) |
+| DeepSeek Flash v4.1 | R-B | compiler feedback | 64/72 (88.9%) | 69/72 (95.8%) |
+| DeepSeek Flash v4.1 | R-C | feedback + fixed retrieval | 65/72 (90.3%) | 69/72 (95.8%) |
+| DeepSeek Flash v4.1 | R-D | fixed retrieval only | 61/72 (84.7%) | 68/72 (94.4%) |
+| DeepSeek Flash v4.1 | R-E | feedback + diagnostic-adaptive retrieval | 66/72 (91.7%) | 70/72 (97.2%) |
+| DeepSeek Flash v4.1 | R-F | R-E + failure-capsule context | 64/72 (88.9%) | 70/72 (97.2%) |
+| DeepSeek Pro 0813 | R-A | none | 61/72 (84.7%) | 67/72 (93.1%) |
+| DeepSeek Pro 0813 | R-B | compiler feedback | 56/72 (77.8%) | 65/72 (90.3%) |
+| DeepSeek Pro 0813 | R-C | feedback + fixed retrieval | 60/72 (83.3%) | 67/72 (93.1%) |
+| DeepSeek Pro 0813 | R-D | fixed retrieval only | 56/72 (77.8%) | 65/72 (90.3%) |
+| DeepSeek Pro 0813 | R-E | feedback + diagnostic-adaptive retrieval | 61/72 (84.7%) | 67/72 (93.1%) |
+| DeepSeek Pro 0813 | R-F | R-E + failure-capsule context | 57/72 (79.2%) | 65/72 (90.3%) |
 
-Evidence: [Pro release](published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248) · [Flash replication](published/feedback-study-562ad440-3446-4138-801e-59726ed0e108) · [task-paired comparison](published/feedback-cross-model-8ccb89dd-562ad440).
+Evidence: [audited six-arm release](published/research-six-arm-313f437f). It contains 864 task summaries, 1,066 sanitized attempts, 811 independently recompiled proofs, and 864 review rows; all 811 successful proofs passed AI-assisted checks. Five transport retries were reported at runtime, while release-time inventory found six archived attempt directories containing ten failed-round records; one additional call reservation has no round record. The release preserves these counts instead of reconciling them silently.
 
-Flash + structured is the highest observed row, but these are descriptive results within one provider's model family. The two batches differ in explicit reasoning controls, prices were not frozen, and no causal, statistical-significance, cross-provider, or SOTA claim is made.
+The preregistered primary comparison, R-B minus R-A, was **0.0 percentage points for Flash and −2.8 points for Pro** on success within three rounds. R-E/R-F reached the highest observed Flash value, but not on Pro. These are descriptive, model-family results over 24 unique problems; repeats and arms are paired observations, not independent new problems. The batch records 5,116,954 tokens and a configuration-based estimate of about US$13.39, not a provider invoice. No causal superiority, statistical significance, cross-provider generalization, or SOTA claim is made.
 
 ## Evidence and boundaries
 
 | Area | What is supported now | Important boundary |
 | --- | --- | --- |
-| Feedback study | Two audited 216-task releases; 408 proofs independently recompiled | AI-assisted review; not an independent-provider replication |
+| Six-arm repair24 study | Audited 864-task release; 811 proofs independently recompiled | AI-assisted review; 24 unique problems and one provider family |
+| Earlier feedback-representation study | Two audited 216-task releases; 408 proofs independently recompiled | Supporting history, not the latest primary result |
 | TRACER-REAL v2 | Two projects fully screened with public accept/reject ledgers | Enrollment evidence only; four projects and the provider run are unfinished |
 | LeanCapsule | 24/24 reviewed gallery replays; 16/16 feasibility replays | Reproducing an expected failure is not proof repair |
 | Security | [SP v2 release](published/security-study-tracer-sp-v2): 0/12 dangerous false accepts and 0/8 benign false rejects | A small frozen suite is not an OS sandbox or a zero-risk guarantee |
 
-The earlier [18-task smoke pilot](published/pilot-20260826T122354Z-d628742d) remains available for pipeline traceability but is not a headline effectiveness result. The canonical evidence register is [PROGRESS.md](PROGRESS.md); historical changes are in [CHANGELOG.md](CHANGELOG.md).
+The canonical evidence register is [PROGRESS.md](PROGRESS.md); historical changes and superseded engineering baselines are kept in [CHANGELOG.md](CHANGELOG.md).
 
 ## Validation
 

@@ -104,7 +104,7 @@ class DocumentationConsistencyTest(unittest.TestCase):
                     self.assertIn(label, readme)
 
     def test_readme_front_matter_separates_experiment_and_policy_namespaces(self):
-        """README 首屏必须同时解释历史试验、研究臂和安全策略三套命名。"""
+        """README 首屏只解释当前研究臂和安全策略命名。"""
         headings = {
             "README.md": "## Experiment and policy namespaces",
             "README.zh-CN.md": "## 实验与安全命名体系",
@@ -118,8 +118,7 @@ class DocumentationConsistencyTest(unittest.TestCase):
                 front = readme[: readme.index(quick_start[name])]
                 self.assertIn(headings[name], front)
                 for label in ("P-A", "P-B", "P-C"):
-                    self.assertIn(label, front)
-                self.assertIn("A/B/C", front)
+                    self.assertNotIn(label, front)
                 for label in ("R-A", "R-B", "R-C", "R-D", "R-E", "R-F", "SP-1"):
                     self.assertIn(label, front)
                 self.assertIn("C_dynamic", front)
@@ -139,55 +138,52 @@ class DocumentationConsistencyTest(unittest.TestCase):
         self.assertTrue(commands[0])
         self.assertEqual(commands[0], commands[1])
 
-    def test_readme_latest_feedback_numbers_match_published_summaries(self):
+    def test_readme_latest_six_arm_numbers_match_published_summary(self):
         expected = [
-            ["DeepSeekPro", "Raw", "72", "56/72(77.8%)", "67/72(93.1%)"],
-            ["DeepSeekPro", "Normalized", "72", "56/72(77.8%)", "65/72(90.3%)"],
-            ["DeepSeekPro", "Structured", "72", "60/72(83.3%)", "67/72(93.1%)"],
-            ["DeepSeekFlash", "Raw", "72", "67/72(93.1%)", "69/72(95.8%)"],
-            ["DeepSeekFlash", "Normalized", "72", "63/72(87.5%)", "69/72(95.8%)"],
-            ["DeepSeekFlash", "Structured", "72", "66/72(91.7%)", "71/72(98.6%)"],
+            ["DeepSeekFlashv4.1", "R-A", "64/72(88.9%)", "69/72(95.8%)"],
+            ["DeepSeekFlashv4.1", "R-B", "64/72(88.9%)", "69/72(95.8%)"],
+            ["DeepSeekFlashv4.1", "R-C", "65/72(90.3%)", "69/72(95.8%)"],
+            ["DeepSeekFlashv4.1", "R-D", "61/72(84.7%)", "68/72(94.4%)"],
+            ["DeepSeekFlashv4.1", "R-E", "66/72(91.7%)", "70/72(97.2%)"],
+            ["DeepSeekFlashv4.1", "R-F", "64/72(88.9%)", "70/72(97.2%)"],
+            ["DeepSeekPro0813", "R-A", "61/72(84.7%)", "67/72(93.1%)"],
+            ["DeepSeekPro0813", "R-B", "56/72(77.8%)", "65/72(90.3%)"],
+            ["DeepSeekPro0813", "R-C", "60/72(83.3%)", "67/72(93.1%)"],
+            ["DeepSeekPro0813", "R-D", "56/72(77.8%)", "65/72(90.3%)"],
+            ["DeepSeekPro0813", "R-E", "61/72(84.7%)", "67/72(93.1%)"],
+            ["DeepSeekPro0813", "R-F", "57/72(79.2%)", "65/72(90.3%)"],
         ]
         for name, readme in self.readmes().items():
             rows = []
             for line in readme.splitlines():
                 if line.startswith("| DeepSeek "):
                     cells = line.strip("|").split("|")
-                    rows.append([
+                    normalized = [
                         cell.replace("（", "(")
                         .replace("）", ")")
                         .replace("**", "")
                         .replace(" ", "")
                         for cell in cells
-                    ])
+                    ]
+                    rows.append([normalized[0], normalized[1], normalized[3], normalized[4]])
             with self.subTest(language=name):
                 self.assertEqual(expected, rows)
                 self.assertNotIn("## Pilot results", readme)
                 self.assertNotIn("## 实验结果", readme)
 
-    def test_readmes_use_public_pilot_names_without_changing_storage_values(self):
+    def test_readmes_do_not_promote_superseded_smoke_pilot(self):
         for name, readme in self.readmes().items():
             with self.subTest(language=name):
-                self.assertIn("P-A / P-B / P-C", readme)
-                self.assertIn("A/B/C", readme)
-                self.assertNotIn("| **Published pilot conditions** | A / B / C |", readme)
-                self.assertNotIn("| **已发布 pilot 条件** | A / B / C |", readme)
+                self.assertNotIn("P-A / P-B / P-C", readme)
+                self.assertNotIn("published/pilot-20260826T122354Z-d628742d", readme)
 
     def test_readmes_share_evidence_links_and_repository_license(self):
         evidence = []
         for name, readme in self.readmes().items():
             links = set(re.findall(r"\]\((published/[^)]+)\)", readme))
             with self.subTest(language=name):
-                self.assertEqual(5, len(links))
-                self.assertIn(
-                    "published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248",
-                    links,
-                )
-                self.assertIn(
-                    "published/feedback-study-562ad440-3446-4138-801e-59726ed0e108",
-                    links,
-                )
-                self.assertIn("published/feedback-cross-model-8ccb89dd-562ad440", links)
+                self.assertEqual(2, len(links))
+                self.assertIn("published/research-six-arm-313f437f", links)
                 self.assertIn("published/security-study-tracer-sp-v2", links)
                 self.assertIn("[MIT License](LICENSE)", readme)
                 self.assertIn("MIT License", (ROOT / "LICENSE").read_text(encoding="utf-8"))
@@ -204,7 +200,7 @@ class DocumentationConsistencyTest(unittest.TestCase):
         ):
             self.assertIn(heading, progress)
         self.assertNotIn("当前 `leiteng`", progress)
-        self.assertIn("配置文件不是实验结果", progress)
+        self.assertIn("重复与实验臂不能扩充为 864 道独立样本", progress)
         self.assertIn("不作为发布结果", progress)
         for name, readme in self.readmes().items():
             with self.subTest(language=name):

@@ -1,0 +1,59 @@
+{
+  "version": "tracer-real-v2-screening-plan-v1",
+  "status": "operational-plan-no-provider-calls",
+  "enrollment_contract": "benchmarks/real_repairs/tracer_real_v2.enrollment.json",
+  "candidate_inventory": "benchmarks/real_repairs/tracer_real_v2.candidates.json",
+  "candidate_scan_root": "benchmarks/real_repairs/tracer_real_v2_candidates",
+  "published_report_root": "benchmarks/real_repairs/tracer_real_v2_screening",
+  "working_root": "results/tracer-real-v2-screening",
+  "repository_root": "results/tracer-real-v2-screening/repos",
+  "completed_before_plan": [
+    {
+      "project_id": "leanapap",
+      "candidate_count": 51,
+      "accepted": 16,
+      "rejected": 35
+    },
+    {
+      "project_id": "pfr",
+      "candidate_count": 276,
+      "accepted": 44,
+      "rejected": 232
+    }
+  ],
+  "screening_order": [
+    {
+      "project_id": "scilean",
+      "candidate_count": 54,
+      "endpoint_revision": "95f8119a2884e9c41f82136523bd5568ea7075c5",
+      "lean_toolchain": "leanprover/lean4:v4.28.0-rc1"
+    },
+    {
+      "project_id": "equational_theories",
+      "candidate_count": 250,
+      "endpoint_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+      "lean_toolchain": "leanprover/lean4:v4.29.1"
+    },
+    {
+      "project_id": "flt",
+      "candidate_count": 270,
+      "endpoint_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+      "lean_toolchain": "leanprover/lean4:v4.34.0-rc2"
+    },
+    {
+      "project_id": "physlean",
+      "candidate_count": 675,
+      "endpoint_revision": "891d5972436a47ab5c64ec30bc7682e5caed4f46",
+      "lean_toolchain": "leanprover/lean4:v4.33.0"
+    }
+  ],
+  "execution": {
+    "workers": 1,
+    "timeout_seconds": 180,
+    "refuse_while_research_runner_active": true,
+    "checkpoint_after_each_candidate": true,
+    "publish_report_only_after_complete_screen": true
+  },
+  "ordering_rationale": "对尚未筛查项目按冻结候选数升序执行，先验证最小项目的环境与续跑链路；顺序不改变纳入规则。",
+  "provider_calls_allowed": false
+}

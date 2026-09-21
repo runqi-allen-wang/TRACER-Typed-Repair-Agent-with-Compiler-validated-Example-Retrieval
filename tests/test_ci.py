@@ -68,6 +68,8 @@ class ContinuousIntegrationTest(unittest.TestCase):
             "published/feedback-study-562ad440-3446-4138-801e-59726ed0e108",
             "run: python scripts/audit_feedback_comparison.py "
             "published/feedback-cross-model-8ccb89dd-562ad440",
+            "run: python scripts/audit_research_release.py "
+            "published/research-six-arm-313f437f",
         ]
         for command in commands:
             self.assertIn(command, workflow)

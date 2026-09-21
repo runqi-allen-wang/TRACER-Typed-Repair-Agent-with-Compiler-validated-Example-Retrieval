@@ -12,12 +12,42 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts"))
 from human_study import assignment, report, run_session, valid_answer
-from research import CallBudget, load_config, prompt_api_keys, write_json
+from research import CallBudget, load_config, preflight_provider, prompt_api_keys, write_json
 from provider import OpenAICompatibleProvider
 from stage_cross_os import stage
 
 
 class ResearchExecutionTest(unittest.TestCase):
+    def test_six_arm_wrapper_preflights_and_clears_key(self):
+        script = (ROOT / "scripts/run_repair24_six_arm.ps1").read_text(encoding="utf-8")
+        self.assertLess(script.index("preflight"), script.index('"src/research.py", "run"'))
+        self.assertIn('Read-Host "DeepSeek API key" -AsSecureString', script)
+        self.assertIn("Remove-Item Env:TRACER_DEEPSEEK_KEY", script)
+        self.assertIn("repair24_six_arm_deepseek_20260920.json", script)
+        self.assertIn("--resume", script)
+        self.assertIn("TransportResumeAttempts = 20", script)
+        self.assertIn("TransportResumeDelaySeconds = 60", script)
+        self.assertIn("Get-LatestTrialFailure", script)
+        self.assertIn("$invocationStartedUtc.AddSeconds(-2)", script)
+        self.assertIn(r"HTTP\s+(429|500|502|503|504)", script)
+        self.assertIn(r"WinError\s+(10054|10060|10061)", script)
+        self.assertIn("$nextInvocationIsResume = $true", script)
+
+    def test_six_arm_preflight_uses_only_synthetic_theorem(self):
+        class OfflineProvider:
+            def generate(self, prompt):
+                self.prompt = prompt
+                return type("Result", (), {"candidate": "by trivial", "usage": {"total_tokens": 2}})()
+
+        config = load_config(ROOT / "experiments/research.deepseek.six_arm_20260920.json")
+        providers = {model["id"]: OfflineProvider() for model in config["models"]}
+        with patch("research._providers", return_value=providers):
+            result = preflight_provider(config, {"TRACER_DEEPSEEK_KEY": "not-used"})
+        self.assertTrue(result["ok"])
+        self.assertTrue(all(row["lean_compile_ok"] for row in result["models"]))
+        self.assertTrue(all("tracerSixArmProviderPreflight" in provider.prompt for provider in providers.values()))
+        self.assertTrue(all("forall_and" not in provider.prompt for provider in providers.values()))
+
     def test_human_cases_complement_between_participants_not_within(self):
         materials = {"cases": [{"case_id": str(i)} for i in range(8)]}
         a, b = assignment(materials, 1), assignment(materials, 2)

@@ -1,0 +1,43 @@
+[
+  {
+    "path": "and_swap.lean",
+    "tags": [
+      "propositional_logic",
+      "and"
+    ],
+    "text": "-- tags: propositional_logic and\nexample (p q : Prop) : p ∧ q → p ∨ q := by\n  intro h\n  exact Or.inl h.left\n"
+  },
+  {
+    "path": "equality.lean",
+    "tags": [
+      "equality",
+      "functions"
+    ],
+    "text": "-- tags: equality functions\nexample {α : Type} {a b c : α} : a = b → b = c → c = a := by\n  intro hab hbc\n  exact (Eq.trans hab hbc).symm\n\nexample {α β : Type} (f : α → β) {a b : α} : a = b → f b = f a := by\n  intro hab\n  cases hab\n  rfl\n"
+  },
+  {
+    "path": "natural_numbers.lean",
+    "tags": [
+      "natural_numbers",
+      "rewriting",
+      "relations"
+    ],
+    "text": "-- tags: natural_numbers rewriting relations\nexample (n : Nat) : n ≤ Nat.succ n := by exact Nat.le_succ n\nexample (n m : Nat) : m + Nat.succ n = Nat.succ (m + n) := by exact Nat.add_succ m n\nexample (n : Nat) : n ≤ Nat.succ n := by exact Nat.le_succ n\n"
+  },
+  {
+    "path": "negation.lean",
+    "tags": [
+      "propositional_logic",
+      "negation"
+    ],
+    "text": "-- tags: propositional_logic negation\nexample (p : Prop) : p ∧ True → p := by\n  intro h\n  exact h.left\n"
+  },
+  {
+    "path": "or_swap.lean",
+    "tags": [
+      "propositional_logic",
+      "or"
+    ],
+    "text": "-- tags: propositional_logic or\nexample (p q : Prop) : p ∨ q → p ∨ q := by\n  intro h\n  exact h\n"
+  }
+]

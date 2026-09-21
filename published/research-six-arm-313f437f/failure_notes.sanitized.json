@@ -1,0 +1,7 @@
+{
+  "and_swap.lean": "可复用失败案例 std/type-application（失败代码，不能直接作为证明）：\nimport Std\n\ndef only_nat (n : Nat) : Nat := n\nexample : Nat := only_nat True\n\n预期诊断：type_mismatch: Application type mismatch: The argument\n此案例只用于提示常见失败模式；请仍针对当前目标构造完整证明。",
+  "equality.lean": "可复用失败案例 std/type-application（失败代码，不能直接作为证明）：\nimport Std\n\ndef only_nat (n : Nat) : Nat := n\nexample : Nat := only_nat True\n\n预期诊断：type_mismatch: Application type mismatch: The argument\n此案例只用于提示常见失败模式；请仍针对当前目标构造完整证明。",
+  "natural_numbers.lean": "可复用失败案例 std/unknown-identifier（失败代码，不能直接作为证明）：\nimport Std\n\nnamespace CapsuleExamples\n\nexample : True := by\n  exact missing_identifier\n\nend CapsuleExamples\n\n预期诊断：unknown_identifier: Unknown identifier `missing_identifier`\n此案例只用于提示常见失败模式；请仍针对当前目标构造完整证明。",
+  "negation.lean": "可复用失败案例 std/goal-unsolved（失败代码，不能直接作为证明）：\nimport Std\n\nexample (p : Prop) : p ∧ p := by\n  constructor\n\n预期诊断：unsolved_goals: unsolved goals\n此案例只用于提示常见失败模式；请仍针对当前目标构造完整证明。",
+  "or_swap.lean": "可复用失败案例 std/goal-unsolved（失败代码，不能直接作为证明）：\nimport Std\n\nexample (p : Prop) : p ∧ p := by\n  constructor\n\n预期诊断：unsolved_goals: unsolved goals\n此案例只用于提示常见失败模式；请仍针对当前目标构造完整证明。"
+}

@@ -1,0 +1,51 @@
+{
+  "version": "tracer-repair24-six-arm-preregistration-v1",
+  "frozen_on": "2026-09-20",
+  "benchmark_version": "repair24-v1",
+  "planned_tasks": 864,
+  "max_generations": 2592,
+  "primary_comparison": "B - A",
+  "primary_estimand": "同模型、同题、同重复配对的三轮内成功率差；先按题汇总，不把三次重复当成独立数学题。",
+  "secondary_comparisons": ["D - A", "C - B", "C - D", "C_dynamic - C", "C_failure - C_dynamic"],
+  "review_mode": "ai_assisted",
+  "stopping_rule": "完成全部 864 个任务，或在 provider、预算、编译基础设施错误时停止并保留不完整批次；不得按中途效果提前停止。",
+  "claim_boundary": "两模型属于同一 DeepSeek 模型家族；结果不能表述为跨供应商泛化、统计显著或 SOTA。",
+  "transport_policy": "单次 HTTP 请求不自动重试；显式续跑跳过完整任务，并把失败或中断任务移入 retry_history。所有续跑次数在报告中披露。",
+  "config": {
+    "models": [
+      {
+        "id": "deepseek_flash_v41",
+        "model": "deepseek-flash",
+        "api_url": "https://api.deepseek.com/chat/completions",
+        "api_key_env": "TRACER_DEEPSEEK_KEY",
+        "temperature": 0,
+        "max_tokens": 12000,
+        "thinking": "enabled",
+        "reasoning_effort": "high",
+        "input_price_per_1k": 0.0003,
+        "output_price_per_1k": 0.0012,
+        "pricing_note": "2026-09-20 DeepSeek 官方峰时美元价格；输入按 cache miss 计价，deepseek-flash 对应 V4.1-Flash。价格估算不是账单。https://api-docs.deepseek.com/quick_start/pricing/"
+      },
+      {
+        "id": "deepseek_v4_pro_0813",
+        "model": "deepseek-v4-pro",
+        "api_url": "https://api.deepseek.com/chat/completions",
+        "api_key_env": "TRACER_DEEPSEEK_KEY",
+        "temperature": 0,
+        "max_tokens": 12000,
+        "thinking": "enabled",
+        "reasoning_effort": "high",
+        "input_price_per_1k": 0.00132,
+        "output_price_per_1k": 0.00396,
+        "pricing_note": "2026-09-20 DeepSeek 官方峰时美元价格；输入按 cache miss 计价，模型为 V4-Pro-0813。价格估算不是账单。https://api-docs.deepseek.com/quick_start/pricing/"
+      }
+    ],
+    "repeats": 3,
+    "arms": ["A", "B", "C", "D", "C_dynamic", "C_failure"],
+    "max_rounds": 3,
+    "compile_timeout": 180,
+    "order_seed": 20260920,
+    "examples_dir": "examples",
+    "failure_notes": "experiments/failure_notes.json"
+  }
+}
