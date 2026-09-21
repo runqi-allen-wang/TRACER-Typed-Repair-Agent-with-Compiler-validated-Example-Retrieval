@@ -1,6 +1,6 @@
 # Lean 编译反馈与 SP-n 后续工作方案
 
-> **状态：DeepSeek Pro/Flash 模型族内复现与 SP v2 已脱敏发布，SP 容器低权限原型已实现，独立供应商复现及真实双平台隔离结果仍待完成（2026-09-11）。** Compiler Feedback v1、Feedback Adoption v1、三表示对照 runner、SP-1～SP-12/CTRL-1～CTRL-8 离线门禁，以及 `tracer-sp-isolation-v1` 的冻结配置、探针和手动工作流已经实现。两个 216 任务模型批次、逐任务配对报告和 SP v2 确定性报告均已通过门禁；当前开发机没有 Docker，因此不能声称操作系统隔离已经运行通过。本状态不表示普适模型收益或完整沙箱已经成立。现有历史轨迹和已发布结果保持不变。
+> **状态：repair24 正式六臂批次、DeepSeek Pro/Flash 反馈表示研究与 SP v2 均已脱敏发布（2026-09-21）。** 六臂发布包覆盖 864 个任务、1,066 条有效轮次和 811 个独立复编译成功证明；预注册主比较 R-B−R-A 在 Flash 为 0.0 个百分点、在 Pro 为 −2.8 个百分点。结果只支持同一供应商模型族、24 道独立题上的描述性结论，不能证明普适或因果增益。下一优先级是完成 TRACER-REAL v2 项目级纳入、进行独立供应商复现，并生成真实双平台 SP 隔离报告。
 
 Community feedback from [subfish-zhou](https://github.com/subfish-zhou) and [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) motivates two next-stage tracks: measuring how models use Lean diagnostics, and expanding SP-1 into a versioned SP-n security program. The plan below freezes evidence boundaries before implementation.
 
@@ -99,6 +99,16 @@ Community feedback from [subfish-zhou](https://github.com/subfish-zhou) and [Ful
 
 `scripts/compare_feedback_models.py` 已对齐 Pro/Flash 的 216 个任务，并报告首轮与最终结局一致率、各表示成功差和表示对比方向一致性。报告单列共同零差异，避免把“两个模型都未出现表示差”解释为处理增益复现。下一次独立供应商复现仍须披露 thinking/reasoning 接口、tokenizer、别名更新和服务端默认值等残余混杂。
 
+### F5：正式六臂结果后的确认性研究
+
+**当前进展：repair24 六臂矩阵已完成并发布，确认性外推尚未开始。** 当前结果没有显示 R-B 相对 R-A 的稳定正向差异；动态检索与失败 Capsule 的最高观测值也只出现在 Flash。后续不应通过重复运行同一批次追求更好数字，而应把以下三项作为新的、独立预注册：
+
+1. 在 TRACER-REAL v2 的项目级 test 划分上复验同首轮候选分叉，主要估计按项目等权。
+2. 使用独立供应商模型复现 R-A～R-F，避免把同一供应商的两个配置当成跨模型普适证据。
+3. 把错误状态、路由决策、检索 query 与 Top-k 变化纳入逐题分析，解释“何时有效”，而不只比较总体成功率。
+
+每个新批次使用新的预注册、输出目录和发布包；不得回写 repair24 六臂工件，也不得把重复和实验臂当成新的独立题目扩大样本量。
+
 ## 3. Track S：把 SP-1 扩展为 SP-n
 
 SP 是安全策略编号，不是 R-A～R-F 之外的新增实验臂。新增编号前必须先写清威胁、正常对照和预期拦截位置。
@@ -171,4 +181,4 @@ SP 是安全策略编号，不是 R-A～R-F 之外的新增实验臂。新增编
 4. **已完成第二版：** 冻结 SP 威胁模型、12 个危险案例和 8 个可真实编译的正常对照，并同时报告检测器一致性和带 Wilson 区间的双向错误率。
 5. **原型已完成、运行待完成：** Windows 与 Linux 共用的 Docker 低权限探针、14 项冻结控制与手动工作流已实现；仍需两个平台的真实报告及脱敏审计，在此之前不宣称隔离通过或完整沙箱。
 
-下一项是实际运行并审计 Windows Docker Desktop 与原生 Linux 两份隔离报告；独立供应商模型复现可另行授权，但不再阻塞 SP 隔离研究。
+下一阶段按以下顺序推进：先完成 TRACER-REAL v2 剩余项目筛查并冻结最终 manifest；再分别开展项目级确认实验和独立供应商复现；SP 线并行生成 Windows Docker Desktop 与原生 Linux 两份隔离报告。三条线使用独立工件和门禁，任一计划或中间状态都不得写成已完成结果。

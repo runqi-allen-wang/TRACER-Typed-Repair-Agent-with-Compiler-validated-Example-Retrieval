@@ -1,6 +1,7 @@
 import json
 import re
 import unittest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 
@@ -170,6 +171,32 @@ class DocumentationConsistencyTest(unittest.TestCase):
                 self.assertEqual(expected, rows)
                 self.assertNotIn("## Pilot results", readme)
                 self.assertNotIn("## 实验结果", readme)
+
+    def test_readme_chart_matches_published_six_arm_summary(self):
+        relative = "docs/assets/repair24-six-arm-results.svg"
+        for name, readme in self.readmes().items():
+            with self.subTest(language=name):
+                self.assertIn(f"]({relative})", readme)
+        summary = json.loads(
+            (ROOT / "published" / "research-six-arm-313f437f" / "summary.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        root = ET.parse(ROOT / relative).getroot()
+        bars = {
+            (node.attrib["data-model"], node.attrib["data-arm"], node.attrib["data-stage"]): float(
+                node.attrib["data-value"]
+            )
+            for node in root.findall("{http://www.w3.org/2000/svg}rect")
+            if "data-stage" in node.attrib
+        }
+        self.assertEqual(24, len(bars))
+        for row in summary["summary"]:
+            key = (row["model"], row["arm"])
+            self.assertAlmostEqual(bars[(*key, "first")], 100 * row["first"] / row["tasks"], places=5)
+            self.assertAlmostEqual(
+                bars[(*key, "within_3")], 100 * row["success"] / row["tasks"], places=5
+            )
 
     def test_readmes_do_not_promote_superseded_smoke_pilot(self):
         for name, readme in self.readmes().items():

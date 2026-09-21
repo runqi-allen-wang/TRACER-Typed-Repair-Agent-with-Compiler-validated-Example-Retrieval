@@ -90,6 +90,10 @@ Agent success means a candidate passed Lean and incomplete-proof checks. Capsule
 
 The latest release freezes 24 repair24 problems × two DeepSeek-family model configurations × three repeats × six research arms = **864 task instances**, with at most three rounds per task.
 
+![repair24 first-candidate and three-round success comparison](docs/assets/repair24-six-arm-results.svg)
+
+> “Before/after” in this figure means the first candidate versus the outcome after at most three repair rounds on the same task. R-A is the no-feedback/no-retrieval baseline. The chart is descriptive and must not be read as a causal effect of TRACER.
+
 | Model configuration | Arm | Information supplied after a failure | pass@1 | Success within three rounds |
 | --- | --- | --- | ---: | ---: |
 | DeepSeek Flash v4.1 | R-A | none | 64/72 (88.9%) | 69/72 (95.8%) |

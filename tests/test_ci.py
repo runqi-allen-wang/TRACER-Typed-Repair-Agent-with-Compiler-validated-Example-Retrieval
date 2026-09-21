@@ -74,6 +74,11 @@ class ContinuousIntegrationTest(unittest.TestCase):
         for command in commands:
             self.assertIn(command, workflow)
             self.assertLess(workflow.index(command), workflow.index("- name: Run tests"))
+        chart_command = "python scripts/render_six_arm_chart.py"
+        chart_diff = "git diff --exit-code -- docs/assets/repair24-six-arm-results.svg"
+        self.assertIn(chart_command, workflow)
+        self.assertIn(chart_diff, workflow)
+        self.assertLess(workflow.index(chart_command), workflow.index("- name: Run tests"))
 
     def test_second_model_replication_contract_is_checked_before_tests(self):
         workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")

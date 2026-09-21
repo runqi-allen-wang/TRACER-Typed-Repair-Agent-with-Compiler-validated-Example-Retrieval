@@ -83,7 +83,7 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 
 当前文档基线的本地 Windows 全量复审记录：
 
-- Python：共发现 336 项测试，334 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。在既有 Compiler Feedback、TRACER-REAL、Feedback Study、Capsule 与 SP 门禁上，新增覆盖六臂预注册、AI 辅助复核、脱敏发布合同、当前正式配置一致性、合成 provider 预检、PowerShell 密钥清理和失败工件保留式续跑。
+- Python：共发现 337 项测试，335 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。在既有 Compiler Feedback、TRACER-REAL、Feedback Study、Capsule 与 SP 门禁上，新增覆盖六臂预注册、AI 辅助复核、脱敏发布合同、当前正式配置一致性、合成 provider 预检、PowerShell 密钥清理、失败工件保留式续跑，以及 README 结果图与正式 `summary.json` 的逐柱一致性。
 - `lake build`：通过；冻结 Evaluation18 输入中的 18 个 `sorry` 是预期占位警告，不代表题目已在原文件中修复。
 - `python -m leancapsule audit capsules`：24/24 通过。
 - `python -m leancapsule verify capsules`：24/24 通过，包含 4 个 Mathlib 案例。
