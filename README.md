@@ -10,13 +10,25 @@
 [![Lean](https://img.shields.io/badge/Lean-4.32.0-blue)](lean-toolchain)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-[Quick start](#quick-start) · [Latest results](#latest-published-results) · [Evidence status](PROGRESS.md) · [API guide](docs/API_GUIDE.md) · [Failure gallery](capsules/index.md) · [Contributing](CONTRIBUTING.md)
+[Interactive demo](#try-tracer-in-60-seconds) · [Quick start](#quick-start) · [Latest results](#latest-published-results) · [Evidence status](PROGRESS.md) · [API guide](docs/API_GUIDE.md) · [Failure gallery](capsules/index.md) · [Contributing](CONTRIBUTING.md)
 
 ![TRACER overview](TRACER.png)
 
 TRACER is a research toolkit for **Lean 4 proof repair, compiler-feedback experiments, and reproducible failure artifacts**. It compiles every candidate in the target project, records per-round diagnostics and retrieved examples, and saves successful proofs for independent rechecking. LeanCapsule turns failures into portable, auditable regression cases.
 
 > TRACER does not train or fine-tune models. It studies inference-time repair and the evidence needed to distinguish a compiled proof, a reproduced failure, and a supported research claim.
+
+## Try TRACER in 60 seconds
+
+**[Open the interactive web demo](https://runqi-allen-wang.github.io/TRACER-Typed-Repair-Agent-with-Compiler-validated-Example-Retrieval/)** · [Inspect its public source](demo/) · [Open the underlying audited release](published/research-six-arm-313f437f)
+
+The demo replays a real, sanitized `scale_add` trajectory: the first candidate fails in Lean, TRACER exposes the compiler goal and refreshes retrieval, and the second candidate passes after aligning the goal with the induction hypothesis. It needs no API key and makes no network request. After cloning, launch the same page locally with:
+
+```text
+python demo/serve.py
+```
+
+Across the published 864 task instances, **735/864 (85.1%)** passed on the first candidate and **811/864 (93.9%)** passed within at most three rounds: 76 additional task instances, or **+8.8 percentage points**, were recovered by the bounded loop. This first-to-final conversion is descriptive—not a causal estimate of TRACER's effect. The demo shows one recorded trajectory; the local quick start below invokes the real Lean compiler.
 
 ## Experiment and policy namespaces
 
