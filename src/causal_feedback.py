@@ -174,9 +174,15 @@ def resolve_compile_environments(
 
     if project_root is not None:
         raise ValueError("TRACER-REAL v2 必须使用 manifest 中逐项目冻结的编译环境；禁止统一覆盖")
-    from tracer_real_v2 import read_json as read_v2_json, validate_v2_benchmark
+    from tracer_real_v2 import (
+        SHARE_GATE_AMENDMENT_PATH, apply_share_gate_amendment,
+        read_json as read_v2_json, validate_v2_benchmark,
+    )
 
-    contract = read_v2_json(ROOT / "benchmarks/real_repairs/tracer_real_v2.enrollment.json")
+    contract = apply_share_gate_amendment(
+        read_v2_json(ROOT / "benchmarks/real_repairs/tracer_real_v2.enrollment.json"),
+        read_v2_json(SHARE_GATE_AMENDMENT_PATH),
+    )
     validate_v2_benchmark(benchmark, contract)
     roots: dict[str, Path] = {}
     toolchains: dict[str, str] = {}
@@ -242,9 +248,15 @@ def validate_preregistration_record(
         raise ValueError("预注册的项目与题目数量发生漂移")
     if benchmark.get("version") == "tracer-real-v2":
         # v2 采用两阶段预注册：先冻结纳入规则，再冻结满足门槛的精确清单。
-        from tracer_real_v2 import read_json as read_v2_json, validate_v2_benchmark
+        from tracer_real_v2 import (
+            SHARE_GATE_AMENDMENT_PATH, apply_share_gate_amendment,
+            read_json as read_v2_json, validate_v2_benchmark,
+        )
 
-        contract = read_v2_json(ROOT / "benchmarks/real_repairs/tracer_real_v2.enrollment.json")
+        contract = apply_share_gate_amendment(
+            read_v2_json(ROOT / "benchmarks/real_repairs/tracer_real_v2.enrollment.json"),
+            read_v2_json(SHARE_GATE_AMENDMENT_PATH),
+        )
         validate_v2_benchmark(benchmark, contract)
     frozen_models = prereg["models"]
     model_fields = (

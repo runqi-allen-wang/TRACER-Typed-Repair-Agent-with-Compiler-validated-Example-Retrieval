@@ -1,0 +1,63 @@
+{
+  "version": "tracer-real-project-split-v2",
+  "benchmark_version": "tracer-real-v2",
+  "split_policy": "upstream_project_disjoint",
+  "projects": [
+    {
+      "project_id": "mathlib",
+      "split": "development",
+      "manifest": "mathlib_v1/manifest.json",
+      "compile_project_root": "mathlib_project",
+      "lean_toolchain": "leanprover/lean4:v4.32.0"
+    },
+    {
+      "project_id": "batteries",
+      "split": "validation",
+      "manifest": "batteries_v1/manifest.json",
+      "compile_project_root": "mathlib_project",
+      "lean_toolchain": "leanprover/lean4:v4.32.0"
+    },
+    {
+      "project_id": "aesop",
+      "split": "validation",
+      "manifest": "aesop_v1/manifest.json",
+      "compile_project_root": "mathlib_project",
+      "lean_toolchain": "leanprover/lean4:v4.32.0"
+    },
+    {
+      "project_id": "equational_theories",
+      "split": "test",
+      "manifest": "equational_theories_v2/manifest.json",
+      "compile_project_root": "results/tracer-real-v2-screening/repos/equational_theories",
+      "lean_toolchain": "leanprover/lean4:v4.29.1"
+    },
+    {
+      "project_id": "flt",
+      "split": "test",
+      "manifest": "flt_v2/manifest.json",
+      "compile_project_root": "results/tracer-real-v2-screening/repos/flt",
+      "lean_toolchain": "leanprover/lean4:v4.34.0-rc2"
+    },
+    {
+      "project_id": "leanapap",
+      "split": "test",
+      "manifest": "leanapap_v2/manifest.json",
+      "compile_project_root": "results/tracer-real-v2-screening/repos/leanapap",
+      "lean_toolchain": "leanprover/lean4:v4.35.0-rc1"
+    },
+    {
+      "project_id": "pfr",
+      "split": "test",
+      "manifest": "pfr_v2/manifest.json",
+      "compile_project_root": "results/tracer-real-v2-screening/repos/pfr",
+      "lean_toolchain": "leanprover/lean4:v4.35.0-rc1"
+    },
+    {
+      "project_id": "physlean",
+      "split": "test",
+      "manifest": "physlean_v2/manifest.json",
+      "compile_project_root": "results/tracer-real-v2-screening/repos/physlean",
+      "lean_toolchain": "leanprover/lean4:v4.33.0"
+    }
+  ]
+}

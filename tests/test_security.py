@@ -26,6 +26,20 @@ class SecurityBoundaryTest(unittest.TestCase):
         self.assertNotIn("UNRELATED_TOKEN", environment)
         self.assertEqual(environment["TRACER_LEAN_CHILD"], "1")
 
+    def test_compiler_git_trust_is_scoped_to_current_project(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "project"
+            root.mkdir()
+            with patch.dict(os.environ, {"GIT_CONFIG_COUNT": "1", "GIT_CONFIG_KEY_0": "unsafe.key", "GIT_CONFIG_VALUE_0": "secret"}, clear=False):
+                environment = lean_subprocess_environment(root, Path(temp) / "scratch")
+        self.assertEqual(environment["GIT_CONFIG_COUNT"], "2")
+        self.assertEqual(environment["GIT_CONFIG_KEY_0"], "safe.directory")
+        self.assertEqual(environment["GIT_CONFIG_VALUE_0"], str(root.resolve()))
+        self.assertEqual(environment["GIT_CONFIG_KEY_1"], "safe.directory")
+        self.assertEqual(environment["GIT_CONFIG_VALUE_1"], str(root.resolve() / ".lake" / "packages" / "*"))
+        self.assertNotIn("unsafe.key", environment.values())
+        self.assertNotIn("secret", environment.values())
+
     def test_sorry_axiom_is_not_a_success(self):
         source_path = ROOT / "lean_project" / "Benchmarks" / "Evaluation18.lean"
         source = source_path.read_text(encoding="utf-8")

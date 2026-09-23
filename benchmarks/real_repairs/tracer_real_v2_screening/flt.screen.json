@@ -1,0 +1,1362 @@
+{
+  "version": "tracer-real-candidate-screen-v1",
+  "project_id": "flt",
+  "endpoint_revision": "bb71146e6df02dbdcc5527b6b68b37da03226ed6",
+  "provider_calls_observed": 0,
+  "candidates": 270,
+  "accepted": 47,
+  "rejected": 223,
+  "decisions": [
+    {
+      "id": "flt_map_inv_eq_map_comm",
+      "accepted": false,
+      "reason": "flt_map_inv_eq_map_comm: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_weighttwoautomorphicform_levelstruct_form_map",
+      "accepted": false,
+      "reason": "flt_totallydefinitequaternionalgebra_weighttwoautomorphicform_levelstruct_form_map: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_weighttwoautomorphicform_levelstruct_inf_u_eq_iff",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_weighttwoautomorphicform_levelstruct_restrict_le",
+      "accepted": false,
+      "reason": "flt_totallydefinitequaternionalgebra_weighttwoautomorphicform_levelstruct_restrict_le: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_weighttwoautomorphicform_locallevelstruct_iscompact_us",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_abstractheckeoperator_eq_finsum_quotient_out_of_bijon",
+      "accepted": false,
+      "reason": "flt_abstractheckeoperator_eq_finsum_quotient_out_of_bijon: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_heckealgebra_t_smul_def",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_heckealgebra_u_smul_def",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_heckealgebra_formmap_smul",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_heckeoperator_u_apply",
+      "accepted": false,
+      "reason": "flt_totallydefinitequaternionalgebra_heckeoperator_u_apply: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_heckeoperator_u_smul",
+      "accepted": false,
+      "reason": "flt_totallydefinitequaternionalgebra_heckeoperator_u_smul: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_weighttwoautomorphicform_root",
+      "accepted": false,
+      "reason": "flt_totallydefinitequaternionalgebra_weighttwoautomorphicform_root: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_totallydefinitequaternionalgebra_weighttwoautomorphicform_measure",
+      "accepted": false,
+      "reason": "flt_totallydefinitequaternionalgebra_weighttwoautomorphicform_measure: 历史证明没有形成稳定的 Lean 证明失败 (ok=False, timed_out=True, returncode=None)"
+    },
+    {
+      "id": "flt_hurwitz_exists_near",
+      "accepted": false,
+      "reason": "flt_hurwitz_exists_near: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_hurwitz_leftinvon_toquaternion_fromquaternion",
+      "accepted": false,
+      "reason": "flt_hurwitz_leftinvon_toquaternion_fromquaternion: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_hurwitz_left_ideal_princ",
+      "accepted": false,
+      "reason": "flt_hurwitz_left_ideal_princ: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_hurwitz_normsq_toquaternion",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_hurwitz_toquaternion_one",
+      "accepted": false,
+      "reason": "flt_hurwitz_toquaternion_one: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_hurwitz_toquaternion_sub",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "flt_hurwitz_toquaternion_zero",
+      "accepted": false,
+      "reason": "flt_hurwitz_toquaternion_zero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_qhat_canonicalform",
+      "accepted": false,
+      "reason": "flt_qhat_canonicalform: 历史证明没有形成稳定的 Lean 证明失败 (ok=False, timed_out=True, returncode=None)"
+    },
+    {
+      "id": "flt_qhat_injective_zhat",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "flt_qhat_lowestterms",
+      "accepted": false,
+      "reason": "flt_qhat_lowestterms: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_zhat_e_not_in_int",
+      "accepted": false,
+      "reason": "flt_zhat_e_not_in_int: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_zhat_pnat_mul_apply",
+      "accepted": false,
+      "reason": "flt_zhat_pnat_mul_apply: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_adiccompletion_uniformizer_ne_zero",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_adiccompletion_uniformizer_not_isunit",
+      "accepted": false,
+      "reason": "flt_isdedekinddomain_heightonespectrum_adiccompletion_uniformizer_not_isunit: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_closurealgebramapintegers_eq_integers",
+      "accepted": false,
+      "reason": "flt_isdedekinddomain_heightonespectrum_closurealgebramapintegers_eq_integers: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_closurealgebramapintegers_eq_prodintegers",
+      "accepted": false,
+      "reason": "flt_isdedekinddomain_heightonespectrum_closurealgebramapintegers_eq_prodintegers: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_exists_adicvalued_mul_sub_le",
+      "accepted": false,
+      "reason": "flt_isdedekinddomain_heightonespectrum_exists_adicvalued_mul_sub_le: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_exists_adicvalued_sub_lt_of_adiccompletioninteger",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_exists_adicvalued_sub_lt_of_adicvalued_le_one",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_exists_ofadd_natcast_of_le_one",
+      "accepted": false,
+      "reason": "flt_isdedekinddomain_heightonespectrum_exists_ofadd_natcast_of_le_one: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_extension_adiccompletionsemialghom_coe",
+      "accepted": false,
+      "reason": "flt_isdedekinddomain_heightonespectrum_extension_adiccompletionsemialghom_coe: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_extension_adiccompletionsemialghom_continuous",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_extension_tensoradiccompletionintegerstoadiccompletion_range_eq_integers",
+      "accepted": false,
+      "reason": "flt_isdedekinddomain_heightonespectrum_extension_tensoradiccompletionintegerstoadiccompletion_range_eq_integers: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_extension_valued_adiccompletionsemialghom",
+      "accepted": false,
+      "reason": "flt_isdedekinddomain_heightonespectrum_extension_valued_adiccompletionsemialghom: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_adiccompletion_root",
+      "accepted": false,
+      "reason": "flt_isdedekinddomain_heightonespectrum_adiccompletion_root: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_adiccompletion_basechange_bijective",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_adiccompletion_finrank_tensorproduct_adiccompletion_eq_finrank_pi_adiccompletion",
+      "accepted": false,
+      "reason": "flt_isdedekinddomain_heightonespectrum_adiccompletion_finrank_tensorproduct_adiccompletion_eq_finrank_pi_adiccompletion: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_adicvalued",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_tensoradiccompletionintegersto_range_subset_closure",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_basechange",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_algebramap_apply_eq_algebramap",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_basechangelinearequiv_tmul",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_basechange_bijective",
+      "accepted": false,
+      "reason": "flt_isdedekinddomain_finiteadelering_basechange_bijective: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_restrictedproduct_pi_ismoduletopology",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_restrictedproduct_prod_equiv_apply",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_restrictedproduct_tensorproduct_equiv_restrictedproduct_prod_apply",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_tensorequivrestrictedproduct_tmul",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_tensorequivtensor_tmul",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_adiccompletionuniformizer_ne_zero",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "flt_module",
+      "accepted": false,
+      "reason": "flt_module: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_tensorpi_equiv_pitensor_apply",
+      "accepted": false,
+      "reason": "flt_tensorpi_equiv_pitensor_apply: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_tensorproduct",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: IsDedekindDomain.FiniteAdeleRing.TensorProduct"
+    },
+    {
+      "id": "flt_restrictedproduct_coe_ltensorleft_eq_ltensor",
+      "accepted": false,
+      "reason": "flt_restrictedproduct_coe_ltensorleft_eq_ltensor: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_restrictedproduct_ltensor_tmul",
+      "accepted": false,
+      "reason": "flt_restrictedproduct_ltensor_tmul: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_extension",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: IsDedekindDomain.HeightOneSpectrum.Extension"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_root",
+      "accepted": false,
+      "reason": "flt_isdedekinddomain_heightonespectrum_root: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_intvaluation_comap",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_preimage_comap_finite",
+      "accepted": false,
+      "reason": "flt_isdedekinddomain_heightonespectrum_preimage_comap_finite: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_isdedekinddomain_linearequivtensorproduct_symm_one_tmul",
+      "accepted": false,
+      "reason": "flt_isdedekinddomain_linearequivtensorproduct_symm_one_tmul: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_root",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: _root_"
+    },
+    {
+      "id": "flt_inverselimit_lift_def",
+      "accepted": false,
+      "reason": "flt_inverselimit_lift_def: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_deformation_proartiniancat_to_residuefield_apply",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_iscontinuous_of_isproartinian_of_islocalhom",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "flt_algebraicclosure",
+      "accepted": false,
+      "reason": "flt_algebraicclosure: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_ismoduletopology",
+      "accepted": false,
+      "reason": "flt_ismoduletopology: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_ringhom_2",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "flt_field",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: Field"
+    },
+    {
+      "id": "flt_isarithfrobat_exists_of_isinvariant_of_profinite",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "flt_isarithfrobat_exists_primesover_isconj_of_profinite",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "flt_not_isfield_integralclosure",
+      "accepted": false,
+      "reason": "flt_not_isfield_integralclosure: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_adelering_divisionalgebra_aux_e_family_nonempty_interior",
+      "accepted": false,
+      "reason": "flt_adelering_divisionalgebra_aux_e_family_nonempty_interior: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_adelering_divisionalgebra_aux_e_family_unbounded",
+      "accepted": false,
+      "reason": "flt_adelering_divisionalgebra_aux_e_family_unbounded: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_adelering_divisionalgebra_aux_m_compact",
+      "accepted": false,
+      "reason": "flt_adelering_divisionalgebra_aux_m_compact: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_adelering_divisionalgebra_aux_t_finite",
+      "accepted": false,
+      "reason": "flt_adelering_divisionalgebra_aux_t_finite: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_adelering_divisionalgebra_aux_t_finite_extracted1",
+      "accepted": false,
+      "reason": "flt_adelering_divisionalgebra_aux_t_finite_extracted1: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_adelering_divisionalgebra_aux_x_compact",
+      "accepted": false,
+      "reason": "flt_adelering_divisionalgebra_aux_x_compact: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_adelering_divisionalgebra_aux_toquot_surjective",
+      "accepted": false,
+      "reason": "flt_adelering_divisionalgebra_aux_toquot_surjective: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_infiniteadelering_algebramap_completion",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "flt_infiniteadelering_iscentralsimple_infinite_addhaarscalarfactor_left_mul_eq_right_mul",
+      "accepted": false,
+      "reason": "flt_infiniteadelering_iscentralsimple_infinite_addhaarscalarfactor_left_mul_eq_right_mul: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_infiniteadelering_tensorpi_equiv_pitensor_map_mul",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_numberfield_adelering_divisionalgebra_aux_d_discrete",
+      "accepted": false,
+      "reason": "flt_numberfield_adelering_divisionalgebra_aux_d_discrete: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_numberfield_adelering_divisionalgebra_aux_not_injective_of_large_measure",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "flt_weierstrasscurve",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: WeierstrassCurve"
+    },
+    {
+      "id": "flt_freycurve_map",
+      "accepted": false,
+      "reason": "flt_freycurve_map: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_freypackage_hgcdbc",
+      "accepted": false,
+      "reason": "flt_freypackage_hgcdbc: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_isdedekinddomain_diamond_fix",
+      "accepted": false,
+      "reason": "flt_isdedekinddomain_diamond_fix: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_measuretheory_mulequivhaarchar_map_open",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "flt_measuretheory_mulequivhaarchar_prodcongr",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "flt_measuretheory_mulequivhaarchar_restrictedproductcongrright",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "flt_measuretheory",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: MeasureTheory"
+    },
+    {
+      "id": "flt_numberfield",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: NumberField"
+    },
+    {
+      "id": "flt_finiteadelering",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: FiniteAdeleRing"
+    },
+    {
+      "id": "flt_basis_eq_single",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "flt_basis_eq_single_global",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "flt_basis_repr_eq",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "flt_basis_repr_eq_global",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "flt_localcomponent_matrix",
+      "accepted": false,
+      "reason": "flt_localcomponent_matrix: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_localcomponent_mulleft",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "flt_localcomponent_mulright",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "flt_tomatrix_f",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "flt_measuretheory_addequivaddhaarchar_eq_ringhaarchar_det_diagonal",
+      "accepted": false,
+      "reason": "flt_measuretheory_addequivaddhaarchar_eq_ringhaarchar_det_diagonal: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_measuretheory_ringhaarchar_modulefinite",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "flt_measuretheory_ringhaarchar_modulefinite_unit",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "flt_tensorproduct_rightactions_smul_def",
+      "accepted": false,
+      "reason": "flt_tensorproduct_rightactions_smul_def: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_algebra_ncard_primesover_quotient_singleton_lt_of_notmem",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_weierstrasscurve_hasmultiplicativereduction_basechange",
+      "accepted": false,
+      "reason": "flt_weierstrasscurve_hasmultiplicativereduction_basechange: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_weierstrasscurve_hassplitmultiplicativereduction_basechange",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "flt_tatecurve_valuation_evalint_sub_sum_le",
+      "accepted": false,
+      "reason": "flt_tatecurve_valuation_evalint_sub_sum_le: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_derivweierstrassp_q_expansion",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_derivweierstrassp_q_expansion: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_e_add",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_e_add: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_e_intcast_mul_natabs",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_e_intcast_mul_natabs: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_e_intmul",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_e_intmul: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_e_neg",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_e_neg: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_e_neg_intcast_mul_natabs",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_e_neg_intcast_mul_natabs: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_e_sub_intcast_mul",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_e_sub_intcast_mul: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_eq_zero_of_forall_hassum_zero",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_eq_zero_of_forall_hassum_zero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_hassum_x_eval",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_hassum_x_eval: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_hassum_y_eval",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_hassum_y_eval: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_norm_e",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_norm_e: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_norm_e_lt_norm_e",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_norm_e_lt_norm_e: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_norm_e_lt_one",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_norm_e_lt_one: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_riemannzeta_six",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_riemannzeta_six: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_sum_int_inv_cube",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_sum_int_inv_cube: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_sum_int_inv_sq",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_sum_int_inv_sq: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_two_pi_i_ne_zero",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_two_pi_i_ne_zero: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_tatecurve_blueprint_weierstrassp_q_expansion",
+      "accepted": false,
+      "reason": "flt_tatecurve_blueprint_weierstrassp_q_expansion: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_tatecurve_weierstrass_equation",
+      "accepted": false,
+      "reason": "raw.compile_ok 与结构化类别不一致"
+    },
+    {
+      "id": "flt_tatecurve_evalint_mul",
+      "accepted": false,
+      "reason": "flt_tatecurve_evalint_mul: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_tatecurve_summable_evalint",
+      "accepted": false,
+      "reason": "flt_tatecurve_summable_evalint: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_tatecurve_summable_of_valuation_le_pow",
+      "accepted": false,
+      "reason": "flt_tatecurve_summable_of_valuation_le_pow: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_tatecurve_valuation_evalint_eq",
+      "accepted": false,
+      "reason": "flt_tatecurve_valuation_evalint_eq: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_tatecurve_valuation_evalint_le_pow",
+      "accepted": false,
+      "reason": "flt_tatecurve_valuation_evalint_le_pow: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_classification_tame_proof",
+      "accepted": true,
+      "error_category": "typeclass"
+    },
+    {
+      "id": "flt_dickson_classification_wild_proof",
+      "accepted": true,
+      "error_category": "typeclass"
+    },
+    {
+      "id": "flt_semialghom",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: SemialgHom"
+    },
+    {
+      "id": "flt_subalgebra",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: Subalgebra"
+    },
+    {
+      "id": "flt_submodule",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "flt_mulaction_fixedpoints_coe_add",
+      "accepted": false,
+      "reason": "flt_mulaction_fixedpoints_coe_add: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_mulaction_fixedpoints_smul_neg",
+      "accepted": false,
+      "reason": "flt_mulaction_fixedpoints_smul_neg: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_isdirectlimit_module_compatibility_module",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "flt_isdirectlimit_is_surjective",
+      "accepted": false,
+      "reason": "flt_isdirectlimit_is_surjective: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_isdirectlimit_lift_of",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "flt_matrix_generallineargroup_gl2_unipotent_def",
+      "accepted": false,
+      "reason": "flt_matrix_generallineargroup_gl2_unipotent_def: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_matrix_generallineargroup_gl2_unipotent_inv",
+      "accepted": false,
+      "reason": "flt_matrix_generallineargroup_gl2_unipotent_inv: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_measuretheory_index_mul_haar_subgroup_eq_haar_subgroup",
+      "accepted": false,
+      "reason": "flt_measuretheory_index_mul_haar_subgroup_eq_haar_subgroup: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_topology_isopenembedding_outerregular_comap",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "flt_padicint_smul_submodule_one_isfiniterelindex",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_filter",
+      "accepted": false,
+      "reason": "flt_filter: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_representation_comp_def",
+      "accepted": false,
+      "reason": "flt_representation_comp_def: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_isdedekinddomain_heightonespectrum_intvaluation_eq_coe_neg_multiplicity",
+      "accepted": false,
+      "reason": "flt_isdedekinddomain_heightonespectrum_intvaluation_eq_coe_neg_multiplicity: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_exists_mul_mem_integraladeles",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "flt_isdedekinddomain_finiteadelering_singlecontinuousalgebramap_comp_evalcontinuouslinearmap",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "flt_islocalization_tensorproduct_ext",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "flt_tensorproduct",
+      "accepted": false,
+      "reason": "flt_tensorproduct: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_twosidedideal",
+      "accepted": false,
+      "reason": "flt_twosidedideal: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_valuativerel_exists_pow_valuation_lt",
+      "accepted": false,
+      "reason": "flt_valuativerel_exists_pow_valuation_lt: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_istopologicalgroup",
+      "accepted": false,
+      "reason": "flt_istopologicalgroup: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_ismoduletopology_root",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: IsModuleTopology._root_"
+    },
+    {
+      "id": "flt_ismoduletopology_of_continuous_isopenmap_algebramap",
+      "accepted": false,
+      "reason": "flt_ismoduletopology_of_continuous_isopenmap_algebramap: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_ismoduletopology_t2space",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: IsModuleTopology.t2Space"
+    },
+    {
+      "id": "flt_absolutevalue_exists_rpow_of_one_lt",
+      "accepted": false,
+      "reason": "flt_absolutevalue_exists_rpow_of_one_lt: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_absolutevalue_log_div_image_eq_singleton_of_le_one_iff",
+      "accepted": false,
+      "reason": "flt_absolutevalue_log_div_image_eq_singleton_of_le_one_iff: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_absolutevalue_lt_one_iff_of_lt_one_imp",
+      "accepted": false,
+      "reason": "flt_absolutevalue_lt_one_iff_of_lt_one_imp: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_restrictedproduct",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: RestrictedProduct"
+    },
+    {
+      "id": "flt_valued",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "flt_valued_withzeromulint_finite_cover_of_uniformity_basis",
+      "accepted": false,
+      "reason": "flt_valued_withzeromulint_finite_cover_of_uniformity_basis: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_valued_withzeromulint_integer_compactspace",
+      "accepted": false,
+      "reason": "flt_valued_withzeromulint_integer_compactspace: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_valued_withzeromulint_irreducible_valuation_le_ofadd_neg_one",
+      "accepted": false,
+      "reason": "flt_valued_withzeromulint_irreducible_valuation_le_ofadd_neg_one: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_homdiscrete_iff_discrete",
+      "accepted": false,
+      "reason": "flt_homdiscrete_iff_discrete: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_polish_of_locally_compact_second_countable",
+      "accepted": false,
+      "reason": "flt_polish_of_locally_compact_second_countable: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_numberfield_2",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: NumberField"
+    },
+    {
+      "id": "flt_numberfield_adelering_basechangeadelealghom_bijective",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "flt_rat",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: Rat"
+    },
+    {
+      "id": "flt_numberfield_infiniteplace_completion_basechangeequiv_tmul",
+      "accepted": false,
+      "reason": "flt_numberfield_infiniteplace_completion_basechangeequiv_tmul: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_numberfield_infiniteplace_completion_comaphom_cont",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "flt_numberfield_infiniteplace_completion_denserange_algebramap_subtype_pi",
+      "accepted": false,
+      "reason": "flt_numberfield_infiniteplace_completion_denserange_algebramap_subtype_pi: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_numberfield_infiniteplace_completion_mem_placesover_iff_comap",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "flt_strictmonoon_ioi_nat_of_lt_succ",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "flt_numberfield_infiniteplace_extension_isextension_or_isextension_conjugate",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "flt_restrictedproduct_padicnatden_ne_zero",
+      "accepted": false,
+      "reason": "flt_restrictedproduct_padicnatden_ne_zero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_restrictedproduct_padicnatden_norm_mul_le_one",
+      "accepted": false,
+      "reason": "flt_restrictedproduct_padicnatden_norm_mul_le_one: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_restrictedproduct_padicnatden_norm_of_mem",
+      "accepted": false,
+      "reason": "flt_restrictedproduct_padicnatden_norm_of_mem: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_restrictedproduct_padicnatden_norm_of_notmem",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "flt_restrictedproduct_padic_exists_sub_mem_padicint",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "flt_restrictedproduct_padic_exists_sub_mem_structuresubring",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "flt_ringhom",
+      "accepted": false,
+      "reason": "flt_ringhom: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_patchingmodule",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: PatchingModule"
+    },
+    {
+      "id": "flt_patchingalgebra",
+      "accepted": false,
+      "reason": "flt_patchingalgebra: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_ultrafilter",
+      "accepted": false,
+      "reason": "flt_ultrafilter: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_support_eq_top",
+      "accepted": false,
+      "reason": "flt_support_eq_top: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_eventuallyprod_eq_sup",
+      "accepted": false,
+      "reason": "flt_eventuallyprod_eq_sup: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_islocalring_continuous",
+      "accepted": false,
+      "reason": "flt_islocalring_continuous: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_islocalring_compactspace_of_finite_residuefield",
+      "accepted": false,
+      "reason": "flt_islocalring_compactspace_of_finite_residuefield: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_commgroup",
+      "accepted": false,
+      "reason": "flt_commgroup: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_islocalring",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "flt_wellfoundedlt",
+      "accepted": false,
+      "reason": "flt_wellfoundedlt: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_eventually_vanishingfilter_not_isunit",
+      "accepted": false,
+      "reason": "flt_eventually_vanishingfilter_not_isunit: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_dimensiontheorem_colength_coe",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_dimensiontheorem_mingenprimary_le_ringkrulldim",
+      "accepted": false,
+      "reason": "flt_dimensiontheorem_mingenprimary_le_ringkrulldim: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dimensiontheorem_ringkrulldim_le_of_forall_minimalprimes",
+      "accepted": false,
+      "reason": "flt_dimensiontheorem_ringkrulldim_le_of_forall_minimalprimes: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dimensiontheorem_ringkrulldim_le_of_growthle",
+      "accepted": false,
+      "reason": "flt_dimensiontheorem_ringkrulldim_le_of_growthle: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_dimensiontheorem_ringkrulldim_le_zero_of_growthle_zero",
+      "accepted": false,
+      "reason": "flt_dimensiontheorem_ringkrulldim_le_zero_of_growthle_zero: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dimensiontheorem_colength_pow_le",
+      "accepted": false,
+      "reason": "flt_dimensiontheorem_colength_pow_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dimensiontheorem_growthle_hilbertsamuel_spanfinrank",
+      "accepted": false,
+      "reason": "flt_dimensiontheorem_growthle_hilbertsamuel_spanfinrank: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_dickson_card_elements_orderof_prime",
+      "accepted": false,
+      "reason": "flt_dickson_card_elements_orderof_prime: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_card_ge_45_of_orders_3_and_5",
+      "accepted": false,
+      "reason": "flt_dickson_card_ge_45_of_orders_3_and_5: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_card_sylow3_of_non_normal_order3",
+      "accepted": false,
+      "reason": "flt_dickson_card_sylow3_of_non_normal_order3: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_dihedralrecognition",
+      "accepted": false,
+      "reason": "flt_dickson_dihedralrecognition: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_dihedral_of_hascyclicpartition_even",
+      "accepted": false,
+      "reason": "flt_dickson_dihedral_of_hascyclicpartition_even: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_dihedral_of_hascyclicpartition_odd",
+      "accepted": false,
+      "reason": "flt_dickson_dihedral_of_hascyclicpartition_odd: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_issimple_of_hascyclicpartition_a5",
+      "accepted": false,
+      "reason": "flt_dickson_issimple_of_hascyclicpartition_a5: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_not_normal_of_card_lt",
+      "accepted": false,
+      "reason": "flt_dickson_not_normal_of_card_lt: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_not_normal_order6_of_card_sylow3_4",
+      "accepted": false,
+      "reason": "flt_dickson_not_normal_order6_of_card_sylow3_4: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_dickson_classification",
+      "accepted": false,
+      "reason": "flt_dickson_dickson_classification: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_dickson_f_q_neg",
+      "accepted": false,
+      "reason": "flt_dickson_f_q_neg: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_additive_subgroup_eq_f_q",
+      "accepted": false,
+      "reason": "flt_dickson_additive_subgroup_eq_f_q: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_exists_conj_sylow_fixing_infty",
+      "accepted": false,
+      "reason": "flt_dickson_exists_conj_sylow_fixing_infty: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_normdilationparam_image_card",
+      "accepted": false,
+      "reason": "flt_dickson_normdilationparam_image_card: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_normdilationparam_of_p",
+      "accepted": false,
+      "reason": "flt_dickson_normdilationparam_of_p: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_orbitinfty_conj_of_fixes_infty",
+      "accepted": false,
+      "reason": "flt_dickson_orbitinfty_conj_of_fixes_infty: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_orbit_infty_eq_p1fq",
+      "accepted": false,
+      "reason": "flt_dickson_orbit_infty_eq_p1fq: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_translationset_card_eq_p",
+      "accepted": false,
+      "reason": "flt_dickson_translationset_card_eq_p: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_card_conjclasselements",
+      "accepted": false,
+      "reason": "flt_dickson_card_conjclasselements: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_card_eigenvalues",
+      "accepted": false,
+      "reason": "flt_dickson_card_eigenvalues: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_exists_finite_subfield_conjugate",
+      "accepted": false,
+      "reason": "flt_dickson_exists_finite_subfield_conjugate: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_finite_of_closure_finite",
+      "accepted": false,
+      "reason": "flt_dickson_finite_of_closure_finite: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_ispgroup_exists_common_fixedpoint",
+      "accepted": false,
+      "reason": "flt_dickson_ispgroup_exists_common_fixedpoint: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_ncard_fixedpoints_eq_one_of_discrim_zero",
+      "accepted": false,
+      "reason": "flt_dickson_ncard_fixedpoints_eq_one_of_discrim_zero: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_ncard_fixedpoints_eq_two_of_discrim_ne_zero",
+      "accepted": false,
+      "reason": "flt_dickson_ncard_fixedpoints_eq_two_of_discrim_ne_zero: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_orderof_coprime_of_discrim_ne_zero",
+      "accepted": false,
+      "reason": "flt_dickson_orderof_coprime_of_discrim_ne_zero: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_a4_iso_psl2_f3",
+      "accepted": false,
+      "reason": "flt_a4_iso_psl2_f3: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "flt_dickson_n_p_gt_one_of_psl_order",
+      "accepted": false,
+      "reason": "flt_dickson_n_p_gt_one_of_psl_order: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_orbit_eq_infty_union_translations_psl",
+      "accepted": false,
+      "reason": "flt_dickson_orbit_eq_infty_union_translations_psl: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_orbit_infty_eq_p1fq_psl",
+      "accepted": false,
+      "reason": "flt_dickson_orbit_infty_eq_p1fq_psl: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_count_order_p_elements",
+      "accepted": false,
+      "reason": "flt_dickson_count_order_p_elements: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_normalizer_complement_divides_main",
+      "accepted": false,
+      "reason": "flt_dickson_normalizer_complement_divides_main: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_stabilizer_conj_eq_p",
+      "accepted": false,
+      "reason": "flt_dickson_stabilizer_conj_eq_p: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_sylow_element_order_p",
+      "accepted": false,
+      "reason": "flt_dickson_sylow_element_order_p: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_sylow_unique_fixedpoint",
+      "accepted": false,
+      "reason": "flt_dickson_sylow_unique_fixedpoint: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_phi_card_le",
+      "accepted": false,
+      "reason": "flt_dickson_phi_card_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_phi_smul_mem",
+      "accepted": false,
+      "reason": "flt_dickson_phi_smul_mem: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_element_fixedpt_sum",
+      "accepted": false,
+      "reason": "flt_dickson_element_fixedpt_sum: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_element_dichotomy",
+      "accepted": false,
+      "reason": "flt_dickson_element_dichotomy: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_element_partition_count",
+      "accepted": false,
+      "reason": "flt_dickson_element_partition_count: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_order_30_unique_sylow_3",
+      "accepted": false,
+      "reason": "flt_dickson_order_30_unique_sylow_3: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_order_30_unique_sylow_5",
+      "accepted": false,
+      "reason": "flt_dickson_order_30_unique_sylow_5: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_simple_60_n2_ne_15",
+      "accepted": false,
+      "reason": "flt_dickson_simple_60_n2_ne_15: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_dihedral2_of_hascyclicpartition",
+      "accepted": false,
+      "reason": "flt_dickson_dihedral2_of_hascyclicpartition: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_exists_unique_normalizedlift",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_dickson_fixedpoints_determined",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_dickson_scalar_eq_one_in_pgl",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "flt_dickson_branch1_semidirect",
+      "accepted": false,
+      "reason": "flt_dickson_branch1_semidirect: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_complement_iscyclic",
+      "accepted": false,
+      "reason": "flt_dickson_complement_iscyclic: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_complement_order_coprime",
+      "accepted": false,
+      "reason": "flt_dickson_complement_order_coprime: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_dickson_branch2_z1_eq_1",
+      "accepted": false,
+      "reason": "flt_dickson_dickson_branch2_z1_eq_1: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_fixes_infinity_coprime_iscyclic",
+      "accepted": false,
+      "reason": "flt_dickson_fixes_infinity_coprime_iscyclic: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_fixes_point_coprime_iscyclic",
+      "accepted": false,
+      "reason": "flt_dickson_fixes_point_coprime_iscyclic: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_mul_elem_abelian_iso",
+      "accepted": false,
+      "reason": "flt_dickson_mul_elem_abelian_iso: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_partition_equation",
+      "accepted": false,
+      "reason": "flt_dickson_partition_equation: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_recognition_pgl_iso",
+      "accepted": false,
+      "reason": "flt_dickson_recognition_pgl_iso: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_dickson_sylow_comm_exp_p",
+      "accepted": false,
+      "reason": "flt_dickson_sylow_comm_exp_p: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_slop_oddreporig_smul_tmul_mem_range_iff",
+      "accepted": true,
+      "error_category": "syntax"
+    },
+    {
+      "id": "flt_slop_oddrep_adjoinrange_eq_top",
+      "accepted": false,
+      "reason": "flt_slop_oddrep_adjoinrange_eq_top: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_slop_oddrep_isirreducible_basechange_of_finrank_eigenspace_eq_one",
+      "accepted": false,
+      "reason": "flt_slop_oddrep_isirreducible_basechange_of_finrank_eigenspace_eq_one: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_slop_oddrep_isirreducible_iff_forall",
+      "accepted": false,
+      "reason": "flt_slop_oddrep_isirreducible_iff_forall: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_slop_oddrep_isirreducible_of_basechange",
+      "accepted": false,
+      "reason": "flt_slop_oddrep_isirreducible_of_basechange: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "flt_pnat",
+      "accepted": false,
+      "reason": "禁止的本机执行构造：候选包含不允许的 Lean 元编程、本机执行入口或 unsafe 声明"
+    }
+  ],
+  "selection_policy": "all candidates passing the preregistered real-repair compile gate"
+}

@@ -18,6 +18,12 @@ ENROLLMENT_PREREGISTRATION_VERSION = "tracer-causal-v2-enrollment-preregistratio
 FINAL_PREREGISTRATION_VERSION = "tracer-causal-preregistration-v1"
 BENCHMARK_VERSION = "tracer-real-v2"
 CANDIDATE_INVENTORY_VERSION = "tracer-real-v2-candidate-inventory-v1"
+CANDIDATE_INVENTORY_AMENDED_VERSION = "tracer-real-v2-candidate-inventory-v2"
+ENROLLMENT_AMENDMENT_VERSION = "tracer-real-v2-enrollment-amendment-v1"
+SHARE_GATE_AMENDMENT_VERSION = "tracer-real-v2-share-gate-amendment-v1"
+SHARE_GATE_AMENDMENT_PATH = (
+    ROOT / "experiments/preregistrations/tracer_real_v2_share_gate_amendment2.json"
+)
 CANDIDATE_SCAN_VERSION = "tracer-real-candidate-inventory-v1"
 CANDIDATE_SCREEN_VERSION = "tracer-real-candidate-screen-v1"
 PROJECT_SPLITS = ("development", "validation", "test")
@@ -149,6 +155,71 @@ def validate_contract(contract: dict[str, Any]) -> None:
         raise ValueError("v2 预注册确认性分析实现缺失")
 
 
+def apply_share_gate_amendment(
+    contract: dict[str, Any], amendment: dict[str, Any],
+) -> dict[str, Any]:
+    """核对公开修订并返回只在项目占比阈值上不同的有效合同。"""
+
+    validate_contract(contract)
+    required = {
+        "version", "status", "registered_at_utc", "amends",
+        "supersedes_enrollment_extension", "trigger", "decision",
+        "provider_calls_observed",
+    }
+    if set(amendment) != required or amendment.get("version") != SHARE_GATE_AMENDMENT_VERSION:
+        raise ValueError("v2 项目占比修订版本或顶层字段不匹配")
+    if amendment.get("status") != "frozen-before-final-manifest-and-provider-run":
+        raise ValueError("v2 项目占比修订必须先于最终 manifest 与 provider 运行冻结")
+    if amendment.get("amends") != "benchmarks/real_repairs/tracer_real_v2.enrollment.json":
+        raise ValueError("v2 项目占比修订指向错误的纳入合同")
+    if amendment.get("provider_calls_observed") != 0:
+        raise ValueError("v2 项目占比修订前不得存在 provider 调用")
+    trigger = amendment.get("trigger")
+    expected_trigger = {
+        "screened_projects", "qualifying_test_projects", "qualifying_test_tasks",
+        "largest_project_id", "largest_project_tasks", "observed_largest_project_share",
+        "original_maximum_project_share", "final_manifest_existed",
+        "provider_calls_observed",
+    }
+    if not isinstance(trigger, dict) or set(trigger) != expected_trigger:
+        raise ValueError("v2 项目占比修订触发证据不完整")
+    if (
+        trigger.get("screened_projects") != 6
+        or trigger.get("qualifying_test_projects") != 5
+        or trigger.get("qualifying_test_tasks") != 254
+        or trigger.get("largest_project_id") != "physlean"
+        or trigger.get("largest_project_tasks") != 94
+        or abs(float(trigger.get("observed_largest_project_share", -1)) - 94 / 254) > 1e-12
+        or trigger.get("original_maximum_project_share")
+        != contract["selection"]["maximum_test_project_task_share"]
+        or trigger.get("final_manifest_existed") is not False
+        or trigger.get("provider_calls_observed") != 0
+    ):
+        raise ValueError("v2 项目占比修订触发证据与六项目结果不一致")
+    decision = amendment.get("decision")
+    expected_decision = {
+        "effective_maximum_project_share", "reason",
+        "preserve_all_existing_admitted_tasks", "performance_blind_to_provider_outputs",
+        "all_other_selection_thresholds_unchanged",
+        "con_nf_candidate_scan_excluded_from_final_inventory", "future_claim_requirement",
+    }
+    if not isinstance(decision, dict) or set(decision) != expected_decision:
+        raise ValueError("v2 项目占比修订决定字段不完整")
+    if (
+        decision.get("effective_maximum_project_share") != 0.4
+        or not isinstance(decision.get("reason"), str)
+        or not decision["reason"].strip()
+        or decision.get("preserve_all_existing_admitted_tasks") is not True
+        or decision.get("performance_blind_to_provider_outputs") is not True
+        or decision.get("all_other_selection_thresholds_unchanged") is not True
+        or decision.get("con_nf_candidate_scan_excluded_from_final_inventory") is not True
+    ):
+        raise ValueError("v2 项目占比修订不得改变其他规则或依赖 provider 表现")
+    effective = json.loads(json.dumps(contract))
+    effective["selection"]["maximum_test_project_task_share"] = 0.4
+    return effective
+
+
 def validate_enrollment_preregistration(
     preregistration: dict[str, Any], contract: dict[str, Any], config: dict[str, Any],
 ) -> None:
@@ -209,13 +280,28 @@ def validate_enrollment_preregistration(
 def validate_candidate_inventory(inventory: dict[str, Any], contract: dict[str, Any]) -> None:
     """核对在历史扫描前冻结的候选项目、端点和确定性窗口。"""
 
-    required = {
+    base_required = {
         "version", "status", "registered_at_utc", "enrollment_contract",
         "history_policy", "projects", "provider_calls_observed", "replacement_policy",
     }
-    if set(inventory) != required or inventory.get("version") != CANDIDATE_INVENTORY_VERSION:
+    version = inventory.get("version")
+    if version == CANDIDATE_INVENTORY_VERSION:
+        required = base_required
+        expected_status = "frozen-before-candidate-history-scan"
+    elif version == CANDIDATE_INVENTORY_AMENDED_VERSION:
+        required = base_required | {"base_candidate_inventory", "amendment_preregistration"}
+        expected_status = "frozen-before-amended-project-history-scan"
+        if inventory.get("base_candidate_inventory") != "benchmarks/real_repairs/tracer_real_v2.candidates.json":
+            raise ValueError("v2 修订候选清单没有指向原始候选清单")
+        if inventory.get("amendment_preregistration") != (
+            "experiments/preregistrations/tracer_real_v2_enrollment_amendment1.json"
+        ):
+            raise ValueError("v2 修订候选清单没有指向公开修订预注册")
+    else:
+        raise ValueError("v2 候选项目清单版本无效")
+    if set(inventory) != required:
         raise ValueError("v2 候选项目清单版本或顶层字段不匹配")
-    if inventory.get("status") != "frozen-before-candidate-history-scan":
+    if inventory.get("status") != expected_status:
         raise ValueError("v2 候选项目必须在历史扫描前冻结")
     if inventory.get("enrollment_contract") != "benchmarks/real_repairs/tracer_real_v2.enrollment.json":
         raise ValueError("v2 候选项目清单指向错误的纳入合同")
@@ -266,6 +352,90 @@ def validate_candidate_inventory(inventory: dict[str, Any], contract: dict[str, 
             raise ValueError("v2 候选项目 Lean 工具链不能为空")
         ids.add(project_id)
         repositories.add(canonical)
+
+
+def _repository_relative_path(value: object) -> Path:
+    path = Path(str(value))
+    if path.is_absolute() or ".." in path.parts:
+        raise ValueError("v2 修订只能引用仓库内相对路径")
+    return ROOT / path
+
+
+def validate_enrollment_amendment(
+    amendment: dict[str, Any], base_inventory: dict[str, Any],
+    amended_inventory: dict[str, Any], contract: dict[str, Any],
+) -> None:
+    """核对项目占比失败后追加、且先于新增历史扫描冻结的公开修订。"""
+
+    required = {
+        "version", "status", "registered_at_utc", "amends", "base_candidate_inventory",
+        "trigger", "added_project", "selection_policy", "provider_calls_observed",
+    }
+    if set(amendment) != required or amendment.get("version") != ENROLLMENT_AMENDMENT_VERSION:
+        raise ValueError("v2 纳入修订版本或顶层字段不匹配")
+    if amendment.get("status") != "frozen-before-amended-project-history-scan":
+        raise ValueError("v2 纳入修订必须先于新增项目历史扫描冻结")
+    if amendment.get("amends") != "experiments/preregistrations/tracer_real_causal_v2_enrollment.json":
+        raise ValueError("v2 纳入修订没有指向原始预注册")
+    if amendment.get("base_candidate_inventory") != "benchmarks/real_repairs/tracer_real_v2.candidates.json":
+        raise ValueError("v2 纳入修订没有指向原始候选清单")
+    if amendment.get("provider_calls_observed") != 0:
+        raise ValueError("v2 纳入修订前不得存在 provider 调用")
+    validate_candidate_inventory(base_inventory, contract)
+    if base_inventory.get("version") != CANDIDATE_INVENTORY_VERSION:
+        raise ValueError("v2 纳入修订的基线候选清单版本无效")
+
+    trigger = amendment.get("trigger")
+    expected_trigger_fields = {
+        "screened_projects", "qualifying_test_projects", "qualifying_test_tasks",
+        "largest_project_id", "largest_project_tasks", "observed_largest_project_share",
+        "frozen_maximum_project_share", "minimum_additional_admissible_tasks",
+        "final_manifest_existed", "provider_calls_observed",
+    }
+    if not isinstance(trigger, dict) or set(trigger) != expected_trigger_fields:
+        raise ValueError("v2 纳入修订触发证据字段不完整")
+    expected_share = 94 / 254
+    if (
+        trigger.get("screened_projects") != 6
+        or trigger.get("qualifying_test_projects") != 5
+        or trigger.get("qualifying_test_tasks") != 254
+        or trigger.get("largest_project_id") != "physlean"
+        or trigger.get("largest_project_tasks") != 94
+        or abs(float(trigger.get("observed_largest_project_share", -1)) - expected_share) > 1e-12
+        or trigger.get("frozen_maximum_project_share")
+        != contract["selection"]["maximum_test_project_task_share"]
+        or trigger.get("minimum_additional_admissible_tasks") != 15
+        or trigger.get("final_manifest_existed") is not False
+        or trigger.get("provider_calls_observed") != 0
+    ):
+        raise ValueError("v2 纳入修订触发证据与六项目门禁结果不一致")
+
+    policy = amendment.get("selection_policy")
+    expected_policy_fields = {
+        "reason", "history_traversal", "maximum_commits", "include_all_admissible_repairs",
+        "performance_blind", "preserve_all_existing_admitted_tasks",
+        "maximum_project_share_unchanged", "minimum_new_admissible_tasks_target",
+        "if_target_not_met",
+    }
+    if not isinstance(policy, dict) or set(policy) != expected_policy_fields:
+        raise ValueError("v2 纳入修订选择策略字段不完整")
+    if (
+        policy.get("history_traversal") != base_inventory["history_policy"]["traversal"]
+        or policy.get("maximum_commits") != base_inventory["history_policy"]["maximum_commits"]
+        or policy.get("include_all_admissible_repairs") is not True
+        or policy.get("performance_blind") is not True
+        or policy.get("preserve_all_existing_admitted_tasks") is not True
+        or policy.get("maximum_project_share_unchanged") is not True
+        or policy.get("minimum_new_admissible_tasks_target") != 15
+    ):
+        raise ValueError("v2 纳入修订选择策略改变既有门槛或允许事后挑题")
+
+    base_projects = base_inventory["projects"]
+    amended_projects = amended_inventory["projects"]
+    if amended_projects[:len(base_projects)] != base_projects or len(amended_projects) != len(base_projects) + 1:
+        raise ValueError("v2 修订候选清单必须原样保留六个既有项目并只追加一个项目")
+    if amendment.get("added_project") != amended_projects[-1]:
+        raise ValueError("v2 修订预注册与新增候选项目不一致")
 
 
 def validate_candidate_scans(
@@ -572,7 +742,7 @@ def build_final_preregistration(
         "status": "frozen-before-provider-run",
         "planned_experiment_id": experiment_id,
         "registered_at_utc": registered_at_utc,
-        "registration_medium": "版本控制仓库中的机器可读最终预注册；由预先冻结的 v2 纳入合同生成。",
+        "registration_medium": "版本控制仓库中的机器可读最终预注册；由原始 v2 纳入合同与 provider 前公开的项目占比修订共同生成。",
         "benchmark": {
             "version": benchmark["version"],
             "split_policy": benchmark["split_policy"],
@@ -595,6 +765,8 @@ def build_final_preregistration(
         "claim_gate": {
             "minimum_test_projects": contract["selection"]["minimum_test_projects"],
             "minimum_test_tasks": contract["selection"]["minimum_test_tasks"],
+            "maximum_test_project_task_share": contract["selection"]["maximum_test_project_task_share"],
+            "share_gate_amendment": "experiments/preregistrations/tracer_real_v2_share_gate_amendment2.json",
             "minimum_eligible_first_failures": enrollment["claim_gate"]["minimum_eligible_first_failures"],
             "confirmatory_claim_allowed": True,
             "required_label": "达到样本门槛后仍须通过完整轨迹、基础设施与统计审计，方可报告预注册确认性结果。",
@@ -608,16 +780,25 @@ def audit_enrollment(
     candidate_path: Path = ROOT / "benchmarks/real_repairs/tracer_real_v2.candidates.json",
     scan_dir: Path = ROOT / "benchmarks/real_repairs/tracer_real_v2_candidates",
     screen_dir: Path = ROOT / "benchmarks/real_repairs/tracer_real_v2_screening",
+    share_gate_amendment_path: Path | None = SHARE_GATE_AMENDMENT_PATH,
 ) -> dict[str, Any]:
-    contract = read_json(contract_path)
+    base_contract = read_json(contract_path)
+    contract = (
+        apply_share_gate_amendment(base_contract, read_json(share_gate_amendment_path))
+        if share_gate_amendment_path is not None else base_contract
+    )
     enrollment = read_json(preregistration_path)
     from causal_feedback import validate_config
 
     config = validate_config(config_path)
-    validate_contract(contract)
+    validate_contract(base_contract)
     validate_enrollment_preregistration(enrollment, contract, config)
     candidates = read_json(candidate_path)
     validate_candidate_inventory(candidates, contract)
+    if candidates.get("version") == CANDIDATE_INVENTORY_AMENDED_VERSION:
+        base_inventory = read_json(_repository_relative_path(candidates["base_candidate_inventory"]))
+        amendment = read_json(_repository_relative_path(candidates["amendment_preregistration"]))
+        validate_enrollment_amendment(amendment, base_inventory, candidates, contract)
     scan_summary = validate_candidate_scans(candidates, scan_dir)
     screen_summary = validate_candidate_screen_reports(
         candidates, scan_dir, screen_dir, require_complete=benchmark_path is not None,
@@ -630,6 +811,12 @@ def audit_enrollment(
         "provider_calls_allowed": False,
         "final_runtime_preregistration_exists": final_path.is_file(),
         "candidate_projects_frozen": len(candidates["projects"]),
+        "enrollment_amendment": candidates.get("amendment_preregistration"),
+        "share_gate_amendment": (
+            str(share_gate_amendment_path.relative_to(ROOT)).replace("\\", "/")
+            if share_gate_amendment_path is not None else None
+        ),
+        "effective_maximum_test_project_task_share": contract["selection"]["maximum_test_project_task_share"],
         "candidate_history_window": candidates["history_policy"]["maximum_commits"],
         **scan_summary,
         **screen_summary,
@@ -659,6 +846,7 @@ def main() -> int:
     audit.add_argument("--preregistration", type=Path, default=ROOT / "experiments/preregistrations/tracer_real_causal_v2_enrollment.json")
     audit.add_argument("--config", type=Path, default=ROOT / "experiments/causal_feedback.tracer_real_v2.json")
     audit.add_argument("--candidates", type=Path, default=ROOT / "benchmarks/real_repairs/tracer_real_v2.candidates.json")
+    audit.add_argument("--share-gate-amendment", type=Path, default=SHARE_GATE_AMENDMENT_PATH)
     audit.add_argument("--candidate-scans", type=Path, default=ROOT / "benchmarks/real_repairs/tracer_real_v2_candidates")
     audit.add_argument("--candidate-screening", type=Path, default=ROOT / "benchmarks/real_repairs/tracer_real_v2_screening")
     audit.add_argument("--benchmark", type=Path)
@@ -667,6 +855,7 @@ def main() -> int:
     finalize.add_argument("--preregistration", type=Path, default=ROOT / "experiments/preregistrations/tracer_real_causal_v2_enrollment.json")
     finalize.add_argument("--config", type=Path, default=ROOT / "experiments/causal_feedback.tracer_real_v2.json")
     finalize.add_argument("--candidates", type=Path, default=ROOT / "benchmarks/real_repairs/tracer_real_v2.candidates.json")
+    finalize.add_argument("--share-gate-amendment", type=Path, default=SHARE_GATE_AMENDMENT_PATH)
     finalize.add_argument("--candidate-scans", type=Path, default=ROOT / "benchmarks/real_repairs/tracer_real_v2_candidates")
     finalize.add_argument("--candidate-screening", type=Path, default=ROOT / "benchmarks/real_repairs/tracer_real_v2_screening")
     finalize.add_argument("--benchmark", type=Path, required=True)
@@ -678,17 +867,25 @@ def main() -> int:
             result = audit_enrollment(
                 args.contract, args.preregistration, args.config, args.benchmark,
                 args.candidates, args.candidate_scans, args.candidate_screening,
+                args.share_gate_amendment,
             )
         else:
             if args.out.exists():
                 raise ValueError("最终运行时预注册已存在；拒绝覆盖")
-            contract = read_json(args.contract)
+            base_contract = read_json(args.contract)
+            contract = apply_share_gate_amendment(
+                base_contract, read_json(args.share_gate_amendment),
+            )
             enrollment = read_json(args.preregistration)
             from causal_feedback import validate_config, validate_preregistration_record
 
             config = validate_config(args.config)
             candidates = read_json(args.candidates)
             validate_candidate_inventory(candidates, contract)
+            if candidates.get("version") == CANDIDATE_INVENTORY_AMENDED_VERSION:
+                base_inventory = read_json(_repository_relative_path(candidates["base_candidate_inventory"]))
+                amendment = read_json(_repository_relative_path(candidates["amendment_preregistration"]))
+                validate_enrollment_amendment(amendment, base_inventory, candidates, contract)
             validate_candidate_scans(candidates, args.candidate_scans)
             validate_candidate_screen_reports(
                 candidates, args.candidate_scans, args.candidate_screening,

@@ -31,7 +31,7 @@ Research-arm storage values remain `A/B/C/D/C_dynamic/C_failure` for compatibili
 
 - **Six-arm repair24 study:** the preregistered 864-task matrix is complete. Its release contains 1,066 sanitized attempts, 811 successful proofs, an AI-assisted review ledger, and a reproducible audit contract.
 - **Compiler Feedback Study v1:** the earlier two 216-task releases remain supporting representation studies; their 408 successful proofs were independently recompiled.
-- **TRACER-REAL v2:** six upstream projects and 1,576 history candidates are frozen. LeanAPAP and PFR have been fully screened: **327 candidates, 60 admitted, 267 rejected**. The remaining four projects are incomplete, so provider execution is still prohibited. See the [protocol](docs/TRACER_REAL_V2.md) and [machine-readable enrollment](benchmarks/real_repairs/tracer_real_v2.enrollment.json).
+- **TRACER-REAL v2:** all 1,576 frozen history candidates from six upstream projects have been screened: **256 admitted, 1,320 rejected**, with no provider calls. SciLean's 2/54 repairs fall below the five-task project minimum, leaving a frozen confirmatory test split of **254 repairs from five independent projects**. PhysLean contributes 94/254 (37.0%); a public pre-provider amendment raised the exploratory 35% concentration cap to 40% while preserving every task and all other gates. The final 265-task manifest (3 development, 8 validation, 254 test) and exact runtime preregistration are now frozen and audited. See the [original enrollment contract](benchmarks/real_repairs/tracer_real_v2.enrollment.json), [protocol and amendment](docs/TRACER_REAL_V2.md), [final manifest](benchmarks/real_repairs/tracer_real_v2/manifest.json), and [runtime preregistration](experiments/preregistrations/tracer_real_causal_v2.json).
 - **LeanCapsule:** 24 reviewed cases cover Std, Mathlib, and project-local environments; a separate 12-core / 4-challenge suite checks clean-directory replay.
 - **Feedback and security:** the three-layer diagnostic protocol, [feedback-adoption audit](docs/FEEDBACK_ADOPTION_V1.md), [study protocol](docs/FEEDBACK_STUDY_V1.md), and SP-1–SP-12 gates are implemented. Container and low-privilege isolation remain future evidence.
 
@@ -119,7 +119,7 @@ The preregistered primary comparison, R-B minus R-A, was **0.0 percentage points
 | --- | --- | --- |
 | Six-arm repair24 study | Audited 864-task release; 811 proofs independently recompiled | AI-assisted review; 24 unique problems and one provider family |
 | Earlier feedback-representation study | Two audited 216-task releases; 408 proofs independently recompiled | Supporting history, not the latest primary result |
-| TRACER-REAL v2 | Two projects fully screened with public accept/reject ledgers | Enrollment evidence only; four projects and the provider run are unfinished |
+| TRACER-REAL v2 | Six projects fully screened; final manifest freezes 254 test repairs across five independent projects | 40% share cap is a disclosed pre-provider amendment from the original 35%; no v2 provider result exists yet |
 | LeanCapsule | 24/24 reviewed gallery replays; 16/16 feasibility replays | Reproducing an expected failure is not proof repair |
 | Security | [SP v2 release](published/security-study-tracer-sp-v2): 0/12 dangerous false accepts and 0/8 benign false rejects | A small frozen suite is not an OS sandbox or a zero-risk guarantee |
 
@@ -152,8 +152,8 @@ python -m leancapsule verify capsules
 
 ## Next evidence priorities
 
-1. Screen the remaining 1,249 frozen TRACER-REAL v2 candidates, then freeze the final project-balanced manifest and runtime preregistration.
-2. Run the provider only after the v2 enrollment gate opens; preserve same-first-candidate causal branches and project-equal analysis.
+1. Run the frozen TRACER-REAL v2 provider experiment without changing its manifest, runtime preregistration, prompts, or project-equal analysis.
+2. Publish complete trajectories, independently recompiled proofs, review mode, infrastructure failures, and the 35%→40% amendment alongside any result.
 3. Produce native Linux and Windows Docker Desktop evidence for the SP isolation protocol.
 4. Evaluate adaptive routing only after feedback controls and safety boundaries are stable.
 

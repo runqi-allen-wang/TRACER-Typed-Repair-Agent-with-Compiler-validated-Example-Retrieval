@@ -12,7 +12,11 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PLAN_VERSION = "tracer-real-v2-screening-plan-v1"
+PLAN_VERSIONS = {
+    "tracer-real-v2-screening-plan-v1",
+    "tracer-real-v2-screening-plan-v2",
+    "tracer-real-v2-screening-plan-v3",
+}
 PLAN_PATH = ROOT / "experiments/tracer_real_v2_screening.plan.json"
 
 
@@ -37,12 +41,24 @@ def validate_plan(plan: dict[str, Any]) -> dict[str, Any]:
         "completed_before_plan", "screening_order", "execution",
         "ordering_rationale", "provider_calls_allowed",
     }
-    if set(plan) != required or plan.get("version") != PLAN_VERSION:
+    if plan.get("version") == "tracer-real-v2-screening-plan-v2":
+        required.add("amendment_preregistration")
+    if plan.get("version") == "tracer-real-v2-screening-plan-v3":
+        required.add("share_gate_amendment")
+    if set(plan) != required or plan.get("version") not in PLAN_VERSIONS:
         raise ValueError("V2 筛查计划版本或顶层字段不匹配")
     if plan.get("status") != "operational-plan-no-provider-calls":
         raise ValueError("V2 筛查计划状态无效")
     if plan.get("provider_calls_allowed") is not False:
         raise ValueError("V2 候选筛查不得调用 provider")
+    if plan.get("version") == "tracer-real-v2-screening-plan-v2":
+        expected_amendment = "experiments/preregistrations/tracer_real_v2_enrollment_amendment1.json"
+        if plan.get("amendment_preregistration") != expected_amendment:
+            raise ValueError("V2 扩展筛查计划必须绑定公开 enrollment amendment")
+    if plan.get("version") == "tracer-real-v2-screening-plan-v3":
+        expected_amendment = "experiments/preregistrations/tracer_real_v2_share_gate_amendment2.json"
+        if plan.get("share_gate_amendment") != expected_amendment:
+            raise ValueError("V2 最终筛查计划必须绑定公开项目占比修订")
     execution = plan.get("execution")
     expected_execution = {
         "workers": 1,
@@ -55,6 +71,12 @@ def validate_plan(plan: dict[str, Any]) -> dict[str, Any]:
         raise ValueError("V2 筛查执行策略发生漂移")
 
     contract = read_json(_resolve(plan["enrollment_contract"]))
+    if plan["version"] == "tracer-real-v2-screening-plan-v3":
+        from tracer_real_v2 import apply_share_gate_amendment
+
+        contract = apply_share_gate_amendment(
+            contract, read_json(_resolve(plan["share_gate_amendment"])),
+        )
     selection = contract.get("selection")
     if not isinstance(selection, dict):
         raise ValueError("V2 纳入合同缺少 selection")
@@ -77,12 +99,25 @@ def validate_plan(plan: dict[str, Any]) -> dict[str, Any]:
         raise ValueError("V2 筛查项目列表格式错误")
     completed_ids = [row.get("project_id") for row in completed]
     ordered_ids = [row.get("project_id") for row in order]
-    if completed_ids != ["leanapap", "pfr"]:
-        raise ValueError("计划基线必须精确登记 LeanAPAP 与 PFR")
-    if ordered_ids != ["scilean", "equational_theories", "flt", "physlean"]:
-        raise ValueError("剩余筛查顺序发生漂移")
+    if plan["version"] == "tracer-real-v2-screening-plan-v1":
+        expected_completed = ["leanapap", "pfr"]
+        expected_order = ["scilean", "equational_theories", "flt", "physlean"]
+    elif plan["version"] == "tracer-real-v2-screening-plan-v2":
+        expected_completed = [
+            "leanapap", "pfr", "scilean", "equational_theories", "flt", "physlean",
+        ]
+        expected_order = ["con_nf"]
+    else:
+        expected_completed = [
+            "leanapap", "pfr", "scilean", "equational_theories", "flt", "physlean",
+        ]
+        expected_order = []
+    if completed_ids != expected_completed:
+        raise ValueError("已完成筛查基线与计划版本不一致")
+    if ordered_ids != expected_order:
+        raise ValueError("待筛查项目顺序发生漂移")
     if set(completed_ids + ordered_ids) != set(projects):
-        raise ValueError("筛查计划没有唯一覆盖六个冻结项目")
+        raise ValueError("筛查计划没有唯一覆盖全部冻结项目")
 
     report_root = _resolve(plan["published_report_root"])
     for row in completed:
@@ -207,7 +242,10 @@ def _repository_status(row: dict[str, Any], repository_root: Path) -> dict[str, 
         "clean": dirty == "",
         "lake_config_exists": (repo / "lakefile.toml").is_file()
         or (repo / "lakefile.lean").is_file(),
-        "dependencies_prepared": (repo / ".lake" / "packages").is_dir(),
+        "dependencies_prepared": (
+            (repo / ".lake" / "packages").is_dir()
+            and (repo / ".lake" / "build" / "lib" / "lean").is_dir()
+        ),
     })
     return result
 
@@ -240,7 +278,7 @@ def build_status(plan_path: Path = PLAN_PATH, *, check_repositories: bool = Fals
     return {
         "ok": True,
         "provider_calls": 0,
-        "screened_before_plan": 327,
+        "screened_before_plan": sum(row["candidate_count"] for row in plan["completed_before_plan"]),
         "remaining_candidates": sum(row["candidate_count"] for row in rows if not row["complete"]),
         "next_project": next_project,
         "projects": rows,

@@ -31,7 +31,7 @@ TRACER 是面向 **Lean 4 证明修复、编译反馈实验与失败复现**的�
 
 - **repair24 六臂实验：** 预注册的 864 任务矩阵已经完成；发布包包含 1,066 条脱敏逐轮记录、811 个成功证明、AI 辅助复核账本和可复现审计合同。
 - **Compiler Feedback Study v1：** 早期两批 216 任务实验继续作为反馈表示研究的辅助证据；其中 408 个成功证明均已独立复编译。
-- **TRACER-REAL v2：** 已冻结 6 个上游项目和 1,576 个历史候选。LeanAPAP 与 PFR 已完成全量筛查：**327 个候选、60 个纳入、267 个拒绝**。其余四项目未完成，因此纳入门禁仍禁止 provider 运行。参见 [v2 协议](docs/TRACER_REAL_V2.md)和[机器可读纳入规则](benchmarks/real_repairs/tracer_real_v2.enrollment.json)。
+- **TRACER-REAL v2：** 六个上游项目的 1,576 个冻结历史候选已全部筛查：**256 个纳入、1,320 个拒绝**，provider 调用为零。SciLean 的 2/54 项低于每项目五题门槛，最终确认性 test 划分冻结为**五个独立项目、254 道真实修复题**。PhysLean 占 94/254（37.0%）；一份在 provider 调用前公开的修订将探索阶段的 35% 集中度上限调整为 40%，不删题且不改变其他门槛。最终 265 题 manifest（development 3、validation 8、test 254）及精确运行时预注册均已冻结并通过审计。参见[原始纳入合同](benchmarks/real_repairs/tracer_real_v2.enrollment.json)、[v2 协议与修订](docs/TRACER_REAL_V2.md)、[最终 manifest](benchmarks/real_repairs/tracer_real_v2/manifest.json)和[运行时预注册](experiments/preregistrations/tracer_real_causal_v2.json)。
 - **LeanCapsule：** 24 个复核案例覆盖 Std、Mathlib 与 project-local 环境；另有 12-core / 4-challenge 套件验证干净目录回放。
 - **编译反馈与安全：** 三层诊断协议、[反馈采纳审计](docs/FEEDBACK_ADOPTION_V1.md)、[反馈实验协议](docs/FEEDBACK_STUDY_V1.md)和 SP-1～SP-12 门禁均已实现。容器和低权限隔离仍是待补证据。
 
@@ -119,7 +119,7 @@ Agent 成功表示候选通过 Lean 和未完成证明检查；Capsule 成功表
 | --- | --- | --- |
 | repair24 六臂实验 | 通过审计的 864 任务发布；811 个证明独立复编译 | AI 辅助复核；仅 24 道独立题且属于同一供应商模型族 |
 | 早期反馈表示实验 | 两批通过审计的 216 任务发布；408 个证明独立复编译 | 辅助历史证据，不是当前最新主结果 |
-| TRACER-REAL v2 | 两个项目完成全量筛查并公开接受/拒绝账本 | 仅是纳入证据；四项目和 provider 运行尚未完成 |
+| TRACER-REAL v2 | 六个项目全部筛查；最终 manifest 冻结五个独立测试项目、254 道修复题 | 40% 占比门槛是 provider 前对原 35% 的公开修订；尚无 v2 provider 结果 |
 | LeanCapsule | 24/24 gallery 回放、16/16 feasibility 回放 | 复现预期失败不等于修复证明 |
 | 安全 | [SP v2 发布包](published/security-study-tracer-sp-v2)：危险候选误放行 0/12，正常对照误拒绝 0/8 | 小规模冻结套件不是操作系统沙箱，也不代表零风险 |
 
@@ -152,8 +152,8 @@ python -m leancapsule verify capsules
 
 ## 下一步证据
 
-1. 筛查 TRACER-REAL v2 剩余 1,249 个冻结候选，再冻结项目均衡的最终 manifest 与运行时预注册。
-2. 仅在 v2 纳入门禁开启后运行 provider，保留同首轮候选的因果分叉和项目等权分析。
+1. 按已经冻结的 TRACER-REAL v2 manifest 与运行时预注册执行 provider 实验，不再修改题目、提示、生成参数或项目等权分析。
+2. 发布结果时同时交付完整轨迹、独立复编译证明、复核方式、基础设施错误和 35%→40% 门禁修订。
 3. 分别生成原生 Linux 与 Windows Docker Desktop 的 SP 隔离证据。
 4. 在反馈对照和安全边界稳定后，再评估自适应路由策略。
 

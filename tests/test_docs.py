@@ -198,6 +198,60 @@ class DocumentationConsistencyTest(unittest.TestCase):
                 bars[(*key, "within_3")], 100 * row["success"] / row["tasks"], places=5
             )
 
+    def test_readme_tracer_real_v2_counts_match_public_screening_ledgers(self):
+        reports = [
+            json.loads(path.read_text(encoding="utf-8"))
+            for path in sorted(
+                (ROOT / "benchmarks" / "real_repairs" / "tracer_real_v2_screening").glob(
+                    "*.screen.json"
+                )
+            )
+        ]
+        totals = {
+            "projects": len(reports),
+            "candidates": sum(row["candidates"] for row in reports),
+            "accepted": sum(row["accepted"] for row in reports),
+            "rejected": sum(row["rejected"] for row in reports),
+        }
+        self.assertGreaterEqual(totals["projects"], 5)
+        self.assertEqual(totals["candidates"], totals["accepted"] + totals["rejected"])
+        expected = {
+            "README.md": [
+                f'{totals["candidates"]:,}',
+                f'{totals["accepted"]:,} admitted',
+                f'{totals["rejected"]:,} rejected',
+            ],
+            "README.zh-CN.md": [
+                f'{totals["candidates"]:,}',
+                f'{totals["accepted"]:,} 个纳入',
+                f'{totals["rejected"]:,} 个拒绝',
+            ],
+        }
+        remaining = 1576 - totals["candidates"]
+        for name, readme in self.readmes().items():
+            with self.subTest(language=name):
+                for fragment in expected[name]:
+                    self.assertIn(fragment, readme)
+                if remaining:
+                    self.assertIn(str(remaining), readme)
+        project_words = {5: "Five", 6: "Six"}
+        english_phrase = (
+            f'{project_words[totals["projects"]]} projects fully screened'
+            if remaining else 'Six projects fully screened'
+        )
+        self.assertIn(
+            english_phrase,
+            (ROOT / "README.md").read_text(encoding="utf-8"),
+        )
+        self.assertIn(
+            "五个项目完成全量筛查" if remaining else "六个项目全部筛查",
+            (ROOT / "README.zh-CN.md").read_text(encoding="utf-8"),
+        )
+        if not remaining:
+            for readme in self.readmes().values():
+                self.assertIn("35%", readme)
+                self.assertIn("40%", readme)
+
     def test_readmes_do_not_promote_superseded_smoke_pilot(self):
         for name, readme in self.readmes().items():
             with self.subTest(language=name):

@@ -1,0 +1,1262 @@
+{
+  "version": "tracer-real-candidate-screen-v1",
+  "project_id": "equational_theories",
+  "endpoint_revision": "1aec8a7acf223b7c56e4830977b6e90d4ef1924b",
+  "provider_calls_observed": 0,
+  "candidates": 250,
+  "accepted": 53,
+  "rejected": 197,
+  "decisions": [
+    {
+      "id": "equational_theories_asterix_denumerable",
+      "accepted": false,
+      "reason": "equational_theories_asterix_denumerable: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_asterix_closure_eq_of_mem_e1",
+      "accepted": false,
+      "reason": "equational_theories_asterix_closure_eq_of_mem_e1: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_asterix_mem_closureseq_e0",
+      "accepted": false,
+      "reason": "equational_theories_asterix_mem_closureseq_e0: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_freemagma_elementsofnumnodeseq_card_eq_catalan_mul_pow",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_definable_of_termdefinable",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_structural_of_termstructural",
+      "accepted": false,
+      "reason": "equational_theories_structural_of_termstructural: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_equation46_termdefinablefrom_equalshape",
+      "accepted": false,
+      "reason": "equational_theories_equation46_termdefinablefrom_equalshape: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_freemagma",
+      "accepted": false,
+      "reason": "equational_theories_freemagma: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_equation43_structuralfrom_equation543",
+      "accepted": false,
+      "reason": "equational_theories_equation43_structuralfrom_equation543: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_equation4512_structuralfrom_equation543",
+      "accepted": false,
+      "reason": "equational_theories_equation4512_structuralfrom_equation543: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_list",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: List"
+    },
+    {
+      "id": "equational_theories_testfreemagmas",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: TestFreeMagmas"
+    },
+    {
+      "id": "equational_theories_freemagma_2",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: FreeMagma"
+    },
+    {
+      "id": "equational_theories_freshgenerator_generatornames_append",
+      "accepted": false,
+      "reason": "equational_theories_freshgenerator_generatornames_append: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_freshgenerator_generatornames_invrev",
+      "accepted": false,
+      "reason": "equational_theories_freshgenerator_generatornames_invrev: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_freshgenerator_generatornames_sublist",
+      "accepted": false,
+      "reason": "equational_theories_freshgenerator_generatornames_sublist: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_fullspectrum_full_spectrum_equation1482",
+      "accepted": false,
+      "reason": "equational_theories_fullspectrum_full_spectrum_equation1482: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_fullspectrum_full_spectrum_equation1682",
+      "accepted": false,
+      "reason": "equational_theories_fullspectrum_full_spectrum_equation1682: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_fullspectrum_full_spectrum_linear_cancellative2",
+      "accepted": false,
+      "reason": "equational_theories_fullspectrum_full_spectrum_linear_cancellative2: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_fullspectrum_full_spectrum_square_cancellative",
+      "accepted": false,
+      "reason": "equational_theories_fullspectrum_full_spectrum_square_cancellative: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_fullspectrum_not_full_spectrum_card2_2var",
+      "accepted": false,
+      "reason": "equational_theories_fullspectrum_not_full_spectrum_card2_2var: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_fullspectrum_not_full_spectrum_card2_3var",
+      "accepted": false,
+      "reason": "equational_theories_fullspectrum_not_full_spectrum_card2_3var: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_eq1112_partialsolution",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq1112.PartialSolution"
+    },
+    {
+      "id": "equational_theories_eq1112_root",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq1112._root_"
+    },
+    {
+      "id": "equational_theories_eq1112_rule_0_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq1112_rule_1_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq1112_rule_2_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq1112_rule_3_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq1112_rule_finite_1_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq1112_rule_finite_2_preserved",
+      "accepted": false,
+      "reason": "equational_theories_eq1112_rule_finite_2_preserved: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_eq1113_partialsolution",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq1113.PartialSolution"
+    },
+    {
+      "id": "equational_theories_eq1113_root",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq1113._root_"
+    },
+    {
+      "id": "equational_theories_eq1113_rule_0_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq1113_rule_1_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq1113_rule_2_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq1113_rule_3_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq118_partialsolution",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq118.PartialSolution"
+    },
+    {
+      "id": "equational_theories_eq118_root",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq118._root_"
+    },
+    {
+      "id": "equational_theories_eq118_rule_0_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq118_rule_1_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq118_rule_3_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq118_rule_5_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq118_rule_8_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq118_rule_9_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq118_rule_finite_0_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq118_rule_finite_1_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq118_rule_finite_2_preserved",
+      "accepted": false,
+      "reason": "equational_theories_eq118_rule_finite_2_preserved: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_eq124_partialsolution",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq124.PartialSolution"
+    },
+    {
+      "id": "equational_theories_eq124_root",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_eq124_rule_0_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq124_rule_1_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq124_rule_2_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq124_rule_5_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq124_rule_finite_0_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq124_rule_finite_1_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq1648_partialsolution",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq1648.PartialSolution"
+    },
+    {
+      "id": "equational_theories_eq1648_root",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_eq1648_rule_0_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq1648_rule_1_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq1648_rule_2_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq1648_rule_finite_2_preserved",
+      "accepted": false,
+      "reason": "equational_theories_eq1648_rule_finite_2_preserved: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_eq476_partialsolution",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq476.PartialSolution"
+    },
+    {
+      "id": "equational_theories_eq476_root",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq476._root_"
+    },
+    {
+      "id": "equational_theories_eq476_rule_0_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq476_rule_1_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq476_rule_2_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq476_rule_3_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq476_rule_4_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq476_rule_finite_2_preserved",
+      "accepted": false,
+      "reason": "equational_theories_eq476_rule_finite_2_preserved: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_eq503_partialsolution",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq503.PartialSolution"
+    },
+    {
+      "id": "equational_theories_eq503_root",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq503._root_"
+    },
+    {
+      "id": "equational_theories_eq503_rule_0_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq503_rule_1_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq503_rule_2_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq503_rule_3_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq503_rule_4_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq503_rule_5_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq503_rule_6_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_partialsolution",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq511.PartialSolution"
+    },
+    {
+      "id": "equational_theories_eq511_root",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq511._root_"
+    },
+    {
+      "id": "equational_theories_eq511_rule_0_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_rule_10_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_rule_11_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_rule_12_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_rule_13_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_rule_14_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_rule_15_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_rule_1_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_rule_2_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_rule_3_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_rule_4_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_rule_5_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_rule_6_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_rule_8_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_rule_9_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_rule_finite_1_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq511_rule_finite_2_preserved",
+      "accepted": false,
+      "reason": "equational_theories_eq511_rule_finite_2_preserved: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_eq677_partialsolution",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq677.PartialSolution"
+    },
+    {
+      "id": "equational_theories_eq677_root",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_eq677_rule_0_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq677_rule_1_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq677_rule_2_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq677_rule_3_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq677_rule_4_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq707_partialsolution",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq707.PartialSolution"
+    },
+    {
+      "id": "equational_theories_eq707_root",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq707._root_"
+    },
+    {
+      "id": "equational_theories_eq707_rule_0_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq707_rule_1_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq707_rule_2_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq707_rule_3_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq883_partialsolution",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq883.PartialSolution"
+    },
+    {
+      "id": "equational_theories_eq883_root",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq883._root_"
+    },
+    {
+      "id": "equational_theories_eq883_rule_0_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq883_rule_1_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq883_rule_2_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq883_rule_3_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq883_rule_4_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq883_rule_finite_0_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq883_rule_finite_2_preserved",
+      "accepted": false,
+      "reason": "equational_theories_eq883_rule_finite_2_preserved: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_eq906_partialsolution",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq906.PartialSolution"
+    },
+    {
+      "id": "equational_theories_eq906_root",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_eq906_rule_0_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq906_rule_1_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq906_rule_2_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq906_rule_3_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq906_rule_4_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq906_rule_5_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq906_rule_finite_0_preserved",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "equational_theories_eq906_rule_finite_2_preserved",
+      "accepted": false,
+      "reason": "equational_theories_eq906_rule_finite_2_preserved: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_infmodel_equation28770_not_implies_equation2",
+      "accepted": false,
+      "reason": "equational_theories_infmodel_equation28770_not_implies_equation2: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_infmodel_equation3994_not_implies_equation3588",
+      "accepted": false,
+      "reason": "equational_theories_infmodel_equation3994_not_implies_equation3588: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_infmodel_zero_lt_degree_word_polynomial",
+      "accepted": false,
+      "reason": "equational_theories_infmodel_zero_lt_degree_word_polynomial: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_law_magmalaw_satisfiesphi_dual",
+      "accepted": false,
+      "reason": "equational_theories_law_magmalaw_satisfiesphi_dual: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_evalinmagmaop",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "equational_theories_models",
+      "accepted": false,
+      "reason": "equational_theories_models: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_eq1076_greedy_extension1_next_ok",
+      "accepted": false,
+      "reason": "equational_theories_eq1076_greedy_extension1_next_ok: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed1",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed2",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed3",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed4",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed5",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed6",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed7",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed8",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_eq1076_refute_seed9",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_eq1289_greedy_extension1_next_ok",
+      "accepted": false,
+      "reason": "equational_theories_eq1289_greedy_extension1_next_ok: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_eq1289_not_3116_4435",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_eq1323_reprscomplete",
+      "accepted": false,
+      "reason": "equational_theories_eq1323_reprscomplete: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_eq1323_roots_lyry",
+      "accepted": false,
+      "reason": "equational_theories_eq1323_roots_lyry: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_eq1323_seed_lhs_disjoint",
+      "accepted": false,
+      "reason": "equational_theories_eq1323_seed_lhs_disjoint: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_equation1447_pnat_s_refutes_equation4269",
+      "accepted": false,
+      "reason": "equational_theories_equation1447_pnat_s_refutes_equation4269: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_equation1447_arbitraryroot_root",
+      "accepted": false,
+      "reason": "equational_theories_equation1447_arbitraryroot_root: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_equation1447_square_root_iff_neq",
+      "accepted": false,
+      "reason": "equational_theories_equation1447_square_root_iff_neq: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_equation1447_square_root_times_square_root_eq_elem",
+      "accepted": false,
+      "reason": "equational_theories_equation1447_square_root_times_square_root_eq_elem: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_equation1447_square_roots_elem_iff_square_root",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "equational_theories_eq1516_extensiontask_disjoint_old_e1",
+      "accepted": false,
+      "reason": "equational_theories_eq1516_extensiontask_disjoint_old_e1: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_eq1516_extensiontask_newe_dom_and_inv",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq1516.ExtensionTask.newE_dom_and_inv"
+    },
+    {
+      "id": "equational_theories_eq1516_greedyac_extension_exists_not_in_domain_range",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq1516.GreedyAC.Extension.exists_not_in_domain_range"
+    },
+    {
+      "id": "equational_theories_eq1516_greedyb_extension2_next2_h_1516",
+      "accepted": false,
+      "reason": "equational_theories_eq1516_greedyb_extension2_next2_h_1516: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_eq1516_greedyb_extension2_next2_le_encard",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "equational_theories_eq1516_seed_ok",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "equational_theories_eq1518_greedy_extension1_c_ne_c_inv",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq1518.Greedy.Extension1.c_ne_c_inv"
+    },
+    {
+      "id": "equational_theories_eq1526_greedy_extension1_c_ne_c_inv",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq1526.Greedy.Extension1.c_ne_c_inv"
+    },
+    {
+      "id": "equational_theories_equation1648_facts",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_equation1648_not_implies_equation206",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_equation1659_facts",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_equation1692_not_implies_equation1832",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_equation1692_not_implies_equation23",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_equation1692_not_implies_equation2441",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_equation1692_not_implies_equation3050",
+      "accepted": false,
+      "reason": "equational_theories_equation1692_not_implies_equation3050: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_equation1692_not_implies_equation3456",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_equation1692_not_implies_equation4065",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_equation1692_not_implies_equation47",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "equational_theories_basis_n_injective",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "equational_theories_common_ancestor_helper",
+      "accepted": false,
+      "reason": "equational_theories_common_ancestor_helper: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_cross_eq_same_parent",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_diamond_law",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_f_equation_1692",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "equational_theories_f_neg_b",
+      "accepted": false,
+      "reason": "equational_theories_f_neg_b: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_f_zero_eq",
+      "accepted": false,
+      "reason": "equational_theories_f_zero_eq: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_left_tree_supp_increasing",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_nonpos_not_tree_right",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "equational_theories_not_equation_1832",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_not_equation_23",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_not_equation_2441",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_not_equation_3050",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_not_equation_4065",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "equational_theories_partial_function",
+      "accepted": false,
+      "reason": "equational_theories_partial_function: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_partial_function_inner",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "equational_theories_sum_1_3_eq_tree",
+      "accepted": false,
+      "reason": "equational_theories_sum_1_3_eq_tree: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_tree_b_neq_root_mul",
+      "accepted": false,
+      "reason": "equational_theories_tree_b_neq_root_mul: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_tree_supp_disjoint",
+      "accepted": false,
+      "reason": "equational_theories_tree_supp_disjoint: 历史证明没有形成稳定的 Lean 证明失败 (ok=False, timed_out=True, returncode=None)"
+    },
+    {
+      "id": "equational_theories_x_vals_zero_left_b",
+      "accepted": false,
+      "reason": "equational_theories_x_vals_zero_left_b: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_xseq_zero_neq_b",
+      "accepted": false,
+      "reason": "equational_theories_xseq_zero_neq_b: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_eq1722_greedy_extension1_next_ok",
+      "accepted": false,
+      "reason": "equational_theories_eq1722_greedy_extension1_next_ok: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_eq1722_not_1832_2644_3050",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_function_embedding_edit_of_avoids",
+      "accepted": false,
+      "reason": "equational_theories_function_embedding_edit_of_avoids: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_eq1729_enlarge_s_induction",
+      "accepted": false,
+      "reason": "equational_theories_eq1729_enlarge_s_induction: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_eq1729_enlarge_s_induction_with_axioms",
+      "accepted": false,
+      "reason": "equational_theories_eq1729_enlarge_s_induction_with_axioms: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_eq1729_enlarge_op",
+      "accepted": false,
+      "reason": "equational_theories_eq1729_enlarge_op: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_eq1729_gen_fresh_not_in_fill",
+      "accepted": false,
+      "reason": "equational_theories_eq1729_gen_fresh_not_in_fill: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_eq1729_gen_fresh_not_rel_extra",
+      "accepted": false,
+      "reason": "equational_theories_eq1729_gen_fresh_not_rel_extra: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_eq1729_zpow_of_e_inj",
+      "accepted": false,
+      "reason": "equational_theories_eq1729_zpow_of_e_inj: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_eq1729_e_inj",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_eq1729_e_ne_s",
+      "accepted": false,
+      "reason": "equational_theories_eq1729_e_ne_s: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_eq1729_r0_mem_fill_iff",
+      "accepted": false,
+      "reason": "equational_theories_eq1729_r0_mem_fill_iff: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_eq1729_sm_char_four",
+      "accepted": false,
+      "reason": "equational_theories_eq1729_sm_char_four: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_eq1729_sm_satisfies_1729",
+      "accepted": false,
+      "reason": "equational_theories_eq1729_sm_satisfies_1729: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_eq1729_sfresh_not_in_generators",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_eq1729_basis_elements_of_inv",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_eq1729_cancel_lemma",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq1729.cancel_lemma"
+    },
+    {
+      "id": "equational_theories_eq1729_generators_mono",
+      "accepted": false,
+      "reason": "equational_theories_eq1729_generators_mono: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_eq1729_generators_union",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_eq1729_nonbasis_fixes",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq1729.nonbasis_fixes"
+    },
+    {
+      "id": "equational_theories_eq1729_parent_of_adjacent",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "equational_theories_eq1729_parent_toword",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "equational_theories_eq1729_repr_of_self",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_eq1729_repr_of_self_pow",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_eq1729_val_e",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_eq1729_val_of_nonsupp_eq_zero",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq1729.val_of_nonsupp_eq_zero"
+    },
+    {
+      "id": "equational_theories_refutation_3308_greedy_extension2_next_func",
+      "accepted": false,
+      "reason": "equational_theories_refutation_3308_greedy_extension2_next_func: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_refutation_3308_greedy_extension3_next_eq3308",
+      "accepted": false,
+      "reason": "equational_theories_refutation_3308_greedy_extension3_next_eq3308: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_refutation_3308_greedy_extension3_next_func",
+      "accepted": false,
+      "reason": "equational_theories_refutation_3308_greedy_extension3_next_func: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_refutation_3308_not_3456_3511",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "equational_theories_eq63_greedy_extension_mem_old",
+      "accepted": false,
+      "reason": "equational_theories_eq63_greedy_extension_mem_old: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_eq713_greedy_extension1_next_ok",
+      "accepted": false,
+      "reason": "equational_theories_eq713_greedy_extension1_next_ok: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_eq713_not_817_1426_3862_4065",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_eq73_greedy_extension1_c_ne_c_inv",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq73.Greedy.Extension1.c_ne_c_inv"
+    },
+    {
+      "id": "equational_theories_refutation_854_greedy_extension1_lt_c",
+      "accepted": false,
+      "reason": "equational_theories_refutation_854_greedy_extension1_lt_c: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_refutation_854_greedy_extension1_mem_dom",
+      "accepted": false,
+      "reason": "equational_theories_refutation_854_greedy_extension1_mem_dom: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_refutation_854_not_413_1045",
+      "accepted": false,
+      "reason": "equational_theories_refutation_854_not_413_1045: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_eq906_finite",
+      "accepted": false,
+      "reason": "equational_theories_eq906_finite: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_eq917_greedy_extension1_c_ne_c_inv",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Eq917.Greedy.Extension1.c_ne_c_inv"
+    },
+    {
+      "id": "equational_theories_obelix_partialsolution_dfinsuppinfinite_not_finite",
+      "accepted": false,
+      "reason": "equational_theories_obelix_partialsolution_dfinsuppinfinite_not_finite: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_obelix_partialsolution_equation1491_facts",
+      "accepted": false,
+      "reason": "equational_theories_obelix_partialsolution_equation1491_facts: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_obelix_partialsolution_extendimg",
+      "accepted": false,
+      "reason": "equational_theories_obelix_partialsolution_extendimg: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_obelix_partialsolution_closureseq_asc",
+      "accepted": false,
+      "reason": "equational_theories_obelix_partialsolution_closureseq_asc: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_obelix_partialsolution_closureseq_ascdom",
+      "accepted": false,
+      "reason": "equational_theories_obelix_partialsolution_closureseq_ascdom: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_obelix_partialsolution_fresh_ne_sum",
+      "accepted": false,
+      "reason": "equational_theories_obelix_partialsolution_fresh_ne_sum: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "equational_theories_partialmagma_extensionbase_lt_dom_bound",
+      "accepted": false,
+      "reason": "equational_theories_partialmagma_extensionbase_lt_dom_bound: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_partialmagma_extensionbase_mem_dom",
+      "accepted": false,
+      "reason": "equational_theories_partialmagma_extensionbase_mem_dom: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_sheffer",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: Sheffer"
+    },
+    {
+      "id": "equational_theories_stringmagmas_equation3102_not_implies_equation270",
+      "accepted": false,
+      "reason": "equational_theories_stringmagmas_equation3102_not_implies_equation270: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_stringmagmas_equation3102_not_implies_equation3176",
+      "accepted": false,
+      "reason": "equational_theories_stringmagmas_equation3102_not_implies_equation3176: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_subgraph_equation387_not_implies_equation4512",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "equational_theories_subgraph_equation5_not_implies_equation42",
+      "accepted": false,
+      "reason": "equational_theories_subgraph_equation5_not_implies_equation42: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_threec2_red_eq_of_isred",
+      "accepted": false,
+      "reason": "equational_theories_threec2_red_eq_of_isred: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_refutation_1485_not_2087_2124",
+      "accepted": false,
+      "reason": "equational_theories_refutation_1485_not_2087_2124: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_refutation_1485_not_3457",
+      "accepted": false,
+      "reason": "equational_theories_refutation_1485_not_3457: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "equational_theories_refutation_1485_not_3511",
+      "accepted": false,
+      "reason": "equational_theories_refutation_1485_not_3511: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    }
+  ],
+  "selection_policy": "all candidates passing the preregistered real-repair compile gate"
+}
