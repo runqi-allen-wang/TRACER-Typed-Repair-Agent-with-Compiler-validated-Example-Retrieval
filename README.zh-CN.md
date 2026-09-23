@@ -10,6 +10,11 @@
 [![Lean](https://img.shields.io/badge/Lean-4.32.0-blue)](lean-toolchain)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
+> [!IMPORTANT]
+> **[打开 TRACER 交互式 Demo](https://runqi-allen-wang.github.io/TRACER-Typed-Repair-Agent-with-Compiler-validated-Example-Retrieval/)** —— 浏览 24 组经过验证的 Lean 修复，覆盖五类证明领域和四类诊断错误；可以筛选案例、查看编译反馈，并在冻结失败证明与独立复编译通过的解之间切换。无需安装，也无需 API key。
+
+![TRACER 交互式证明修复浏览器](demo/assets/tracer-demo-preview.png)
+
 [交互演示](#60-秒体验-tracer) · [快速开始](#快速开始) · [最新结果](#最新已发布结果) · [证据状态](PROGRESS.md) · [API 指南](docs/API_GUIDE.md) · [失败案例库](capsules/index.md) · [参与贡献](CONTRIBUTING.md)
 
 ![TRACER 项目概览](TRACER.png)
@@ -22,13 +27,13 @@ TRACER 是面向 **Lean 4 证明修复、编译反馈实验与失败复现**的�
 
 **[打开交互式网页 Demo](https://runqi-allen-wang.github.io/TRACER-Typed-Repair-Agent-with-Compiler-validated-Example-Retrieval/)** · [查看网页源码](demo/) · [查看对应审计发布包](published/research-six-arm-313f437f)
 
-Demo 回放一条真实脱敏的 `scale_add` 轨迹：第一轮候选在 Lean 中失败，TRACER 展示编译器目标并更新检索，第二轮通过对齐归纳假设所需的目标形式后编译成功。网页无需 API key，也不会发起网络请求。克隆仓库后，可用下面的命令在本地打开同一页面：
+Demo 是一个由静态公开证据驱动的动态浏览器界面。它包含全部 24 组 `repair24` 失败/成功证明，覆盖递归列表、量词、函数、Option 和自然数递归，以及类型不匹配、未知标识符、未解决目标和策略/elaboration 错误。这里的“动态”指浏览器交互，不是在线调用模型：网页不需要 API key、不上传代码，也不会发起网络请求。克隆仓库后，可用下面的命令在本地打开同一页面：
 
 ```text
 python demo/serve.py
 ```
 
-在已发布的 864 个任务实例中，第一轮通过 **735/864（85.1%）**，最多三轮后通过 **811/864（93.9%）**；有界修复循环额外挽回 76 个任务实例，即 **+8.8 个百分点**。这只是首轮到末轮的描述性转化，不是 TRACER 因果效应估计。网页展示的是一条已记录轨迹；下方本地快速开始会调用真实 Lean 编译器。
+页面还会明确解释 TRACER 改进的环节：隔离的证明区域补丁、原始/规范化/结构化编译反馈、随错误变化的检索、有界重试，以及带证据保存的 Lean 内核验证。在已发布的 864 个任务实例中，第一轮通过 **735/864（85.1%）**，最多三轮后通过 **811/864（93.9%）**；有界修复循环额外挽回 76 个任务实例，即 **+8.8 个百分点**。这只是首轮到末轮的描述性转化，不是 TRACER 因果效应估计；下方本地快速开始会调用真实 Lean 编译器。
 
 ## 实验与安全命名体系
 

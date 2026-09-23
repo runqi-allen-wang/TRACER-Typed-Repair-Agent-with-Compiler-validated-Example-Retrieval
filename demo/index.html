@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Interactive, evidence-backed replay of a TRACER Lean proof repair.">
-  <title>TRACER · Interactive proof-repair demo</title>
+  <meta name="description" content="Explore 24 verified Lean proof repairs and the compiler-grounded TRACER pipeline. No API key required.">
+  <title>TRACER · Verified Lean repair explorer</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -21,13 +21,36 @@
   <main>
     <section class="hero">
       <div class="eyebrow" data-i18n="eyebrow">COMPILER-GROUNDED PROOF REPAIR</div>
-      <h1 data-i18n="title">Watch one failed Lean proof become a verified repair.</h1>
-      <p class="lede" data-i18n="lede">No API key. No simulated success. Replay one sanitized trajectory from the audited 864-task release.</p>
+      <h1 data-i18n="title">Explore 24 failed proofs and their verified repairs.</h1>
+      <p class="lede" data-i18n="lede">Filter by failure mode, inspect the compiler signal, and switch from each frozen faulty proof to an independently recompiled solution. Everything runs in your browser—no API key required.</p>
       <div class="hero-actions">
-        <button id="replay" class="primary" type="button" data-i18n="replay">Replay the repair</button>
+        <a class="primary" href="#examples" data-i18n="browse">Browse 24 repairs</a>
         <a class="secondary" href="#results" data-i18n="resultsLink">See published results</a>
       </div>
       <div class="evidence-chip"><span class="pulse"></span><span data-i18n="evidence">Evidence: public release research-six-arm-313f437f</span></div>
+    </section>
+
+    <section class="coverage-strip" aria-label="Demo coverage">
+      <div><strong id="case-count">24</strong><span data-i18n="verifiedCases">verified repair pairs</span></div>
+      <div><strong id="topic-count">5</strong><span data-i18n="topics">proof domains</span></div>
+      <div><strong id="category-count">4</strong><span data-i18n="categories">diagnostic families</span></div>
+      <small data-i18n="staticNote">Interactive static replay · zero network requests</small>
+    </section>
+
+    <section id="examples" class="examples-section">
+      <div class="section-heading split-heading">
+        <div>
+          <div class="eyebrow" data-i18n="caseEyebrow">VERIFIED REPAIR EXPLORER</div>
+          <h2 data-i18n="caseTitle">Different errors need different repair moves</h2>
+          <p data-i18n="caseBody">Each left side is a frozen failing benchmark proof; each right side is a public solution that passed independent Lean recompilation.</p>
+        </div>
+        <div class="filter-group">
+          <label><span data-i18n="filterError">Error family</span><select id="category-filter"><option value="all">All errors</option></select></label>
+          <label><span data-i18n="filterTopic">Proof domain</span><select id="topic-filter"><option value="all">All domains</option></select></label>
+        </div>
+      </div>
+      <div class="case-list-header"><strong data-i18n="examples">Examples</strong><span id="visible-count"></span></div>
+      <div id="case-list" class="case-list" role="listbox" aria-label="Verified repair examples"></div>
     </section>
 
     <section class="workspace" aria-label="Interactive repair trace">
@@ -36,13 +59,13 @@
           <span class="muted">THEOREM</span>
           <strong id="problem-name"></strong>
         </div>
-        <div class="trace-meta"><span id="model-name"></span><span id="arm-name"></span></div>
+        <div class="trace-meta"><span id="topic-name"></span><span id="error-name"></span><span id="difficulty-name"></span></div>
       </div>
 
       <div class="stepper" role="tablist" aria-label="Repair rounds">
-        <button class="step active" data-round="0" role="tab"><span>1</span><b data-i18n="firstCandidate">First candidate</b><small data-i18n="compileFail">Compile fails</small></button>
+        <button class="step active" data-round="0" role="tab"><span>1</span><b data-i18n="firstCandidate">Frozen faulty proof</b><small data-i18n="compileFail">Compiler rejects</small></button>
         <div class="connector"></div>
-        <button class="step" data-round="1" role="tab"><span>2</span><b data-i18n="feedbackRepair">Feedback repair</b><small data-i18n="kernelPass">Kernel pass</small></button>
+        <button class="step" data-round="1" role="tab"><span>2</span><b data-i18n="feedbackRepair">Verified repair</b><small data-i18n="kernelPass">Independent recompile passes</small></button>
       </div>
 
       <div class="panels">
@@ -54,12 +77,33 @@
           <div class="panel-title"><span data-i18n="compiler">Lean compiler</span><span id="compile-status" class="status"></span></div>
           <pre><code id="diagnostic"></code></pre>
           <div class="feedback-box">
-            <div class="mini-title" data-i18n="feedback">TRACER feedback</div>
+            <div class="mini-title" data-i18n="feedback">TRACER structured signal</div>
             <pre><code id="feedback"></code></pre>
           </div>
-          <div class="retrieval"><span data-i18n="retrieved">Top retrieved example</span><strong id="retrieval"></strong></div>
+          <div class="retrieval"><span data-i18n="retrieved">Evidence provenance</span><a id="retrieval" href="#" target="_blank" rel="noreferrer"></a></div>
         </article>
       </div>
+      <div class="workspace-actions">
+        <button id="previous-case" class="ghost" type="button" data-i18n="previous">← Previous</button>
+        <button id="replay" class="primary compact" type="button" data-i18n="replay">Replay repair</button>
+        <button id="next-case" class="ghost" type="button" data-i18n="next">Next →</button>
+      </div>
+    </section>
+
+    <section id="pipeline" class="pipeline-section">
+      <div class="section-heading">
+        <div class="eyebrow" data-i18n="pipelineEyebrow">WHERE TRACER INTERVENES</div>
+        <h2 data-i18n="pipelineTitle">The improvement is the repair loop—not a new Lean kernel</h2>
+        <p data-i18n="pipelineBody">TRACER keeps the model replaceable and improves the engineering between generation and acceptance: diagnostics remain traceable, retrieval can react to the current error, and no proof is accepted without compilation.</p>
+      </div>
+      <div class="pipeline-grid">
+        <article><span>01</span><strong data-i18n="p1Title">Patch safely</strong><p data-i18n="p1Body">Replace only the target proof region in an isolated temporary project; preserve imports and theorem headers.</p><small data-i18n="p1Effect">Effect: source files stay untouched.</small></article>
+        <article><span>02</span><strong data-i18n="p2Title">Keep the compiler signal</strong><p data-i18n="p2Body">Store raw diagnostics, normalized categories, structured goals, warnings, and timeouts together.</p><small data-i18n="p2Effect">Effect: compact feedback remains auditable.</small></article>
+        <article><span>03</span><strong data-i18n="p3Title">React to the error</strong><p data-i18n="p3Body">Feedback arms expose the latest diagnostic; adaptive retrieval arms rebuild the query from the current error state.</p><small data-i18n="p3Effect">Effect: R-E changed 90% of eligible Flash queries.</small></article>
+        <article><span>04</span><strong data-i18n="p4Title">Bound the repair loop</strong><p data-i18n="p4Body">Retry only within a declared round budget, recording every candidate, diagnostic, retrieved example, latency, and usage.</p><small data-i18n="p4Effect">Effect: 76/864 instances recovered after round one.</small></article>
+        <article><span>05</span><strong data-i18n="p5Title">Verify, then publish</strong><p data-i18n="p5Body">Reject incomplete proofs and unsafe constructs; save successful files and independently recompile public solutions.</p><small data-i18n="p5Effect">Effect: 811 released proofs recompiled independently.</small></article>
+      </div>
+      <p class="pipeline-boundary" data-i18n="pipelineBoundary"><strong>Boundary:</strong> TRACER does not replace Lean, train a new model, or make every feedback arm better. It turns model output into a bounded, compiler-validated, inspectable repair process.</p>
     </section>
 
     <section id="results" class="results-section">

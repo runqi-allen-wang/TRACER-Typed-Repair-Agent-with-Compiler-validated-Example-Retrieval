@@ -1,63 +1,353 @@
 window.TRACER_DEMO = {
-  evidence: {
-    release: "research-six-arm-313f437f",
-    tasks: 864,
-    firstPass: 735,
-    withinThree: 811,
-    recovered: 76,
-    firstRate: 85.1,
-    withinThreeRate: 93.9,
-    deltaPoints: 8.8
+  "evidence": {
+    "release": "research-six-arm-313f437f",
+    "tasks": 864,
+    "firstPass": 735,
+    "withinThree": 811,
+    "recovered": 76,
+    "firstRate": 85.1,
+    "withinThreeRate": 93.9,
+    "deltaPoints": 8.8,
+    "caseCount": 24,
+    "topicCount": 5,
+    "categoryCount": 4
   },
-  caseStudy: {
-    model: "DeepSeek Flash v4.1",
-    arm: "R-E · diagnostic-adaptive retrieval",
-    problem: "Repair24.scale_add",
-    repeat: 1,
-    theorem: `def scale (a : Nat) : Nat → Nat
-  | 0 => 0
-  | n + 1 => scale a n + a
-
-theorem scale_add (a m n : Nat) :
-    scale a (m + n) = scale a m + scale a n := by
-  induction n with
-  | zero => simp [scale]
-  | succ n ih => simp only [Nat.add_succ, scale]`,
-    rounds: [
-      {
-        status: "failed",
-        label: "Round 1",
-        candidate: `by
-  induction n with
-  | zero => simp [scale]
-  | succ n ih =>
-      simp only [scale]
-      rw [ih, Nat.add_assoc]`,
-        diagnostic: `Tactic \`rewrite\` failed: Did not find an occurrence of
-  scale a (m + n)
-in the target expression
-  scale a (m.add n) + a = scale a m + (scale a n + a)`,
-        feedback: `category: compile_error
-goal: scale a (m.add n) + a = scale a m + (scale a n + a)
-actionable signal: expose the syntactic form expected by the induction hypothesis`,
-        retrieval: "natural_numbers.lean · score 0.3760",
-        compileMs: 1010.4
-      },
-      {
-        status: "passed",
-        label: "Round 2",
-        candidate: `by
-  induction n with
-  | zero => simp [scale]
-  | succ n ih =>
-      change scale a (m + n) + a =
-        scale a m + (scale a n + a)
-      rw [ih, Nat.add_assoc]`,
-        diagnostic: "Lean compiled the candidate successfully.",
-        feedback: "The new `change` step aligns the goal with the induction hypothesis before rewriting.",
-        retrieval: "natural_numbers.lean · score 0.5199",
-        compileMs: 1031.9
-      }
-    ]
-  }
+  "cases": [
+    {
+      "id": "stitch_assoc",
+      "theorem": "Repair24.stitch_assoc",
+      "topic": "recursive_lists",
+      "difficulty": "structural-repair",
+      "category": "type_mismatch",
+      "initialProof": "by\n  exact List.append_assoc xs ys zs",
+      "initialDiagnostic": "<local-path> error: Type mismatch\n  List.append_assoc xs ys zs\nhas type\n  xs ++ ys ++ zs = xs ++ (ys ++ zs)\nbut is expected to have type\n  stitch (stitch xs ys) zs = stitch xs (stitch ys zs)",
+      "structuredFeedback": "类别=type_mismatch；摘要=type_mismatch: Type mismatch",
+      "repairedProof": "by\n  induction xs with\n  | nil => rfl\n  | cons x xs ih => simp [stitch, ih]",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/stitch_assoc.lean",
+      "solutionArm": "A",
+      "compileMs": 938.2
+    },
+    {
+      "id": "map_stitch",
+      "theorem": "Repair24.map_stitch",
+      "topic": "recursive_lists",
+      "difficulty": "structural-repair",
+      "category": "unknown_identifier",
+      "initialProof": "by\n  rw [transform_stitch]",
+      "initialDiagnostic": "<local-path> error(lean.unknownIdentifier): Unknown identifier `transform_stitch`\n<local-path> error: unsolved goals\nf : Nat → Nat\nxs ys : List Nat\n⊢ transform f (stitch xs ys) = stitch (transform f xs) (transform f ys)",
+      "structuredFeedback": "类别=unknown_identifier；摘要=unknown_identifier: Unknown identifier `transform_stitch`; unsolved_goals: unsolved goals",
+      "repairedProof": "by\n  induction xs with\n  | nil => rfl\n  | cons x xs ih =>\n      simp only [stitch, transform]\n      exact congrArg (fun t => f x :: t) ih",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/map_stitch.lean",
+      "solutionArm": "A",
+      "compileMs": 980.2
+    },
+    {
+      "id": "size_stitch",
+      "theorem": "Repair24.size_stitch",
+      "topic": "recursive_lists",
+      "difficulty": "structural-repair",
+      "category": "unsolved_goals",
+      "initialProof": "by\n  induction xs with\n  | nil => simp [stitch, size]\n  | cons x xs ih => simp only [stitch, size]",
+      "initialDiagnostic": "<local-path> error: unsolved goals\ncase cons\nys : List Nat\nx : Nat\nxs : List Nat\nih : size (stitch xs ys) = size xs + size ys\n⊢ size (stitch xs ys) + 1 = size xs + 1 + size ys",
+      "structuredFeedback": "类别=unsolved_goals；摘要=unsolved_goals: unsolved goals",
+      "repairedProof": "by\n  induction xs with\n  | nil => simp [stitch, size]\n  | cons x xs ih =>\n      simp only [stitch, size]\n      rw [ih]\n      exact Nat.add_right_comm (size xs) (size ys) 1",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/size_stitch.lean",
+      "solutionArm": "A",
+      "compileMs": 997.6
+    },
+    {
+      "id": "map_comp",
+      "theorem": "Repair24.map_comp",
+      "topic": "recursive_lists",
+      "difficulty": "structural-repair",
+      "category": "compile_error",
+      "initialProof": "by\n  rfl",
+      "initialDiagnostic": "<local-path> error: Tactic `rfl` failed: The left-hand side\n  transform g (transform f xs)\nis not definitionally equal to the right-hand side\n  transform (fun x => g (f x)) xs\n\nf g : Nat → Nat\nxs : List Nat\n⊢ transform g (transform f xs) = transform (fun x => g (f x)) xs",
+      "structuredFeedback": "类别=compile_error；摘要=compile_error: Tactic `rfl` failed: The left-hand side",
+      "repairedProof": "by\n  induction xs with\n  | nil => rfl\n  | cons x xs ih => simp [transform, ih]",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/map_comp.lean",
+      "solutionArm": "A",
+      "compileMs": 1002.2
+    },
+    {
+      "id": "fold_stitch",
+      "theorem": "Repair24.fold_stitch",
+      "topic": "recursive_lists",
+      "difficulty": "structural-repair",
+      "category": "type_mismatch",
+      "initialProof": "by\n  induction xs with\n  | nil => rfl\n  | cons x xs ih => exact ih",
+      "initialDiagnostic": "<local-path> error: Type mismatch\n  ih\nhas type\n  fold f z (stitch xs ys) = fold f (fold f z xs) ys\nbut is expected to have type\n  fold f z (stitch (x :: xs) ys) = fold f (fold f z (x :: xs)) ys",
+      "structuredFeedback": "类别=type_mismatch；摘要=type_mismatch: Type mismatch",
+      "repairedProof": "by\n  induction xs generalizing z with\n  | nil => rfl\n  | cons x xs ih => exact ih (f z x)",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/fold_stitch.lean",
+      "solutionArm": "A",
+      "compileMs": 950.7
+    },
+    {
+      "id": "size_map",
+      "theorem": "Repair24.size_map",
+      "topic": "recursive_lists",
+      "difficulty": "structural-repair",
+      "category": "unknown_identifier",
+      "initialProof": "by\n  exact size_transform f xs",
+      "initialDiagnostic": "<local-path> error(lean.unknownIdentifier): Unknown identifier `size_transform`",
+      "structuredFeedback": "类别=unknown_identifier；摘要=unknown_identifier: Unknown identifier `size_transform`",
+      "repairedProof": "by\n  induction xs with\n  | nil => simp [transform, size]\n  | cons x xs ih => simp [transform, size, ih]",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/size_map.lean",
+      "solutionArm": "A",
+      "compileMs": 952.4
+    },
+    {
+      "id": "forall_and",
+      "theorem": "Repair24.forall_and",
+      "topic": "quantifiers",
+      "difficulty": "structural-repair",
+      "category": "type_mismatch",
+      "initialProof": "by\n  constructor\n  · intro h; exact h\n  · intro h; exact h",
+      "initialDiagnostic": "<local-path> error: Type mismatch\n  h\nhas type\n  ∀ (x : Nat), P x ∧ Q x\nbut is expected to have type\n  (∀ (x : Nat), P x) ∧ ∀ (x : Nat), Q x\n<local-path> error: Type mismatch\n  h\nhas type\n  (∀ (x : Nat), P x) ∧ ∀ (x : Nat), Q x\nbut is expected to have type\n  ∀ (x : Nat), P x ∧ Q x",
+      "structuredFeedback": "类别=type_mismatch；摘要=type_mismatch: Type mismatch; type_mismatch: Type mismatch",
+      "repairedProof": "by\n  constructor\n  · intro h\n    constructor\n    · intro x\n      exact (h x).1\n    · intro x\n      exact (h x).2\n  · intro h\n    intro x\n    exact ⟨h.1 x, h.2 x⟩",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/forall_and.lean",
+      "solutionArm": "A",
+      "compileMs": 981.1
+    },
+    {
+      "id": "exists_or",
+      "theorem": "Repair24.exists_or",
+      "topic": "quantifiers",
+      "difficulty": "structural-repair",
+      "category": "type_mismatch",
+      "initialProof": "by\n  constructor\n  · intro h; rcases h with ⟨x, hx⟩; exact Or.inl ⟨x, hx⟩\n  · intro h; exact h",
+      "initialDiagnostic": "<local-path> error: Application type mismatch: The argument\n  hx\nhas type\n  P x ∨ Q x\nbut is expected to have type\n  P x\nin the application\n  Exists.intro x hx\n<local-path> error: Type mismatch\n  h\nhas type\n  (∃ x, P x) ∨ ∃ x, Q x\nbut is expected to have type\n  ∃ x, P x ∨ Q x",
+      "structuredFeedback": "类别=type_mismatch；摘要=type_mismatch: Application type mismatch: The argument; type_mismatch: Type mismatch",
+      "repairedProof": "⟨fun h => Exists.elim h (fun x hx => Or.elim hx (fun hp => Or.inl ⟨x, hp⟩) (fun hq => Or.inr ⟨x, hq⟩)), fun h => Or.elim h (fun hP => Exists.elim hP (fun x hx => ⟨x, Or.inl hx⟩)) (fun hQ => Exists.elim hQ (fun x hx => ⟨x, Or.inr hx⟩))⟩",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/exists_or.lean",
+      "solutionArm": "A",
+      "compileMs": 960.4
+    },
+    {
+      "id": "exists_and",
+      "theorem": "Repair24.exists_and",
+      "topic": "quantifiers",
+      "difficulty": "structural-repair",
+      "category": "unsolved_goals",
+      "initialProof": "by\n  constructor\n  · rintro ⟨x, hp, hq⟩; exact ⟨⟨x, hp⟩, hq⟩\n  · intro h",
+      "initialDiagnostic": "<local-path> error: unsolved goals\ncase mpr\nP : Nat → Prop\nQ : Prop\nh : (∃ x, P x) ∧ Q\n⊢ ∃ x, P x ∧ Q",
+      "structuredFeedback": "类别=unsolved_goals；摘要=unsolved_goals: unsolved goals",
+      "repairedProof": "by\n  constructor\n  · rintro ⟨x, hp, hq⟩\n    exact ⟨⟨x, hp⟩, hq⟩\n  · rintro ⟨⟨x, hp⟩, hq⟩\n    exact ⟨x, hp, hq⟩",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/exists_and.lean",
+      "solutionArm": "A",
+      "compileMs": 960.7
+    },
+    {
+      "id": "not_exists",
+      "theorem": "Repair24.not_exists",
+      "topic": "quantifiers",
+      "difficulty": "structural-repair",
+      "category": "type_mismatch",
+      "initialProof": "by\n  constructor\n  · intro h x hx; exact h hx\n  · intro h hx; exact h hx",
+      "initialDiagnostic": "<local-path> error: Application type mismatch: The argument\n  hx\nhas type\n  P x\nbut is expected to have type\n  ∃ x, P x\nin the application\n  h hx\n<local-path> error: Application type mismatch: The argument\n  hx\nhas type\n  ∃ x, P x\nof sort `Prop` but is expected to have type\n  Nat\nof sort `Type` in the application\n  h hx",
+      "structuredFeedback": "类别=type_mismatch；摘要=type_mismatch: Application type mismatch: The argument; type_mismatch: Application type mismatch: The argument",
+      "repairedProof": "by\n  constructor\n  · intro h x hx\n    exact h ⟨x, hx⟩\n  · intro h hx\n    rcases hx with ⟨x, hx⟩\n    exact h x hx",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/not_exists.lean",
+      "solutionArm": "A",
+      "compileMs": 982.0
+    },
+    {
+      "id": "injective_comp",
+      "theorem": "Repair24.injective_comp",
+      "topic": "functions",
+      "difficulty": "structural-repair",
+      "category": "type_mismatch",
+      "initialProof": "by\n  intro a b h; exact hg a b h",
+      "initialDiagnostic": "<local-path> error: Application type mismatch: The argument\n  h\nhas type\n  g (f a) = g (f b)\nbut is expected to have type\n  g a = g b\nin the application\n  hg a b h",
+      "structuredFeedback": "类别=type_mismatch；摘要=type_mismatch: Application type mismatch: The argument",
+      "repairedProof": "by\n  intro a b h\n  exact hf a b (hg (f a) (f b) h)",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/injective_comp.lean",
+      "solutionArm": "A",
+      "compileMs": 953.3
+    },
+    {
+      "id": "left_inverse",
+      "theorem": "Repair24.left_inverse",
+      "topic": "functions",
+      "difficulty": "structural-repair",
+      "category": "type_mismatch",
+      "initialProof": "by\n  intro a b hab; exact hab",
+      "initialDiagnostic": "<local-path> error: Type mismatch\n  hab\nhas type\n  f a = f b\nbut is expected to have type\n  a = b",
+      "structuredFeedback": "类别=type_mismatch；摘要=type_mismatch: Type mismatch",
+      "repairedProof": "fun a b hab => (h a).symm.trans ((congrArg g hab).trans (h b))",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/left_inverse.lean",
+      "solutionArm": "A",
+      "compileMs": 991.0
+    },
+    {
+      "id": "surjective_comp",
+      "theorem": "Repair24.surjective_comp",
+      "topic": "functions",
+      "difficulty": "structural-repair",
+      "category": "type_mismatch",
+      "initialProof": "by\n  intro y; exact hg y",
+      "initialDiagnostic": "<local-path> error: Type mismatch\n  hg y\nhas type\n  ∃ x, g x = y\nbut is expected to have type\n  ∃ x, g (f x) = y",
+      "structuredFeedback": "类别=type_mismatch；摘要=type_mismatch: Type mismatch",
+      "repairedProof": "by\n  intro y\n  rcases hg y with ⟨z, hz⟩\n  rcases hf z with ⟨x, hx⟩\n  exact ⟨x, by rw [hx, hz]⟩",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/surjective_comp.lean",
+      "solutionArm": "A",
+      "compileMs": 966.3
+    },
+    {
+      "id": "right_inverse",
+      "theorem": "Repair24.right_inverse",
+      "topic": "functions",
+      "difficulty": "structural-repair",
+      "category": "type_mismatch",
+      "initialProof": "by\n  intro y; exact ⟨y, h y⟩",
+      "initialDiagnostic": "<local-path> error: Application type mismatch: The argument\n  h y\nhas type\n  f (g y) = y\nbut is expected to have type\n  f y = y\nin the application\n  Exists.intro y (h y)",
+      "structuredFeedback": "类别=type_mismatch；摘要=type_mismatch: Application type mismatch: The argument",
+      "repairedProof": "by\n  intro y\n  exact ⟨g y, h y⟩",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/right_inverse.lean",
+      "solutionArm": "A",
+      "compileMs": 952.4
+    },
+    {
+      "id": "omap_comp",
+      "theorem": "Repair24.omap_comp",
+      "topic": "options",
+      "difficulty": "structural-repair",
+      "category": "compile_error",
+      "initialProof": "by\n  rfl",
+      "initialDiagnostic": "<local-path> error: Tactic `rfl` failed: The left-hand side\n  omap g (omap f x)\nis not definitionally equal to the right-hand side\n  omap (fun n => g (f n)) x\n\nf g : Nat → Nat\nx : Option Nat\n⊢ omap g (omap f x) = omap (fun n => g (f n)) x",
+      "structuredFeedback": "类别=compile_error；摘要=compile_error: Tactic `rfl` failed: The left-hand side",
+      "repairedProof": "by\n  cases x <;> rfl",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/omap_comp.lean",
+      "solutionArm": "A",
+      "compileMs": 959.4
+    },
+    {
+      "id": "obind_assoc",
+      "theorem": "Repair24.obind_assoc",
+      "topic": "options",
+      "difficulty": "structural-repair",
+      "category": "type_mismatch",
+      "initialProof": "by\n  cases x with\n  | none => rfl\n  | some n => exact Eq.refl n",
+      "initialDiagnostic": "<local-path> error: Type mismatch\n  Eq.refl n\nhas type\n  n = n\nbut is expected to have type\n  obind (obind (some n) f) g = obind (some n) fun n => obind (f n) g",
+      "structuredFeedback": "类别=type_mismatch；摘要=type_mismatch: Type mismatch",
+      "repairedProof": "by\n  cases x with\n  | none => rfl\n  | some n => rfl",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/obind_assoc.lean",
+      "solutionArm": "A",
+      "compileMs": 946.6
+    },
+    {
+      "id": "omap_bind",
+      "theorem": "Repair24.omap_bind",
+      "topic": "options",
+      "difficulty": "structural-repair",
+      "category": "unknown_identifier",
+      "initialProof": "by\n  exact omap_obind x f g",
+      "initialDiagnostic": "<local-path> error(lean.unknownIdentifier): Unknown identifier `omap_obind`",
+      "structuredFeedback": "类别=unknown_identifier；摘要=unknown_identifier: Unknown identifier `omap_obind`",
+      "repairedProof": "by cases x <;> rfl",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/omap_bind.lean",
+      "solutionArm": "A",
+      "compileMs": 953.5
+    },
+    {
+      "id": "omap_identity",
+      "theorem": "Repair24.omap_identity",
+      "topic": "options",
+      "difficulty": "structural-repair",
+      "category": "unsolved_goals",
+      "initialProof": "by\n  cases x with\n  | none => rfl\n  | some n => skip",
+      "initialDiagnostic": "<local-path> error: unsolved goals\ncase some\nn : Nat\n⊢ omap (fun n => n) (some n) = some n",
+      "structuredFeedback": "类别=unsolved_goals；摘要=unsolved_goals: unsolved goals",
+      "repairedProof": "by\n  cases x with\n  | none => rfl\n  | some n => rfl",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/omap_identity.lean",
+      "solutionArm": "A",
+      "compileMs": 916.3
+    },
+    {
+      "id": "double_add",
+      "theorem": "Repair24.double_add",
+      "topic": "recursive_nat",
+      "difficulty": "structural-repair",
+      "category": "compile_error",
+      "initialProof": "by\n  rfl",
+      "initialDiagnostic": "<local-path> error: Tactic `rfl` failed: The left-hand side\n  double (a + b)\nis not definitionally equal to the right-hand side\n  double a + double b\n\na b : Nat\n⊢ double (a + b) = double a + double b",
+      "structuredFeedback": "类别=compile_error；摘要=compile_error: Tactic `rfl` failed: The left-hand side",
+      "repairedProof": "by\n  induction b with\n  | zero => rfl\n  | succ b ih =>\n      simp [double, ih, Nat.add_assoc]",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/double_add.lean",
+      "solutionArm": "A",
+      "compileMs": 982.6
+    },
+    {
+      "id": "double_value",
+      "theorem": "Repair24.double_value",
+      "topic": "recursive_nat",
+      "difficulty": "structural-repair",
+      "category": "unknown_identifier",
+      "initialProof": "by\n  exact double_eq_add n",
+      "initialDiagnostic": "<local-path> error(lean.unknownIdentifier): Unknown identifier `double_eq_add`",
+      "structuredFeedback": "类别=unknown_identifier；摘要=unknown_identifier: Unknown identifier `double_eq_add`",
+      "repairedProof": "by\n  induction n with\n  | zero => rfl\n  | succ n ih =>\n      change double n + 2 = Nat.succ n + Nat.succ n\n      rw [ih]\n      omega",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/double_value.lean",
+      "solutionArm": "A",
+      "compileMs": 942.9
+    },
+    {
+      "id": "scale_add",
+      "theorem": "Repair24.scale_add",
+      "topic": "recursive_nat",
+      "difficulty": "structural-repair",
+      "category": "unsolved_goals",
+      "initialProof": "by\n  induction n with\n  | zero => simp [scale]\n  | succ n ih => simp only [Nat.add_succ, scale]",
+      "initialDiagnostic": "<local-path> error: unsolved goals\ncase succ\na m n : Nat\nih : scale a (m + n) = scale a m + scale a n\n⊢ scale a (m.add n) + a = scale a m + (scale a n + a)\n<local-path> warning: This simp argument is unused:\n  Nat.add_succ\n\nHint: Omit it from the simp argument list.\n  simp only [̵N̵a̵t̵.̵a̵d̵d̵_̵s̵u̵c̵c̵,̵ ̵s̵c̵a̵l̵e̵]̵[̲s̲c̲a̲l̲e̲]̲\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`",
+      "structuredFeedback": "类别=unsolved_goals；摘要=unsolved_goals: unsolved goals",
+      "repairedProof": "by\n  induction n with\n  | zero => simp [scale]\n  | succ n ih =>\n      simp only [scale]\n      change scale a (m + n) + a = scale a m + (scale a n + a)\n      rw [ih, Nat.add_assoc]",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/B/scale_add.lean",
+      "solutionArm": "B",
+      "compileMs": 960.6
+    },
+    {
+      "id": "scale_value",
+      "theorem": "Repair24.scale_value",
+      "topic": "recursive_nat",
+      "difficulty": "structural-repair",
+      "category": "type_mismatch",
+      "initialProof": "by\n  induction n with\n  | zero => rfl\n  | succ n ih => exact ih",
+      "initialDiagnostic": "<local-path> error: Type mismatch\n  ih\nhas type\n  scale a n = a * n\nbut is expected to have type\n  scale a (n + 1) = a * (n + 1)",
+      "structuredFeedback": "类别=type_mismatch；摘要=type_mismatch: Type mismatch",
+      "repairedProof": "by\n  induction n with\n  | zero => rfl\n  | succ n ih =>\n    simp [scale, ih, Nat.mul_succ]",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/scale_value.lean",
+      "solutionArm": "A",
+      "compileMs": 970.9
+    },
+    {
+      "id": "tri_lower",
+      "theorem": "Repair24.tri_lower",
+      "topic": "recursive_nat",
+      "difficulty": "structural-repair",
+      "category": "type_mismatch",
+      "initialProof": "by\n  induction n with\n  | zero => exact Nat.le_refl 0\n  | succ n ih => exact ih",
+      "initialDiagnostic": "<local-path> error: Type mismatch\n  ih\nhas type\n  n ≤ tri n\nbut is expected to have type\n  n + 1 ≤ tri (n + 1)",
+      "structuredFeedback": "类别=type_mismatch；摘要=type_mismatch: Type mismatch",
+      "repairedProof": "by\n  induction n with\n  | zero => exact Nat.le_refl 0\n  | succ n ih => exact Nat.le_add_left (n + 1) (tri n)",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/tri_lower.lean",
+      "solutionArm": "A",
+      "compileMs": 951.2
+    },
+    {
+      "id": "double_even",
+      "theorem": "Repair24.double_even",
+      "topic": "recursive_nat",
+      "difficulty": "structural-repair",
+      "category": "type_mismatch",
+      "initialProof": "by\n  exact ⟨n, rfl⟩",
+      "initialDiagnostic": "<local-path> error: Application type mismatch: The argument\n  rfl\nhas type\n  ?m.12 = ?m.12\nbut is expected to have type\n  double n = n + n\nin the application\n  Exists.intro n rfl",
+      "structuredFeedback": "类别=type_mismatch；摘要=type_mismatch: Application type mismatch: The argument",
+      "repairedProof": "by\n  induction n with\n  | zero => exact ⟨0, rfl⟩\n  | succ n ih =>\n      rcases ih with ⟨k, hk⟩\n      refine ⟨k + 1, ?_⟩\n      calc\n        double (Nat.succ n) = double n + 2 := rfl\n        _ = k + k + 2 := by rw [hk]\n        _ = (k + 1) + (k + 1) := by\n          change k + k + (1 + 1) = (k + 1) + (k + 1)\n          ac_rfl",
+      "solutionPath": "published/research-six-arm-313f437f/solutions/deepseek_flash_v41/1/A/double_even.lean",
+      "solutionArm": "A",
+      "compileMs": 983.4
+    }
+  ]
 };
