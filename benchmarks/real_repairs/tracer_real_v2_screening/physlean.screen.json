@@ -1,0 +1,3387 @@
+{
+  "version": "tracer-real-candidate-screen-v1",
+  "project_id": "physlean",
+  "endpoint_revision": "891d5972436a47ab5c64ec30bc7682e5caed4f46",
+  "provider_calls_observed": 0,
+  "candidates": 675,
+  "accepted": 94,
+  "rejected": 581,
+  "decisions": [
+    {
+      "id": "physlean_classicalmechanics_dampedharmonicoscillator_angularfrequency_ne_zero_of_overdamped",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_classicalmechanics_dampedharmonicoscillator_contdiff_lagrangian",
+      "accepted": false,
+      "reason": "physlean_classicalmechanics_dampedharmonicoscillator_contdiff_lagrangian: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_classicalmechanics_dampedharmonicoscillator_decayrate_nonneg",
+      "accepted": false,
+      "reason": "physlean_classicalmechanics_dampedharmonicoscillator_decayrate_nonneg: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_classicalmechanics_dampedharmonicoscillator_equationofmotion_iff_newtons_2nd_law",
+      "accepted": false,
+      "reason": "physlean_classicalmechanics_dampedharmonicoscillator_equationofmotion_iff_newtons_2nd_law: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_classicalmechanics_dampedharmonicoscillator_trajectory_eq_of_overdamped",
+      "accepted": false,
+      "reason": "physlean_classicalmechanics_dampedharmonicoscillator_trajectory_eq_of_overdamped: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_classicalmechanics_dampedharmonicoscillator_trajectory_equationofmotion",
+      "accepted": false,
+      "reason": "physlean_classicalmechanics_dampedharmonicoscillator_trajectory_equationofmotion: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_classicalmechanics_harmonicoscillator_contdiff_lagrangian",
+      "accepted": false,
+      "reason": "physlean_classicalmechanics_harmonicoscillator_contdiff_lagrangian: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_classicalmechanics_harmonicoscillator_gradient_hamiltonian_momentum_eq",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_classicalmechanics_harmonicoscillator_gradient_hamiltonian_position_eq",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_classicalmechanics_harmonicoscillator_gradient_lagrangian_position_eq",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_classicalmechanics_harmonicoscillator_gradient_lagrangian_velocity_eq",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_massunit_pounds_div_ounces",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_classicalmechanics_simplependulum_gradlagrangian_eq_eulerlagrangeop",
+      "accepted": false,
+      "reason": "physlean_classicalmechanics_simplependulum_gradlagrangian_eq_eulerlagrangeop: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_classicalmechanics_simplependulum_gradlagrangian_eq_torque",
+      "accepted": false,
+      "reason": "physlean_classicalmechanics_simplependulum_gradlagrangian_eq_torque: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_classicalmechanics_simplependulum_gradient_lagrangian_velocity_eq",
+      "accepted": false,
+      "reason": "physlean_classicalmechanics_simplependulum_gradient_lagrangian_velocity_eq: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_classicalmechanics_simplependulum_torque_apply",
+      "accepted": false,
+      "reason": "physlean_classicalmechanics_simplependulum_torque_apply: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_classicalmechanics_simplependulum_linearized_unique",
+      "accepted": false,
+      "reason": "physlean_classicalmechanics_simplependulum_linearized_unique: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_classicalmechanics_simplependulum_smallangletrajectory_periodic",
+      "accepted": false,
+      "reason": "physlean_classicalmechanics_simplependulum_smallangletrajectory_periodic: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_classicalmechanics_simplependulum_issolution_comp_neg",
+      "accepted": false,
+      "reason": "physlean_classicalmechanics_simplependulum_issolution_comp_neg: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_rigidbody_inertiatensor_symmetric",
+      "accepted": false,
+      "reason": "physlean_rigidbody_inertiatensor_symmetric: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_rigidbody_rotationalkineticenergy_eq_angularmomentum",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_rigidbodymotion_kineticenergy_integrand_split",
+      "accepted": false,
+      "reason": "physlean_rigidbodymotion_kineticenergy_integrand_split: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_rigidbodymotion_centerofmassvelocity_of_comtrajectory_const",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "physlean_rigidbodymotion_contdiff_velocityclosedform_inner",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "physlean_rigidbodymotion_massdistribution_centerofmass",
+      "accepted": false,
+      "reason": "physlean_rigidbodymotion_massdistribution_centerofmass: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_rigidbodymotion_massdistribution_mass",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_rigidbodymotion_orientation_mulvec_sub_centerofmass",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_rigidbodymotion_orientation_mul_transpose",
+      "accepted": false,
+      "reason": "physlean_rigidbodymotion_orientation_mul_transpose: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_rigidbodymotion_velocityclosedform_apply",
+      "accepted": false,
+      "reason": "physlean_rigidbodymotion_velocityclosedform_apply: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_rigidbodymotion_velocity_apply",
+      "accepted": false,
+      "reason": "physlean_rigidbodymotion_velocity_apply: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_rigidbodymotion_velocity_eq_deriv_orientation",
+      "accepted": false,
+      "reason": "physlean_rigidbodymotion_velocity_eq_deriv_orientation: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_rigidbodymotion_velocity_of_orientation_const",
+      "accepted": false,
+      "reason": "physlean_rigidbodymotion_velocity_of_orientation_const: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_condensedmatter_tightbindingchain_energyeigenstate_orthogonal",
+      "accepted": false,
+      "reason": "physlean_condensedmatter_tightbindingchain_energyeigenstate_orthogonal: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_cosmology_flrw_friedmannequation_desitterscalefactor_secondorderfriedmann",
+      "accepted": false,
+      "reason": "physlean_cosmology_flrw_friedmannequation_desitterscalefactor_secondorderfriedmann: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_cosmology_flrw_friedmannequation_decelerationparameter_desitterscalefactor",
+      "accepted": false,
+      "reason": "physlean_cosmology_flrw_friedmannequation_decelerationparameter_desitterscalefactor: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_cosmology_flrw_friedmannequation_deriv_desitterscalefactor",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_cosmology_flrw_friedmannequation_deriv_deriv_desitterscalefactor",
+      "accepted": false,
+      "reason": "physlean_cosmology_flrw_friedmannequation_deriv_deriv_desitterscalefactor: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_cosmology_flrw_friedmannequation_sq_desitterrate",
+      "accepted": false,
+      "reason": "physlean_cosmology_flrw_friedmannequation_sq_desitterrate: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_electromagnetism_distelectromagneticpotential_gradkineticterm_sum_inr_eq",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_canonicalmomentum_eq_electricfield",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_canonicalmomentum_eq_gradient_kineticterm",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_isextrema_iff_gradlagrangian",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_isextrema_iff_gradlagrangian: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_isextrema_iff_tensors",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_gradkineticterm_add",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_gradkineticterm_eq_electric_magnetic",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_gradkineticterm_eq_sum_sum",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_gradkineticterm_eq_sum_sum: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_gradkineticterm_eq_tensorderiv",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_gradkineticterm_smul",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_kineticterm_contdiff",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_kineticterm_eq_electricmatrix_magneticfieldmatrix_time_space",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_kineticterm_eq_electric_magnetic",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Electromagnetism.ElectromagneticPotential.kineticTerm_eq_electric_magnetic"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_kineticterm_eq_sum_potential",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_electricfield_apply_x_boost_succ",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_electricfield_apply_x_boost_zero",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_magneticfieldmatrix_apply_x_boost_succ_succ",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_magneticfieldmatrix_apply_x_boost_zero_succ",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_action_apply",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_action_apply: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_contdiff_ofelectromagneticfield",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_contdiff_ofelectromagneticfield: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_contdiff_ofscalarpotential",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_contdiff_ofvectorpotential",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_differentiable_ofpotentials",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_differentiable_ofscalarpotential",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_differentiable_ofvectorpotential",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_hasvaradjderivat_component",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_hasvaradjderivat_component: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_smul_apply",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_spacetime_deriv_action_eq_sum",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_spacetime_deriv_action_eq_sum: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tensorderiv_eval_eq",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_totensor_deriv_basis_repr_apply",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_totensor_deriv_basis_repr_apply: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_electricfield_contdiff",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_electricfield_eq_tofieldstrength_eval",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_contdiff_tofieldstrength",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_contdiff_tofieldstrength: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_action_eq_sum",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_action_eq_sum: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_add",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_antisymmetric",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_eq_sum_basis_single",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_equivariant",
+      "accepted": true,
+      "error_category": "syntax"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_eval_add",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_eval_apply",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_eval_apply: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_eval_apply_eq_single",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_eval_apply_eq_single: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_eval_contdiff",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_eval_contdiff: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_eval_diag_eq_zero",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_eval_differentiable",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_eval_differentiable: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_eval_eq_tensor_basis_repr",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_eval_eq_tensor_basis_repr: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_eval_equivariant",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_eval_smul",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_smul",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_gaugetransform_equivariant",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_gaugetransform_equivariant: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_baregradient_ne_zero",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_gaugetransform",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_gaugetransform: 历史证明没有形成稳定的 Lean 证明失败 (ok=False, timed_out=True, returncode=None)"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_ofgradient",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_tofieldstrength_ofgradient: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_magneticfieldmatrix_antisymm",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_magneticfieldmatrix_contdiff",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_magneticfieldmatrix_diag_eq_zero",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_magneticfieldmatrix_differentiable",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_magneticfieldmatrix_eq_vectorpotential",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_magneticfield_eq",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_magneticfield_eq: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_magneticfield_eq_magneticfieldmatrix",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_ofelectromagneticfield_magneticfield",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_ofelectromagneticfield_magneticfield: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_electromagnetism_distelectromagneticpotential_threedimpointparticle_div_electricfield",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_constanteb_vectorpotential",
+      "accepted": false,
+      "reason": "physlean_electromagnetism_electromagneticpotential_constanteb_vectorpotential: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_electromagnetism_electromagneticpotential_isplanewave_space_deriv_electricfield_eq_magneticfieldmatrix",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_divergence_prodmk",
+      "accepted": false,
+      "reason": "physlean_divergence_prodmk: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_divergence_smul",
+      "accepted": false,
+      "reason": "physlean_divergence_smul: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_matrix_det_exp_of_blocktriangular_id",
+      "accepted": false,
+      "reason": "physlean_matrix_det_exp_of_blocktriangular_id: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_matrix_det_exp_real",
+      "accepted": false,
+      "reason": "physlean_matrix_det_exp_real: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_normedspace_exp_map_algebramap",
+      "accepted": false,
+      "reason": "physlean_normedspace_exp_map_algebramap: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_physlib_distribution_totempereddistribution_offinitemeasure",
+      "accepted": false,
+      "reason": "physlean_physlib_distribution_totempereddistribution_offinitemeasure: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_physlib_distribution_norm_iteratedfderiv_ofrealclm",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_physlib_fin_finextractone_apply_eq",
+      "accepted": false,
+      "reason": "physlean_physlib_fin_finextractone_apply_eq: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pseudoriemannianmetric_flatl_surj",
+      "accepted": false,
+      "reason": "physlean_pseudoriemannianmetric_flatl_surj: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_quadraticform_rankneg_eq_zero",
+      "accepted": false,
+      "reason": "physlean_quadraticform_rankneg_eq_zero: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_kroneckerdelta_generalizedkroneckerdelta_swap",
+      "accepted": false,
+      "reason": "physlean_kroneckerdelta_generalizedkroneckerdelta_swap: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_sum_generalizedkroneckerdelta_mul_cons",
+      "accepted": false,
+      "reason": "physlean_sum_generalizedkroneckerdelta_mul_cons: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_levicivitasymbol_comp_swap",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_linearpmap_sum_apply",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_physlib_list_orderedinsertequiv_fin_succ",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_physlib_list_orderedinsertequiv_succ",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_physlib_list_orderedinsertpos_sigma",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_physlib_list_orderedinsert_eraseidx_lt_orderedinsertpos",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_physlib_list_orderedinsert_eraseidx_orderedinsertpos_le",
+      "accepted": false,
+      "reason": "physlean_physlib_list_orderedinsert_eraseidx_orderedinsertpos_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_physlib_list_insertionsortequiv_gt_zero_of_ne_insertionsortminpos",
+      "accepted": false,
+      "reason": "physlean_physlib_list_insertionsortequiv_gt_zero_of_ne_insertionsortminpos: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_unitaryoneparametergroup_generator_isselfadjoint",
+      "accepted": false,
+      "reason": "physlean_unitaryoneparametergroup_generator_isselfadjoint: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_physlib_pitensorproduct_elimpuretensor_update_right",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_physlib_pitensorproduct_pureinl_update_left",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_physlib_pitensorproduct_pureinr_update_left",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_physlib_pitensorproduct_pureinr_update_right",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_physlib_pitensorproduct_tmulequiv_tmul_tprod",
+      "accepted": false,
+      "reason": "physlean_physlib_pitensorproduct_tmulequiv_tmul_tprod: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_physlib_ratcomplexnum_i_mul_tocomplexnum",
+      "accepted": false,
+      "reason": "physlean_physlib_ratcomplexnum_i_mul_tocomplexnum: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_physlib_ratcomplexnum_tocomplexnum_injective",
+      "accepted": false,
+      "reason": "physlean_physlib_ratcomplexnum_tocomplexnum_injective: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_grouptheory_so3_toprod_injective",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "physlean_polynomial_physhermite_norm_cons",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_fundamental_theorem_of_variational_calculus",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: fundamental_theorem_of_variational_calculus"
+    },
+    {
+      "id": "physlean_hasvaradjoint_adjfderiv_apply",
+      "accepted": false,
+      "reason": "physlean_hasvaradjoint_adjfderiv_apply: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_acccube_decomp",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_accgrav_ext",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_accquad_decomp",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_accquad_ext",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_accsu2_ext",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_accsu3_ext",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_accyy_ext",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_smrhn_familyuniversal_accgrav",
+      "accepted": false,
+      "reason": "physlean_smrhn_familyuniversal_accgrav: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_familyuniversal_accsu2",
+      "accepted": false,
+      "reason": "physlean_smrhn_familyuniversal_accsu2: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_familyuniversal_accsu3",
+      "accepted": false,
+      "reason": "physlean_smrhn_familyuniversal_accsu3: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_sum_familyuniversal",
+      "accepted": false,
+      "reason": "physlean_smrhn_sum_familyuniversal: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_sum_familyuniversal_three",
+      "accepted": false,
+      "reason": "physlean_smrhn_sum_familyuniversal_three: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_sm_planeseven_bi_bj_ne_cubic",
+      "accepted": false,
+      "reason": "physlean_smrhn_sm_planeseven_bi_bj_ne_cubic: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_accgrav_invariant",
+      "accepted": false,
+      "reason": "physlean_smrhn_accgrav_invariant: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_accsu2_invariant",
+      "accepted": false,
+      "reason": "physlean_smrhn_accsu2_invariant: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_accsu3_invariant",
+      "accepted": false,
+      "reason": "physlean_smrhn_accsu3_invariant: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_tospecies_sum_invariant",
+      "accepted": false,
+      "reason": "physlean_smrhn_tospecies_sum_invariant: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_plusu1_bl_addquad_zero",
+      "accepted": false,
+      "reason": "physlean_smrhn_plusu1_bl_addquad_zero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_plusu1_su2sol",
+      "accepted": false,
+      "reason": "physlean_smrhn_plusu1_su2sol: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_plusu1_su3sol",
+      "accepted": false,
+      "reason": "physlean_smrhn_plusu1_su3sol: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_plusu1_yysol",
+      "accepted": false,
+      "reason": "physlean_smrhn_plusu1_yysol: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_plusu1_gravsol",
+      "accepted": false,
+      "reason": "physlean_smrhn_plusu1_gravsol: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_plusu1_y_addquad_zero",
+      "accepted": false,
+      "reason": "physlean_smrhn_plusu1_y_addquad_zero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_plusu1_y_add_afl_cube",
+      "accepted": false,
+      "reason": "physlean_smrhn_plusu1_y_add_afl_cube: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_plusu1_y_on_cubetrilin_afl",
+      "accepted": false,
+      "reason": "physlean_smrhn_plusu1_y_on_cubetrilin_afl: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_smrhn_plusu1_quadsoltosolinv_1",
+      "accepted": false,
+      "reason": "physlean_smrhn_plusu1_quadsoltosolinv_1: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_twohiggsdoublet_ext_of_fst_snd",
+      "accepted": true,
+      "error_category": "typeclass"
+    },
+    {
+      "id": "physlean_twohiggsdoublet_mem_orbit_gaugegroupi_iff_grammatrix",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_twohiggsdoublet_masstermreduced_stabilitycounterexample",
+      "accepted": false,
+      "reason": "physlean_twohiggsdoublet_masstermreduced_stabilitycounterexample: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_twohiggsdoublet_potentialisstable_of_strong",
+      "accepted": false,
+      "reason": "physlean_twohiggsdoublet_potentialisstable_of_strong: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_twohiggsdoublet_quartictermreduced_stabilitycounterexample_nonneg",
+      "accepted": false,
+      "reason": "physlean_twohiggsdoublet_quartictermreduced_stabilitycounterexample_nonneg: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_twohiggsdoublet_stabilitycounterexample_not_potentialisstable",
+      "accepted": false,
+      "reason": "physlean_twohiggsdoublet_stabilitycounterexample_not_potentialisstable: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_phaseshiftapply_cb",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_phaseshiftapply_cd",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_phaseshiftapply_cs",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_phaseshiftapply_equiv",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_phaseshiftapply_tb",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_phaseshiftapply_td",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_phaseshiftapply_ts",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_phaseshiftapply_ub",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_phaseshiftapply_ud",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_phaseshiftapply_us",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_phaseshiftmatrix_mul",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_phaseshiftmatrix_one",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_phaseshiftmatrix_star",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_ckmmatrix_vabs_sum_sq_col_eq_one",
+      "accepted": false,
+      "reason": "physlean_ckmmatrix_vabs_sum_sq_col_eq_one: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_ckmmatrix_vabs_sum_sq_row_eq_one",
+      "accepted": false,
+      "reason": "physlean_ckmmatrix_vabs_sum_sq_row_eq_one: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_ckmmatrix_crow_cross_trow_eq_urow",
+      "accepted": false,
+      "reason": "physlean_ckmmatrix_crow_cross_trow_eq_urow: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_ckmmatrix_rows_linearly_independent",
+      "accepted": false,
+      "reason": "physlean_ckmmatrix_rows_linearly_independent: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_standparam_vusvubvcdsq_eq",
+      "accepted": false,
+      "reason": "physlean_standparam_vusvubvcdsq_eq: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_standparam_eq_exp_of_phases",
+      "accepted": false,
+      "reason": "physlean_standparam_eq_exp_of_phases: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_standparam_eq_rows",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_smaccs_accgrav_ext",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_smaccs_accquad_ext",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_smaccs_accsu2_ext",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_smaccs_accsu3_ext",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_smaccs_accyy_ext",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_smcharges_charges_eq_tospecies_eq",
+      "accepted": false,
+      "reason": "physlean_smcharges_charges_eq_tospecies_eq: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_sm_smnograv_su2sol",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_sm_smnograv_one_e_zero_iff_q_zero",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_sm_smnograv_one_linearparameters_speciesval",
+      "accepted": false,
+      "reason": "physlean_sm_smnograv_one_linearparameters_speciesval: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_sm_accgrav_invariant",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_sm_accsu2_invariant",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_sm_accsu3_invariant",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_sm_tospecies_sum_invariant",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_standardmodel_higgsfield_const_normsq",
+      "accepted": false,
+      "reason": "physlean_standardmodel_higgsfield_const_normsq: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_standardmodel_higgsvec_ofreal_normsq",
+      "accepted": false,
+      "reason": "physlean_standardmodel_higgsvec_ofreal_normsq: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_standardmodel_higgsfield_effectivepotential_isinvariant_eq_of_norm_eq",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_standardmodel_higgsfield_effectivepotential_termofmassdim_isinvariant",
+      "accepted": true,
+      "error_category": "typeclass"
+    },
+    {
+      "id": "physlean_mssmaccs_accgrav_ext",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_mssmaccs_accsu2_ext",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_mssmaccs_accsu3_ext",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_mssmaccs_accyy_ext",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_mssmacc_anomalyfreeperp_inlineeqto_smul",
+      "accepted": false,
+      "reason": "physlean_mssmacc_anomalyfreeperp_inlineeqto_smul: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_mssm_hu_invariant",
+      "accepted": false,
+      "reason": "physlean_mssm_hu_invariant: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_mssm_accgrav_invariant",
+      "accepted": false,
+      "reason": "physlean_mssm_accgrav_invariant: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_mssm_accsu2_invariant",
+      "accepted": false,
+      "reason": "physlean_mssm_accsu2_invariant: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_mssm_accsu3_invariant",
+      "accepted": false,
+      "reason": "physlean_mssm_accsu3_invariant: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_mssm_chargemap_tospecies",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_susy_n1_tofield_conjscalar",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_fieldspecification_fieldopfreealgebra_anpartf_posasymp",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_fieldopfreealgebra_anpartf_posasymp: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_fieldopfreealgebra_offieldoplistf_append",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_fieldopfreealgebra_offieldoplistf_append: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_fieldopfreealgebra_bosonicprojf_of_mem_bosonic",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_fieldopfreealgebra_bosonicprojf_of_mem_bosonic: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_fieldspecification_fieldopfreealgebra_bosonicprojf_of_mem_fermionic",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_fieldopfreealgebra_bosonicprojf_of_mem_fermionic: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_fieldspecification_fieldopfreealgebra_fermionicprojf_of_mem_bosonic",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_fieldopfreealgebra_fermionicprojf_of_mem_bosonic: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_fieldspecification_fieldopfreealgebra_fermionicprojf_of_mem_fermionic",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_fieldopfreealgebra_fermionicprojf_of_mem_fermionic: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_fieldspecification_fieldopfreealgebra_ofcranopf_mul_normalorderf_offieldoplistf_eq_supercommutef",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_fieldspecification_fieldopfreealgebra_supercommutef_anpartf_anpartf",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_fieldopfreealgebra_supercommutef_anpartf_anpartf: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_fieldopfreealgebra_supercommutef_anpartf_crpartf",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_fieldopfreealgebra_supercommutef_anpartf_crpartf: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_fieldopfreealgebra_supercommutef_crpartf_anpartf",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_fieldopfreealgebra_supercommutef_crpartf_anpartf: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_fieldopfreealgebra_supercommutef_crpartf_crpartf",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_fieldopfreealgebra_supercommutef_crpartf_crpartf: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_fieldopfreealgebra_supercommutef_crpartf_offieldoplistf",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_fieldopfreealgebra_supercommutef_crpartf_offieldoplistf: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_fieldopfreealgebra_supercommutef_offieldoplistf_offieldopf",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_fieldopfreealgebra_supercommutef_offieldoplistf_offieldopf: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_cransection_append_assoc",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: FieldSpecification.CrAnSection.append_assoc"
+    },
+    {
+      "id": "physlean_fieldspecification_cransection_card_cons_eq",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_cransection_card_cons_eq: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_cransection_eq_head_cons_tail",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_fieldspecification_cransection_eraseidxequiv_apply_snd",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_fieldspecification_cransection_eraseidxequiv_symm_eq_take_cons_drop",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_cransection_eraseidxequiv_symm_eq_take_cons_drop: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_wick_koszulsign_eraseidx_insertionsortminpos",
+      "accepted": false,
+      "reason": "physlean_wick_koszulsign_eraseidx_insertionsortminpos: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_wick_koszulsigninsert_eq_cons",
+      "accepted": false,
+      "reason": "physlean_wick_koszulsigninsert_eq_cons: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_wickalgebra_bosonicprojf_mem_fieldopidealset_or_zero",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_wickalgebra_bosonicprojf_mem_fieldopidealset_or_zero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_wickalgebra_fermionicprojf_mem_fieldopidealset_or_zero",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_wickalgebra_fermionicprojf_mem_fieldopidealset_or_zero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_wickalgebra_mem_bosonic_of_mem_free_bosonic",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_wickalgebra_mem_bosonic_of_mem_free_bosonic: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_wickalgebra_mem_fermionic_of_mem_free_fermionic",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_wickalgebra_mem_fermionic_of_mem_free_fermionic: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_wickalgebra_normalorder_ofcranop_offieldoplist_swap",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_wickalgebra_normalorder_ofcranop_offieldoplist_swap: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_wickalgebra_ofcranop_supercommute_normalorder_offieldoplist_sum",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_fieldspecification_wickalgebra_supercommuteright_eq_of_equiv",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_fieldspecification_wickalgebra_supercommute_crpart_anpart",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_wickalgebra_supercommute_crpart_anpart: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_wickalgebra_supercommute_crpart_crpart",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_wickalgebra_supercommute_crpart_crpart: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_wickalgebra_supercommute_diff_statistic",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_wickalgebra_supercommute_diff_statistic: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fieldspecification_wickalgebra_supercommute_ofcranop_offieldop_diff_stat_zero",
+      "accepted": false,
+      "reason": "physlean_fieldspecification_wickalgebra_supercommute_ofcranop_offieldop_diff_stat_zero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_wickcontraction_insertandcontractnat_erase",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_wickcontraction_insertandcontractnat_none_getdual",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: WickContraction.insertAndContractNat_none_getDual"
+    },
+    {
+      "id": "physlean_wickcontraction_insertandcontractnat_some_uncontracted",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_wickcontraction_insertliftsome_bijective",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_wickcontraction_self_not_mem_uncontracted_of_insertandcontractnat_some",
+      "accepted": false,
+      "reason": "physlean_wickcontraction_self_not_mem_uncontracted_of_insertandcontractnat_some: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_wickcontraction_exists_contraction_pair_of_card_ge_zero",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "physlean_wickcontraction_joinsignrightextra_eq_i_j_finset_eq_if",
+      "accepted": false,
+      "reason": "physlean_wickcontraction_joinsignrightextra_eq_i_j_finset_eq_if: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_wickcontraction_of_singleton_eq",
+      "accepted": false,
+      "reason": "physlean_wickcontraction_of_singleton_eq: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_wickcontraction_singleton_prod",
+      "accepted": false,
+      "reason": "physlean_wickcontraction_singleton_prod: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_wickcontraction_eqtimeonly_quotcontraction_eqtimeonly",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_wickcontraction_haseqtimeequiv_ext_sigma",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_wickcontraction_uncontractedcongr_some",
+      "accepted": false,
+      "reason": "physlean_wickcontraction_uncontractedcongr_some: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_wickcontraction_take_uncontractedlistorderpos_eq_filter_sort",
+      "accepted": false,
+      "reason": "physlean_wickcontraction_take_uncontractedlistorderpos_eq_filter_sort: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_sum_of_anomaly_free_linear",
+      "accepted": false,
+      "reason": "physlean_pureu1_sum_of_anomaly_free_linear: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_sum_of_charges",
+      "accepted": false,
+      "reason": "physlean_pureu1_sum_of_charges: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_pureu1_cube",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_pureu1_linear",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_pureu1_basislinear_ascharges_eq_castsucc",
+      "accepted": false,
+      "reason": "physlean_pureu1_basislinear_ascharges_eq_castsucc: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_basislinear_sum_of_vectors",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_pureu1_constabs_perm",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_pa_elim_eq_iff",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_pa_evenshiftfst",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeevenplane_pa_evenshiftfst: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_pa_evenshiftlast",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_pa_evenshiftsnd",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeevenplane_pa_evenshiftsnd: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_pa_evenshitzero",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeevenplane_pa_evenshitzero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_shifted_basis_linearacc",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeevenplane_shifted_basis_linearacc: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_shifted_basis_on_evenshiftlast",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeevenplane_shifted_basis_on_evenshiftlast: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_shifted_basis_on_evenshiftsnd_other",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_shifted_basis_on_evenshiftzero",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_shifted_basis_on_other",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_shifted_planecharges_evenshiftlast",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeevenplane_shifted_planecharges_evenshiftlast: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_shifted_planecharges_evenshiftsnd",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeevenplane_shifted_planecharges_evenshiftsnd: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_shifted_planecharges_evenshiftzero",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeevenplane_shifted_planecharges_evenshiftzero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_shifted_smul_basisascharges_in_span",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_unshifted_basis_linearacc",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeevenplane_unshifted_basis_linearacc: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_unshifted_basis_on_evensnd_other",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeevenplane_unshifted_basis_on_evensnd_other: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_unshifted_planecharges_evensnd",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeevenplane_unshifted_planecharges_evensnd: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_unshifted_planecharges_evensnd_evenfst",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeevenplane_unshifted_planecharges_evensnd_evenfst: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_unshifted_planecharges_linearacc",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeevenplane_unshifted_planecharges_linearacc: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_basisa_linear_independent",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_evenshiftsnd_eq_evensnd_castsucc",
+      "accepted": true,
+      "error_category": "syntax"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeevenplane_unshifted_unshifted_shifted_acccube",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeevenplane_unshifted_unshifted_shifted_acccube: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_even_lineincubicperm_last_cond",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_pureu1_even_generic_case",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_pureu1_even_generic_or_special",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_pureu1_even_parameterizationcharge_cube",
+      "accepted": false,
+      "reason": "physlean_pureu1_even_parameterizationcharge_cube: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_pureu1_even_special_case_lineincubic",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeoddplane_pa_elim_eq_iff",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeoddplane_pa_eq",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeoddplane_pa_eq: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeoddplane_pa_oddshiftshiftfst",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeoddplane_pa_oddshiftshiftfst: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeoddplane_pa_oddshiftshiftmid",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeoddplane_pa_oddshiftshiftmid: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeoddplane_pa_oddshiftshiftsnd",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeoddplane_pa_oddshiftshiftzero",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeoddplane_pa_oddshiftshiftzero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeoddplane_shifted_basis_on_oddshiftzero",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeoddplane_shifted_basis_on_oddshiftzero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeoddplane_shifted_planecharges_linearacc",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeoddplane_shifted_planecharges_linearacc: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeoddplane_shifted_planecharges_oddshiftzero",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeoddplane_shifted_planecharges_oddshiftzero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeoddplane_unshifted_basis_on_oddmid",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeoddplane_unshifted_basis_on_oddmid: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeoddplane_unshifted_planecharges_linearacc",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeoddplane_unshifted_planecharges_linearacc: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeoddplane_unshifted_planecharges_oddmid",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeoddplane_unshifted_planecharges_oddmid: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeoddplane_basisa_card",
+      "accepted": false,
+      "reason": "physlean_pureu1_vectorlikeoddplane_basisa_card: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_vectorlikeoddplane_basisa_linear_independent",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_pureu1_odd_generic_case",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_pureu1_odd_generic_or_special",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_pureu1_odd_parameterizationcharge_cube",
+      "accepted": false,
+      "reason": "physlean_pureu1_odd_parameterizationcharge_cube: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_pureu1_odd_special_case_lineincubic",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_pureu1_prop_two",
+      "accepted": false,
+      "reason": "physlean_pureu1_prop_two: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_pureu1_sort_apply",
+      "accepted": false,
+      "reason": "physlean_pureu1_sort_apply: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_quantummechanics_hydrogenatom_angularmomentum_commutation_lrl",
+      "accepted": false,
+      "reason": "physlean_quantummechanics_hydrogenatom_angularmomentum_commutation_lrl: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_quantummechanics_hydrogenatom_hamiltonianreg_commutation_lrl",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_quantummechanics_momentumsqoperator_domain_eq",
+      "accepted": false,
+      "reason": "physlean_quantummechanics_momentumsqoperator_domain_eq: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_quantummechanics_onedimension_hilbertspace_parityoperatorschwartz_parityoperatorschwartz",
+      "accepted": false,
+      "reason": "physlean_quantummechanics_onedimension_hilbertspace_parityoperatorschwartz_parityoperatorschwartz: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_linearpmap_numericalrange_convex",
+      "accepted": false,
+      "reason": "physlean_linearpmap_numericalrange_convex: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_quantummechanics_rectangularbarrier_potentialfunction_eq",
+      "accepted": false,
+      "reason": "physlean_quantummechanics_rectangularbarrier_potentialfunction_eq: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_fermion_dirac_chiralbasis_nat_add",
+      "accepted": false,
+      "reason": "physlean_fermion_dirac_chiralbasis_nat_add: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_fermion_dualleftcontraction_apply_metric",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_fermion_dualrightmetric_apply_one",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentzgroup_generalizedboost_inv",
+      "accepted": false,
+      "reason": "physlean_lorentzgroup_generalizedboost_inv: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_lorentzgroup_isorthochronous_mul_iff",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentzgroup_isorthochronous_on_connected_component",
+      "accepted": false,
+      "reason": "physlean_lorentzgroup_isorthochronous_on_connected_component: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_lorentzgroup_detcontinuous_eq_one",
+      "accepted": false,
+      "reason": "physlean_lorentzgroup_detcontinuous_eq_one: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_lorentzgroup_detcontinuous_eq_zero",
+      "accepted": false,
+      "reason": "physlean_lorentzgroup_detcontinuous_eq_zero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_lorentzgroup_det_on_connected_component",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentzgroup_transpose_mem_rotations",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_minkowskimatrix_det_eq_neg_one_pow_d",
+      "accepted": false,
+      "reason": "physlean_minkowskimatrix_det_eq_neg_one_pow_d: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_paulimatrix_aulicontrdown_paulicontr_mul_add",
+      "accepted": false,
+      "reason": "physlean_paulimatrix_aulicontrdown_paulicontr_mul_add: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_paulimatrix_pauliselfadjoint_linearly_independent",
+      "accepted": false,
+      "reason": "physlean_paulimatrix_pauliselfadjoint_linearly_independent: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_paulimatrix_pauliselfadjoint_linearly_independent_2",
+      "accepted": false,
+      "reason": "physlean_paulimatrix_pauliselfadjoint_linearly_independent_2: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_paulimatrix_pauliselfadjoint_span",
+      "accepted": false,
+      "reason": "physlean_paulimatrix_pauliselfadjoint_span: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_paulimatrix_selfadjoint_ext",
+      "accepted": false,
+      "reason": "physlean_paulimatrix_selfadjoint_ext: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_paulimatrix_totensor_eq_asconstensor",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_sl2c_toselfadjointmap_paulibasis",
+      "accepted": false,
+      "reason": "physlean_lorentz_sl2c_toselfadjointmap_paulibasis: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_specialrelativity_instantaneoustwinparadox_agegap_nonneg",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_specialrelativity_instantaneoustwinparadox_example1_agegap",
+      "accepted": false,
+      "reason": "physlean_specialrelativity_instantaneoustwinparadox_example1_agegap: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_specialrelativity_instantaneoustwinparadox_example1_propertimetwina",
+      "accepted": false,
+      "reason": "physlean_specialrelativity_instantaneoustwinparadox_example1_propertimetwina: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_actiont_eq",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_tensor_actiont_eq: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_actiont_neg",
+      "accepted": true,
+      "error_category": "syntax"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_permt_congr",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_permt_pure",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_complexlorentztensor_contrpcoeff_basis",
+      "accepted": false,
+      "reason": "physlean_complexlorentztensor_contrpcoeff_basis: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_complexlorentztensor_actiont_cometric",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_complexlorentztensor_actiont_contrmetric",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_complexlorentztensor_actiont_dualleftmetric",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_complexlorentztensor_actiont_leftmetric",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_complexlorentztensor_actiont_rightmetric",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_complexlorentztensor_cometric_eq_ofrat",
+      "accepted": false,
+      "reason": "physlean_complexlorentztensor_cometric_eq_ofrat: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_complexlorentztensor_dualrightmetric_eq_basis",
+      "accepted": false,
+      "reason": "physlean_complexlorentztensor_dualrightmetric_eq_basis: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_complexlorentztensor_basis_eq_ofrat",
+      "accepted": false,
+      "reason": "physlean_complexlorentztensor_basis_eq_ofrat: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_complexlorentztensor_cocontrunit_eq_ofrat",
+      "accepted": false,
+      "reason": "physlean_complexlorentztensor_cocontrunit_eq_ofrat: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_complexlorentztensor_contrcounit_eq_ofrat",
+      "accepted": false,
+      "reason": "physlean_complexlorentztensor_contrcounit_eq_ofrat: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_complexlorentztensor_dualleftleftunit_eq_ofrat",
+      "accepted": false,
+      "reason": "physlean_complexlorentztensor_dualleftleftunit_eq_ofrat: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_complexlorentztensor_dualrightrightunit_eq_ofrat",
+      "accepted": false,
+      "reason": "physlean_complexlorentztensor_dualrightrightunit_eq_ofrat: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_complexlorentztensor_leftdualleftunit_eq_ofrat",
+      "accepted": false,
+      "reason": "physlean_complexlorentztensor_leftdualleftunit_eq_ofrat: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_complexlorentztensor_rightdualrightunit_eq_tensor_basis",
+      "accepted": false,
+      "reason": "physlean_complexlorentztensor_rightdualrightunit_eq_tensor_basis: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_componentidx_droppairsection_offinequiv_apply_snd",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_tensor_componentidx_droppairsection_offinequiv_apply_snd: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_actiont_frompairt",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_tensor_actiont_frompairt: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_actiont_fromtriplet",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_tensor_actiont_fromtriplet: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_frompairt_basis_repr",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_tensor_frompairt_basis_repr: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_frompairt_contr_frompairt_eq_frompairtcontr",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_tensor_frompairt_contr_frompairt_eq_frompairtcontr: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_frompairt_eq_pure",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_tensor_frompairt_eq_pure: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_frompairt_map_right",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_tensor_frompairt_map_right: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_frompairt_tmul",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_tensor_frompairt_tmul: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_fromsingletcontrfrompairt_tmul",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_tensor_fromsingletcontrfrompairt_tmul: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_fromtriplet_basis_repr",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_tensor_fromtriplet_basis_repr: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_fromtriplet_tmul",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_tensor_fromtriplet_tmul: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_crosstoslot_eq_crosstoend",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_tensor_crosstoslot_eq_crosstoend: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_pure_contrpcoeff_invariant",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_pure_contrp_update_add",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_fin_funpredpredabove_id",
+      "accepted": false,
+      "reason": "physlean_fin_funpredpredabove_id: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_fin_succsuccabove_natadd_image_range_castadd",
+      "accepted": false,
+      "reason": "physlean_fin_succsuccabove_natadd_image_range_castadd: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_crosstoend_round_trip_of_unit_slot",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_crosstoslot_crosstoslotinv",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_tensor_crosstoslot_crosstoslotinv: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_crosstoend_dual_metrictensor_metrictensor",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_pure_evalpcoeff_basisvector",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_pure_evalp_update_add",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_eq_sum_evalt",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_tensor_eq_sum_evalt: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_eq_sum_evalt_of_single_tensor_basis",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_evalt_evalt_basis",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_evalt_permt",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_evalt_prodt_right",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_reallorentztensor_levicivita_basis_repr_apply",
+      "accepted": false,
+      "reason": "physlean_reallorentztensor_levicivita_basis_repr_apply: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_euclidlevicivita_symbol_contract_one",
+      "accepted": false,
+      "reason": "physlean_euclidlevicivita_symbol_contract_one: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_euclidlevicivita_symbol_contract_two",
+      "accepted": false,
+      "reason": "physlean_euclidlevicivita_symbol_contract_two: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_euclidlevicivita_symbol_contract_zero",
+      "accepted": false,
+      "reason": "physlean_euclidlevicivita_symbol_contract_zero: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_tensorspecies_contrt_metrictensor_metrictensor",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_contrt_metrictensor_metrictensor: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_tensorspecies_frompairtcontr_metric_metric_eq_permt_unit",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_tensorspecies_permt_frompairtcontr_metric_metric",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_permt_frompairtcontr_metric_metric: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_lorentz_covector_basis_apply",
+      "accepted": false,
+      "reason": "physlean_lorentz_covector_basis_apply: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_lorentz_covector_basis_repr_apply",
+      "accepted": false,
+      "reason": "physlean_lorentz_covector_basis_repr_apply: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_lorentz_covector_inner_eq_equiveuclid",
+      "accepted": false,
+      "reason": "physlean_lorentz_covector_inner_eq_equiveuclid: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_lorentz_covector_rep_injective",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_covector_actionclm_apply",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_covector_smul_add",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_covector_smul_eq_sum",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_covector_smul_sub",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_covector_smul_zero",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_reallorentztensor_actiont_contrmetric",
+      "accepted": false,
+      "reason": "physlean_reallorentztensor_actiont_contrmetric: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_reallorentztensor_cometric_repr_apply_eq_minkowskimatrix",
+      "accepted": false,
+      "reason": "physlean_reallorentztensor_cometric_repr_apply_eq_minkowskimatrix: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_reallorentztensor_contrmetric_repr_apply_eq_minkowskimatrix",
+      "accepted": false,
+      "reason": "physlean_reallorentztensor_contrmetric_repr_apply_eq_minkowskimatrix: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_lorentz_precometricval_expand_tmul",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_precontrmetricval_expand_tmul",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_covector",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Lorentz.CoVector"
+    },
+    {
+      "id": "physlean_reallorentztensor_complexify_prod",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_reallorentztensor_isreindexing_prodtcolortocomplex",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_reallorentztensor_tocomplex_contrp_basisvector",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_reallorentztensor_tocomplex_pure",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_precocontrunitval_expand_tmul",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_precontrcounitval_expand_tmul",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_vector_basis_apply",
+      "accepted": false,
+      "reason": "physlean_lorentz_vector_basis_apply: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_lorentz_vector_basis_inner",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_vector_basis_repr_apply",
+      "accepted": false,
+      "reason": "physlean_lorentz_vector_basis_repr_apply: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_lorentz_vector_inner_basis",
+      "accepted": false,
+      "reason": "physlean_lorentz_vector_inner_basis: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_lorentz_vector_causallyfollows_zero_add_of_causallyfollows",
+      "accepted": false,
+      "reason": "physlean_lorentz_vector_causallyfollows_zero_add_of_causallyfollows: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_lorentz_vector_minkowskiproduct_add_self",
+      "accepted": false,
+      "reason": "physlean_lorentz_vector_minkowskiproduct_add_self: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_lorentz_vector_minkowskiproduct_self_le_timecomponent_sq",
+      "accepted": false,
+      "reason": "physlean_lorentz_vector_minkowskiproduct_self_le_timecomponent_sq: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_lorentz_vector_minkowskiproduct_tocoord_minkowskimatrix",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_continuous_contr",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_contrcontrcontractfield_root",
+      "accepted": false,
+      "reason": "完全限定定理名不唯一: Lorentz.contrContrContractField._root_"
+    },
+    {
+      "id": "physlean_lorentz_contrcontrcontractfield_nondegenerate",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_contrmod_ext",
+      "accepted": false,
+      "reason": "physlean_lorentz_contrmod_ext: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_lorentz_contrmod_mulvec_mulvec",
+      "accepted": false,
+      "reason": "physlean_lorentz_contrmod_mulvec_mulvec: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_lorentz_contrmod_val_smul",
+      "accepted": false,
+      "reason": "physlean_lorentz_contrmod_val_smul: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_lorentz_vector_rep_injective",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_vector_actionclm_surjective",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_vector_neg_smul",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_vector_smul_add",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_vector_smul_eq_sum",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_vector_smul_sub",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_vector_smul_zero",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_lorentz_vector_tensor_basis_repr_totensor_apply",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_tensorspecies_tensor_isreindexing_succsuccabove_succabove_comm",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_tensor_isreindexing_succsuccabove_succabove_comm: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_tensorspecies_tensorial_self_totensor_apply",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_tensorspecies_tensorial_smullinearmap_apply",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_tensorspecies_tensorial_smul_totensor_symm",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_tensorspecies_tensorial_totensor_tprod",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_tensorspecies_unittensor_congr",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_tensorspecies_unittensor_eq_permt_dual",
+      "accepted": false,
+      "reason": "physlean_tensorspecies_unittensor_eq_permt_dual: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_classicalmechanics_referenceframe_vector_inner_euclidean_if_orthonormal",
+      "accepted": true,
+      "error_category": "typeclass"
+    },
+    {
+      "id": "physlean_classicalmechanics_referenceframe_vector_norm_euclidean_if_orthonormal",
+      "accepted": false,
+      "reason": "physlean_classicalmechanics_referenceframe_vector_norm_euclidean_if_orthonormal: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_space_eq_grad_integral_of_curl_zero",
+      "accepted": false,
+      "reason": "physlean_space_eq_grad_integral_of_curl_zero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_space_contdiff_grad",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_space_radialangularmeasure_closedball",
+      "accepted": false,
+      "reason": "physlean_space_radialangularmeasure_closedball: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_lengthunit_furlongs_div_yards",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_lengthunit_miles_div_yards",
+      "accepted": false,
+      "reason": "physlean_lengthunit_miles_div_yards: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_space_eval_contdiff",
+      "accepted": false,
+      "reason": "physlean_space_eval_contdiff: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_space_modeldiffeo_apply",
+      "accepted": false,
+      "reason": "physlean_space_modeldiffeo_apply: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_space_distdiv_inv_pow_eq_dim",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_space_distlaplacian_fundamentalsolution_norm_zpow",
+      "accepted": false,
+      "reason": "physlean_space_distlaplacian_fundamentalsolution_norm_zpow: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_space_gradient_dist_normpowerseries_log_tendsto",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "physlean_space_gradient_dist_normpowerseries_log_tendsto_distgrad_norm",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_spacetime_det_timespacebasisequiv",
+      "accepted": false,
+      "reason": "physlean_spacetime_det_timespacebasisequiv: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_spacetime_space_tocoord_symm",
+      "accepted": false,
+      "reason": "physlean_spacetime_space_tocoord_symm: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_spacetime_space_totimeandspace_symm",
+      "accepted": false,
+      "reason": "physlean_spacetime_space_totimeandspace_symm: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_spacetime_timespacebasis_apply_inr",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_spacetime_totimeandspace_basis_inr",
+      "accepted": false,
+      "reason": "physlean_spacetime_totimeandspace_basis_inr: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_spacetime_totimeandspace_symm_apply_time_space",
+      "accepted": false,
+      "reason": "physlean_spacetime_totimeandspace_symm_apply_time_space: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_spacetime_totimeandspace_symm_fderiv",
+      "accepted": false,
+      "reason": "physlean_spacetime_totimeandspace_symm_fderiv: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_spacetime_deriv_eq_manifoldderiv",
+      "accepted": false,
+      "reason": "physlean_spacetime_deriv_eq_manifoldderiv: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_time_val_injective",
+      "accepted": false,
+      "reason": "physlean_time_val_injective: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_time_deriv_comp_neg",
+      "accepted": false,
+      "reason": "physlean_time_deriv_comp_neg: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_time_deriv_comp_torealcle_of_hasderivat",
+      "accepted": false,
+      "reason": "physlean_time_deriv_comp_torealcle_of_hasderivat: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_time_deriv_const",
+      "accepted": false,
+      "reason": "physlean_time_deriv_const: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_time_deriv_contdiff_of_contdiff",
+      "accepted": false,
+      "reason": "physlean_time_deriv_contdiff_of_contdiff: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_time_deriv_contdiff_of_space",
+      "accepted": false,
+      "reason": "physlean_time_deriv_contdiff_of_space: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_time_deriv_eq",
+      "accepted": false,
+      "reason": "physlean_time_deriv_eq: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_time_deriv_eq_manifoldderiv",
+      "accepted": false,
+      "reason": "physlean_time_deriv_eq_manifoldderiv: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_time_deriv_space",
+      "accepted": false,
+      "reason": "physlean_time_deriv_space: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_time_differentiable_euclid",
+      "accepted": false,
+      "reason": "physlean_time_differentiable_euclid: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_time_manifoldderiv_const",
+      "accepted": false,
+      "reason": "physlean_time_manifoldderiv_const: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_timetransman_diff_fst_surjective",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_timetransman_neg_eq_negmetric",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_timeunit_days_div_hours",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_timeunit_days_div_minutes",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_timeunit_weeks_div_hours",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_timeunit_weeks_div_minutes",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_space_integrable_time_integral",
+      "accepted": false,
+      "reason": "physlean_space_integrable_time_integral: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_space_iteratedfderiv_integrable",
+      "accepted": false,
+      "reason": "physlean_space_iteratedfderiv_integrable: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_space_time_integral_hasfderivat",
+      "accepted": false,
+      "reason": "physlean_space_time_integral_hasfderivat: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_canonicalensemble_energyvariance_eq_meansquareenergy_sub_meanenergy_sq",
+      "accepted": false,
+      "reason": "physlean_canonicalensemble_energyvariance_eq_meansquareenergy_sub_meanenergy_sq: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_canonicalensemble_heatcapacity_eq_deriv_meanenergybeta",
+      "accepted": false,
+      "reason": "physlean_canonicalensemble_heatcapacity_eq_deriv_meanenergybeta: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_canonicalensemble_twostate_meanenergy_eq",
+      "accepted": false,
+      "reason": "physlean_canonicalensemble_twostate_meanenergy_eq: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_idealgas_partitionz_eq",
+      "accepted": false,
+      "reason": "physlean_idealgas_partitionz_eq: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_ftheory_su5_quanta_tocharges_of_mem_liftcharge",
+      "accepted": false,
+      "reason": "physlean_ftheory_su5_quanta_tocharges_of_mem_liftcharge: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_dimensionful",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: Dimensionful"
+    },
+    {
+      "id": "physlean_ltmctunitchoices_si_temperature",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_ltmctunitchoices_dimscale_symm",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_ltmctunitchoices_dimscale_transitive",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_dimension_ext",
+      "accepted": true,
+      "error_category": "compile_error"
+    },
+    {
+      "id": "physlean_dimension_inv_exponent",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "physlean_dimension_mul_exponent",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "physlean_dimension_one_exponent",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "physlean_dimension_single_exponent",
+      "accepted": false,
+      "reason": "physlean_dimension_single_exponent: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitexamples_energymass_isdimensionallycorrect",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_fderiv_dimension_const_direction",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_dimension_fromisqhom_comp_toisqhom",
+      "accepted": false,
+      "reason": "physlean_dimension_fromisqhom_comp_toisqhom: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_dimension_toisqhom_injective",
+      "accepted": false,
+      "reason": "physlean_dimension_toisqhom_injective: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_integral_isdimensionallycorrect",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_dimension_div_charge",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_dimension_div_length",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_dimension_div_mass",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_dimension_div_temperature",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_dimension_div_time",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_dimension_inv_temperature",
+      "accepted": false,
+      "reason": "physlean_dimension_inv_temperature: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_dimension_npow_charge",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_dimension_npow_length",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_dimension_npow_mass",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_dimension_npow_temperature",
+      "accepted": false,
+      "reason": "physlean_dimension_npow_temperature: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_dimension_npow_time",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_unitscale_ratio_ne_zero",
+      "accepted": true,
+      "error_category": "typeclass"
+    },
+    {
+      "id": "physlean_dmul",
+      "accepted": false,
+      "reason": "physlean_dmul: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_dimensionful_2",
+      "accepted": true,
+      "error_category": "type_mismatch"
+    },
+    {
+      "id": "physlean_ltmctunitchoices",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: LTMCTUnitChoices"
+    },
+    {
+      "id": "physlean_ltmctunitchoices_dimscale_eq_toscale_dimscale",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_dimarea_acre_in_si",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_dimarea_hectare_in_si",
+      "accepted": false,
+      "reason": "physlean_dimarea_hectare_in_si: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_dimarea_squarefoot_in_si",
+      "accepted": false,
+      "reason": "physlean_dimarea_squarefoot_in_si: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_dimarea_squaremeter_in_si",
+      "accepted": false,
+      "reason": "physlean_dimarea_squaremeter_in_si: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_withdim_scaleunit_val",
+      "accepted": true,
+      "error_category": "typeclass"
+    },
+    {
+      "id": "physlean_withdim_smul_val",
+      "accepted": false,
+      "reason": "physlean_withdim_smul_val: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_dimspeed_onekilometerperhour_eq_mul_oneknot",
+      "accepted": false,
+      "reason": "physlean_dimspeed_onekilometerperhour_eq_mul_oneknot: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_dimspeed_onekilometerperhour_in_si",
+      "accepted": false,
+      "reason": "physlean_dimspeed_onekilometerperhour_in_si: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_dimspeed_oneknot_eq_mul_onekilometerperhour",
+      "accepted": false,
+      "reason": "physlean_dimspeed_oneknot_eq_mul_onekilometerperhour: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_dimspeed_onemeterpersecond_in_si",
+      "accepted": false,
+      "reason": "physlean_dimspeed_onemeterpersecond_in_si: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_dimspeed_onemileperhour_in_si",
+      "accepted": false,
+      "reason": "physlean_dimspeed_onemileperhour_in_si: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_dimspeed_speedoflight_in_si",
+      "accepted": false,
+      "reason": "physlean_dimspeed_speedoflight_in_si: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_apply_centered_mul_centered",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_apply_centered_mul_centered: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_bracket_centered",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_bracket_centered: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_centered_cauchy_schwarz",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_centered_cauchy_schwarz: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_robertson",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_robertson: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_robertson_eq_iff_gram_zero_and_covariance_zero",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_robertson_eq_iff_gram_zero_and_covariance_zero: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_instrument_coe_measurement_effects",
+      "accepted": false,
+      "reason": "physlean_instrument_coe_measurement_effects: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_instrument_conditionalstate_apply",
+      "accepted": false,
+      "reason": "physlean_instrument_conditionalstate_apply: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_isnormal",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_isnormal: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_isnormal_id",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_isnormal_id: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_effect_nonneg_add_eq_zero",
+      "accepted": false,
+      "reason": "physlean_effect_nonneg_add_eq_zero: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_effectvaluedmeasure_integral_smul",
+      "accepted": false,
+      "reason": "physlean_effectvaluedmeasure_integral_smul: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_effectvaluedmeasure_orderunitnorm_simpleintegral_sub_le",
+      "accepted": false,
+      "reason": "physlean_effectvaluedmeasure_orderunitnorm_simpleintegral_sub_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_isarchimedeanorderunit_orderunitnorm_add_le",
+      "accepted": false,
+      "reason": "physlean_isarchimedeanorderunit_orderunitnorm_add_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_isarchimedeanorderunit_orderunitnorm_eq_zero_iff",
+      "accepted": false,
+      "reason": "physlean_isarchimedeanorderunit_orderunitnorm_eq_zero_iff: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_operation_apply_one_le_one",
+      "accepted": false,
+      "reason": "physlean_operation_apply_one_le_one: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_optimalsuccessprob_eq",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_optimalsuccessprob_eq: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_weight_isstate",
+      "accepted": false,
+      "reason": "physlean_weight_isstate: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_selfadjoint_jordanmul_add_left",
+      "accepted": false,
+      "reason": "physlean_selfadjoint_jordanmul_add_left: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_selfadjoint_jordanmul_add_right",
+      "accepted": false,
+      "reason": "physlean_selfadjoint_jordanmul_add_right: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_selfadjoint_jordanmul_comm",
+      "accepted": false,
+      "reason": "physlean_selfadjoint_jordanmul_comm: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_selfadjoint_mul_def",
+      "accepted": false,
+      "reason": "physlean_selfadjoint_mul_def: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_selfadjoint_isselfadjoint_mul_iff_commute",
+      "accepted": false,
+      "reason": "physlean_selfadjoint_isselfadjoint_mul_iff_commute: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_apply_mul_comm_eq_star",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_apply_mul_comm_eq_star: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_apply_observable_eq_expectation",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_apply_observable_eq_expectation: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_centered_add_smul_one",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_centered_add_smul_one: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_covariance_add_smul_one_left",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_covariance_add_smul_one_left: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_covariance_add_smul_one_right",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_covariance_add_smul_one_right: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_covariance_comm",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_covariance_comm: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_covariance_self",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_covariance_self: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_expectation_centered",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_expectation_centered: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_expectation_nonneg",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_expectation_nonneg: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_expectation_one",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_expectation_one: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalpositivelinearmap_variance_eq_re_apply_centered_mul_self",
+      "accepted": false,
+      "reason": "physlean_unitalpositivelinearmap_variance_eq_re_apply_centered_mul_self: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_coercive_of_posdef",
+      "accepted": false,
+      "reason": "physlean_coercive_of_posdef: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_coercive_of_posdefhalf",
+      "accepted": false,
+      "reason": "physlean_coercive_of_posdefhalf: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_twohiggsdoublet_ofu1subgroup_smul_slicehiggs",
+      "accepted": false,
+      "reason": "physlean_twohiggsdoublet_ofu1subgroup_smul_slicehiggs: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_twohiggsdoublet_exists_smul_eq_rephiggs",
+      "accepted": true,
+      "error_category": "unknown_identifier"
+    },
+    {
+      "id": "physlean_probabilityof_eq_poisson_c",
+      "accepted": false,
+      "reason": "physlean_probabilityof_eq_poisson_c: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_onbpart_inner",
+      "accepted": false,
+      "reason": "physlean_onbpart_inner: 历史证明没有形成稳定的 Lean 证明失败 (ok=False, timed_out=True, returncode=None)"
+    },
+    {
+      "id": "physlean_stinespringform_eq",
+      "accepted": true,
+      "error_category": "unsolved_goals"
+    },
+    {
+      "id": "physlean_stinespringgeneralform_works",
+      "accepted": false,
+      "reason": "physlean_stinespringgeneralform_works: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_stinespringop_adjoint_mul_self",
+      "accepted": false,
+      "reason": "physlean_stinespringop_adjoint_mul_self: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_stinespringop_apply",
+      "accepted": false,
+      "reason": "physlean_stinespringop_apply: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_tracefree_version",
+      "accepted": false,
+      "reason": "physlean_tracefree_version: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitaryform_of_general",
+      "accepted": false,
+      "reason": "physlean_unitaryform_of_general: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitaryform_of_general_e",
+      "accepted": false,
+      "reason": "physlean_unitaryform_of_general_e: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_hpmap_apply_hermitianmat_eq",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_pmap_apply_hermitianmat_eq",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_cptpmap_isunitary_iff_uconj",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_matrixmap_dual",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_matrixmap_map_choi_inv",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_pinching_idempotent",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_pinching_kraus_ortho",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_matrixmap_cp_subunital_kadison_schwarz",
+      "accepted": false,
+      "reason": "physlean_matrixmap_cp_subunital_kadison_schwarz: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_matrixmap_of_kraus_cp",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_probdistribution_expect_val_eq_mixable_mix",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_probdistribution_map_congr_eq_congr_map",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_mixable_instpi",
+      "accepted": false,
+      "reason": "physlean_mixable_instpi: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_mixable_mix_zero",
+      "accepted": false,
+      "reason": "physlean_mixable_mix_zero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_prob_le_neglog_of_le_exp",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_prob_neglog_ne_top",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_prob_neglog_one",
+      "accepted": false,
+      "reason": "physlean_prob_neglog_one: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_prob_neglog_pos_ennreal",
+      "accepted": false,
+      "reason": "physlean_prob_neglog_pos_ennreal: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_prob_neglog_pos_real",
+      "accepted": false,
+      "reason": "physlean_prob_neglog_pos_real: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_sandwichedrenyientropy_dpi_gt_one",
+      "accepted": false,
+      "reason": "physlean_sandwichedrenyientropy_dpi_gt_one: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_sandwichedrenyientropy_mono_traceright",
+      "accepted": false,
+      "reason": "定理名不唯一，请使用完全限定名称: sandwichedRenyiEntropy_mono_traceRight"
+    },
+    {
+      "id": "physlean_sandwichedtracefunctional_mono_traceright",
+      "accepted": false,
+      "reason": "physlean_sandwichedtracefunctional_mono_traceright: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_sandwichedtracefunctional_pos",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_frontier_singleton",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_inner_log_sub_log_nonneg",
+      "accepted": false,
+      "reason": "physlean_inner_log_sub_log_nonneg: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_qrelativeent_additive",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_qrelativeent_ker",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_qrelativeent_lowersemicontinuous_2",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_sandwichedrelrentropy_relabel",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_sandwichedrelrentropy_self",
+      "accepted": false,
+      "reason": "禁止的本机执行构造：候选包含不允许的 Lean 元编程、本机执行入口或 unsafe 声明"
+    },
+    {
+      "id": "physlean_v_rho_conj_mul_self_eq",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_continuouson_complexlaplacetransform_interior_convergencedomain",
+      "accepted": false,
+      "reason": "physlean_continuouson_complexlaplacetransform_interior_convergencedomain: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_hilbertschmidtoperatorspace_leftmulhs_pdset",
+      "accepted": false,
+      "reason": "physlean_hilbertschmidtoperatorspace_leftmulhs_pdset: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_jensenoperatorinequality_theorem_2_5_2_i_ici_all_imp_v",
+      "accepted": false,
+      "reason": "physlean_jensenoperatorinequality_theorem_2_5_2_i_ici_all_imp_v: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_jensenoperatorinequality_theorem_2_5_2_iv_imp_v",
+      "accepted": false,
+      "reason": "physlean_jensenoperatorinequality_theorem_2_5_2_iv_imp_v: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_jensenoperatorinequality_theorem_2_5_2_i_all_imp_iv",
+      "accepted": false,
+      "reason": "physlean_jensenoperatorinequality_theorem_2_5_2_i_all_imp_iv: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_jensenoperatorinequality_theorem_2_5_2_i_ici_all_imp_iv",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "physlean_liebandotrace_liebtrace_jointlyconcaveon_pdset",
+      "accepted": false,
+      "reason": "physlean_liebandotrace_liebtrace_jointlyconcaveon_pdset: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_liebandotrace_liebtrace_jointlyconvexon_pdset",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "physlean_liebandotrace_pdset_convexcombo",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "physlean_hermitianmat_conjlinear_apply",
+      "accepted": false,
+      "reason": "physlean_hermitianmat_conjlinear_apply: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_hermitianmat_conj_zero",
+      "accepted": false,
+      "reason": "physlean_hermitianmat_conj_zero: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_hermitianmat_continuouson_iff_coe",
+      "accepted": false,
+      "reason": "physlean_hermitianmat_continuouson_iff_coe: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_hermitianmat_diagonal_mul",
+      "accepted": false,
+      "reason": "physlean_hermitianmat_diagonal_mul: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_hermitianmat_cfc_nonsingular",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_hermitianmat_cfc_pos_of_pos",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_hermitianmat_continuouson_cfc_fun",
+      "accepted": false,
+      "reason": "physlean_hermitianmat_continuouson_cfc_fun: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_hermitianmat_continuouson_cfc_of_compact",
+      "accepted": false,
+      "reason": "physlean_hermitianmat_continuouson_cfc_of_compact: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_hermitianmat_continuouson_finite",
+      "accepted": false,
+      "reason": "physlean_hermitianmat_continuouson_finite: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_hermitianmat_continuouswithinat_cfc_of_continuouson",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "physlean_hermitianmat_dist_lt_of_continuous",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_hermitianmat_spectrum_subset_closedball",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "physlean_hermitianmat_compoundhermitian_nonneg",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_hermitianmat_root",
+      "accepted": false,
+      "reason": "physlean_hermitianmat_root: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_hermitianmat_symmmul_comm",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_hermitianmat_symmmul_zero",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_hermitianmat_trace_conj_rpow_concave",
+      "accepted": false,
+      "reason": "physlean_hermitianmat_trace_conj_rpow_concave: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_hermitianmat_logapprox_mono",
+      "accepted": false,
+      "reason": "physlean_hermitianmat_logapprox_mono: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_hermitianmat_log_concave",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_hermitianmat_ker_sum",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_hermitianmat_peierls_inequality_ici",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_hermitianmat_trace_function_convex_univ",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_hermitianmat_projector_eq_sum_rankone",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_hermitianmat_projector_ker",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_hermitianmat_conj_submatrix",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_hermitianmat_ker_reindex_le_iff",
+      "accepted": false,
+      "reason": "physlean_hermitianmat_ker_reindex_le_iff: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_hermitianmat_ker_rpow_le_of_nonneg",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_hermitianmat_trace_eq_one_iff",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_hermitianmat_le_conj_unitary",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_isup_mono_bot",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_exists_liminf_zero_of_forall_liminf_limsup_le_with_ub",
+      "accepted": false,
+      "reason": "physlean_exists_liminf_zero_of_forall_liminf_limsup_le_with_ub: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_exists_seq_bound",
+      "accepted": false,
+      "reason": "physlean_exists_seq_bound: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_exists_strictmono_seq_le",
+      "accepted": false,
+      "reason": "physlean_exists_strictmono_seq_le: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_extracted_limsup_inequality",
+      "accepted": false,
+      "reason": "physlean_extracted_limsup_inequality: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_liminf_le_of_block_sequence_witnesses",
+      "accepted": false,
+      "reason": "physlean_liminf_le_of_block_sequence_witnesses: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_limsup_le_of_block_sequence_bound",
+      "accepted": false,
+      "reason": "physlean_limsup_le_of_block_sequence_bound: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_compoundmatrix_conjtranspose",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_compoundmatrix_diagonal",
+      "accepted": false,
+      "reason": "physlean_compoundmatrix_diagonal: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_compoundmatrix_mul",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_prod_singularvalues_subset_le_sorted_prod",
+      "accepted": false,
+      "reason": "候选试图修改资源、跟踪或编译器选项"
+    },
+    {
+      "id": "physlean_rpow_preserves_weak_log_maj",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_singularvalues_compoundmatrix_rev",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_matrix_cfc_diagonal",
+      "accepted": false,
+      "reason": "physlean_matrix_cfc_diagonal: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_matrix_fromblocks_gram_possemidef",
+      "accepted": false,
+      "reason": "physlean_matrix_fromblocks_gram_possemidef: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_matrix_exists_svd_sqrt_eigenvalues",
+      "accepted": false,
+      "reason": "physlean_matrix_exists_svd_sqrt_eigenvalues: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_matrix_singularvalues_le_opnorm",
+      "accepted": false,
+      "reason": "physlean_matrix_singularvalues_le_opnorm: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_matrix_tracenorm_add_le",
+      "accepted": false,
+      "reason": "physlean_matrix_tracenorm_add_le: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_matrix_tracenorm_conjtranspose",
+      "accepted": false,
+      "reason": "physlean_matrix_tracenorm_conjtranspose: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_matrix_tracenorm_mul_le_opnorm_tracenorm",
+      "accepted": false,
+      "reason": "physlean_matrix_tracenorm_mul_le_opnorm_tracenorm: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_sion_minimax",
+      "accepted": false,
+      "reason": "physlean_sion_minimax: 历史证明没有形成稳定的 Lean 证明失败 (ok=True, timed_out=False, returncode=0)"
+    },
+    {
+      "id": "physlean_povm_measurementmap_apply_matrix",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_mstate_no_cloning",
+      "accepted": false,
+      "reason": "physlean_mstate_no_cloning: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_unitalfreestatetheory_relativeentresource_ne_top",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_optimalhypothesisrate_rate_continuous_singleton",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_ensemble_mix_mensemble_pure_average",
+      "accepted": false,
+      "reason": "physlean_ensemble_mix_mensemble_pure_average: 修复后证明不能独立通过当前固定环境"
+    },
+    {
+      "id": "physlean_ensemble_mix_mensemble_pure_iff_pure",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_ensemble_trivial_mensemble_mix",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_ensemble_trivial_pensemble_mix",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_convex_roof_of_pure",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_mixed_convex_roof_le_convex_roof",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_mstate_pureq_injective",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    },
+    {
+      "id": "physlean_mstate_pure_apply",
+      "accepted": false,
+      "reason": "候选试图注入额外 Lean 命令"
+    }
+  ],
+  "selection_policy": "all candidates passing the preregistered real-repair compile gate"
+}

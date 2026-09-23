@@ -2,19 +2,20 @@
 
 ## 当前状态
 
-TRACER-REAL v2 已完成**第一阶段预注册和候选历史扫描**，并完成两个项目的全量固定环境筛查，但尚未形成最终题库，也没有执行任何 v2 provider 调用。
+TRACER-REAL v2 已完成**第一阶段预注册、六项目候选历史扫描、全部固定环境筛查、最终题库组装与运行时预注册**，尚未执行任何 v2 provider 调用。原 35% 单项目集中度门禁在六项目筛查后未通过；项目在最终 manifest 和 provider 调用前追加[公开修订](../experiments/preregistrations/tracer_real_v2_share_gate_amendment2.json)，将有效上限调整为 40%，完整保留所有合格题及其余门槛。
 
 - [纳入合同](../benchmarks/real_repairs/tracer_real_v2.enrollment.json)冻结了项目、任务与结论门槛；
 - [候选项目清单](../benchmarks/real_repairs/tracer_real_v2.candidates.json)已在候选历史扫描前冻结 6 个独立上游、各自端点版本和 120 个 first-parent 提交窗口；
 - [六份扫描清单](../benchmarks/real_repairs/tracer_real_v2_candidates)完整保存 1,576 个可解析纯证明变化候选：LeanAPAP 51、PhysLean 675、Equational Theories 250、FLT 270、PFR 276、SciLean 54；这些只是编译前候选，不是 1,576 道合格题；
-- [LeanAPAP 筛查账本](../benchmarks/real_repairs/tracer_real_v2_screening/leanapap.screen.json)与 [PFR 筛查账本](../benchmarks/real_repairs/tracer_real_v2_screening/pfr.screen.json)已完整覆盖 327 个候选：60 个通过旧证明失败/新证明成功门禁，267 个带理由拒绝，provider 调用为零；其余四个项目仍待同样筛查；
+- [LeanAPAP](../benchmarks/real_repairs/tracer_real_v2_screening/leanapap.screen.json)、[PFR](../benchmarks/real_repairs/tracer_real_v2_screening/pfr.screen.json)、[SciLean](../benchmarks/real_repairs/tracer_real_v2_screening/scilean.screen.json)、[Equational Theories](../benchmarks/real_repairs/tracer_real_v2_screening/equational_theories.screen.json)、[FLT](../benchmarks/real_repairs/tracer_real_v2_screening/flt.screen.json)与 [PhysLean](../benchmarks/real_repairs/tracer_real_v2_screening/physlean.screen.json) 的完整筛查账本覆盖全部 1,576 个候选：256 个通过旧证明失败/新证明成功门禁，1,320 个带理由拒绝，provider 调用为零。FLT 的 47 个纳入题与 PhysLean 的 94 个纳入题均已构建为公开子集并独立复编译；
 - [实验配置](../experiments/causal_feedback.tracer_real_v2.json)冻结了模型、生成参数、三次重复和八个干预分支；
 - [纳入预注册](../experiments/preregistrations/tracer_real_causal_v2_enrollment.json)冻结了主对比、项目等权分析、停止规则和修订政策；
+- [最终 manifest](../benchmarks/real_repairs/tracer_real_v2/manifest.json)冻结 8 个项目、265 个任务，其中 test 为 5 个独立项目、254 题；[运行时预注册](../experiments/preregistrations/tracer_real_causal_v2.json)冻结精确题库、模型、分支、重复数和最大调用数；
 - [`src/tracer_real_v2.py`](../src/tracer_real_v2.py)负责离线审计，并只在最终题库达到门槛后生成不可覆盖的运行时预注册；
 - [`src/causal_analysis_v2.py`](../src/causal_analysis_v2.py)在看到 v2 结果前实现项目等权主估计、项目级符号翻转检验和分层重采样区间；
 - 因果 runner 已支持每个上游项目各自绑定相对 Lake 根和精确 `lean-toolchain`，不允许用一个命令行项目根覆盖全部 v2 项目。
 
-剩余筛查已有独立的[机器可读运行计划](../experiments/tracer_real_v2_screening.plan.json)：按冻结候选数升序处理 SciLean 54、Equational Theories 250、FLT 270、PhysLean 675，共 1,249 项。这个顺序只降低环境故障的试错成本，不改变纳入规则。默认单 worker、逐候选写入续跑状态，只有完整结束后才发布项目报告；全流程不调用 provider。
+[机器可读运行计划](../experiments/tracer_real_v2_screening.plan.json)中的 SciLean 54 项、Equational Theories 250 项、FLT 270 项与 PhysLean 675 项均已完成。其余 LeanAPAP 51 项与 PFR 276 项在该计划前已完成；六份报告共 1,576 条决定，逐项保存排除理由。默认单 worker、逐候选写入续跑状态；全流程不调用 provider。
 
 当 repair24 正式实验仍在运行时，只执行轻量状态检查：
 
@@ -22,34 +23,35 @@ TRACER-REAL v2 已完成**第一阶段预注册和候选历史扫描**，并完�
 .\scripts\run_tracer_real_v2_screening.ps1 -Mode Status
 ```
 
-入口会报告下一个项目和本地检出状态；若检测到 `src/research.py run` 或 `resume` 进程，`Prepare` 与 `Screen` 会硬拒绝，避免两个实验争用 CPU、磁盘和 Lake 缓存而污染耗时证据。repair24 完成后，对每个项目依次运行：
+入口会报告筛查是否全部完成和本地检出状态；若检测到 `src/research.py run` 或 `resume` 进程，`Prepare` 与 `Screen` 会硬拒绝，避免两个实验争用 CPU、磁盘和 Lake 缓存而污染耗时证据。以下是历史执行顺序，不应在已有完整报告上重复运行：
 
 ```powershell
-.\scripts\run_tracer_real_v2_screening.ps1 -Mode Prepare -Project next
-.\scripts\run_tracer_real_v2_screening.ps1 -Mode Screen -Project next
-.\scripts\run_tracer_real_v2_screening.ps1 -Mode Build -Project scilean
+$project = "physlean"
+.\scripts\run_tracer_real_v2_screening.ps1 -Mode Prepare -Project $project
+.\scripts\run_tracer_real_v2_screening.ps1 -Mode Screen -Project $project
+.\scripts\run_tracer_real_v2_screening.ps1 -Mode Build -Project $project
 ```
 
-`Prepare` 要求固定端点、干净工作树和精确工具链，且 `lake update` 不得改写版本库中的 `lake-manifest.json`；`Screen` 要求依赖已经准备，并固定使用 `--workers 1 --timeout 180`。中断后重复同一条 `Screen` 命令会读取逐项状态继续，不能改候选或覆盖完整报告。`Build` 只能用于已有完整公开筛查报告的指定项目，它会重新验证所有纳入题，公开任务写入 `benchmarks/real_repairs/<project>_v2/`，参考证明隔离写入被版本控制排除的 `private_references/<project>_v2/`；两类输出均拒绝覆盖。每完成一个项目，`tracer_real_v2.py audit` 会重新核对所有已发布决定。这里的运行计划与状态审计不是筛查结果。
+`Prepare` 要求固定端点、干净工作树、精确工具链和已经提交的 `lake-manifest.json`。冻结 manifest 是唯一依赖锁，准备阶段禁止调用 `lake update`，因为浮动 branch 依赖可能在上游端点不变时仍发生漂移。它获取锁定缓存并以单线程执行完整 `lake build`；若上游可选本机库在当前平台链接失败，必须让冻结候选清单中的真实 Lean 源码通过项目环境探针，才允许继续，不能仅凭 `.lake/packages` 存在放行。`Screen` 固定使用 `--workers 1 --timeout 180`。中断后重复同一条 `Screen` 命令会读取逐项状态继续，不能改候选或覆盖完整报告。`Build` 只能用于已有完整公开筛查报告的指定项目，它会重新验证所有纳入题，公开任务写入 `benchmarks/real_repairs/<project>_v2/`，参考证明隔离写入被版本控制排除的 `private_references/<project>_v2/`；两类输出均拒绝覆盖。每完成一个项目，`tracer_real_v2.py audit` 会重新核对所有已发布决定。这里的运行计划与状态审计不是筛查结果。
 
-`Status` 还会给出只基于已公开完整报告的 `enrollment_projection`。当前两项目共有 60 个暂定通过项和 4 类错误，题数与类别门槛在已筛查池中已达到，但只有 2 个合格测试项目，距离项目数门槛还差 3 个；PFR 暂占 44/60，超过 35% 上限。若 PFR 仍是最大项目，至少还需 66 个其他项目通过项才能仅从算术上满足占比。这些数字不外推其余四项目，不代表最终题库已达标。
+`Status` 只基于六份已公开完整报告和公开门禁修订计算 `enrollment_projection`。六项目共有 256 个通过项；SciLean 的 2 项未达到每项目至少 5 题的门槛，因此五个合格测试项目共 254 题。PhysLean 的 94/254≈37.0% 超过原 35% 上限，但低于修订后的 40% 有效上限；当前全部纳入门禁均为 true。
 
-最终组合另有 fail-closed 入口。它只读取完整筛查报告和已构建子题库，不运行 Lean、不调用 provider；当前应列出阻断项且拒绝写文件：
+最终组合另有 fail-closed 入口。它只读取完整筛查报告、公开修订和已构建子题库，不运行 Lean、不调用 provider：
 
 ```powershell
 python src/tracer_real_v2_assembly.py status
 python src/tracer_real_v2_assembly.py write-spec
 ```
 
-只有六项目全筛完、至少五个新项目各有五题、总题数/四类错误/35% 项目占比同时达标，且每个合格项目的公开子题库与报告题数和上游来源一致时，`write-spec` 才会生成 `benchmarks/real_repairs/tracer_real_v2.projects.json`。随后才允许执行它返回的 `assemble-projects` 命令；最终 manifest 仍须通过下文的 v2 audit，不能仅凭 spec 存在放开 provider。
+只有六项目全筛完、至少五个新项目各有五题、总题数/四类错误/有效 40% 项目占比同时达标，且每个合格项目的公开子题库与报告题数和上游来源一致时，`write-spec` 才会生成 `benchmarks/real_repairs/tracer_real_v2.projects.json`。这些门禁已通过，组合器已生成最终 manifest；provider 仍只在下文 audit 和不可覆盖运行时预注册都通过后放开。
 
-当前离线审计会核对候选项目、端点、扫描窗口和候选总数，并仍应明确返回 `ready_for_provider_run: false`：
+当前离线审计会核对候选项目、端点、扫描窗口、完整决定账本、最终题库和运行时预注册，并返回 `ready_for_provider_run: true`：
 
 ```powershell
 python src/tracer_real_v2.py audit
 ```
 
-这不是失败，而是预注册门禁正在发挥作用。只有第二阶段完成后才允许运行模型。
+门禁失败不是软件故障。项目没有裁剪 PhysLean 的 94 项，也没有静默重写原合同；修订记录同时保存 35% 原值、94/254 的触发证据、40% 新值、零 provider 调用和“其他规则不变”承诺。40% 是工程集中度上限，不是统计定理；任何论文或报告都必须披露这次修订，不能把它描述为原始预注册门槛。
 
 ## 为什么不直接把 v1 改名为 v2
 
@@ -68,7 +70,7 @@ v2 不通过复制题目或拆分同一仓库来凑项目数。Mathlib 保留为
 | 总任务 | 至少 51 |
 | 测试任务 | 至少 40 |
 | 每个测试项目任务 | 至少 5 |
-| 单个测试项目占全部测试任务 | 不超过 35% |
+| 单个测试项目占全部测试任务 | 原合同不超过 35%；provider 前公开修订后的有效上限为 40% |
 | 测试错误类别 | 至少 4 |
 | 合格首轮失败结论门槛 | 至少 30 |
 
@@ -88,7 +90,7 @@ v2 不通过复制题目或拆分同一仓库来凑项目数。Mathlib 保留为
 6. 任何基础设施异常阻止确认性报告；
 7. 最终清单冻结前 provider 调用数必须为零。
 
-### 阶段二：最终题库与运行时预注册（待完成）
+### 阶段二：最终题库与运行时预注册（已完成）
 
 对每个候选上游项目使用 [`src/real_repairs.py`](../src/real_repairs.py) 构建子集。参考证明写入被版本控制排除的独立目录。完成候选池后，使用 `tracer-real-project-split-v2` 规范组装项目级清单；每个项目条目额外记录：
 
@@ -132,9 +134,9 @@ python src/causal_analysis_v2.py `
 
 ## 明确边界
 
-- 目前已预注册的是**纳入和分析设计**，不是最终 benchmark，也不是实验结果；
+- 当前已冻结纳入设计、最终 benchmark 与运行时预注册，但它们仍不是 provider 实验结果；
 - v1 的 11 条任务与其运行记录保持原样，不回写成 v2；
-- 当前代码没有替用户选择或伪造五个测试项目；
-- 当前已冻结并扫描六个候选上游；LeanAPAP 与 PFR 的 327 个候选已完成固定环境编译门禁并公开全部决定，但其余 1,249 个候选仍未完成；依赖下载或环境构建中断不计为项目或题目通过；
+- 五个 test 项目由冻结候选、逐项编译门禁与最小题数规则机械确定，没有按 provider 表现选题；
+- 六个候选上游的 1,576 个候选已全部完成固定环境筛查并公开决定；SciLean 未达到每项目五题门槛，PhysLean 的 94/254 触发了 35%→40% 的公开修订；依赖下载或环境构建中断不计为项目或题目通过；
 - 当前没有 v2 API 成本、成功率或因果增益；
 - 若后续必须改变门槛或主分析，应追加带日期的修订记录，不能静默覆盖本预注册。

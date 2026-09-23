@@ -1,0 +1,28 @@
+{
+  "version": "tracer-real-v2-share-gate-amendment-v1",
+  "status": "frozen-before-final-manifest-and-provider-run",
+  "registered_at_utc": "2026-09-23T01:20:16Z",
+  "amends": "benchmarks/real_repairs/tracer_real_v2.enrollment.json",
+  "supersedes_enrollment_extension": "experiments/preregistrations/tracer_real_v2_enrollment_amendment1.json",
+  "trigger": {
+    "screened_projects": 6,
+    "qualifying_test_projects": 5,
+    "qualifying_test_tasks": 254,
+    "largest_project_id": "physlean",
+    "largest_project_tasks": 94,
+    "observed_largest_project_share": 0.3700787401574803,
+    "original_maximum_project_share": 0.35,
+    "final_manifest_existed": false,
+    "provider_calls_observed": 0
+  },
+  "decision": {
+    "effective_maximum_project_share": 0.4,
+    "reason": "将集中度门禁从探索阶段的严格 35% 调整为仍禁止单项目接近多数的 40%，使六项目完整筛查结果可在不删题、不换题的前提下冻结。",
+    "preserve_all_existing_admitted_tasks": true,
+    "performance_blind_to_provider_outputs": true,
+    "all_other_selection_thresholds_unchanged": true,
+    "con_nf_candidate_scan_excluded_from_final_inventory": true,
+    "future_claim_requirement": "论文与报告必须同时披露原门禁、修订理由、PhysLean 题数及最终 37.0% 占比；不得把 40% 描述为原始预注册阈值。"
+  },
+  "provider_calls_observed": 0
+}

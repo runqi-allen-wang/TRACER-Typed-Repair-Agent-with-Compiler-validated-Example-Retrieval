@@ -71,7 +71,10 @@ def assembly_status() -> dict[str, Any]:
         if not passed:
             blockers.append("纳入门槛未通过：" + gate)
 
-    qualifying = projection["qualifying_project_ids"] if not incomplete else []
+    # 即使全部项目尚未筛查完，也持续校验已经达到项目门槛的公开子题库。
+    # 最终 spec 仍由 incomplete 与 enrollment gates 阻断；这里不提前组装，
+    # 只是避免把已完成项目的缺失或损坏推迟到最后一刻才发现。
+    qualifying = projection["qualifying_project_ids"]
     reports_root = ROOT / plan["published_report_root"]
     missing_subsets: list[str] = []
     invalid_subsets: list[str] = []
@@ -98,19 +101,27 @@ def assembly_status() -> dict[str, Any]:
         blockers.append("公开子题库无效：" + "; ".join(invalid_subsets))
 
     spec = compose_project_spec(contract, inventory, qualifying) if not blockers else None
+    final_manifest = ROOT / "benchmarks/real_repairs/tracer_real_v2/manifest.json"
+    next_command = None
+    if not blockers:
+        next_command = (
+            "python src/tracer_real_v2.py audit "
+            "--benchmark benchmarks/real_repairs/tracer_real_v2/manifest.json"
+            if final_manifest.is_file() else
+            "python src/real_repairs.py assemble-projects "
+            "--spec benchmarks/real_repairs/tracer_real_v2.projects.json "
+            "--out benchmarks/real_repairs/tracer_real_v2"
+        )
     return {
         "ok": True,
         "provider_calls": 0,
         "ready": not blockers,
         "blockers": blockers,
         "qualifying_test_projects": qualifying,
+        "enrollment_projection": projection,
+        "final_manifest_exists": final_manifest.is_file(),
         "project_spec": spec,
-        "next_command": (
-            "python src/real_repairs.py assemble-projects "
-            "--spec benchmarks/real_repairs/tracer_real_v2.projects.json "
-            "--out benchmarks/real_repairs/tracer_real_v2"
-            if not blockers else None
-        ),
+        "next_command": next_command,
     }
 
 

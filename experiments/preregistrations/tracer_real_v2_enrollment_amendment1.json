@@ -1,0 +1,38 @@
+{
+  "version": "tracer-real-v2-enrollment-amendment-v1",
+  "status": "frozen-before-amended-project-history-scan",
+  "registered_at_utc": "2026-09-23T00:31:34Z",
+  "amends": "experiments/preregistrations/tracer_real_causal_v2_enrollment.json",
+  "base_candidate_inventory": "benchmarks/real_repairs/tracer_real_v2.candidates.json",
+  "trigger": {
+    "screened_projects": 6,
+    "qualifying_test_projects": 5,
+    "qualifying_test_tasks": 254,
+    "largest_project_id": "physlean",
+    "largest_project_tasks": 94,
+    "observed_largest_project_share": 0.3700787401574803,
+    "frozen_maximum_project_share": 0.35,
+    "minimum_additional_admissible_tasks": 15,
+    "final_manifest_existed": false,
+    "provider_calls_observed": 0
+  },
+  "added_project": {
+    "project_id": "con_nf",
+    "source_repository": "https://github.com/leanprover-community/con-nf",
+    "source_license": "Apache-2.0 OR MIT",
+    "endpoint_revision": "55b939a3acf947793e252ff330800bfe968cc172",
+    "lean_toolchain": "leanprover/lean4:v4.21.0-rc3"
+  },
+  "selection_policy": {
+    "reason": "仅修复六项目筛查后暴露的预注册项目占比失败；项目选择先于新增历史扫描，且未查看任何 v2 provider 输出。",
+    "history_traversal": "first_parent",
+    "maximum_commits": 120,
+    "include_all_admissible_repairs": true,
+    "performance_blind": true,
+    "preserve_all_existing_admitted_tasks": true,
+    "maximum_project_share_unchanged": true,
+    "minimum_new_admissible_tasks_target": 15,
+    "if_target_not_met": "保持 provider 门禁关闭；追加新的公开修订，不删除、换题或放宽既有门槛。"
+  },
+  "provider_calls_observed": 0
+}

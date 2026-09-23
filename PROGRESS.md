@@ -47,7 +47,7 @@
 | I-08 | `tracer-sp-isolation-v1`：Docker 非 root、只读根与仓库、noexec 临时目录、禁网、清空 capabilities、`no-new-privileges`、seccomp、内存/CPU/PID/墙钟限制，共 14 项 fail-closed 探针；含手动 Actions 工作流 | 当前机器没有 Docker，尚无 Windows Docker Desktop 或原生 Linux 的真实运行报告；未知容器逃逸与恶意依赖不在已验证范围 |
 | I-09 | `tracer-causal-feedback-v1`：冻结无反馈首轮候选后分叉到空反馈、三种真实反馈、同类无关反馈、反事实反馈、只检索和 adaptive；负对照禁止自配对，所有分支保留同一首轮候选；TRACER-REAL 试点已冻结机器可读预注册 | provider 批次与结果审计尚待完成；单 test 项目且最多 12 个合格失败，预注册明确禁止正式统计或跨项目因果结论 |
 | I-10 | Error-State Graph、确定性 Adaptive Router 与 TRACER-REAL v1：结构化信号保留原始证据边；Mathlib 3、Batteries 4、Aesop 4 共 11 题按 development/validation/test 上游项目互斥划分，均经旧证明失败与修复证明通过门禁，参考证明单独存放 | 当前 Router 尚未学习；11 题/3 项目仍是试点，确认性结论门禁要求至少 5 个 test 项目与 30 个合格首轮失败 |
-| I-11 | [TRACER-REAL v2](docs/TRACER_REAL_V2.md) 第一阶段两阶段预注册；六个独立候选上游、端点和 120 提交窗口已在扫描前冻结；确定性扫描保存 1,576 个候选并由审计器核对；LeanAPAP 与 PFR 的 327 个候选已全量筛查并公开 60 个通过、267 个拒绝的完整决定账本；剩余 1,249 项已有机器可读顺序、单 worker、逐项续跑、并发研究拒绝、门槛差距报告、筛查后隔离构建和最终组合 fail-closed 入口 | SciLean、Equational Theories、FLT 与 PhysLean 尚未执行固定环境 Lean 门禁；运行计划和暂定门槛投影不是筛查结果，候选数不能写成合格题数；最终组合入口当前必须拒绝写 spec，最终 `tracer-real-v2` manifest 和运行时预注册不存在，`ready_for_provider_run` 必须为 false；没有 v2 provider 结果或因果结论 |
+| I-11 | [TRACER-REAL v2](docs/TRACER_REAL_V2.md) 的六个候选上游、端点和 120 提交窗口在扫描前冻结；1,576 个候选全部筛查，公开 256 个通过、1,320 个拒绝的完整决定账本。SciLean 2/54 低于项目门槛，最终 test 划分为五个独立项目、254 题。原 35% 占比门禁被 PhysLean 94/254≈37.0% 触发；provider 前公开修订为 40%，其他门槛与全部合格题保持不变。最终 265 题 manifest 与运行时预注册已生成并通过审计，`ready_for_provider_run` 为 true | 尚未运行 v2 provider，因此没有 v2 成功率、反馈因果效应、成本或统计结论；40% 是公开修订后的工程门槛，报告必须同时披露原 35% 阈值与修订理由 |
 
 repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译→保存→独立复编译→报告校验”，但 mock 或参考候选不得计作模型实验结果。
 
@@ -83,7 +83,7 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 
 当前文档基线的本地 Windows 全量复审记录：
 
-- Python：共发现 337 项测试，335 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。在既有 Compiler Feedback、TRACER-REAL、Feedback Study、Capsule 与 SP 门禁上，新增覆盖六臂预注册、AI 辅助复核、脱敏发布合同、当前正式配置一致性、合成 provider 预检、PowerShell 密钥清理、失败工件保留式续跑，以及 README 结果图与正式 `summary.json` 的逐柱一致性。
+- Python：共发现 342 项测试，340 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。在既有 Compiler Feedback、TRACER-REAL、Feedback Study、Capsule 与 SP 门禁上，新增覆盖六臂预注册、AI 辅助复核、脱敏发布合同、当前正式配置一致性、合成 provider 预检、PowerShell 密钥清理、失败工件保留式续跑、README 结果图与正式 `summary.json` 的逐柱一致性、v2 公开筛查账本、双语 README 计数一致性，以及原 35% 合同与公开 40% 修订的 fail-closed 行为。
 - `lake build`：通过；冻结 Evaluation18 输入中的 18 个 `sorry` 是预期占位警告，不代表题目已在原文件中修复。
 - `python -m leancapsule audit capsules`：24/24 通过。
 - `python -m leancapsule verify capsules`：24/24 通过，包含 4 个 Mathlib 案例。
@@ -97,6 +97,8 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 - `python scripts/audit_feedback_study.py published/feedback-study-562ad440-3446-4138-801e-59726ed0e108 --compile-solutions`：第二模型发布审计通过，209/209 个公开证明独立复编译通过。
 - `python scripts/audit_feedback_comparison.py published/feedback-cross-model-8ccb89dd-562ad440`：Pro/Flash 的 216 个任务完整配对，比较包脱敏审计通过。
 - `python scripts/audit_research_release.py published/research-six-arm-313f437f --compile-solutions`：六臂发布包的 864 任务、1,066 条有效轮次、864 行复核和 811 个公开证明一一对应；811/811 独立复编译通过。
+- `python src/tracer_real_v2.py audit --benchmark benchmarks/real_repairs/tracer_real_v2/manifest.json`：六个项目的 1,576 个候选、256 个纳入与 1,320 个拒绝均与公开决定账本一致；最终 8 项目/265 题 manifest 与运行时预注册一致，provider 门禁可开启但尚未发生 v2 调用。
+- `python src/tracer_real_v2_assembly.py status`：五个合格 test 项目共 254 题，全部公开子集均已构建并验证；PhysLean 94/254≈37.0% 低于公开修订后的 40% 有效上限，最终 spec 已冻结。
 - `python scripts/validate_b_handoff.py` 与 `python scripts/validate_part3_handoff.py`：通过。
 - 已发布 54 个成功证明逐个独立重编译通过。
 
@@ -124,6 +126,6 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 5. **隔离原型已完成、实测待完成：** 已冻结 14 项 Docker/低权限控制与手动 workflow；下一步分别生成 Windows Docker Desktop 和原生 Linux 报告并脱敏审计，不把计划、环境标签或静态参数称为隔离通过。
 6. **已完成公开导出：** raw/normalized/structured DeepSeek 批次已脱敏发布；保留 AI 辅助复核标识，未上传逐请求完整 prompts、历史归档原文或认证字段。
 7. 真人计时与独立机器跨环境研究单独立项，不与模型结果混算。
-8. **TRACER-REAL v2 候选池已冻结并准备继续固定环境筛查：** 六个上游共 1,576 个候选；LeanAPAP 与 PFR 的 327 条已全部处理，60 条通过、267 条拒绝，两份完整决定账本已进入版本化审计。剩余 SciLean、Equational Theories、FLT、PhysLean 共 1,249 条，已按候选数升序登记运行计划；入口默认单 worker、逐项保存状态，并在 repair24 runner 活跃时拒绝启动重型工作。本轮只完成离线准备，没有把 1,249 条写成已筛查。达到至少 5 个全新 test 项目、40 个测试任务和 51 个总任务后，才生成最终运行时预注册。provider 必须晚于最终 manifest、逐项目 Lake 环境和分析实现的共同门禁；旧 v1 与 Feedback Study 保持原样，不回写为 v2。
+8. **TRACER-REAL v2 已完成离线冻结，下一步是严格按预注册运行：** 六个上游共 1,576 个候选均已处理，256 条通过、1,320 条拒绝。SciLean 低于项目门槛，五个 test 项目共 254 题。PhysLean 的 37.0% 占比触发原 35% 门禁后，项目在 provider 调用前公开修订为 40%，没有删题、换题或改变其他门槛；最终 manifest 和运行时预注册已冻结。下一步不得再更换题库、模型、提示、分支或分析方法，只能按冻结对象运行并发布完整证据链。
 
 新结果只有在包含冻结配置、原始轨迹、成功证明、独立重编译、明确标注的复核模式和发布审计后，才能从“可复验实现”升级为“已发布证据”。AI 辅助复核不能表述为纯人工复核。

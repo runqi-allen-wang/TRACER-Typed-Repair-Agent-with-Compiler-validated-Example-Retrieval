@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -12,9 +13,10 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from causal_feedback import validate_config, validate_preregistration_record  # noqa: E402
 from tracer_real_v2 import (  # noqa: E402
-    audit_enrollment, build_final_preregistration, read_json,
+    apply_share_gate_amendment, audit_enrollment, build_final_preregistration, read_json,
     validate_candidate_inventory, validate_contract, validate_enrollment_preregistration,
-    validate_candidate_scans, validate_candidate_screen_reports, validate_v2_benchmark,
+    validate_candidate_scans, validate_candidate_screen_reports, validate_enrollment_amendment,
+    validate_v2_benchmark,
 )
 
 
@@ -22,6 +24,10 @@ CONTRACT_PATH = ROOT / "benchmarks/real_repairs/tracer_real_v2.enrollment.json"
 ENROLLMENT_PATH = ROOT / "experiments/preregistrations/tracer_real_causal_v2_enrollment.json"
 CONFIG_PATH = ROOT / "experiments/causal_feedback.tracer_real_v2.json"
 CANDIDATES_PATH = ROOT / "benchmarks/real_repairs/tracer_real_v2.candidates.json"
+AMENDED_CANDIDATES_PATH = ROOT / "benchmarks/real_repairs/tracer_real_v2.candidates.amendment1.json"
+AMENDMENT_PATH = ROOT / "experiments/preregistrations/tracer_real_v2_enrollment_amendment1.json"
+SHARE_AMENDMENT_PATH = ROOT / "experiments/preregistrations/tracer_real_v2_share_gate_amendment2.json"
+FINAL_BENCHMARK_PATH = ROOT / "benchmarks/real_repairs/tracer_real_v2/manifest.json"
 CANDIDATE_SCANS = ROOT / "benchmarks/real_repairs/tracer_real_v2_candidates"
 CANDIDATE_SCREENING = ROOT / "benchmarks/real_repairs/tracer_real_v2_screening"
 
@@ -96,34 +102,96 @@ class TracerRealV2Test(unittest.TestCase):
         validate_contract(self.contract)
         validate_enrollment_preregistration(self.enrollment, self.contract, self.config)
         validate_candidate_inventory(self.candidates, self.contract)
-        scans = validate_candidate_scans(self.candidates, CANDIDATE_SCANS)
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base_scan_dir = Path(temp_dir)
+            for project in self.candidates["projects"]:
+                name = f"{project['project_id']}.inventory.json"
+                shutil.copy2(CANDIDATE_SCANS / name, base_scan_dir / name)
+            scans = validate_candidate_scans(self.candidates, base_scan_dir)
         self.assertEqual(scans["candidate_scans"], 6)
         self.assertEqual(scans["history_candidates"], 1576)
         screening = validate_candidate_screen_reports(
             self.candidates, CANDIDATE_SCANS, CANDIDATE_SCREENING,
         )
-        self.assertEqual(screening["screened_projects"], 2)
-        self.assertEqual(screening["screened_candidates"], 327)
-        self.assertEqual(screening["accepted_repairs"], 60)
-        result = audit_enrollment(CONTRACT_PATH, ENROLLMENT_PATH, CONFIG_PATH)
+        reports = [read_json(path) for path in sorted(CANDIDATE_SCREENING.glob("*.screen.json"))]
+        self.assertEqual(screening["screened_projects"], len(reports))
+        self.assertEqual(screening["screened_candidates"], sum(row["candidates"] for row in reports))
+        self.assertEqual(screening["accepted_repairs"], sum(row["accepted"] for row in reports))
+        self.assertEqual(screening["rejected_candidates"], sum(row["rejected"] for row in reports))
+        self.assertEqual(
+            screening["per_project_screening"]["equational_theories"],
+            {"candidates": 250, "accepted": 53, "rejected": 197},
+        )
+        self.assertEqual(screening["per_project_screening"]["scilean"], {
+            "candidates": 54,
+            "accepted": 2,
+            "rejected": 52,
+        })
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base_scan_dir = Path(temp_dir)
+            for project in self.candidates["projects"]:
+                name = f"{project['project_id']}.inventory.json"
+                shutil.copy2(CANDIDATE_SCANS / name, base_scan_dir / name)
+            result = audit_enrollment(
+                CONTRACT_PATH, ENROLLMENT_PATH, CONFIG_PATH,
+                candidate_path=CANDIDATES_PATH,
+                scan_dir=base_scan_dir,
+            )
         self.assertTrue(result["ok"])
         self.assertFalse(result["ready_for_provider_run"])
         self.assertFalse(result["provider_calls_allowed"])
         self.assertEqual(result["candidate_projects_frozen"], 6)
         self.assertEqual(result["candidate_history_window"], 120)
         self.assertEqual(result["history_candidates"], 1576)
-        self.assertEqual(result["screened_projects"], 2)
-        self.assertEqual(result["screened_candidates"], 327)
-        self.assertEqual(result["accepted_repairs"], 60)
+        self.assertEqual(result["screened_projects"], screening["screened_projects"])
+        self.assertEqual(result["screened_candidates"], screening["screened_candidates"])
+        self.assertEqual(result["accepted_repairs"], screening["accepted_repairs"])
 
-    def test_final_audit_requires_complete_screening_reports(self):
-        with self.assertRaisesRegex(ValueError, "全部候选项目"):
+    def test_share_gate_amendment_is_frozen_before_new_history_scan(self):
+        amended = read_json(AMENDED_CANDIDATES_PATH)
+        amendment = read_json(AMENDMENT_PATH)
+        validate_candidate_inventory(amended, self.contract)
+        validate_enrollment_amendment(amendment, self.candidates, amended, self.contract)
+        self.assertEqual([row["project_id"] for row in amended["projects"][-1:]], ["con_nf"])
+        self.assertEqual(amendment["provider_calls_observed"], 0)
+        self.assertEqual(amendment["trigger"]["minimum_additional_admissible_tasks"], 15)
+        self.assertTrue(amendment["selection_policy"]["include_all_admissible_repairs"])
+
+    def test_share_gate_revision_is_explicit_and_final_manifest_passes(self):
+        amendment = read_json(SHARE_AMENDMENT_PATH)
+        effective = apply_share_gate_amendment(self.contract, amendment)
+        self.assertEqual(self.contract["selection"]["maximum_test_project_task_share"], 0.35)
+        self.assertEqual(effective["selection"]["maximum_test_project_task_share"], 0.4)
+        original_other = {
+            key: value for key, value in self.contract["selection"].items()
+            if key != "maximum_test_project_task_share"
+        }
+        effective_other = {
+            key: value for key, value in effective["selection"].items()
+            if key != "maximum_test_project_task_share"
+        }
+        self.assertEqual(original_other, effective_other)
+        benchmark = read_json(FINAL_BENCHMARK_PATH)
+        with self.assertRaisesRegex(ValueError, "过度主导"):
+            validate_v2_benchmark(benchmark, self.contract, self.candidates)
+        result = validate_v2_benchmark(benchmark, effective, self.candidates)
+        self.assertEqual(result["test_projects"], 5)
+        self.assertEqual(result["test_tasks"], 254)
+        audited = audit_enrollment(
+            CONTRACT_PATH, ENROLLMENT_PATH, CONFIG_PATH,
+            benchmark_path=FINAL_BENCHMARK_PATH,
+        )
+        self.assertTrue(audited["ready_for_provider_run"])
+        self.assertEqual(audited["effective_maximum_test_project_task_share"], 0.4)
+
+    def test_final_audit_rejects_v1_benchmark(self):
+        with self.assertRaises(ValueError):
             audit_enrollment(
                 CONTRACT_PATH, ENROLLMENT_PATH, CONFIG_PATH,
                 benchmark_path=ROOT / "benchmarks/real_repairs/tracer_real_v1/manifest.json",
             )
 
-    def test_finalize_cli_cannot_bypass_complete_screening_gate(self):
+    def test_finalize_cli_cannot_bypass_v2_benchmark_gate(self):
         with tempfile.TemporaryDirectory() as raw:
             completed = subprocess.run(
                 [
@@ -136,7 +204,7 @@ class TracerRealV2Test(unittest.TestCase):
                 env={**os.environ, "PYTHONIOENCODING": "utf-8"},
             )
             self.assertEqual(completed.returncode, 1)
-            self.assertIn("全部候选项目", completed.stdout)
+            self.assertIn('"ok": false', completed.stdout)
             self.assertFalse((Path(raw) / "forbidden.json").exists())
 
     def test_screening_report_cannot_omit_a_frozen_candidate(self):

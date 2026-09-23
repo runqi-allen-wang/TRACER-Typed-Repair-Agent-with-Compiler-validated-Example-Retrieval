@@ -1,0 +1,119 @@
+{
+  "version": "tracer-causal-preregistration-v1",
+  "status": "frozen-before-provider-run",
+  "planned_experiment_id": "tracer-real-causal-v2-20260923",
+  "registered_at_utc": "2026-09-23T01:30:01Z",
+  "registration_medium": "版本控制仓库中的机器可读最终预注册；由原始 v2 纳入合同与 provider 前公开的项目占比修订共同生成。",
+  "benchmark": {
+    "version": "tracer-real-v2",
+    "split_policy": "upstream_project_disjoint",
+    "projects": [
+      {
+        "project_id": "mathlib",
+        "split": "development",
+        "tasks": 3
+      },
+      {
+        "project_id": "batteries",
+        "split": "validation",
+        "tasks": 4
+      },
+      {
+        "project_id": "aesop",
+        "split": "validation",
+        "tasks": 4
+      },
+      {
+        "project_id": "equational_theories",
+        "split": "test",
+        "tasks": 53
+      },
+      {
+        "project_id": "flt",
+        "split": "test",
+        "tasks": 47
+      },
+      {
+        "project_id": "leanapap",
+        "split": "test",
+        "tasks": 16
+      },
+      {
+        "project_id": "pfr",
+        "split": "test",
+        "tasks": 44
+      },
+      {
+        "project_id": "physlean",
+        "split": "test",
+        "tasks": 94
+      }
+    ]
+  },
+  "models": [
+    {
+      "id": "deepseek_v4_pro",
+      "model": "deepseek-v4-pro",
+      "api_url": "https://api.deepseek.com/chat/completions",
+      "temperature": 0,
+      "max_tokens": 12000,
+      "thinking": "enabled",
+      "reasoning_effort": "high"
+    }
+  ],
+  "design": {
+    "protocol_version": "tracer-causal-feedback-v1",
+    "arms": [
+      "content_free_retry",
+      "true_raw",
+      "true_normalized",
+      "true_structured",
+      "irrelevant_matched",
+      "counterfactual",
+      "retrieval_only",
+      "adaptive"
+    ],
+    "repeats": 3,
+    "branch_attempts": 1,
+    "benchmark_splits": [
+      "test"
+    ],
+    "order_seed": 20260916,
+    "compile_timeout": 180,
+    "prompt_files": [
+      "prompts/causal_seed.txt",
+      "prompts/causal_branch.txt",
+      "prompts/proof_contract.txt"
+    ]
+  },
+  "primary_analysis": {
+    "population": "eligible_first_failures_on_preregistered_v2_test_projects",
+    "contrast": "true_structured - content_free_retry",
+    "outcome": "one_branch_attempt_kernel_success",
+    "estimand": "测试项目等权的同一冻结首轮失败内平均配对成功率差",
+    "project_weighting": "equal_weight_per_test_project",
+    "missingness": "首轮成功不进入反馈效果人群；负对照供体不可用只影响对应负对照；任何 provider、策略或编译基础设施异常都会阻止确认性报告。"
+  },
+  "secondary_analyses": [
+    "true_raw、true_normalized、retrieval_only 与 adaptive 相对 content_free_retry 的项目等权配对差",
+    "irrelevant_matched 与 counterfactual 的误导率、服从率和错误类别转移",
+    "按错误类别、项目、token、墙钟时间和编译次数分层的描述性结果",
+    "Error-State Graph 变化、检索查询变化和反馈相关代码修改与成功的关联"
+  ],
+  "stopping_rule": {
+    "maximum_seed_generations": 762,
+    "maximum_branch_generations": 6096,
+    "maximum_provider_calls": 6858,
+    "adaptive_early_stopping": false,
+    "transport_policy": "传输状态不明时停止并人工核对；不得删除异常后重写同一预注册批次。"
+  },
+  "claim_gate": {
+    "minimum_test_projects": 5,
+    "minimum_test_tasks": 40,
+    "maximum_test_project_task_share": 0.4,
+    "share_gate_amendment": "experiments/preregistrations/tracer_real_v2_share_gate_amendment2.json",
+    "minimum_eligible_first_failures": 30,
+    "confirmatory_claim_allowed": true,
+    "required_label": "达到样本门槛后仍须通过完整轨迹、基础设施与统计审计，方可报告预注册确认性结果。"
+  }
+}

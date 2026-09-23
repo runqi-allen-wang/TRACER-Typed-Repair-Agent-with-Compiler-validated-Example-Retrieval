@@ -14,16 +14,41 @@ from tracer_real_v2_assembly import assembly_status, compose_project_spec, read_
 
 
 class TracerRealV2AssemblyTest(unittest.TestCase):
-    def test_current_incomplete_screening_cannot_emit_final_spec(self):
+    def test_assembly_status_tracks_screening_and_public_subsets(self):
         status = assembly_status()
         self.assertTrue(status["ok"])
-        self.assertFalse(status["ready"])
         self.assertEqual(status["provider_calls"], 0)
-        self.assertTrue(any("scilean" in blocker for blocker in status["blockers"]))
-        self.assertIsNone(status["project_spec"])
-        self.assertIsNone(status["next_command"])
+        self.assertIn("flt", status["qualifying_test_projects"])
+        self.assertNotIn("scilean", status["qualifying_test_projects"])
+        physlean_report = ROOT / "benchmarks/real_repairs/tracer_real_v2_screening/physlean.screen.json"
+        if not physlean_report.exists():
+            self.assertFalse(status["ready"])
+            self.assertTrue(any("physlean" in blocker for blocker in status["blockers"]))
+            self.assertFalse(any("缺少已验证公开子题库" in blocker for blocker in status["blockers"]))
+            self.assertFalse(any("公开子题库无效" in blocker for blocker in status["blockers"]))
+            self.assertIsNone(status["project_spec"])
+            self.assertIsNone(status["next_command"])
+        elif any("maximum_test_project_share" in blocker for blocker in status["blockers"]):
+            self.assertFalse(status["ready"])
+            self.assertIsNone(status["project_spec"])
+            self.assertIsNone(status["next_command"])
+        elif status["ready"]:
+            self.assertFalse(status["blockers"])
+            self.assertIsNotNone(status["project_spec"])
+            self.assertIsNotNone(status["next_command"])
 
-    def test_write_spec_fails_closed_without_creating_output(self):
+    def test_six_project_screening_uses_disclosed_share_gate_revision(self):
+        physlean_report = ROOT / "benchmarks/real_repairs/tracer_real_v2_screening/physlean.screen.json"
+        if not physlean_report.exists():
+            self.skipTest("PhysLean 全量筛查尚未完成")
+        status = assembly_status()
+        projection = status["enrollment_projection"]
+        self.assertAlmostEqual(projection["current_largest_project_share"], 94 / 254)
+        self.assertTrue(projection["gates"]["maximum_test_project_share"])
+        self.assertTrue(status["ready"])
+        self.assertIsNotNone(status["project_spec"])
+
+    def test_write_spec_matches_current_gate(self):
         with tempfile.TemporaryDirectory() as raw:
             out = Path(raw) / "forbidden.json"
             completed = subprocess.run(
@@ -32,9 +57,13 @@ class TracerRealV2AssemblyTest(unittest.TestCase):
                 cwd=ROOT, capture_output=True, text=True, encoding="utf-8",
                 env={**os.environ, "PYTHONIOENCODING": "utf-8"},
             )
-            self.assertEqual(completed.returncode, 1)
-            self.assertFalse(out.exists())
-            self.assertIn("尚未就绪", completed.stdout)
+            if assembly_status()["ready"]:
+                self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
+                self.assertTrue(out.exists())
+            else:
+                self.assertEqual(completed.returncode, 1)
+                self.assertFalse(out.exists())
+                self.assertIn("尚未就绪", completed.stdout)
 
     def test_composed_spec_keeps_v1_out_of_test_and_new_projects_in_test(self):
         plan = read_json(ROOT / "experiments/tracer_real_v2_screening.plan.json")

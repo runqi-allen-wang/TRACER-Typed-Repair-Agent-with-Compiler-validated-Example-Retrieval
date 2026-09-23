@@ -153,6 +153,16 @@ def lean_subprocess_environment(project_root: Path | None = None, scratch_home: 
         )
     if project_root:
         environment["LEAN_PATH"] = str(project_root)
+        # 隔离 HOME 不读取用户级 Git 配置。仅信任当前冻结项目及其 Lake 包目录，
+        # 否则 Lake 在外部工作树中查询依赖时可能报 ownership 错误，误判证明失败。
+        root = project_root.resolve()
+        environment.update({
+            "GIT_CONFIG_COUNT": "2",
+            "GIT_CONFIG_KEY_0": "safe.directory",
+            "GIT_CONFIG_VALUE_0": str(root),
+            "GIT_CONFIG_KEY_1": "safe.directory",
+            "GIT_CONFIG_VALUE_1": str(root / ".lake" / "packages" / "*"),
+        })
     environment["TRACER_LEAN_CHILD"] = "1"
     return environment
 
