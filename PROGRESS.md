@@ -83,7 +83,7 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 
 当前文档基线的本地 Windows 全量复审记录：
 
-- Python：共发现 347 项测试，345 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。在既有 Compiler Feedback、TRACER-REAL、Feedback Study、Capsule 与 SP 门禁上，新增覆盖六臂预注册、AI 辅助复核、脱敏发布合同、当前正式配置一致性、合成 provider 预检、PowerShell 密钥清理、失败工件保留式续跑、README 结果图与正式 `summary.json` 的逐柱一致性、v2 公开筛查账本、双语 README 计数一致性、原 35% 合同与公开 40% 修订的 fail-closed 行为，以及交互 Demo 的发布数据、真实轨迹、静态依赖与 Pages 发布范围。
+- Python：共发现 348 项测试，346 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。在既有 Compiler Feedback、TRACER-REAL、Feedback Study、Capsule 与 SP 门禁上，新增覆盖六臂预注册、AI 辅助复核、脱敏发布合同、当前正式配置一致性、合成 provider 预检、PowerShell 密钥清理、失败工件保留式续跑、README 结果图与正式 `summary.json` 的逐柱一致性、v2 公开筛查账本、双语 README 计数一致性、原 35% 合同与公开 40% 修订的 fail-closed 行为，以及交互 Demo 的 24 组公开验证修复、静态依赖与 Pages 发布范围。
 - `python demo/serve.py`：零依赖静态网页在本机完成桌面端视觉与交互验收；两轮真实脱敏轨迹、中英文切换和本地真实编译命令均可用。网页不调用 provider，不能把回放视为一次新的模型生成。
 - `lake build`：通过；冻结 Evaluation18 输入中的 18 个 `sorry` 是预期占位警告，不代表题目已在原文件中修复。
 - `python -m leancapsule audit capsules`：24/24 通过。

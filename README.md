@@ -10,6 +10,11 @@
 [![Lean](https://img.shields.io/badge/Lean-4.32.0-blue)](lean-toolchain)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
+> [!IMPORTANT]
+> **[Open the interactive TRACER demo](https://runqi-allen-wang.github.io/TRACER-Typed-Repair-Agent-with-Compiler-validated-Example-Retrieval/)** — explore 24 verified Lean repairs across five proof domains and four diagnostic families. Filter cases, inspect compiler feedback, and replay each frozen failure beside an independently recompiled solution. No API key or installation is required.
+
+![TRACER interactive repair explorer](demo/assets/tracer-demo-preview.png)
+
 [Interactive demo](#try-tracer-in-60-seconds) · [Quick start](#quick-start) · [Latest results](#latest-published-results) · [Evidence status](PROGRESS.md) · [API guide](docs/API_GUIDE.md) · [Failure gallery](capsules/index.md) · [Contributing](CONTRIBUTING.md)
 
 ![TRACER overview](TRACER.png)
@@ -22,13 +27,13 @@ TRACER is a research toolkit for **Lean 4 proof repair, compiler-feedback experi
 
 **[Open the interactive web demo](https://runqi-allen-wang.github.io/TRACER-Typed-Repair-Agent-with-Compiler-validated-Example-Retrieval/)** · [Inspect its public source](demo/) · [Open the underlying audited release](published/research-six-arm-313f437f)
 
-The demo replays a real, sanitized `scale_add` trajectory: the first candidate fails in Lean, TRACER exposes the compiler goal and refreshes retrieval, and the second candidate passes after aligning the goal with the induction hypothesis. It needs no API key and makes no network request. After cloning, launch the same page locally with:
+The demo is a dynamic browser interface backed by static public evidence. It contains all 24 `repair24` failure/solution pairs, with filters for recursive lists, quantifiers, functions, options, and recursive naturals, plus type mismatch, unknown identifier, unsolved-goal, and tactic/elaboration diagnostics. “Dynamic” means interactive JavaScript—not a live model call: it needs no API key, uploads no code, and makes no network request. After cloning, launch the same page locally with:
 
 ```text
 python demo/serve.py
 ```
 
-Across the published 864 task instances, **735/864 (85.1%)** passed on the first candidate and **811/864 (93.9%)** passed within at most three rounds: 76 additional task instances, or **+8.8 percentage points**, were recovered by the bounded loop. This first-to-final conversion is descriptive—not a causal estimate of TRACER's effect. The demo shows one recorded trajectory; the local quick start below invokes the real Lean compiler.
+The page also explains exactly where TRACER intervenes: isolated proof-region patching, raw/normalized/structured compiler feedback, error-adaptive retrieval, bounded retries, and kernel validation with saved evidence. Across the published 864 task instances, **735/864 (85.1%)** passed on the first candidate and **811/864 (93.9%)** passed within at most three rounds: 76 additional task instances, or **+8.8 percentage points**, were recovered by the bounded loop. This first-to-final conversion is descriptive—not a causal estimate of TRACER's effect. The local quick start below invokes the real Lean compiler.
 
 ## Experiment and policy namespaces
 

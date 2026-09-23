@@ -9,6 +9,13 @@ RELEASE = ROOT / "published" / "research-six-arm-313f437f"
 
 
 class InteractiveDemoTest(unittest.TestCase):
+    @staticmethod
+    def load_demo_data():
+        source = (DEMO / "demo-data.js").read_text(encoding="utf-8")
+        prefix = "window.TRACER_DEMO = "
+        assert source.startswith(prefix) and source.endswith(";\n")
+        return json.loads(source[len(prefix):-2])
+
     def test_static_demo_has_no_external_runtime_dependency(self):
         html = (DEMO / "index.html").read_text(encoding="utf-8")
         for asset in ("styles.css", "demo-data.js", "app.js"):
@@ -23,38 +30,49 @@ class InteractiveDemoTest(unittest.TestCase):
         tasks = sum(row["tasks"] for row in summary["summary"])
         first = sum(row["first"] for row in summary["summary"])
         success = sum(row["success"] for row in summary["summary"])
-        data = (DEMO / "demo-data.js").read_text(encoding="utf-8")
+        data = self.load_demo_data()["evidence"]
         self.assertEqual((tasks, first, success), (864, 735, 811))
-        for fragment in (
-            f"tasks: {tasks}",
-            f"firstPass: {first}",
-            f"withinThree: {success}",
-            f"recovered: {success - first}",
-        ):
-            self.assertIn(fragment, data)
+        self.assertEqual(data["tasks"], tasks)
+        self.assertEqual(data["firstPass"], first)
+        self.assertEqual(data["withinThree"], success)
+        self.assertEqual(data["recovered"], success - first)
 
-    def test_demo_trace_is_a_real_two_round_success(self):
-        attempts = [
-            json.loads(line)
-            for line in (RELEASE / "attempts.sanitized.jsonl").read_text(encoding="utf-8").splitlines()
-        ]
-        trace = sorted(
-            (
-                row for row in attempts
-                if row["model_id"] == "deepseek_flash_v41"
-                and row["repeat"] == 1
-                and row["arm"] == "C_dynamic"
-                and row["problem_id"] == "scale_add"
-            ),
-            key=lambda row: row["round"],
+    def test_demo_exposes_all_24_verified_repair_pairs(self):
+        benchmark = json.loads((RELEASE / "benchmark.json").read_text(encoding="utf-8"))
+        initial = json.loads(
+            (RELEASE / "initial_compilation.sanitized.json").read_text(encoding="utf-8")
         )
-        self.assertEqual([row["compile_ok"] for row in trace], [False, True])
-        data = (DEMO / "demo-data.js").read_text(encoding="utf-8")
-        self.assertIn("rw [ih, Nat.add_assoc]", data)
-        self.assertIn("change scale a (m + n) + a", data)
-        self.assertIn("Did not find an occurrence", data)
-        self.assertIn("score 0.3760", data)
-        self.assertIn("score 0.5199", data)
+        trials = [
+            json.loads(line)
+            for line in (RELEASE / "trials.jsonl").read_text(encoding="utf-8").splitlines()
+        ]
+        verified_solutions = {
+            row["solution"]
+            for row in trials
+            if row["compile_ok"] and row["independent_compile_ok"] and row.get("solution")
+        }
+        data = self.load_demo_data()
+        cases = data["cases"]
+        self.assertEqual(len(cases), 24)
+        self.assertEqual({row["id"] for row in cases}, {row["id"] for row in benchmark["problems"]})
+        self.assertGreaterEqual(len({row["topic"] for row in cases}), 5)
+        self.assertGreaterEqual(len({row["category"] for row in cases}), 4)
+        for row in cases:
+            with self.subTest(problem=row["id"]):
+                self.assertFalse(initial[row["id"]]["compile_ok"])
+                self.assertTrue(row["initialProof"].startswith("by"))
+                self.assertTrue(row["repairedProof"].strip())
+                self.assertTrue((ROOT / row["solutionPath"]).is_file())
+                self.assertIn(
+                    (ROOT / row["solutionPath"]).relative_to(RELEASE).as_posix(),
+                    verified_solutions,
+                )
+
+    def test_demo_data_can_be_rebuilt_from_public_release(self):
+        generator = (DEMO / "build_demo_data.py").read_text(encoding="utf-8")
+        self.assertIn("published", generator)
+        self.assertIn("research-six-arm-313f437f", generator)
+        self.assertNotIn("requests", generator)
 
     def test_readmes_offer_web_and_local_demo(self):
         for name in ("README.md", "README.zh-CN.md"):
@@ -64,6 +82,7 @@ class InteractiveDemoTest(unittest.TestCase):
                 self.assertIn("python demo/serve.py", readme)
                 self.assertIn("735/864", readme)
                 self.assertIn("811/864", readme)
+                self.assertIn("demo/assets/tracer-demo-preview.png", readme)
 
     def test_pages_workflow_deploys_only_demo_directory(self):
         workflow = (ROOT / ".github" / "workflows" / "demo-pages.yml").read_text(
