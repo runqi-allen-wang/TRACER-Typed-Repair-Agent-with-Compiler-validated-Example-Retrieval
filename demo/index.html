@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive, evidence-backed replay of a TRACER Lean proof repair.">
+  <title>TRACER · Interactive proof-repair demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="https://github.com/runqi-allen-wang/TRACER-Typed-Repair-Agent-with-Compiler-validated-Example-Retrieval" aria-label="TRACER repository">
+      <span class="brand-mark">T</span><span>TRACER</span>
+    </a>
+    <div class="header-actions">
+      <button id="language" class="ghost" type="button">中文</button>
+      <a class="ghost link-button" href="https://github.com/runqi-allen-wang/TRACER-Typed-Repair-Agent-with-Compiler-validated-Example-Retrieval">GitHub ↗</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow" data-i18n="eyebrow">COMPILER-GROUNDED PROOF REPAIR</div>
+      <h1 data-i18n="title">Watch one failed Lean proof become a verified repair.</h1>
+      <p class="lede" data-i18n="lede">No API key. No simulated success. Replay one sanitized trajectory from the audited 864-task release.</p>
+      <div class="hero-actions">
+        <button id="replay" class="primary" type="button" data-i18n="replay">Replay the repair</button>
+        <a class="secondary" href="#results" data-i18n="resultsLink">See published results</a>
+      </div>
+      <div class="evidence-chip"><span class="pulse"></span><span data-i18n="evidence">Evidence: public release research-six-arm-313f437f</span></div>
+    </section>
+
+    <section class="workspace" aria-label="Interactive repair trace">
+      <div class="workspace-bar">
+        <div>
+          <span class="muted">THEOREM</span>
+          <strong id="problem-name"></strong>
+        </div>
+        <div class="trace-meta"><span id="model-name"></span><span id="arm-name"></span></div>
+      </div>
+
+      <div class="stepper" role="tablist" aria-label="Repair rounds">
+        <button class="step active" data-round="0" role="tab"><span>1</span><b data-i18n="firstCandidate">First candidate</b><small data-i18n="compileFail">Compile fails</small></button>
+        <div class="connector"></div>
+        <button class="step" data-round="1" role="tab"><span>2</span><b data-i18n="feedbackRepair">Feedback repair</b><small data-i18n="kernelPass">Kernel pass</small></button>
+      </div>
+
+      <div class="panels">
+        <article class="panel code-panel">
+          <div class="panel-title"><span data-i18n="candidate">Candidate proof</span><span id="round-label" class="round-label"></span></div>
+          <pre><code id="candidate-code"></code></pre>
+        </article>
+        <article class="panel diagnostic-panel">
+          <div class="panel-title"><span data-i18n="compiler">Lean compiler</span><span id="compile-status" class="status"></span></div>
+          <pre><code id="diagnostic"></code></pre>
+          <div class="feedback-box">
+            <div class="mini-title" data-i18n="feedback">TRACER feedback</div>
+            <pre><code id="feedback"></code></pre>
+          </div>
+          <div class="retrieval"><span data-i18n="retrieved">Top retrieved example</span><strong id="retrieval"></strong></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="results" class="results-section">
+      <div class="section-heading">
+        <div class="eyebrow" data-i18n="published">PUBLISHED SIX-ARM RELEASE</div>
+        <h2 data-i18n="resultsTitle">What the bounded repair loop recovered</h2>
+        <p data-i18n="resultsBody">Across every model/arm/repeat task instance, compare the first candidate with the final outcome after at most three rounds.</p>
+      </div>
+      <div class="result-grid">
+        <article class="metric-card">
+          <span data-i18n="firstRound">First candidate</span>
+          <strong>85.1%</strong>
+          <div class="bar"><i style="width:85.1%"></i></div>
+          <small>735 / 864</small>
+        </article>
+        <article class="metric-card highlight">
+          <span data-i18n="threeRounds">Within three rounds</span>
+          <strong>93.9%</strong>
+          <div class="bar"><i style="width:93.9%"></i></div>
+          <small>811 / 864</small>
+        </article>
+        <article class="metric-card recovered">
+          <span data-i18n="recovered">Recovered after round one</span>
+          <strong>+76</strong>
+          <p data-i18n="delta">task instances · +8.8 percentage points</p>
+        </article>
+      </div>
+      <p class="caveat" data-i18n="caveat"><strong>Interpretation:</strong> this is a descriptive first-to-final conversion over paired task instances, not a causal estimate of TRACER's effect. The preregistered R-B − R-A comparison was 0.0 points for Flash and −2.8 points for Pro.</p>
+    </section>
+
+    <section class="local-section">
+      <div>
+        <div class="eyebrow" data-i18n="liveEyebrow">RUN THE REAL COMPILER</div>
+        <h2 data-i18n="liveTitle">Want more than a recorded replay?</h2>
+        <p data-i18n="liveBody">Clone the repository and execute the same pipeline with a supplied candidate. Lean runs locally; no model API or payment is required.</p>
+      </div>
+      <div class="command-wrap">
+        <button id="copy-command" class="copy" type="button" data-i18n="copy">Copy</button>
+        <pre><code id="local-command">python src/agent.py solve --file lean_project/Benchmarks/Evaluation18.lean --theorem Eval18.and_swap_eval --condition B --provider mock --mock-candidate "by intro h; exact And.intro h.right h.left"</code></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span data-i18n="footer">Every displayed candidate and metric is traceable to the repository's public artifacts.</span>
+    <a href="https://github.com/runqi-allen-wang/TRACER-Typed-Repair-Agent-with-Compiler-validated-Example-Retrieval/tree/main/published/research-six-arm-313f437f" data-i18n="openEvidence">Open evidence</a>
+  </footer>
+
+  <script src="demo-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -33,7 +33,7 @@ jobs:
         run: python scripts/verify_compiler_feedback_v1.py --verify-only
       - name: Verify feedback comparison plan
         run: python src/feedback_study.py plan
-      # 只核对两阶段纳入预注册；当前必须保持 provider 未就绪状态。
+      # 核对最终冻结 manifest、公开占比修订与运行时预注册；不调用 provider。
       - name: Audit TRACER-REAL v2 enrollment
         run: python src/tracer_real_v2.py audit
       - name: Audit published feedback study
