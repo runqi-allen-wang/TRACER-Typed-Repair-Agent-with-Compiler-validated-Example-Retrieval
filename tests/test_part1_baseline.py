@@ -7,9 +7,9 @@ from types import SimpleNamespace
 
 import yaml
 
-from baseline.run_baseline import _parse_axp_output, _write_axp_config, load_config
-from baseline.run_batch import completed_task_ids
-from baseline.run_api import (
+from historical.fate_m.baseline.run_baseline import _parse_axp_output, _write_axp_config, load_config
+from historical.fate_m.baseline.run_batch import completed_task_ids
+from historical.fate_m.baseline.run_api import (
     _contract_from_config,
     _install_safety_gate,
     extract_record,
@@ -18,7 +18,8 @@ from scripts.prepare_part2_first_round_cache import prepare_cache
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BASELINE = ROOT / "baseline"
+FATE_M = ROOT / "historical" / "fate_m"
+BASELINE = FATE_M / "baseline"
 
 
 class Part1BaselineIntegrationTest(unittest.TestCase):
@@ -38,7 +39,7 @@ class Part1BaselineIntegrationTest(unittest.TestCase):
         self.assertEqual(config["environment"]["benchmark_ref"], "v4.28.0")
         self.assertEqual(config["environment"]["lean_toolchain"], "leanprover/lean4:v4.28.0")
 
-        shared = load_config(ROOT / "configs" / "axprover_yxai_gpt56_sol.yaml")
+        shared = load_config(FATE_M / "configs" / "axprover_yxai_gpt56_sol.yaml")
         self.assertEqual(shared["prover"]["max_iterations"], 4)
         self.assertEqual(
             shared["prover"]["prover_llm"]["retry_config"]["stop_after_attempt"],
@@ -109,8 +110,8 @@ class Part1BaselineIntegrationTest(unittest.TestCase):
             self.assertEqual(item["file"], expected)
 
     def test_part1_workflows_are_ubuntu_only_pinned_and_do_not_override_the_model(self):
-        validation = (ROOT / ".github" / "workflows" / "part1.yml").read_text(encoding="utf-8")
-        real_run = (ROOT / ".github" / "workflows" / "part1_run.yml").read_text(encoding="utf-8")
+        validation = (FATE_M / "workflows" / "part1.yml").read_text(encoding="utf-8")
+        real_run = (FATE_M / "workflows" / "part1_run.yml").read_text(encoding="utf-8")
         for workflow in (validation, real_run):
             self.assertIn("ubuntu-latest", workflow)
             self.assertNotIn("windows-latest", workflow)

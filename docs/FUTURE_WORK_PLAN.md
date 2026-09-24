@@ -73,7 +73,7 @@ Community feedback from [subfish-zhou](https://github.com/subfish-zhou) and [Ful
 
 ### F3：受控模型实验
 
-**当前进展：DeepSeek 批次已脱敏发布。** [Feedback Study v1](FEEDBACK_STUDY_V1.md) 使用独立协议比较 raw、normalized、structured 三组；repair24 × 三表示 × 三重复共 216 个任务已完成，199 个成功证明通过独立复编译和显式标注的 AI 辅助复核。发布包保留 283 条有效逐轮记录和传输重试计数，不公开逐请求完整 prompt 或失败归档原文。单模型结果不能推出跨模型效应。
+**当前进展：DeepSeek 批次已脱敏发布并转入历史归档。** [Feedback Study v1](../historical/feedback_study_v1/docs/FEEDBACK_STUDY_V1.md) 使用独立协议比较 raw、normalized、structured 三组；repair24 × 三表示 × 三重复共 216 个任务已完成，199 个成功证明通过独立复编译和显式标注的 AI 辅助复核。发布包保留 283 条有效逐轮记录和传输重试计数，不公开逐请求完整 prompt 或失败归档原文。单模型结果不能推出跨模型效应。
 
 建议建立独立的反馈表示子研究，不复用现有研究臂名称。最低对照为：原始诊断、归一化诊断、结构化诊断。三组必须使用相同题目、模型、顺序、轮数、输出上限和编译预算。
 
@@ -95,7 +95,7 @@ Community feedback from [subfish-zhou](https://github.com/subfish-zhou) and [Ful
 
 ### F4：第二模型独立复现
 
-**当前进展：DeepSeek Flash 模型族内复现已完成，独立供应商复现未完成。** [第二模型复现协议](SECOND_MODEL_REPLICATION.md)通过 `--reference-release` 在付费请求前核对 Pro 发布包；公共题库、任务顺序、三表示、三重复、轮数、编译时限、温度、输出上限和静态模板均未漂移。Flash 的 216 任务、209 个证明、AI 辅助复核和脱敏发布包已通过门禁。
+**当前进展：DeepSeek Flash 模型族内复现已完成并转入历史归档，独立供应商复现未完成。** [第二模型复现协议](../historical/feedback_study_v1/docs/SECOND_MODEL_REPLICATION.md)通过 `--reference-release` 在付费请求前核对 Pro 发布包；公共题库、任务顺序、三表示、三重复、轮数、编译时限、温度、输出上限和静态模板均未漂移。Flash 的 216 任务、209 个证明、AI 辅助复核和脱敏发布包已通过门禁。
 
 `scripts/compare_feedback_models.py` 已对齐 Pro/Flash 的 216 个任务，并报告首轮与最终结局一致率、各表示成功差和表示对比方向一致性。报告单列共同零差异，避免把“两个模型都未出现表示差”解释为处理增益复现。下一次独立供应商复现仍须披露 thinking/reasoning 接口、tokenizer、别名更新和服务端默认值等残余混杂。
 

@@ -108,4 +108,4 @@ Part 1 Experience 结果仅作资源参考：25/25 成功、39 总轮数、14 �
 - `summary.json`、`REPORT.md`：汇总指标和英文交接报告；
 - `handoff.json`：交接文件的相对路径、字节数和元数据说明。
 
-SP-1 是独立的安全策略回归，不是 Part 3 的第四个 Agent 条件；其候选在 Lean 编译前拒绝，验证方式见 [`security_policy.md`](security_policy.md)。
+SP-1 是独立的安全策略回归，不是 Part 3 的第四个 Agent 条件；其候选在 Lean 编译前拒绝，验证方式见 [`security_policy.md`](../../../docs/security_policy.md)。

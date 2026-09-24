@@ -1,6 +1,6 @@
 # 研究实验操作与预注册协议
 
-与旧 [18 题 pilot 指南](REAL_PILOT_GUIDE.md) 分离。不覆盖旧日志、成功证明、人工复核表或已发布结果。新运行必须使用新输出目录。
+与旧 [18 题 pilot 指南](../historical/evaluation18_pilot/REAL_PILOT_GUIDE.md) 分离。不覆盖旧日志、成功证明、人工复核表或已发布结果。新运行必须使用新输出目录。
 
 ## 1. 两层题库
 
@@ -213,7 +213,7 @@ python src/human_study.py report
 
 ### 7.1 Lean 编译诊断反馈
 
-离线协议与入口已经实现：三层诊断见 [COMPILER_FEEDBACK_V1.md](COMPILER_FEEDBACK_V1.md)，逐轮采纳/query 审计见 [FEEDBACK_ADOPTION_V1.md](FEEDBACK_ADOPTION_V1.md)，独立三表示对照见 [FEEDBACK_STUDY_V1.md](FEEDBACK_STUDY_V1.md)。下列条目中“记录与门禁”已完成；真实模型比较仍待另行授权运行。
+离线协议与入口已经实现：三层诊断见 [COMPILER_FEEDBACK_V1.md](COMPILER_FEEDBACK_V1.md)，逐轮采纳/query 审计见 [FEEDBACK_ADOPTION_V1.md](FEEDBACK_ADOPTION_V1.md)，早期独立三表示对照见 [历史 Feedback Study v1](../historical/feedback_study_v1/docs/FEEDBACK_STUDY_V1.md)。下列条目中“记录与门禁”已完成；真实模型比较仍待另行授权运行。
 
 后续协议应把“是否提供反馈”细化为“提供什么反馈、模型是否采纳反馈”：
 

@@ -20,5 +20,6 @@ results/solutions/
 /experiments/*.local.json
 results/handoff/
 results/work/
-baseline/.baseline_cache.json
-baseline/runs/
+historical/fate_m/baseline/.baseline_cache.json
+historical/fate_m/baseline/runs/
+historical/fate_m/results/work/

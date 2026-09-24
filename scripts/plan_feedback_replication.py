@@ -24,7 +24,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--reference-release", type=Path,
-        default=ROOT / "published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248",
+        default=(
+            ROOT
+            / "historical"
+            / "feedback_study_v1"
+            / "published"
+            / "feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248"
+        ),
     )
     parser.add_argument("--config", type=Path, default=ROOT / "experiments/feedback_study.example.json")
     parser.add_argument("--benchmark", type=Path, default=ROOT / "benchmarks/repair24/manifest.json")

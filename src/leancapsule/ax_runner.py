@@ -12,7 +12,13 @@ from .ax_integration import install_axproverbase_capsule_feedback
 def main(argv: list[str] | None = None) -> None:
     if argv is not None:
         sys.argv = [sys.argv[0], *argv]
-    default_config = Path(__file__).resolve().parents[2] / "configs" / "axprover_part2_capsule.yaml"
+    default_config = (
+        Path(__file__).resolve().parents[2]
+        / "historical"
+        / "fate_m"
+        / "configs"
+        / "axprover_part2_capsule.yaml"
+    )
     config = Path(os.environ.get("CAPSULE_AX_CONFIG", default_config)).resolve()
     if not config.is_file():
         raise SystemExit(f"Part 2 Ax config not found: {config}")

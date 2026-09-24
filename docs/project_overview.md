@@ -1,48 +1,42 @@
 # 项目概览
 
-TRACER（Typed Repair Agent with Compiler-validated Example Retrieval）是 Lean 4 局部证明修复、失败复现与实验审计工具箱。它不训练模型，而是在推理阶段连接模型候选、Lean 编译反馈、本地示例检索、受控重试和可追踪结果。
+TRACER（Typed Repair Agent with Compiler-validated Example Retrieval）是 Lean 4 局部证明修复、编译反馈实验与失败复现工具箱。它不训练模型，而是在推理阶段连接候选生成、Lean 编译、结构化反馈、错误自适应检索、有限重试与可审计发布。
 
-## 三条工作流
+## 当前三条主线
 
-1. **Agent 修复**：`src/agent.py`、`compiler.py`、`provider.py` 与 `retriever.py` 组成最多三轮的局部修复环；原文件不被覆盖，成功证明和逐轮记录分别落盘。
-2. **LeanCapsule 复现**：`src/leancapsule/` 负责定理抽取、full-file fallback、有界 import 精简、回放、gallery、issue 文本和发布审计。
-3. **研究评测**：旧 18×3 pilot、repair24 六臂 runner、AxProverBase Part 1/2 配对入口和 Capsule 价值测量彼此隔离，不能混合日志或结论。
+1. **证明修复**：`src/agent.py`、`compiler.py`、`provider.py` 与 `retriever.py` 在隔离临时项目中执行候选、编译、反馈和保存；原题文件不被覆盖。
+2. **研究评测**：repair24 的 R-A～R-F 六臂 runner、反馈采纳分析和发布门禁已经形成 864 任务正式结果；TRACER-REAL v2 已冻结 265 题 manifest，其中确认性 test 为五个项目的 254 题，尚未运行 provider。
+3. **失败与安全工件**：LeanCapsule 保存可回放失败；SP-1～SP-12 在编译前阻止冻结的危险候选，并用 CTRL-1～CTRL-8 监测正常输入误拒绝。
 
-## 命名约定
+## 当前可核查证据
 
-- 已发布 smoke pilot 使用 P-A/P-B/P-C 表示历史 A/B/C 条件。
-- repair24 公开显示为 R-A～R-F；存储值保持 `A/B/C/D/C_dynamic/C_failure`。
-- SP-n 表示非实验性的 Security Policy 回归；当前离线套件为 SP-1～SP-12，并配有 CTRL-1～CTRL-8 正常对照。
+- `published/research-six-arm-313f437f/`：864 个任务、1,066 条脱敏逐轮记录、811 个成功证明和 864 行 AI 辅助复核；
+- `published/security-study-tracer-sp-v2/`：12 个危险案例和 8 个正常对照；
+- `capsules/`、`results/capsule_feasibility/`、`results/capsule_challenges/`：24 个 gallery 案例及 12-core / 4-challenge 回放；
+- `benchmarks/real_repairs/tracer_real_v2/`：下一阶段已经冻结、尚未调用 provider 的真实修复题库。
 
-## 当前可核查工件
+旧 Evaluation18 pilot、两批 Feedback Study v1 和 FATE-M Part 1–3 没有删除，统一见 [`historical/`](../historical/README.md)。它们不与当前六臂结果合并统计。
 
-- **已发布证据**：Evaluation18 的 56 条逐轮记录、54 个成功证明与完整人工复核；24 个公开失败 Capsule；12-core / 4-challenge 可行性结果；FATE-M Part 1/2、拆分臂与 Part 3 交接工件。
-- **可复验实现**：repair24 题库、R-A～R-F 六臂 runner、反馈采纳/query 变化审计、raw/normalized/structured 对照 runner、SP 双向指标、动态查询、失败 Capsule 上下文、跨环境与真人研究入口；这些功能不等于相应研究结论已经获得。
-- **当前不含原始证据**：历史 DeepSeek R-B 预跑、Windows/WSL 比较和真人计时数据，不作为公开结果。
-- **未来计划**：运行并复核真实 provider 三表示对照，扩大 SP 案例覆盖，并验证操作系统级隔离。
+## 命名与证据边界
 
-证据与未完成事项以带日期的[当前进度与证据登记](../PROGRESS.md)为准；历史改动见[补丁记录](../CHANGELOG.md)。
+- repair24 公开显示为 R-A～R-F，存储值保持 `A/B/C/D/C_dynamic/C_failure`；
+- SP-n 是 Security Policy，不是额外实验臂；
+- 重复与实验臂不能把 24 道独立题扩充为 864 道独立样本；
+- mock、离线计划、Lean 编译通过和发布审计均不能单独替代真实 provider 研究结论。
 
-## 后续研究重点
+当前数字、未完成事项和验收命令以 [`PROGRESS.md`](../PROGRESS.md) 为准；未来路线见 [`FUTURE_WORK_PLAN.md`](FUTURE_WORK_PLAN.md)。
 
-根据 2026 年 8 月 30 日来自 [subfish-zhou](https://github.com/subfish-zhou) 与 [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) 的社区反馈，下一阶段优先研究两项问题：
-
-1. 深化 Lean 编译诊断反馈：离线三表示和采纳指标已经实现，下一步在冻结预算下运行真实 provider 配对实验并完成证明复核。
-2. 深化 SP-n 安全计划：第二版威胁模型、12 个危险案例、8 个正常对照和双向区间已经实现，下一步进行外部案例复核并验证容器或低权限隔离。
-
-这些新增内容不改变 R-A～R-F 的定义；SP v2 是已发布的有限离线回归，但不构成完整安全结论。详细约束见 [研究实验操作与预注册协议](RESEARCH_PROTOCOL.md#7-社区评审驱动的后续工作)，执行顺序见 [编译反馈与 SP-n 后续工作方案](FUTURE_WORK_PLAN.md)。
-
-## 无付费调用的复验
+## 无付费调用的核心复验
 
 ```text
 lake build
-python scripts/run_capsule_feasibility.py --verify-only
 python scripts/verify_compiler_feedback_v1.py --verify-only
-python src/feedback_study.py plan
-python src/security_study.py
+python src/tracer_real_v2.py audit
+python scripts/audit_research_release.py published/research-six-arm-313f437f
+python src/security_study.py --check published/security-study-tracer-sp-v2/report.json
 python scripts/run_ci_tests.py
 python -m leancapsule audit capsules
 python -m leancapsule verify capsules
 ```
 
-最后一项需先准备固定的 Mathlib 依赖。上述命令不产生模型实验结果，也不能代替成功证明的人工数学复核。
+最后一项需要先准备固定的 Mathlib 依赖。上述命令不调用付费模型，也不把软件测试自动解释为研究假设成立。

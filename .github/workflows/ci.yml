@@ -31,17 +31,9 @@ jobs:
       # 固定的 12 个真实 Lean 失败与 3 个基础设施事件；不调用模型 API。
       - name: Verify Compiler Feedback v1 fixtures
         run: python scripts/verify_compiler_feedback_v1.py --verify-only
-      - name: Verify feedback comparison plan
-        run: python src/feedback_study.py plan
       # 核对最终冻结 manifest、公开占比修订与运行时预注册；不调用 provider。
       - name: Audit TRACER-REAL v2 enrollment
         run: python src/tracer_real_v2.py audit
-      - name: Audit published feedback study
-        run: python scripts/audit_feedback_study.py published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248
-      - name: Audit published second-model feedback study
-        run: python scripts/audit_feedback_study.py published/feedback-study-562ad440-3446-4138-801e-59726ed0e108
-      - name: Audit published cross-model comparison
-        run: python scripts/audit_feedback_comparison.py published/feedback-cross-model-8ccb89dd-562ad440
       - name: Audit published six-arm research
         run: python scripts/audit_research_release.py published/research-six-arm-313f437f
       # README 图表由已发布 summary.json 确定性生成；避免图、表与发布结果分叉。
@@ -49,8 +41,6 @@ jobs:
         run: |
           python scripts/render_six_arm_chart.py
           git diff --exit-code -- docs/assets/repair24-six-arm-results.svg
-      - name: Verify second-model replication contract
-        run: python scripts/plan_feedback_replication.py --model-id ci-second-model --api-url https://example.invalid/v1/chat/completions --model ci-second-model
       - name: Verify SP security metrics
         run: python src/security_study.py --check published/security-study-tracer-sp-v2/report.json
       # 普通 CI 只核对隔离协议；真实容器探针仅由独立手动工作流执行。

@@ -98,7 +98,7 @@ class MergeCompatibilityTest(unittest.TestCase):
             self.assertEqual(restored.observe("Demo.lean:甲.target", (False, "error: unknown identifier `x`"), round_no=2)["repeat_count"], 2)
 
     def test_corrected_upstream_pairing_uses_exact_proposals(self):
-        root = ROOT / "results/handoff/part12-live-20260828-corrected"
+        root = ROOT / "historical/fate_m/results/handoff/part12-live-20260828-corrected"
         read = lambda name: [json.loads(line) for line in (root / name).read_text(encoding="utf-8").splitlines() if line.strip()]
         left, right = read("baseline-full.jsonl"), read("capsule-full.jsonl")
         result = validate_paired_runs(left, right)
@@ -120,7 +120,7 @@ class MergeCompatibilityTest(unittest.TestCase):
             elif isinstance(value, list):
                 for child in value:
                     check(child)
-        for directory in (ROOT / "results/handoff").glob("part12-live-*"):
+        for directory in (ROOT / "historical/fate_m/results/handoff").glob("part12-live-*"):
             manifest = json.loads((directory / "handoff.json").read_text(encoding="utf-8"))
             check(manifest)
             for entry in manifest["files"]:
@@ -135,7 +135,11 @@ class MergeCompatibilityTest(unittest.TestCase):
 
     def test_runtime_and_experiment_scripts_do_not_import_digest_library(self):
         prohibited_module = "ha" + "sh" + "lib"
-        for folder in (ROOT / "src", ROOT / "baseline", ROOT / "scripts"):
+        for folder in (
+            ROOT / "src",
+            ROOT / "historical" / "fate_m" / "baseline",
+            ROOT / "scripts",
+        ):
             for path in folder.rglob("*.py"):
                 tree = ast.parse(path.read_text(encoding="utf-8-sig"))
                 for node in ast.walk(tree):

@@ -29,17 +29,31 @@ class DocumentationConsistencyTest(unittest.TestCase):
         for name, readme in self.readmes().items():
             with self.subTest(language=name):
                 self.assertIn("docs/FEEDBACK_ADOPTION_V1.md", readme)
-                self.assertIn("docs/FEEDBACK_STUDY_V1.md", readme)
+                self.assertIn("historical/README.md", readme)
                 self.assertIn("docs/TRACER_REAL_V2.md", readme)
                 self.assertIn("tracer_real_v2.enrollment.json", readme)
                 self.assertIn("SP-1", readme)
                 self.assertIn("SP-12", readme)
 
+    def test_superseded_projects_are_indexed_outside_active_result_roots(self):
+        archive = ROOT / "historical"
+        self.assertTrue((archive / "README.md").is_file())
+        self.assertTrue((archive / "evaluation18_pilot" / "README.md").is_file())
+        self.assertTrue((archive / "feedback_study_v1" / "README.md").is_file())
+        self.assertTrue((archive / "fate_m" / "README.md").is_file())
+        self.assertEqual(
+            {path.name for path in (ROOT / "published").iterdir() if path.is_dir()},
+            {"research-six-arm-313f437f", "security-study-tracer-sp-v2"},
+        )
+        self.assertFalse((ROOT / "results" / "handoff").exists())
+        self.assertTrue((archive / "fate_m" / "baseline" / "run_batch.py").is_file())
+
     def test_part2_freezes_yxai_responses_and_reuses_ax_build_result(self):
-        part2 = (ROOT / "docs" / "part2_capsule_feedback.md").read_text(encoding="utf-8")
-        shared = (ROOT / "configs" / "axprover_yxai_gpt56_sol.yaml").read_text(encoding="utf-8")
-        baseline = (ROOT / "configs" / "axprover_part1_experience.yaml").read_text(encoding="utf-8")
-        capsule = (ROOT / "configs" / "axprover_part2_capsule.yaml").read_text(encoding="utf-8")
+        root = ROOT / "historical" / "fate_m"
+        part2 = (root / "docs" / "part2_capsule_feedback.md").read_text(encoding="utf-8")
+        shared = (root / "configs" / "axprover_yxai_gpt56_sol.yaml").read_text(encoding="utf-8")
+        baseline = (root / "configs" / "axprover_part1_experience.yaml").read_text(encoding="utf-8")
+        capsule = (root / "configs" / "axprover_part2_capsule.yaml").read_text(encoding="utf-8")
         self.assertIn("openai:gpt-5.6-sol", part2)
         self.assertIn("https://yxai.chat/v1", part2)
         self.assertIn("store=false", part2)
@@ -53,7 +67,15 @@ class DocumentationConsistencyTest(unittest.TestCase):
 
     def test_part12_handoff_records_successful_strict_pairing(self):
         handoff = json.loads(
-            (ROOT / "results" / "handoff" / "part12-live-20260828" / "handoff.json").read_text(
+            (
+                ROOT
+                / "historical"
+                / "fate_m"
+                / "results"
+                / "handoff"
+                / "part12-live-20260828"
+                / "handoff.json"
+            ).read_text(
                 encoding="utf-8"
             )
         )

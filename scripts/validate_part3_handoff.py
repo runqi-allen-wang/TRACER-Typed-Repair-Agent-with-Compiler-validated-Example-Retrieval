@@ -205,7 +205,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--handoff",
         type=Path,
-        default=Path("results/handoff/part12-live-20260828-corrected"),
+        default=Path("historical/fate_m/results/handoff/part12-live-20260828-corrected"),
         help="Directory containing baseline/capsule JSONL files and pairing-full.json.",
     )
     args = parser.parse_args(argv)

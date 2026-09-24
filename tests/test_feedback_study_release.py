@@ -12,9 +12,10 @@ from audit_feedback_study import audit_release  # noqa: E402
 from audit_feedback_comparison import audit_comparison  # noqa: E402
 
 
-RELEASE = ROOT / "published" / "feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248"
-SECOND_RELEASE = ROOT / "published" / "feedback-study-562ad440-3446-4138-801e-59726ed0e108"
-COMPARISON = ROOT / "published" / "feedback-cross-model-8ccb89dd-562ad440"
+ARCHIVE = ROOT / "historical" / "feedback_study_v1" / "published"
+RELEASE = ARCHIVE / "feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248"
+SECOND_RELEASE = ARCHIVE / "feedback-study-562ad440-3446-4138-801e-59726ed0e108"
+COMPARISON = ARCHIVE / "feedback-cross-model-8ccb89dd-562ad440"
 
 
 class FeedbackStudyReleaseTest(unittest.TestCase):

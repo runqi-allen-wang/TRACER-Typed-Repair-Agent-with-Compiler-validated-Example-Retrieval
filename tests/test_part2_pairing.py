@@ -15,7 +15,7 @@ from leancapsule.pairing import (  # noqa: E402
     validate_experience_capsule_pair,
     validate_paired_runs,
 )
-from baseline.run_part2 import (  # noqa: E402
+from historical.fate_m.baseline.run_part2 import (  # noqa: E402
     _contract_from_config,
     extract_record,
     main as run_part2_main,

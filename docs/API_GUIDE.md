@@ -118,7 +118,7 @@ OpenAI GPT：
 python src/evaluate.py --provider openai_compatible --api-url https://api.openai.com/v1/chat/completions --model gpt-4.1 --temperature 0 --max-tokens 4000 --api-key-prompt --conditions A,B,C --max-rounds 3 --timeout 60 --fresh
 ```
 
-每个模型完成一批后，先复核、生成报告并导出到独立目录，再运行另一个模型。`--fresh` 会归档上一批结果和复核表；它不表示“保留旧复核并自动用于新实验”。详细步骤见 [真实实验操作说明](REAL_PILOT_GUIDE.md)。
+每个模型完成一批后，先复核、生成报告并导出到独立目录，再运行另一个模型。`--fresh` 会归档上一批结果和复核表；它不表示“保留旧复核并自动用于新实验”。旧 Evaluation18 流程见 [历史真实实验操作说明](../historical/evaluation18_pilot/REAL_PILOT_GUIDE.md)。
 
 - 同一批 A/B/C 必须保持模型、请求参数、轮数与预算一致；不同模型使用不同批次，不拼接日志来生成更高通过率。
 - 上述 12000 与 4000 是启动示例，不构成等预算模型对比；若比较模型，应预先约定预算，并披露推理模式与服务端默认行为。

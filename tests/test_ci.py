@@ -42,52 +42,33 @@ class ContinuousIntegrationTest(unittest.TestCase):
         self.assertLess(workflow.index("- name: Build Lean project"), workflow.index(gate))
         self.assertLess(workflow.index(gate), workflow.index("- name: Run tests"))
 
-    def test_feedback_plan_and_sp_metrics_are_ci_gates(self):
+    def test_current_enrollment_and_sp_metrics_are_ci_gates(self):
         workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
-        self.assertIn("run: python src/feedback_study.py plan", workflow)
         self.assertIn("run: python src/tracer_real_v2.py audit", workflow)
         self.assertIn(
             "run: python src/security_study.py --check published/security-study-tracer-sp-v2/report.json",
             workflow,
         )
         self.assertLess(
-            workflow.index("run: python src/feedback_study.py plan"),
-            workflow.index("- name: Run tests"),
-        )
-        self.assertLess(
             workflow.index("run: python src/tracer_real_v2.py audit"),
             workflow.index("- name: Run tests"),
         )
 
-    def test_published_feedback_study_is_audited_before_tests(self):
+    def test_current_six_arm_release_is_audited_before_tests(self):
         workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
-        commands = [
-            "run: python scripts/audit_feedback_study.py "
-            "published/feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248",
-            "run: python scripts/audit_feedback_study.py "
-            "published/feedback-study-562ad440-3446-4138-801e-59726ed0e108",
-            "run: python scripts/audit_feedback_comparison.py "
-            "published/feedback-cross-model-8ccb89dd-562ad440",
+        command = (
             "run: python scripts/audit_research_release.py "
-            "published/research-six-arm-313f437f",
-        ]
-        for command in commands:
-            self.assertIn(command, workflow)
-            self.assertLess(workflow.index(command), workflow.index("- name: Run tests"))
+            "published/research-six-arm-313f437f"
+        )
+        self.assertIn(command, workflow)
+        self.assertLess(workflow.index(command), workflow.index("- name: Run tests"))
+        self.assertNotIn("published/feedback-study-", workflow)
+        self.assertNotIn("published/feedback-cross-model-", workflow)
         chart_command = "python scripts/render_six_arm_chart.py"
         chart_diff = "git diff --exit-code -- docs/assets/repair24-six-arm-results.svg"
         self.assertIn(chart_command, workflow)
         self.assertIn(chart_diff, workflow)
         self.assertLess(workflow.index(chart_command), workflow.index("- name: Run tests"))
-
-    def test_second_model_replication_contract_is_checked_before_tests(self):
-        workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
-        command = (
-            "run: python scripts/plan_feedback_replication.py --model-id ci-second-model "
-            "--api-url https://example.invalid/v1/chat/completions --model ci-second-model"
-        )
-        self.assertIn(command, workflow)
-        self.assertLess(workflow.index(command), workflow.index("- name: Run tests"))
 
     def test_lean_action_only_installs_toolchain(self):
         workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
@@ -97,36 +78,9 @@ class ContinuousIntegrationTest(unittest.TestCase):
         self.assertIn("auto-config: false", install_block)
         self.assertIn("use-github-cache: false", install_block)
 
-    def test_part2_workflow_contract(self):
-        workflow = (ROOT / ".github" / "workflows" / "part2.yml").read_text(encoding="utf-8")
-        self.assertIn("workflow_dispatch:", workflow)
-        self.assertIn("- main", workflow)
-        self.assertIn("ubuntu-latest", workflow)
-        self.assertNotIn("windows-latest", workflow)
-        self.assertIn("tests.test_feedback", workflow)
-        self.assertIn("tests.test_ax_integration", workflow)
-        self.assertIn("validate_axprover_contract.py", workflow)
-        self.assertIn("06dfadc9ab439755af5efcfe0add95bfef2733c7", workflow)
-        self.assertIn("pip install /tmp/ax-prover-base", workflow)
-        self.assertIn("smoke_axprover_integration.py", workflow)
-        self.assertIn("python scripts/run_ci_tests.py", workflow)
-        self.assertIn("run: lake build", workflow)
-        self.assertIn("contents: read", workflow)
-        self.assertNotIn("secrets.", workflow)
-
-    def test_part1_pin_check_does_not_depend_on_remote_ref_listing(self):
-        workflow = (ROOT / ".github" / "workflows" / "part1.yml").read_text(encoding="utf-8")
-        self.assertIn("Check immutable ax-prover dependency pin", workflow)
-        self.assertIn("requirements-axprover-part2.txt", workflow)
-        self.assertIn("06dfadc9ab439755af5efcfe0add95bfef2733c7", workflow)
-        self.assertNotIn("git ls-remote", workflow)
-
-    def test_part3_workflow_validates_b_handoff(self):
-        workflow = (ROOT / ".github" / "workflows" / "part3.yml").read_text(encoding="utf-8")
-        self.assertIn("results/handoff/part2-experience-capsule-20260829/**", workflow)
-        self.assertIn("scripts/validate_b_handoff.py", workflow)
-        self.assertIn("run: python scripts/validate_b_handoff.py", workflow)
-        self.assertLess(
-            workflow.index("run: python scripts/validate_part3_handoff.py"),
-            workflow.index("run: python scripts/validate_b_handoff.py"),
-        )
+    def test_superseded_fate_m_workflows_are_archived(self):
+        active = ROOT / ".github" / "workflows"
+        archived = ROOT / "historical" / "fate_m" / "workflows"
+        for name in ("part1.yml", "part1_run.yml", "part2.yml", "part3.yml"):
+            self.assertFalse((active / name).exists())
+            self.assertTrue((archived / name).is_file())

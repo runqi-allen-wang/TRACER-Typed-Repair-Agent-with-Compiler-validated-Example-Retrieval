@@ -15,7 +15,7 @@
 
 ![TRACER 交互式证明修复浏览器](demo/assets/tracer-demo-preview.png)
 
-[交互演示](#60-秒体验-tracer) · [快速开始](#快速开始) · [最新结果](#最新已发布结果) · [证据状态](PROGRESS.md) · [API 指南](docs/API_GUIDE.md) · [失败案例库](capsules/index.md) · [参与贡献](CONTRIBUTING.md)
+[交互演示](#60-秒体验-tracer) · [快速开始](#快速开始) · [最新结果](#最新已发布结果) · [证据状态](PROGRESS.md) · [API 指南](docs/API_GUIDE.md) · [失败案例库](capsules/index.md) · [历史归档](historical/README.md) · [参与贡献](CONTRIBUTING.md)
 
 ![TRACER 项目概览](TRACER.png)
 
@@ -47,10 +47,9 @@ python demo/serve.py
 ## 当前状态
 
 - **repair24 六臂实验：** 预注册的 864 任务矩阵已经完成；发布包包含 1,066 条脱敏逐轮记录、811 个成功证明、AI 辅助复核账本和可复现审计合同。
-- **Compiler Feedback Study v1：** 早期两批 216 任务实验继续作为反馈表示研究的辅助证据；其中 408 个成功证明均已独立复编译。
 - **TRACER-REAL v2：** 六个上游项目的 1,576 个冻结历史候选已全部筛查：**256 个纳入、1,320 个拒绝**，provider 调用为零。SciLean 的 2/54 项低于每项目五题门槛，最终确认性 test 划分冻结为**五个独立项目、254 道真实修复题**。PhysLean 占 94/254（37.0%）；一份在 provider 调用前公开的修订将探索阶段的 35% 集中度上限调整为 40%，不删题且不改变其他门槛。最终 265 题 manifest（development 3、validation 8、test 254）及精确运行时预注册均已冻结并通过审计。参见[原始纳入合同](benchmarks/real_repairs/tracer_real_v2.enrollment.json)、[v2 协议与修订](docs/TRACER_REAL_V2.md)、[最终 manifest](benchmarks/real_repairs/tracer_real_v2/manifest.json)和[运行时预注册](experiments/preregistrations/tracer_real_causal_v2.json)。
 - **LeanCapsule：** 24 个复核案例覆盖 Std、Mathlib 与 project-local 环境；另有 12-core / 4-challenge 套件验证干净目录回放。
-- **编译反馈与安全：** 三层诊断协议、[反馈采纳审计](docs/FEEDBACK_ADOPTION_V1.md)、[反馈实验协议](docs/FEEDBACK_STUDY_V1.md)和 SP-1～SP-12 门禁均已实现。容器和低权限隔离仍是待补证据。
+- **编译反馈与安全：** 三层诊断协议、[反馈采纳审计](docs/FEEDBACK_ADOPTION_V1.md)和 SP-1～SP-12 门禁均已实现。容器和低权限隔离仍是待补证据。
 
 ## 快速开始
 
@@ -135,12 +134,11 @@ Agent 成功表示候选通过 Lean 和未完成证明检查；Capsule 成功表
 | 范围 | 当前有证据支持的内容 | 重要边界 |
 | --- | --- | --- |
 | repair24 六臂实验 | 通过审计的 864 任务发布；811 个证明独立复编译 | AI 辅助复核；仅 24 道独立题且属于同一供应商模型族 |
-| 早期反馈表示实验 | 两批通过审计的 216 任务发布；408 个证明独立复编译 | 辅助历史证据，不是当前最新主结果 |
 | TRACER-REAL v2 | 六个项目全部筛查；最终 manifest 冻结五个独立测试项目、254 道修复题 | 40% 占比门槛是 provider 前对原 35% 的公开修订；尚无 v2 provider 结果 |
 | LeanCapsule | 24/24 gallery 回放、16/16 feasibility 回放 | 复现预期失败不等于修复证明 |
 | 安全 | [SP v2 发布包](published/security-study-tracer-sp-v2)：危险候选误放行 0/12，正常对照误拒绝 0/8 | 小规模冻结套件不是操作系统沙箱，也不代表零风险 |
 
-统一证据登记见 [PROGRESS.md](PROGRESS.md)；历史变更和已被取代的工程基线保留在 [CHANGELOG.md](CHANGELOG.md)。
+统一证据登记见 [PROGRESS.md](PROGRESS.md)。被取代的发布包、FATE-M 交接和 Evaluation18 smoke pilot 均未删除，统一保存在[历史归档](historical/README.md)；按时间记录的改动仍见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## 验证
 
@@ -160,12 +158,13 @@ python -m leancapsule verify capsules
 | 主题 | 文档 |
 | --- | --- |
 | Provider/API 配置 | [API 指南](docs/API_GUIDE.md) |
-| Compiler Feedback v1 | [诊断协议](docs/COMPILER_FEEDBACK_V1.md) · [反馈采纳](docs/FEEDBACK_ADOPTION_V1.md) · [反馈实验](docs/FEEDBACK_STUDY_V1.md) |
+| Compiler Feedback v1 | [诊断协议](docs/COMPILER_FEEDBACK_V1.md) · [反馈采纳](docs/FEEDBACK_ADOPTION_V1.md) |
 | 因果对照与 R-A～R-F | [因果反馈](docs/CAUSAL_FEEDBACK_V1.md) · [研究协议](docs/RESEARCH_PROTOCOL.md) |
 | 真实历史修复 | [TRACER-REAL 构建器](benchmarks/real_repairs/README.md) · [v2 纳入](docs/TRACER_REAL_V2.md) |
 | 失败工件 | [Capsule 格式](docs/CAPSULE_FORMAT.md) · [案例库](capsules/index.md) |
 | 安全 | [SP 策略](docs/security_policy.md) · [隔离协议](docs/SP_ISOLATION_V1.md) |
 | 研究背景 | [相关工作](docs/RELATED_WORK.md) |
+| 已被取代的研究 | [历史归档索引](historical/README.md) |
 
 ## 下一步证据
 

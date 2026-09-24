@@ -1,6 +1,6 @@
 # LeanCapsule 实施状态与后续研究
 
-- **安全对抗（已实现至 SP v2）**：SP-1 保留 `unsafe inductive` 的 Agent、AxProverBase 与 Capsule 跨入口回归；SP-1～SP-12/CTRL-1～CTRL-8 进一步覆盖编译前策略、正常对照真编译和双向错误区间。SP 不是实验组，也不是完整沙箱，详见 [`security_policy.md`](security_policy.md)。
+- **安全对抗（已实现至 SP v2）**：SP-1 保留 `unsafe inductive` 的 Agent、AxProverBase 与 Capsule 跨入口回归；SP-1～SP-12/CTRL-1～CTRL-8 进一步覆盖编译前策略、正常对照真编译和双向错误区间。SP 不是实验组，也不是完整沙箱，详见 [`security_policy.md`](../docs/security_policy.md)。
 
 ## 1. 提高错误保真度，同时控制验证成本
 
@@ -11,7 +11,7 @@
 ## 2. 扩充 Capsule 可行性案例集
 
 - **已完成**：在 24 个公开 gallery 回归之外，新增 16 组“正确模板 + 单点错误变异”。12 个 core 覆盖四类错误 × 三种上下文，4 个 challenge 保留同文件依赖、项目多文件、命名空间和多诊断边界。自动运行会编译两个版本、执行 `pack/replay`、复制到干净目录复验并汇总结果。
-- **当前证据**：core 门禁 12/12、challenge 干净回放 4/4，全部 16 个案例保留诊断键和完整有序规范化诊断。core standalone/fallback 为 5/7，challenge 为 2/2。结果见 [`CAPSULE_FEASIBILITY.md`](CAPSULE_FEASIBILITY.md)。这些是有限合成案例，不包含任意 Lake 动态依赖或真实大型维护故障。
+- **当前证据**：core 门禁 12/12、challenge 干净回放 4/4，全部 16 个案例保留诊断键和完整有序规范化诊断。core standalone/fallback 为 5/7，challenge 为 2/2。结果见 [`CAPSULE_FEASIBILITY.md`](../docs/CAPSULE_FEASIBILITY.md)。这些是有限合成案例，不包含任意 Lake 动态依赖或真实大型维护故障。
 
 ## 3. 给Capsule 加入接口，加入基线agent后比对效果
 
@@ -53,4 +53,4 @@ Memory 把失败经验压缩成“实验笔记”
 
 ### Part 3：后续重复与扩展（尚未执行）
 
-在同一批任务上配对比较原始 AxProverBase 与 `AxProverBase + CapsuleFeedback`，共享首轮候选，并固定模型、工具和总 LLM 调用/token/成本预算。当前已完成 Raw/Capsule 主对照和独立 B 混杂拆分臂；主要比较最终通过率、首轮失败后的修复率、调用与成本、重复错误比例。正式结论前仍应在同一时间窗口重跑各条件，避免模型服务变化影响结果；本轮没有运行完整 repair24 六臂矩阵。已有 [交接清单](part3_experiment_handoff.md) 只校验当前交接包，不调用模型；后续扩大模型或批次时仍应使用独立目录并按 task id 配对分析。
+在同一批任务上配对比较原始 AxProverBase 与 `AxProverBase + CapsuleFeedback`，共享首轮候选，并固定模型、工具和总 LLM 调用/token/成本预算。当前已完成 Raw/Capsule 主对照和独立 B 混杂拆分臂；主要比较最终通过率、首轮失败后的修复率、调用与成本、重复错误比例。正式结论前仍应在同一时间窗口重跑各条件，避免模型服务变化影响结果；本轮没有运行完整 repair24 六臂矩阵。已有 [交接清单](fate_m/docs/part3_experiment_handoff.md) 只校验当前交接包，不调用模型；后续扩大模型或批次时仍应使用独立目录并按 task id 配对分析。

@@ -15,7 +15,7 @@
 
 ![TRACER interactive repair explorer](demo/assets/tracer-demo-preview.png)
 
-[Interactive demo](#try-tracer-in-60-seconds) · [Quick start](#quick-start) · [Latest results](#latest-published-results) · [Evidence status](PROGRESS.md) · [API guide](docs/API_GUIDE.md) · [Failure gallery](capsules/index.md) · [Contributing](CONTRIBUTING.md)
+[Interactive demo](#try-tracer-in-60-seconds) · [Quick start](#quick-start) · [Latest results](#latest-published-results) · [Evidence status](PROGRESS.md) · [API guide](docs/API_GUIDE.md) · [Failure gallery](capsules/index.md) · [Historical archive](historical/README.md) · [Contributing](CONTRIBUTING.md)
 
 ![TRACER overview](TRACER.png)
 
@@ -47,10 +47,9 @@ Research-arm storage values remain `A/B/C/D/C_dynamic/C_failure` for compatibili
 ## Current state
 
 - **Six-arm repair24 study:** the preregistered 864-task matrix is complete. Its release contains 1,066 sanitized attempts, 811 successful proofs, an AI-assisted review ledger, and a reproducible audit contract.
-- **Compiler Feedback Study v1:** the earlier two 216-task releases remain supporting representation studies; their 408 successful proofs were independently recompiled.
 - **TRACER-REAL v2:** all 1,576 frozen history candidates from six upstream projects have been screened: **256 admitted, 1,320 rejected**, with no provider calls. SciLean's 2/54 repairs fall below the five-task project minimum, leaving a frozen confirmatory test split of **254 repairs from five independent projects**. PhysLean contributes 94/254 (37.0%); a public pre-provider amendment raised the exploratory 35% concentration cap to 40% while preserving every task and all other gates. The final 265-task manifest (3 development, 8 validation, 254 test) and exact runtime preregistration are now frozen and audited. See the [original enrollment contract](benchmarks/real_repairs/tracer_real_v2.enrollment.json), [protocol and amendment](docs/TRACER_REAL_V2.md), [final manifest](benchmarks/real_repairs/tracer_real_v2/manifest.json), and [runtime preregistration](experiments/preregistrations/tracer_real_causal_v2.json).
 - **LeanCapsule:** 24 reviewed cases cover Std, Mathlib, and project-local environments; a separate 12-core / 4-challenge suite checks clean-directory replay.
-- **Feedback and security:** the three-layer diagnostic protocol, [feedback-adoption audit](docs/FEEDBACK_ADOPTION_V1.md), [study protocol](docs/FEEDBACK_STUDY_V1.md), and SP-1–SP-12 gates are implemented. Container and low-privilege isolation remain future evidence.
+- **Feedback and security:** the three-layer diagnostic protocol, [feedback-adoption audit](docs/FEEDBACK_ADOPTION_V1.md), and SP-1–SP-12 gates are implemented. Container and low-privilege isolation remain future evidence.
 
 ## Quick start
 
@@ -135,12 +134,11 @@ The preregistered primary comparison, R-B minus R-A, was **0.0 percentage points
 | Area | What is supported now | Important boundary |
 | --- | --- | --- |
 | Six-arm repair24 study | Audited 864-task release; 811 proofs independently recompiled | AI-assisted review; 24 unique problems and one provider family |
-| Earlier feedback-representation study | Two audited 216-task releases; 408 proofs independently recompiled | Supporting history, not the latest primary result |
 | TRACER-REAL v2 | Six projects fully screened; final manifest freezes 254 test repairs across five independent projects | 40% share cap is a disclosed pre-provider amendment from the original 35%; no v2 provider result exists yet |
 | LeanCapsule | 24/24 reviewed gallery replays; 16/16 feasibility replays | Reproducing an expected failure is not proof repair |
 | Security | [SP v2 release](published/security-study-tracer-sp-v2): 0/12 dangerous false accepts and 0/8 benign false rejects | A small frozen suite is not an OS sandbox or a zero-risk guarantee |
 
-The canonical evidence register is [PROGRESS.md](PROGRESS.md); historical changes and superseded engineering baselines are kept in [CHANGELOG.md](CHANGELOG.md).
+The canonical evidence register is [PROGRESS.md](PROGRESS.md). Superseded releases, FATE-M handoffs, and the Evaluation18 smoke pilot are preserved—without deletion—in the [historical archive](historical/README.md); chronological changes remain in [CHANGELOG.md](CHANGELOG.md).
 
 ## Validation
 
@@ -160,12 +158,13 @@ python -m leancapsule verify capsules
 | Topic | Document |
 | --- | --- |
 | Provider/API setup | [API guide](docs/API_GUIDE.md) |
-| Compiler Feedback v1 | [diagnostic protocol](docs/COMPILER_FEEDBACK_V1.md) · [feedback adoption](docs/FEEDBACK_ADOPTION_V1.md) · [feedback study](docs/FEEDBACK_STUDY_V1.md) |
+| Compiler Feedback v1 | [diagnostic protocol](docs/COMPILER_FEEDBACK_V1.md) · [feedback adoption](docs/FEEDBACK_ADOPTION_V1.md) |
 | Causal controls and R-A–R-F | [causal feedback](docs/CAUSAL_FEEDBACK_V1.md) · [research protocol](docs/RESEARCH_PROTOCOL.md) |
 | Real historical repairs | [TRACER-REAL builder](benchmarks/real_repairs/README.md) · [v2 enrollment](docs/TRACER_REAL_V2.md) |
 | Failure artifacts | [Capsule format](docs/CAPSULE_FORMAT.md) · [gallery](capsules/index.md) |
 | Security | [SP policies](docs/security_policy.md) · [isolation protocol](docs/SP_ISOLATION_V1.md) |
 | Research context | [related work](docs/RELATED_WORK.md) |
+| Superseded studies | [historical archive index](historical/README.md) |
 
 ## Next evidence priorities
 

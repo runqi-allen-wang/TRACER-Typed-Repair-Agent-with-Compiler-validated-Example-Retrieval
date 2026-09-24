@@ -26,7 +26,13 @@ from compare_feedback_models import (  # noqa: E402
 from research import load_benchmark  # noqa: E402
 
 
-BASELINE = ROOT / "published" / "feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248"
+BASELINE = (
+    ROOT
+    / "historical"
+    / "feedback_study_v1"
+    / "published"
+    / "feedback-study-8ccb89dd-3e26-47f0-8eae-d1930b95e248"
+)
 
 
 class FeedbackReplicationTest(unittest.TestCase):

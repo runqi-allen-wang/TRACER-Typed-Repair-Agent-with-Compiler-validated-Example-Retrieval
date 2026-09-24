@@ -6,11 +6,11 @@
 4. 修改公开案例后运行 `python -m leancapsule audit capsules` 和 `python -m leancapsule verify capsules`。
 5. 不得在正式评测路径中加入标准答案表或按题号路由的确定性答案逻辑。
 6. provider 凭据只通过进程内参数或环境变量提供，不提交凭据和包含敏感信息的运行日志。
-7. 正式 A/B/C 结论必须来自同一真实 provider、冻结题集、完整 JSONL 日志和已完成的人工复核。
+7. 正式研究结论必须来自冻结协议、完整轨迹、成功证明、明确标注的复核方式和通过审计的发布包。
 
 ## API 文档与兼容性
 
-模型接入步骤统一维护在 [API 使用指南](docs/API_GUIDE.md)，完整实验与导出步骤维护在 [真实实验操作说明](docs/REAL_PILOT_GUIDE.md)。更新示例时应同时检查 CLI 参数和 provider 实际发送的字段，不得把仅在服务商文档中存在、但项目尚未实现的参数写成可用命令。
+模型接入步骤统一维护在 [API 使用指南](docs/API_GUIDE.md)，当前实验协议见 [RESEARCH_PROTOCOL.md](docs/RESEARCH_PROTOCOL.md)，被取代的 pilot 和旧实验说明见 [历史归档](historical/README.md)。更新示例时应同时检查 CLI 参数和 provider 实际发送的字段，不得把仅在服务商文档中存在、但项目尚未实现的参数写成可用命令。
 
 文档检查不需要调用真实模型。若只核对了请求结构和命令参数，应明确记录“未实际调用付费 API”，不能把该检查表述为模型调用成功。
 
@@ -34,7 +34,7 @@ Co-authored-by: Rayleiteng <对方确认的 GitHub 关联邮箱>
 
 ```bash
 git switch -c codex/api-model-docs
-git add -- README.md docs/API_GUIDE.md docs/REAL_PILOT_GUIDE.md docs/methodology.md CONTRIBUTING.md CHANGELOG.md PROGRESS.md
+git add -- README.md README.zh-CN.md docs/API_GUIDE.md docs/RESEARCH_PROTOCOL.md docs/methodology.md CONTRIBUTING.md CHANGELOG.md PROGRESS.md
 git diff --cached --name-only
 git diff --cached --check
 ```

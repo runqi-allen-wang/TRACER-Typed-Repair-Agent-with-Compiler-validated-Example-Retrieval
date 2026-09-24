@@ -24,7 +24,7 @@ from leancapsule.feedback import (  # noqa: E402
     YXAI_WIRE_API,
 )
 from leancapsule.part3 import build_summary, validate_part3_runs  # noqa: E402
-from baseline.run_part2 import extract_record  # noqa: E402
+from historical.fate_m.baseline.run_part2 import extract_record  # noqa: E402
 from scripts.compare_part3 import _export_errors  # noqa: E402
 from scripts.prepare_part2_first_round_cache import prepare_cache  # noqa: E402
 

@@ -52,7 +52,13 @@ class PilotWorkflowTest(unittest.TestCase):
         self.assertEqual(len(expected_pairs(ROOT / "benchmarks" / "manifest.json")), 54)
 
     def test_published_v1_pilot_requires_explicit_compatibility_mode(self):
-        release = ROOT / "published/pilot-20260826T122354Z-d628742d"
+        release = (
+            ROOT
+            / "historical"
+            / "evaluation18_pilot"
+            / "published"
+            / "pilot-20260826T122354Z-d628742d"
+        )
         rows = load_runs(release / "real_pilot_runs.sanitized.jsonl")
         expected = expected_pairs(ROOT / "benchmarks/manifest.json")
         strict_errors = validate_runs(rows, expected, allow_cache_hits=False)

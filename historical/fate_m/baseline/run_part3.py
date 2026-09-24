@@ -15,10 +15,11 @@ from typing import Any
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
+REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
-if str(ROOT / "src") not in sys.path:
-    sys.path.insert(0, str(ROOT / "src"))
+if str(REPOSITORY_ROOT / "src") not in sys.path:
+    sys.path.insert(0, str(REPOSITORY_ROOT / "src"))
 
 from run_part2 import (  # noqa: E402
     _read_jsonl,

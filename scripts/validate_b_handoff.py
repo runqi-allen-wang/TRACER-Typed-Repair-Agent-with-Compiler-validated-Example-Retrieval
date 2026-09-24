@@ -10,6 +10,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+HISTORICAL_HANDOFF_ROOT = ROOT / "historical" / "fate_m" / "results" / "handoff"
 sys.path.insert(0, str(ROOT / "src"))
 
 from leancapsule.pairing import validate_experience_capsule_pair  # noqa: E402
@@ -205,7 +206,7 @@ def _validate_manifest(handoff: dict[str, Any], directory: Path) -> list[str]:
     if not isinstance(reference, str) or not reference:
         _fail("baseline_reference is missing")
     baseline_path = (directory / Path(*PurePosixPath(reference.replace("\\", "/")).parts)).resolve()
-    if not _is_relative_to(baseline_path, ROOT / "results" / "handoff"):
+    if not _is_relative_to(baseline_path, HISTORICAL_HANDOFF_ROOT):
         _fail("baseline_reference escapes the published handoff tree")
     if not baseline_path.is_file():
         _fail(f"baseline_reference is missing: {baseline_path}")
@@ -507,14 +508,14 @@ def main() -> int:
     parser.add_argument(
         "--handoff",
         type=Path,
-        default=Path("results/handoff/part2-experience-capsule-20260829"),
+        default=Path("historical/fate_m/results/handoff/part2-experience-capsule-20260829"),
         help="B handoff directory",
     )
     args = parser.parse_args()
     directory = args.handoff if args.handoff.is_absolute() else ROOT / args.handoff
     directory = directory.resolve()
-    if not _is_relative_to(directory, ROOT / "results" / "handoff"):
-        _fail("handoff directory must be inside results/handoff")
+    if not _is_relative_to(directory, HISTORICAL_HANDOFF_ROOT):
+        _fail("handoff directory must be inside historical/fate_m/results/handoff")
 
     handoff = _read_json(directory / "handoff.json")
     if not isinstance(handoff, dict):

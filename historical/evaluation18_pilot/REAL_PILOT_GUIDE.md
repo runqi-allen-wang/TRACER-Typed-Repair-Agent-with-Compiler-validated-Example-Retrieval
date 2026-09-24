@@ -17,7 +17,7 @@ lake build
 
 ## 2. 选择模型与安全输入密钥
 
-当前实现支持 OpenAI 兼容的 Chat Completions 与 Responses API；本页 A/B/C 示例仍使用 Chat Completions。Responses 的 wire API、推理强度和存储配置见 [API 使用指南](API_GUIDE.md)。先按该指南完成一题验证，再运行完整实验。
+当前实现支持 OpenAI 兼容的 Chat Completions 与 Responses API；本页 A/B/C 示例仍使用 Chat Completions。Responses 的 wire API、推理强度和存储配置见 [API 使用指南](../../docs/API_GUIDE.md)。先按该指南完成一题验证，再运行完整实验。
 
 DeepSeek 可选非敏感环境配置：
 

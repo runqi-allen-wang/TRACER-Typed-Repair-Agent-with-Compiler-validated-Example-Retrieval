@@ -46,7 +46,16 @@ async def _run() -> dict[str, object]:
         raise RuntimeError("OPENAI_API_KEY is not set")
 
     merged = merge_configs(
-        [Config(), str(ROOT / "configs" / "axprover_part2_capsule.yaml")],
+        [
+            Config(),
+            str(
+                ROOT
+                / "historical"
+                / "fate_m"
+                / "configs"
+                / "axprover_part2_capsule.yaml"
+            ),
+        ],
         folder=ROOT,
     )
     config = merged.prover

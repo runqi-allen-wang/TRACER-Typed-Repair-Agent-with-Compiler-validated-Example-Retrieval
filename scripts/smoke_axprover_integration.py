@@ -28,7 +28,16 @@ from leancapsule.ax_integration import (  # noqa: E402
 
 def main() -> int:
     merged = merge_configs(
-        [Config(), str(ROOT / "configs" / "axprover_part2_capsule.yaml")],
+        [
+            Config(),
+            str(
+                ROOT
+                / "historical"
+                / "fate_m"
+                / "configs"
+                / "axprover_part2_capsule.yaml"
+            ),
+        ],
         folder=ROOT,
     )
     config = merged.prover
