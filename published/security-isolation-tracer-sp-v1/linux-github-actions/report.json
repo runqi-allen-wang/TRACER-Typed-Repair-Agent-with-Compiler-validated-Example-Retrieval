@@ -1,0 +1,76 @@
+{
+  "protocol_version": "tracer-sp-isolation-evaluation-v1",
+  "profile_version": "tracer-sp-isolation-v1",
+  "recorded_at_utc": "2026-09-24T13:20:52Z",
+  "host_os": "Linux",
+  "runtime": {
+    "kind": "docker",
+    "client_version": "28.0.4",
+    "server_version": "28.0.4",
+    "os_type": "linux"
+  },
+  "image": "python:3.11-slim-bookworm",
+  "image_identity": "tag_only",
+  "image_pulled_during_run": true,
+  "dangerous_lean_executed": false,
+  "configuration": {
+    "container_user": "65532:65532",
+    "read_only_rootfs": true,
+    "read_only_workspace": true,
+    "network": "none",
+    "capabilities": "none",
+    "no_new_privileges": true,
+    "limits": {
+      "memory_bytes": 536870912,
+      "pids": 64,
+      "cpus": 1.0,
+      "tmpfs_bytes": 134217728,
+      "wall_timeout_seconds": 90
+    }
+  },
+  "probe": {
+    "all_required_controls_passed": true,
+    "checks": {
+      "cpu_limit": true,
+      "effective_capabilities_zero": true,
+      "host_secret_not_inherited": true,
+      "memory_limit": true,
+      "network_egress_denied": true,
+      "no_new_privileges": true,
+      "non_root": true,
+      "pids_limit": true,
+      "read_only_rootfs": true,
+      "read_only_workspace": true,
+      "seccomp_filter": true,
+      "temporary_directory_noexec": true,
+      "temporary_directory_writable": true,
+      "unmounted_host_sentinel_absent": true
+    },
+    "evidence": {
+      "cpu_limit": 1.0,
+      "effective_capabilities": "0000000000000000",
+      "effective_uid": 65532,
+      "memory_limit_bytes": 536870912,
+      "network": "connect_ex:101",
+      "no_new_privileges": "1",
+      "pids_limit": 64,
+      "rootfs_write": "OSError:30",
+      "seccomp": "2",
+      "temporary_mount_options": [
+        "inode64",
+        "nodev",
+        "noexec",
+        "nosuid",
+        "relatime",
+        "rw",
+        "size=131072k"
+      ],
+      "temporary_write": "write_succeeded",
+      "workspace_write": "OSError:30"
+    },
+    "profile_version": "tracer-sp-isolation-v1"
+  },
+  "errors": [],
+  "ok": true,
+  "claim_boundary": "该配置只验证冻结的容器边界探针，不证明未知容器逃逸、恶意依赖或任意 Lean 元程序安全。"
+}

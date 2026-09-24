@@ -40,7 +40,7 @@ python demo/serve.py
 | 命名空间 | 含义 | 当前状态 |
 | --- | --- | --- |
 | **R-A / R-B / R-C / R-D / R-E / R-F** | repair24 的反馈与检索研究臂 | 预注册的 864 任务矩阵已完成并发布 |
-| **SP-1～SP-12** | 带正常对照的编译前安全策略 | 离线策略套件已发布；操作系统隔离证据待完成 |
+| **SP-1～SP-12** | 带正常对照的编译前安全策略 | 离线套件与一份原生 Linux Docker 实测已发布；Windows Docker Desktop 仍待完成 |
 
 为兼容现有脚本和记录，研究臂的存储值仍是 `A/B/C/D/C_dynamic/C_failure`。公开讨论使用 R-A～R-F；SP 是安全策略，不是额外实验组。完整定义见[研究协议](docs/RESEARCH_PROTOCOL.md)和[安全策略](docs/security_policy.md)。
 
@@ -49,7 +49,7 @@ python demo/serve.py
 - **repair24 六臂实验：** 预注册的 864 任务矩阵已经完成；发布包包含 1,066 条脱敏逐轮记录、811 个成功证明、AI 辅助复核账本和可复现审计合同。
 - **TRACER-REAL v2：** 六个上游项目的 1,576 个冻结历史候选已全部筛查：**256 个纳入、1,320 个拒绝**，provider 调用为零。SciLean 的 2/54 项低于每项目五题门槛，最终确认性 test 划分冻结为**五个独立项目、254 道真实修复题**。PhysLean 占 94/254（37.0%）；一份在 provider 调用前公开的修订将探索阶段的 35% 集中度上限调整为 40%，不删题且不改变其他门槛。最终 265 题 manifest（development 3、validation 8、test 254）及精确运行时预注册均已冻结并通过审计。参见[原始纳入合同](benchmarks/real_repairs/tracer_real_v2.enrollment.json)、[v2 协议与修订](docs/TRACER_REAL_V2.md)、[最终 manifest](benchmarks/real_repairs/tracer_real_v2/manifest.json)和[运行时预注册](experiments/preregistrations/tracer_real_causal_v2.json)。
 - **LeanCapsule：** 24 个复核案例覆盖 Std、Mathlib 与 project-local 环境；另有 12-core / 4-challenge 套件验证干净目录回放。
-- **编译反馈与安全：** 三层诊断协议、[反馈采纳审计](docs/FEEDBACK_ADOPTION_V1.md)和 SP-1～SP-12 门禁均已实现。容器和低权限隔离仍是待补证据。
+- **编译反馈与安全：** 三层诊断协议、[反馈采纳审计](docs/FEEDBACK_ADOPTION_V1.md)和 SP-1～SP-12 门禁均已实现。一份 GitHub-hosted Ubuntu Docker Engine 报告实测通过全部 14 项低权限控制；Windows Docker Desktop 与未知攻击评估仍待完成。
 
 ## 快速开始
 
@@ -136,7 +136,7 @@ Agent 成功表示候选通过 Lean 和未完成证明检查；Capsule 成功表
 | repair24 六臂实验 | 通过审计的 864 任务发布；811 个证明独立复编译 | AI 辅助复核；仅 24 道独立题且属于同一供应商模型族 |
 | TRACER-REAL v2 | 六个项目全部筛查；最终 manifest 冻结五个独立测试项目、254 道修复题 | 40% 占比门槛是 provider 前对原 35% 的公开修订；尚无 v2 provider 结果 |
 | LeanCapsule | 24/24 gallery 回放、16/16 feasibility 回放 | 复现预期失败不等于修复证明 |
-| 安全 | [SP v2 发布包](published/security-study-tracer-sp-v2)：危险候选误放行 0/12，正常对照误拒绝 0/8 | 小规模冻结套件不是操作系统沙箱，也不代表零风险 |
+| 安全 | [SP v2 策略发布包](published/security-study-tracer-sp-v2)：危险候选误放行 0/12、正常对照误拒绝 0/8；[Linux 隔离证据](published/security-isolation-tracer-sp-v1)：14/14 项冻结控制已观察通过 | 单次 Linux 实测不是完整双平台沙箱证据，也不代表零风险；Windows Docker Desktop 仍待完成 |
 
 统一证据登记见 [PROGRESS.md](PROGRESS.md)。被取代的发布包、FATE-M 交接和 Evaluation18 smoke pilot 均未删除，统一保存在[历史归档](historical/README.md)；按时间记录的改动仍见 [CHANGELOG.md](CHANGELOG.md)。
 
@@ -147,6 +147,7 @@ Agent 成功表示候选通过 Lean 和未完成证明检查；Capsule 成功表
 ```text
 lake build
 python -m unittest discover -s tests -v
+python scripts/audit_security_isolation_release.py published/security-isolation-tracer-sp-v1
 python -m leancapsule audit capsules
 python -m leancapsule verify capsules
 ```
@@ -170,7 +171,7 @@ python -m leancapsule verify capsules
 
 1. 按已经冻结的 TRACER-REAL v2 manifest 与运行时预注册执行 provider 实验，不再修改题目、提示、生成参数或项目等权分析。
 2. 发布结果时同时交付完整轨迹、独立复编译证明、复核方式、基础设施错误和 35%→40% 门禁修订。
-3. 分别生成原生 Linux 与 Windows Docker Desktop 的 SP 隔离证据。
+3. 为 SP 隔离协议补齐仍缺失的 Windows Docker Desktop 报告；已发布的原生 Linux 运行继续按单平台证据解释。
 4. 在反馈对照和安全边界稳定后，再评估自适应路由策略。
 
 以上均为计划，不是已完成结果。

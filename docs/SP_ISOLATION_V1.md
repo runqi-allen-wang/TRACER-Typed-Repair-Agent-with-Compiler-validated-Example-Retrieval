@@ -47,16 +47,23 @@ python src/security_isolation.py run --allow-pull --out $out
 python src/security_isolation.py check "$out/report.json"
 ```
 
-GitHub Actions 中的 `.github/workflows/sp-isolation.yml` 仅支持手动触发，不在普通 push/PR 中自动下载镜像或制造“已运行”证据。运行成功后应下载 `tracer-sp-isolation-report` 工件，检查报告无本机信息，再决定是否作为新发布包提交。
+GitHub Actions 中的 `.github/workflows/sp-isolation.yml` 仅支持手动触发，不在普通 push/PR 中自动下载镜像或制造“已运行”证据。首次实测已由该工作流在 GitHub-hosted Ubuntu runner 上完成，报告发布于 [`published/security-isolation-tracer-sp-v1/`](../published/security-isolation-tracer-sp-v1/)。普通 CI 只审计这份已提交证据，不重新运行 Docker。
 
 ## 当前状态与完成门槛
 
-代码、冻结配置、静态回归和手动工作流已经实现。当前开发机没有 Docker，因此尚无真实容器报告，不能写成“操作系统隔离已通过”。完成这一阶段至少需要：
+代码、冻结配置、静态回归和手动工作流已经实现。原生 Linux Docker Engine 的首次报告已观察到 14/14 项冻结控制，并通过发布审计；危险 Lean 夹具没有在容器中执行。该报告只构成单平台证据，不能写成“双平台操作系统隔离已完成”。完整阶段至少需要：
 
 1. Windows Docker Desktop 的 Linux 容器运行报告；
-2. 原生 Linux Docker Engine 的独立运行报告；
+2. 原生 Linux Docker Engine 的独立运行报告（已完成）；
 3. 两份报告均通过 `check`，且全部 14 个控制为 true；
 4. 脱敏检查确认没有凭据、用户名、本机绝对路径或宿主完整环境；
 5. 两个平台差异被逐字段说明，而不是只给一个总 PASS。
 
 即使上述条件全部满足，结论也只能是“冻结探针在两个环境观察到所声明边界”，不能表述为完整沙箱或任意 Lean 程序安全。
+
+当前已发布报告可用以下命令独立检查：
+
+```powershell
+python src/security_isolation.py check published/security-isolation-tracer-sp-v1/linux-github-actions/report.json
+python scripts/audit_security_isolation_release.py published/security-isolation-tracer-sp-v1
+```

@@ -1,0 +1,27 @@
+{
+  "release_version": "tracer-sp-isolation-release-v1",
+  "evidence_status": "single_platform_observed",
+  "protocol_version": "tracer-sp-isolation-evaluation-v1",
+  "profile_version": "tracer-sp-isolation-v1",
+  "platforms": {
+    "linux_github_actions": {
+      "status": "observed_pass",
+      "environment": "GitHub-hosted Ubuntu Linux runner with Docker Engine",
+      "report": "linux-github-actions/report.json",
+      "required_controls": 14,
+      "passed_controls": 14,
+      "workflow": ".github/workflows/sp-isolation.yml",
+      "workflow_run_url": "https://github.com/runqi-allen-wang/TRACER-Typed-Repair-Agent-with-Compiler-validated-Example-Retrieval/actions/runs/36004997480",
+      "workflow_run_id": 36004997480,
+      "artifact_name": "tracer-sp-isolation-report",
+      "artifact_id": 10809723112,
+      "source_commit": "18b477673ace25906557045f919e128cf61e58a7"
+    },
+    "windows_docker_desktop": {
+      "status": "pending",
+      "report": null
+    }
+  },
+  "dangerous_lean_executed": false,
+  "claim_boundary": "单平台报告只证明该次运行中冻结探针观察到的容器边界；不证明双平台一致、未知容器逃逸不存在、恶意依赖安全或任意 Lean 元程序安全。"
+}

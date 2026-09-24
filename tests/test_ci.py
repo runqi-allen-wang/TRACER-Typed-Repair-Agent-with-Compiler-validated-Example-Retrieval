@@ -54,6 +54,15 @@ class ContinuousIntegrationTest(unittest.TestCase):
             workflow.index("- name: Run tests"),
         )
 
+    def test_published_sp_isolation_evidence_is_a_ci_gate(self):
+        workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+        command = (
+            "run: python scripts/audit_security_isolation_release.py "
+            "published/security-isolation-tracer-sp-v1"
+        )
+        self.assertIn(command, workflow)
+        self.assertLess(workflow.index(command), workflow.index("- name: Run tests"))
+
     def test_current_six_arm_release_is_audited_before_tests(self):
         workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
         command = (

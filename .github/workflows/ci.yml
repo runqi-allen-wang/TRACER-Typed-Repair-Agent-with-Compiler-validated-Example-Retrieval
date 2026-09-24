@@ -43,9 +43,12 @@ jobs:
           git diff --exit-code -- docs/assets/repair24-six-arm-results.svg
       - name: Verify SP security metrics
         run: python src/security_study.py --check published/security-study-tracer-sp-v2/report.json
-      # 普通 CI 只核对隔离协议；真实容器探针仅由独立手动工作流执行。
+      # 普通 CI 核对协议与已提交报告；真实容器探针仅由独立手动工作流执行。
       - name: Verify SP isolation plan
         run: python src/security_isolation.py plan
+      # 核对已提交的单平台实测报告；不在普通 CI 中重新运行 Docker。
+      - name: Audit published SP isolation evidence
+        run: python scripts/audit_security_isolation_release.py published/security-isolation-tracer-sp-v1
       # 12 个 core 案例是硬门槛；同时保留 4 个 challenge 的真实回放结果。
       - name: Run Capsule feasibility gate
         run: python scripts/run_capsule_feasibility.py --verify-only

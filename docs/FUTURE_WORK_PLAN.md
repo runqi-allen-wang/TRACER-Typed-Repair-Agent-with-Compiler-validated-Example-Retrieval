@@ -1,6 +1,6 @@
 # Lean 编译反馈与 SP-n 后续工作方案
 
-> **状态：repair24 正式六臂批次、DeepSeek Pro/Flash 反馈表示研究与 SP v2 均已脱敏发布（2026-09-21）。** 六臂发布包覆盖 864 个任务、1,066 条有效轮次和 811 个独立复编译成功证明；预注册主比较 R-B−R-A 在 Flash 为 0.0 个百分点、在 Pro 为 −2.8 个百分点。结果只支持同一供应商模型族、24 道独立题上的描述性结论，不能证明普适或因果增益。下一优先级是完成 TRACER-REAL v2 项目级纳入、进行独立供应商复现，并生成真实双平台 SP 隔离报告。
+> **状态：repair24 正式六臂批次、DeepSeek Pro/Flash 反馈表示研究与 SP v2 均已脱敏发布（2026-09-21）；SP 隔离协议已于 2026-09-24 发布首份 Linux 实测。** 六臂发布包覆盖 864 个任务、1,066 条有效轮次和 811 个独立复编译成功证明；预注册主比较 R-B−R-A 在 Flash 为 0.0 个百分点、在 Pro 为 −2.8 个百分点。结果只支持同一供应商模型族、24 道独立题上的描述性结论，不能证明普适或因果增益。SP 的 Linux 报告观察到 14/14 项冻结控制，但 Windows Docker Desktop 尚待完成，因此不构成双平台沙箱证据。
 
 Community feedback from [subfish-zhou](https://github.com/subfish-zhou) and [Fulcrum-Nebula](https://github.com/Fulcrum-Nebula) motivates two next-stage tracks: measuring how models use Lean diagnostics, and expanding SP-1 into a versioned SP-n security program. The plan below freezes evidence boundaries before implementation.
 
@@ -157,7 +157,7 @@ SP 是安全策略编号，不是 R-A～R-F 之外的新增实验臂。新增编
 
 文本规则和清理后的子进程环境都不是完整沙箱。应在独立分支验证容器或低权限账户方案，并明确：只读源码范围、可写临时目录、网络策略、进程与资源限制、超时后的清理方式。Windows 和 Linux 的实现与证据分别记录，不能用改环境标签代替真实运行。
 
-**当前进展：原型与离线门禁已完成，真实双平台结果未完成。** [SP 容器与低权限隔离协议 v1](SP_ISOLATION_V1.md)冻结 Linux Docker、非 root UID/GID、只读根文件系统与仓库、独立 noexec `/tmp`、禁网、清空 capabilities、`no-new-privileges`、seccomp 以及内存/CPU/PID/墙钟限制。探针会逐项读取容器内证据并 fail-closed；普通 CI 只验证计划，手动 workflow 才执行真实容器。当前机器没有 Docker，尚未生成 Windows Docker Desktop 与原生 Linux 报告，因此不能升级为已发布隔离证据。
+**当前进展：原型、离线门禁与原生 Linux 首次实测已完成，真实双平台结果未完成。** [SP 容器与低权限隔离协议 v1](SP_ISOLATION_V1.md)冻结 Linux Docker、非 root UID/GID、只读根文件系统与仓库、独立 noexec `/tmp`、禁网、清空 capabilities、`no-new-privileges`、seccomp 以及内存/CPU/PID/墙钟限制。[Linux 发布包](../published/security-isolation-tracer-sp-v1/)保存 GitHub-hosted Ubuntu Docker Engine 的 14/14 控制实测；普通 CI 审计已提交报告，手动 workflow 才生成新的真实容器证据。Windows Docker Desktop 尚未实测，因此不能升级为完整双平台隔离结论。
 
 ## 4. 推荐执行顺序
 
@@ -179,6 +179,6 @@ SP 是安全策略编号，不是 R-A～R-F 之外的新增实验臂。新增编
 2. **已完成：** 定义原始、归一化、结构化三层反馈记录与 JSON Schema，并要求每个结构化字段保留原始诊断片段。
 3. **已完成模型族内复现：** 记录错误类别转移、候选相关修改、反馈缺失/转换状态、缓存复用和检索 query/Top-k 变化；Pro/Flash 脱敏发布与逐任务配对已完成，独立供应商仍待完成。
 4. **已完成第二版：** 冻结 SP 威胁模型、12 个危险案例和 8 个可真实编译的正常对照，并同时报告检测器一致性和带 Wilson 区间的双向错误率。
-5. **原型已完成、运行待完成：** Windows 与 Linux 共用的 Docker 低权限探针、14 项冻结控制与手动工作流已实现；仍需两个平台的真实报告及脱敏审计，在此之前不宣称隔离通过或完整沙箱。
+5. **原型与 Linux 首次运行已完成：** Windows 与 Linux 共用的 Docker 低权限探针、14 项冻结控制与手动工作流已实现；Linux 14/14 实测已脱敏发布，仍需 Windows Docker Desktop 报告。单平台结果不宣称完整沙箱。
 
-下一阶段按以下顺序推进：先完成 TRACER-REAL v2 剩余项目筛查并冻结最终 manifest；再分别开展项目级确认实验和独立供应商复现；SP 线并行生成 Windows Docker Desktop 与原生 Linux 两份隔离报告。三条线使用独立工件和门禁，任一计划或中间状态都不得写成已完成结果。
+下一阶段按以下顺序推进：严格按已冻结的 TRACER-REAL v2 对象开展项目级确认实验，再进行独立供应商复现；SP 线补齐 Windows Docker Desktop 报告并与已发布 Linux 报告逐字段比较。三条线使用独立工件和门禁，任一计划或中间状态都不得写成已完成结果。

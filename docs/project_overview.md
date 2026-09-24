@@ -12,6 +12,7 @@ TRACER（Typed Repair Agent with Compiler-validated Example Retrieval）是 Lean
 
 - `published/research-six-arm-313f437f/`：864 个任务、1,066 条脱敏逐轮记录、811 个成功证明和 864 行 AI 辅助复核；
 - `published/security-study-tracer-sp-v2/`：12 个危险案例和 8 个正常对照；
+- `published/security-isolation-tracer-sp-v1/`：GitHub-hosted Ubuntu Docker Engine 的 14/14 项冻结隔离控制实测；Windows Docker Desktop 尚待补齐；
 - `capsules/`、`results/capsule_feasibility/`、`results/capsule_challenges/`：24 个 gallery 案例及 12-core / 4-challenge 回放；
 - `benchmarks/real_repairs/tracer_real_v2/`：下一阶段已经冻结、尚未调用 provider 的真实修复题库。
 
@@ -34,6 +35,7 @@ python scripts/verify_compiler_feedback_v1.py --verify-only
 python src/tracer_real_v2.py audit
 python scripts/audit_research_release.py published/research-six-arm-313f437f
 python src/security_study.py --check published/security-study-tracer-sp-v2/report.json
+python scripts/audit_security_isolation_release.py published/security-isolation-tracer-sp-v1
 python scripts/run_ci_tests.py
 python -m leancapsule audit capsules
 python -m leancapsule verify capsules

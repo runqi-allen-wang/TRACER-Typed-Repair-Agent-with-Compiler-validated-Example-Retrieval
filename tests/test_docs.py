@@ -43,7 +43,11 @@ class DocumentationConsistencyTest(unittest.TestCase):
         self.assertTrue((archive / "fate_m" / "README.md").is_file())
         self.assertEqual(
             {path.name for path in (ROOT / "published").iterdir() if path.is_dir()},
-            {"research-six-arm-313f437f", "security-study-tracer-sp-v2"},
+            {
+                "research-six-arm-313f437f",
+                "security-study-tracer-sp-v2",
+                "security-isolation-tracer-sp-v1",
+            },
         )
         self.assertFalse((ROOT / "results" / "handoff").exists())
         self.assertTrue((archive / "fate_m" / "baseline" / "run_batch.py").is_file())
@@ -285,9 +289,10 @@ class DocumentationConsistencyTest(unittest.TestCase):
         for name, readme in self.readmes().items():
             links = set(re.findall(r"\]\((published/[^)]+)\)", readme))
             with self.subTest(language=name):
-                self.assertEqual(2, len(links))
+                self.assertEqual(3, len(links))
                 self.assertIn("published/research-six-arm-313f437f", links)
                 self.assertIn("published/security-study-tracer-sp-v2", links)
+                self.assertIn("published/security-isolation-tracer-sp-v1", links)
                 self.assertIn("[MIT License](LICENSE)", readme)
                 self.assertIn("MIT License", (ROOT / "LICENSE").read_text(encoding="utf-8"))
             evidence.append(links)

@@ -9,6 +9,7 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT / "scripts"))
 
 from security_isolation import (  # noqa: E402
     IsolationError,
@@ -21,6 +22,7 @@ from security_isolation import (  # noqa: E402
     runtime_environment,
     validate_probe,
 )
+from audit_security_isolation_release import audit_release  # noqa: E402
 
 
 class SecurityIsolationTest(unittest.TestCase):
@@ -127,6 +129,30 @@ class SecurityIsolationTest(unittest.TestCase):
         self.assertNotIn("\n  push:", workflow)
         self.assertIn("security_isolation.py run", workflow)
         self.assertIn("security_isolation.py check", workflow)
+
+    def test_published_linux_evidence_is_audited_without_overclaiming(self):
+        release = ROOT / "published" / "security-isolation-tracer-sp-v1"
+        metadata = json.loads((release / "release.json").read_text(encoding="utf-8"))
+        linux = metadata["platforms"]["linux_github_actions"]
+        windows = metadata["platforms"]["windows_docker_desktop"]
+
+        self.assertEqual(metadata["evidence_status"], "single_platform_observed")
+        self.assertEqual(linux["status"], "observed_pass")
+        self.assertEqual(linux["required_controls"], 14)
+        self.assertEqual(linux["passed_controls"], 14)
+        self.assertEqual(windows, {"status": "pending", "report": None})
+
+        report = json.loads(
+            (release / linux["report"]).read_text(encoding="utf-8")
+        )
+        self.assertFalse(report["dangerous_lean_executed"])
+        self.assertTrue(all(report["probe"]["checks"].values()))
+
+        audited = audit_release(release)
+        self.assertTrue(audited["ok"], audited["errors"])
+        self.assertEqual(audited["passed_controls"], 14)
+        self.assertEqual(audited["observed_platforms"], 1)
+        self.assertEqual(audited["pending_platforms"], 1)
 
 
 if __name__ == "__main__":

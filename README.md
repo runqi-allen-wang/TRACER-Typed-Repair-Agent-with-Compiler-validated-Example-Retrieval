@@ -40,7 +40,7 @@ The page also explains exactly where TRACER intervenes: isolated proof-region pa
 | Namespace | Meaning | Status |
 | --- | --- | --- |
 | **R-A / R-B / R-C / R-D / R-E / R-F** | repair24 research arms for feedback and retrieval | The preregistered 864-task matrix is complete and released |
-| **SP-1 through SP-12** | Pre-compilation security policies with benign controls | Offline policy suite published; OS isolation evidence is pending |
+| **SP-1 through SP-12** | Pre-compilation security policies with benign controls | Offline suite and one native Linux Docker run published; Windows Docker Desktop remains pending |
 
 Research-arm storage values remain `A/B/C/D/C_dynamic/C_failure` for compatibility. Public discussion uses R-A through R-F; SP identifiers are policies, not extra experimental arms. See the [research protocol](docs/RESEARCH_PROTOCOL.md) and [security policy](docs/security_policy.md).
 
@@ -49,7 +49,7 @@ Research-arm storage values remain `A/B/C/D/C_dynamic/C_failure` for compatibili
 - **Six-arm repair24 study:** the preregistered 864-task matrix is complete. Its release contains 1,066 sanitized attempts, 811 successful proofs, an AI-assisted review ledger, and a reproducible audit contract.
 - **TRACER-REAL v2:** all 1,576 frozen history candidates from six upstream projects have been screened: **256 admitted, 1,320 rejected**, with no provider calls. SciLean's 2/54 repairs fall below the five-task project minimum, leaving a frozen confirmatory test split of **254 repairs from five independent projects**. PhysLean contributes 94/254 (37.0%); a public pre-provider amendment raised the exploratory 35% concentration cap to 40% while preserving every task and all other gates. The final 265-task manifest (3 development, 8 validation, 254 test) and exact runtime preregistration are now frozen and audited. See the [original enrollment contract](benchmarks/real_repairs/tracer_real_v2.enrollment.json), [protocol and amendment](docs/TRACER_REAL_V2.md), [final manifest](benchmarks/real_repairs/tracer_real_v2/manifest.json), and [runtime preregistration](experiments/preregistrations/tracer_real_causal_v2.json).
 - **LeanCapsule:** 24 reviewed cases cover Std, Mathlib, and project-local environments; a separate 12-core / 4-challenge suite checks clean-directory replay.
-- **Feedback and security:** the three-layer diagnostic protocol, [feedback-adoption audit](docs/FEEDBACK_ADOPTION_V1.md), and SP-1–SP-12 gates are implemented. Container and low-privilege isolation remain future evidence.
+- **Feedback and security:** the three-layer diagnostic protocol, [feedback-adoption audit](docs/FEEDBACK_ADOPTION_V1.md), and SP-1–SP-12 gates are implemented. A GitHub-hosted Ubuntu Docker Engine run observed all 14 frozen low-privilege controls; Windows Docker Desktop and unknown-attack evaluation remain pending.
 
 ## Quick start
 
@@ -136,7 +136,7 @@ The preregistered primary comparison, R-B minus R-A, was **0.0 percentage points
 | Six-arm repair24 study | Audited 864-task release; 811 proofs independently recompiled | AI-assisted review; 24 unique problems and one provider family |
 | TRACER-REAL v2 | Six projects fully screened; final manifest freezes 254 test repairs across five independent projects | 40% share cap is a disclosed pre-provider amendment from the original 35%; no v2 provider result exists yet |
 | LeanCapsule | 24/24 reviewed gallery replays; 16/16 feasibility replays | Reproducing an expected failure is not proof repair |
-| Security | [SP v2 release](published/security-study-tracer-sp-v2): 0/12 dangerous false accepts and 0/8 benign false rejects | A small frozen suite is not an OS sandbox or a zero-risk guarantee |
+| Security | [SP v2 policy release](published/security-study-tracer-sp-v2): 0/12 dangerous false accepts and 0/8 benign false rejects; [Linux isolation evidence](published/security-isolation-tracer-sp-v1): 14/14 frozen controls observed | One Linux run is not complete dual-platform sandbox evidence or a zero-risk guarantee; Windows Docker Desktop remains pending |
 
 The canonical evidence register is [PROGRESS.md](PROGRESS.md). Superseded releases, FATE-M handoffs, and the Evaluation18 smoke pilot are preserved—without deletion—in the [historical archive](historical/README.md); chronological changes remain in [CHANGELOG.md](CHANGELOG.md).
 
@@ -147,6 +147,7 @@ The core checks do not call a paid model API:
 ```text
 lake build
 python -m unittest discover -s tests -v
+python scripts/audit_security_isolation_release.py published/security-isolation-tracer-sp-v1
 python -m leancapsule audit capsules
 python -m leancapsule verify capsules
 ```
@@ -170,7 +171,7 @@ python -m leancapsule verify capsules
 
 1. Run the frozen TRACER-REAL v2 provider experiment without changing its manifest, runtime preregistration, prompts, or project-equal analysis.
 2. Publish complete trajectories, independently recompiled proofs, review mode, infrastructure failures, and the 35%→40% amendment alongside any result.
-3. Produce native Linux and Windows Docker Desktop evidence for the SP isolation protocol.
+3. Add the still-missing Windows Docker Desktop report to the SP isolation protocol; keep the published native Linux run as single-platform evidence.
 4. Evaluate adaptive routing only after feedback controls and safety boundaries are stable.
 
 These are plans, not completed results.
