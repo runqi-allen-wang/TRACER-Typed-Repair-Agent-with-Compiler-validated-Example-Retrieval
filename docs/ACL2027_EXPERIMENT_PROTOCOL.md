@@ -47,7 +47,31 @@ python src/acl2027.py audit
 
 冻结端点与模型分别为 DeepSeek `deepseek-v4-pro`、智谱 BigModel `glm-4.5` 和 MiniMax 中国区 `MiniMax-M3`。三者均通过各自一方域名调用；GLM 与 MiniMax 使用其官方 OpenAI-compatible Chat Completions 接口。MiniMax 密钥来自 `platform.minimax.cn`，因此端点冻结为 `https://api.minimax.cn/v1/chat/completions`，并设置 `reasoning_split=true`，使思考内容与送入 Lean 的最终候选分离。GLM 与 MiniMax 中国区价格未在本次冻结中录入，相关成本必须报告为未知而不是 0。
 
-正式运行命令在 provider 预检通过后再从本协议生成，以避免在密钥、模型权限或计费未核实时误启动 16,764 次上限的批次。
+正式运行统一通过 `scripts/run_acl2027_formal.ps1`。脚本为每次实验创建独立会话根目录，并把扩展批次与 MiniMax 确认批次分别写入 `extended/` 和 `minimax-confirmatory/`；密钥只在当前 PowerShell 进程中存在。
+
+首次运行必须明确给出两个批次的预算上限，或显式确认不设置脚本级费用上限：
+
+```powershell
+.\scripts\run_acl2027_formal.ps1 `
+  -Batch All `
+  -ExtendedBudgetUsd 100 `
+  -MiniMaxBudgetUsd 30
+```
+
+如果使用 `-NoCostLimit`，其含义只是关闭 TRACER 的本地保守预留门禁，并不代表供应商账户没有计费或硬限额。正式大批次不应只为追求全通过而重开。
+
+脚本启动后会打印唯一 `RunRoot`。若终端、网络或机器中断，必须使用同一个根目录续跑：
+
+```powershell
+.\scripts\run_acl2027_formal.ps1 `
+  -Batch All `
+  -RunRoot "results/acl2027-formal-YYYYMMDD-HHMMSS-xxxxxxxx" `
+  -Resume `
+  -ExtendedBudgetUsd 100 `
+  -MiniMaxBudgetUsd 30
+```
+
+续跑会先校验会话合同、冻结计划、题库、提示模板、编译环境和预算账本。已完成且审计通过的批次直接跳过；未完成请求只从尚未落盘的任务继续。每次尝试的控制台日志写入 `_runner/attempts/`，非零退出同时产生失败记录；脚本从不删除失败轨迹或已有证明。`-SkipPreflight` 只应用于操作者明确决定跳过本次合成连接检查的情形，不改变正式实验的预注册内容。
 
 ### 4. 运行后门禁
 
@@ -55,4 +79,4 @@ python src/acl2027.py audit
 
 ## 当前状态
 
-离线预注册、五项目/254 题门禁、六类错误覆盖和检索声明重合审计已实现。真实 provider 预检和付费批次尚未运行。
+离线预注册、五项目/254 题门禁、六类错误覆盖、检索声明重合审计和可续跑正式入口已实现。三家 provider 的合成 `True` 定理预检已在操作者会话中通过，但仓库尚未保存正式付费批次，因此仍不得表述为 TRACER-REAL 模型结果。
