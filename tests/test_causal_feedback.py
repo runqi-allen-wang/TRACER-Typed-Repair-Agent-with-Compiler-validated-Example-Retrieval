@@ -337,6 +337,122 @@ end Demo
             self.assertEqual(second_budget.calls, 14)
             self.assertEqual(result["branch_results"], 16)
 
+    def test_resume_archives_transport_failures_and_discloses_unknown_reserved_call(self):
+        class FailingProvider:
+            name = "offline"
+
+            def __init__(self, budget):
+                self.budget = budget
+
+            def metadata(self):
+                return {"provider": "offline", "model": "offline-test", "temperature": 0, "max_tokens": 100}
+
+            def generate(self, prompt):
+                self.budget.reserve(prompt, config["models"][0])
+                raise TimeoutError("The read operation timed out")
+
+        class RecoveredProvider(FailingProvider):
+            def generate(self, prompt):
+                self.budget.reserve(prompt, config["models"][0])
+                return Generation(
+                    "by exact missing", {"prompt_tokens": 1, "completion_tokens": 1}, "offline",
+                    {"choices": [{"finish_reason": "stop"}], "model": "offline-test"},
+                )
+
+        def fake_compile(_path, _source, _candidate, _theorem, **_kwargs):
+            return CompileResult(False, 1.0, "Demo.lean:4:3: error: unknown identifier 'missing'", "", False, 1, ["lean"])
+
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            tasks = root / "tasks"
+            tasks.mkdir()
+            source = "import Std\nnamespace Demo\ntheorem demo : True :=\n  -- PROOF_START\n  by exact missing\n  -- PROOF_END\nend Demo\n"
+            (tasks / "demo.lean").write_text(source, encoding="utf-8")
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps({
+                "version": "transport-resume-v1", "status": "test", "license": "MIT", "problems": [{
+                    "id": "demo", "file": "tasks/demo.lean", "theorem": "Demo.demo", "tags": ["test"],
+                    "difficulty": "test", "expected_error": "unknown_identifier", "source_text": source,
+                }],
+            }), encoding="utf-8")
+            config = validate_config(ROOT / "experiments/causal_feedback.example.json")
+            config["models"] = [{**config["models"][0], "id": "offline", "model": "offline-test"}]
+            config["repeats"] = 1
+            out = root / "out"
+
+            first_budget = CallBudget(20)
+            with patch("causal_feedback._providers", return_value={"offline": FailingProvider(first_budget)}):
+                first = run_matrix(config, manifest, out, budget=first_budget)
+            self.assertEqual(first["infrastructure_errors"], 1)
+            self.assertEqual(first_budget.calls, 1)
+            (out / "summary.json").unlink()
+
+            ledger = json.loads((out / "budget.json").read_text(encoding="utf-8"))
+            ledger["attempted_calls"] += 1
+            (out / "budget.json").write_text(json.dumps(ledger), encoding="utf-8")
+
+            second_budget = CallBudget(20)
+            with patch("causal_feedback._providers", return_value={"offline": RecoveredProvider(second_budget)}), \
+                 patch("causal_feedback.compile_candidate", side_effect=fake_compile):
+                result = run_matrix(config, manifest, out, budget=second_budget, resume=True)
+
+            self.assertEqual(result["infrastructure_errors"], 0)
+            self.assertEqual(result["archived_transport_retry_attempts"], 1)
+            self.assertEqual(result["unmatched_reserved_calls"], 1)
+            self.assertEqual(second_budget.calls, 9)
+            archived = list((out / "retry_history" / "seeds").rglob("attempt-1.json"))
+            self.assertEqual(len(archived), 1)
+            self.assertEqual(json.loads(archived[0].read_text(encoding="utf-8"))["error_category"], "transport_error")
+            recovery = json.loads((out / "transport_recovery.json").read_text(encoding="utf-8"))
+            self.assertEqual(recovery["unmatched_reserved_calls"], 1)
+
+    def test_three_consecutive_transport_errors_stop_before_polluting_matrix(self):
+        class FailingProvider:
+            name = "offline"
+
+            def __init__(self, budget):
+                self.budget = budget
+
+            def metadata(self):
+                return {"provider": "offline", "model": "offline-test", "temperature": 0, "max_tokens": 100}
+
+            def generate(self, prompt):
+                self.budget.reserve(prompt, config["models"][0])
+                raise ConnectionResetError(10054, "connection reset")
+
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            tasks = root / "tasks"
+            tasks.mkdir()
+            problems = []
+            for index in range(4):
+                problem_id = f"demo_{index}"
+                source = (
+                    f"import Std\nnamespace Demo\ntheorem {problem_id} : True :=\n"
+                    "  -- PROOF_START\n  by exact missing\n  -- PROOF_END\nend Demo\n"
+                )
+                (tasks / f"{problem_id}.lean").write_text(source, encoding="utf-8")
+                problems.append({
+                    "id": problem_id, "file": f"tasks/{problem_id}.lean", "theorem": f"Demo.{problem_id}",
+                    "tags": ["test"], "difficulty": "test", "expected_error": "unknown_identifier",
+                    "source_text": source,
+                })
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps({
+                "version": "transport-circuit-v1", "status": "test", "license": "MIT", "problems": problems,
+            }), encoding="utf-8")
+            config = validate_config(ROOT / "experiments/causal_feedback.example.json")
+            config["models"] = [{**config["models"][0], "id": "offline", "model": "offline-test"}]
+            config["repeats"] = 1
+            budget = CallBudget(40)
+            out = root / "out"
+            with patch("causal_feedback._providers", return_value={"offline": FailingProvider(budget)}), \
+                 self.assertRaisesRegex(RuntimeError, "连续 3 次 provider 传输失败"):
+                run_matrix(config, manifest, out, budget=budget)
+            self.assertEqual(budget.calls, 3)
+            self.assertEqual(len(list((out / "seeds").rglob("*.json"))), 3)
+            self.assertFalse((out / "summary.json").exists())
+
 
 if __name__ == "__main__":
     unittest.main()

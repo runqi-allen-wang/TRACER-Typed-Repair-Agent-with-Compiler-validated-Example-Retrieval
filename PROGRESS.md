@@ -71,7 +71,7 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 
 当前文档基线的本地 Windows 全量复审记录：
 
-- Python：共发现 365 项测试，363 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。在既有 Compiler Feedback、TRACER-REAL、Feedback Study、Capsule 与 SP 门禁上，新增 ACL 2027 v2 的 24,000 字符提示预算、254 题全量提示构造门禁、v1/v2 续跑隔离、DeepSeek/GLM/MiniMax 嵌套协议、三臂/八臂预注册、三一方来源审计、检索泄漏门禁、隐藏密钥合成预检，以及正式入口的独立输出、显式费用选择、未知价格前置拒绝、严格续跑、完成批次跳过和失败工件保留合同；同时继续覆盖隔离发布包、AI 辅助复核、脱敏发布合同、README 结果图与正式 `summary.json` 的逐柱一致性、v2 公开筛查账本、双语 README 计数一致性和交互 Demo 的 24 组公开验证修复。
+- Python：共发现 367 项测试，365 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。在既有 Compiler Feedback、TRACER-REAL、Feedback Study、Capsule 与 SP 门禁上，新增 ACL 2027 v2 的 24,000 字符提示预算、254 题全量提示构造门禁、v1/v2 续跑隔离、DeepSeek/GLM/MiniMax 嵌套协议、三臂/八臂预注册、三一方来源审计、检索泄漏门禁、隐藏密钥合成预检，以及正式入口的独立输出、显式费用选择、未知价格前置拒绝、严格续跑、传输失败归档重试、连续三次传输故障熔断、未知预留调用披露、完成批次跳过和失败工件保留合同；同时继续覆盖隔离发布包、AI 辅助复核、脱敏发布合同、README 结果图与正式 `summary.json` 的逐柱一致性、v2 公开筛查账本、双语 README 计数一致性和交互 Demo 的 24 组公开验证修复。
 - `python demo/serve.py`：零依赖静态网页在本机完成桌面端视觉与交互验收；两轮真实脱敏轨迹、中英文切换和本地真实编译命令均可用。网页不调用 provider，不能把回放视为一次新的模型生成。
 - `lake build`：通过；冻结 Evaluation18 输入中的 18 个 `sorry` 是预期占位警告，不代表题目已在原文件中修复。
 - `python -m leancapsule audit capsules`：24/24 通过。
