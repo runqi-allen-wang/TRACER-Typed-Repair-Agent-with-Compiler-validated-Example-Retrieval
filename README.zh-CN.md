@@ -47,7 +47,7 @@ python demo/serve.py
 ## 当前状态
 
 - **repair24 六臂实验：** 预注册的 864 任务矩阵已经完成；发布包包含 1,066 条脱敏逐轮记录、811 个成功证明、AI 辅助复核账本和可复现审计合同。
-- **TRACER-REAL v2 与 ACL 2027 因果协议：** 六个项目全部筛查：**1,576 个候选、256 个纳入、1,320 个拒绝**，尚未调用 v2 正式题库。冻结测试划分包含**五个独立项目、254 道真实修复题**和六类错误；公开的 provider-blind 修订将项目占比门禁从 35% 调整为 40%。新的嵌套预注册要求 DeepSeek 与 GLM 运行完整八臂，MiniMax 运行三条确认臂；三者使用一方 API 来源和同首轮候选干预。题库、检索重合、配置和运行时预注册已通过离线门禁，三家 provider 也已在操作者会话中通过合成 `True` 定理检查；但尚无付费题库批次或仓库内发布的 v2 结果。正式入口现已提供独立批次目录、严格续跑校验、显式费用门禁和失败工件保留。参见 [ACL 执行协议](docs/ACL2027_EXPERIMENT_PROTOCOL.md)、[原始纳入合同](benchmarks/real_repairs/tracer_real_v2.enrollment.json)、[v2 协议与修订](docs/TRACER_REAL_V2.md)和[最终 manifest](benchmarks/real_repairs/tracer_real_v2/manifest.json)。
+- **TRACER-REAL v2 与 ACL 2027 因果协议：** 六个项目全部筛查：**1,576 个候选、256 个纳入、1,320 个拒绝**。冻结测试划分包含**五个独立项目、254 道真实修复题**和六类错误；公开的 provider-blind 修订将项目占比门禁从 35% 调整为 40%。首次 ACL 正式尝试在发出 88 次 seed 请求后、第 89 次调用之前停止，因为 12,000 字符提示视图无法容纳 5 个完整目标声明；该批次保留但排除出分析。在发送任何替代请求前，协议 v2 将唯一变更冻结为 24,000 字符，并验证 254 题提示构造失败为 0。DeepSeek 与 GLM 仍运行完整八臂，MiniMax 仍运行三条确认臂。目前尚无有效付费题库结果。正式入口提供独立批次目录、协议感知的严格续跑、显式费用门禁和失败工件保留。参见 [ACL 执行协议](docs/ACL2027_EXPERIMENT_PROTOCOL.md)、[原始纳入合同](benchmarks/real_repairs/tracer_real_v2.enrollment.json)、[v2 协议与修订](docs/TRACER_REAL_V2.md)和[最终 manifest](benchmarks/real_repairs/tracer_real_v2/manifest.json)。
 - **LeanCapsule：** 24 个复核案例覆盖 Std、Mathlib 与 project-local 环境；另有 12-core / 4-challenge 套件验证干净目录回放。
 - **编译反馈与安全：** 三层诊断协议、[反馈采纳审计](docs/FEEDBACK_ADOPTION_V1.md)和 SP-1～SP-12 门禁均已实现。一份 GitHub-hosted Ubuntu Docker Engine 报告实测通过全部 14 项低权限控制；Windows Docker Desktop 与未知攻击评估仍待完成。
 
@@ -134,7 +134,7 @@ Agent 成功表示候选通过 Lean 和未完成证明检查；Capsule 成功表
 | 范围 | 当前有证据支持的内容 | 重要边界 |
 | --- | --- | --- |
 | repair24 六臂实验 | 通过审计的 864 任务发布；811 个证明独立复编译 | AI 辅助复核；仅 24 道独立题且属于同一供应商模型族 |
-| TRACER-REAL v2 / ACL 2027 | 五个独立项目、254 道测试修复题；三模型嵌套协议、精确运行时预注册、合成 provider 检查和可续跑正式入口已就绪 | 付费题库批次尚未运行；尚无 v2 因果或跨模型结果 |
+| TRACER-REAL v2 / ACL 2027 | 五个独立项目、254 道测试修复题；v2 冻结 24,000 字符提示视图且 254 题构造失败为 0，保留三模型嵌套设计 | 88 次调用的 v1 尝试已排除；v2 付费批次待运行，尚无因果或跨模型结果 |
 | LeanCapsule | 24/24 gallery 回放、16/16 feasibility 回放 | 复现预期失败不等于修复证明 |
 | 安全 | [SP v2 策略发布包](published/security-study-tracer-sp-v2)：危险候选误放行 0/12、正常对照误拒绝 0/8；[Linux 隔离证据](published/security-isolation-tracer-sp-v1)：14/14 项冻结控制已观察通过 | 单次 Linux 实测不是完整双平台沙箱证据，也不代表零风险；Windows Docker Desktop 仍待完成 |
 

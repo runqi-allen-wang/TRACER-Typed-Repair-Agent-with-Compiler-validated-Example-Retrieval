@@ -47,7 +47,7 @@
 | I-09 | `tracer-causal-feedback-v1`：冻结无反馈首轮候选后分叉到空反馈、三种真实反馈、同类无关反馈、反事实反馈、只检索和 adaptive；负对照禁止自配对，所有分支保留同一首轮候选；TRACER-REAL 试点已冻结机器可读预注册 | provider 批次与结果审计尚待完成；单 test 项目且最多 12 个合格失败，预注册明确禁止正式统计或跨项目因果结论 |
 | I-10 | Error-State Graph、确定性 Adaptive Router 与 TRACER-REAL v1：结构化信号保留原始证据边；Mathlib 3、Batteries 4、Aesop 4 共 11 题按 development/validation/test 上游项目互斥划分，均经旧证明失败与修复证明通过门禁，参考证明单独存放 | 当前 Router 尚未学习；11 题/3 项目仍是试点，确认性结论门禁要求至少 5 个 test 项目与 30 个合格首轮失败 |
 | I-11 | [TRACER-REAL v2](docs/TRACER_REAL_V2.md) 的六个候选上游、端点和 120 提交窗口在扫描前冻结；1,576 个候选全部筛查，公开 256 个通过、1,320 个拒绝的完整决定账本。SciLean 2/54 低于项目门槛，最终 test 划分为五个独立项目、254 题。原 35% 占比门禁被 PhysLean 94/254≈37.0% 触发；provider 前公开修订为 40%，其他门槛与全部合格题保持不变。最终 265 题 manifest 与运行时预注册已生成并通过审计，`ready_for_provider_run` 为 true | 尚未运行 v2 provider，因此没有 v2 成功率、反馈因果效应、成本或统计结论；40% 是公开修订后的工程门槛，报告必须同时披露原 35% 阈值与修订理由 |
-| I-12 | [ACL 2027 因果实验](docs/ACL2027_EXPERIMENT_PROTOCOL.md)：冻结 DeepSeek/GLM 八臂与 MiniMax 三臂的嵌套设计；三个独立模型家族与一方 API 来源、精确运行参数、同首轮候选、反事实负对照、项目等权主分析和两份运行时预注册已固化。离线审计确认 5 个 test 项目、254 题、6 类错误、检索声明重合 0，最大调用上限 16,764；正式脚本提供独立批次目录、严格断点续跑、完成批次审计跳过和失败工件保留 | 三 provider 的合成预检已由操作者运行，但正式付费批次及其仓库内发布证据尚不存在；不得把连接预检、配置、预注册或上限数字表述为模型结果 |
+| I-12 | [ACL 2027 因果实验](docs/ACL2027_EXPERIMENT_PROTOCOL.md)：冻结 DeepSeek/GLM 八臂与 MiniMax 三臂；v1 在 88 次 seed 调用后、调用 89 前因 12,000 字符提示预算不足中止并保留。v2 在任何替代调用前只把预算改为 24,000，离线确认 5 个 test 项目、254 题、6 类错误、检索声明重合 0、提示构造失败 0，最大调用上限仍为 16,764；正式脚本拒绝把 v1 根目录续作 v2 | v1 不能进入分析；v2 provider 预检、付费批次和发布证据尚不存在，不得把实现或中止轨迹表述为模型结果 |
 
 repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译→保存→独立复编译→报告校验”，但 mock 或参考候选不得计作模型实验结果。
 
@@ -71,7 +71,7 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 
 当前文档基线的本地 Windows 全量复审记录：
 
-- Python：共发现 364 项测试，362 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。在既有 Compiler Feedback、TRACER-REAL、Feedback Study、Capsule 与 SP 门禁上，新增 ACL 2027 的 DeepSeek/GLM/MiniMax 三模型嵌套协议、三臂/八臂预注册、三一方来源审计、检索泄漏门禁、隐藏密钥合成预检，以及正式入口的独立输出、显式费用选择、未知价格前置拒绝、严格续跑、完成批次跳过和失败工件保留合同；同时继续覆盖隔离发布包、AI 辅助复核、脱敏发布合同、README 结果图与正式 `summary.json` 的逐柱一致性、v2 公开筛查账本、双语 README 计数一致性和交互 Demo 的 24 组公开验证修复。
+- Python：共发现 365 项测试，363 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。在既有 Compiler Feedback、TRACER-REAL、Feedback Study、Capsule 与 SP 门禁上，新增 ACL 2027 v2 的 24,000 字符提示预算、254 题全量提示构造门禁、v1/v2 续跑隔离、DeepSeek/GLM/MiniMax 嵌套协议、三臂/八臂预注册、三一方来源审计、检索泄漏门禁、隐藏密钥合成预检，以及正式入口的独立输出、显式费用选择、未知价格前置拒绝、严格续跑、完成批次跳过和失败工件保留合同；同时继续覆盖隔离发布包、AI 辅助复核、脱敏发布合同、README 结果图与正式 `summary.json` 的逐柱一致性、v2 公开筛查账本、双语 README 计数一致性和交互 Demo 的 24 组公开验证修复。
 - `python demo/serve.py`：零依赖静态网页在本机完成桌面端视觉与交互验收；两轮真实脱敏轨迹、中英文切换和本地真实编译命令均可用。网页不调用 provider，不能把回放视为一次新的模型生成。
 - `lake build`：通过；冻结 Evaluation18 输入中的 18 个 `sorry` 是预期占位警告，不代表题目已在原文件中修复。
 - `python -m leancapsule audit capsules`：24/24 通过。

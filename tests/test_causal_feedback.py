@@ -12,7 +12,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from causal_feedback import (  # noqa: E402
     ARMS, _prompt_source, audit_run, branch_prompt, build_plan, donor_map, intervention_for,
     preflight_provider, resolve_compile_environments, run_matrix, summarize, validate_config,
-    validate_preregistration, validate_protocol,
+    validate_preregistration, validate_preregistration_record, validate_protocol,
 )
 from compiler_feedback import build_feedback_record  # noqa: E402
 from error_state_graph import build_error_state_graph  # noqa: E402
@@ -121,6 +121,22 @@ end Demo
         }
         prompt = branch_prompt(problem, seed_row, intervention)
         self.assertIn(candidate, prompt)
+
+    def test_configured_prompt_budget_is_frozen_in_preregistration(self):
+        config = validate_config(
+            ROOT / "experiments/causal_feedback.tracer_acl2027_extended_v2.json"
+        )
+        benchmark = load_benchmark(
+            ROOT / "benchmarks/real_repairs/tracer_real_v2/manifest.json"
+        )
+        prereg = json.loads(
+            (ROOT / "experiments/preregistrations/tracer_acl2027_extended_v2.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        validate_preregistration_record(prereg, config, benchmark)
+        self.assertEqual(config["prompt_source_characters"], 24000)
+        self.assertEqual(prereg["design"]["prompt_source_characters"], 24000)
 
     def test_protocol_and_plan_are_frozen_and_offline(self):
         protocol = validate_protocol()

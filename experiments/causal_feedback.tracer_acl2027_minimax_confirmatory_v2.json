@@ -1,0 +1,32 @@
+{
+  "models": [
+    {
+      "id": "minimax_m3",
+      "model": "MiniMax-M3",
+      "api_url": "https://api.minimax.cn/v1/chat/completions",
+      "api_key_env": "TRACER_ACL_MINIMAX_KEY",
+      "temperature": 0,
+      "max_tokens": 12000,
+      "provider_kind": "openai_compatible",
+      "wire_api": "chat_completions",
+      "reasoning_split": true,
+      "input_price_per_1k": null,
+      "output_price_per_1k": null,
+      "pricing_note": "MiniMax 中国区价格未在本次冻结中录入；成本必须显示为未知，不能沿用国际区美元价格或记为 0。"
+    }
+  ],
+  "repeats": 3,
+  "arms": [
+    "content_free_retry",
+    "true_structured",
+    "counterfactual"
+  ],
+  "compile_timeout": 180,
+  "order_seed": 20260926,
+  "examples_dir": "examples",
+  "branch_attempts": 1,
+  "prompt_source_characters": 24000,
+  "benchmark_splits": [
+    "test"
+  ]
+}

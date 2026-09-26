@@ -1,6 +1,8 @@
 # ACL 2027 因果反馈实验执行手册
 
-本手册只描述新的 ACL 2027 嵌套实验。历史 `repair24` 和既有 TRACER-REAL v2 配置不改写，也不作为新实验结果。
+本手册描述 ACL 2027 嵌套实验的当前 v2 协议。历史 `repair24` 和既有 TRACER-REAL v2 配置不改写，也不作为新实验结果。
+
+2026-09-26 的 v1 正式尝试在发出 88 次 seed 请求后、构造第 89 个请求之前停止：冻结的 12,000 字符提示视图无法容纳 5 个完整目标声明。该批次必须原样保留，但不得续跑或进入正式分析。v2 在发送任何 v2 题库请求前把唯一变更冻结为 24,000 字符；题库、模型、温度、输出预算、实验臂、重复、顺序、主对比和停止规则全部保持不变。
 
 ## 冻结设计
 
@@ -10,12 +12,15 @@
 - 扩展八臂：上述三臂加 raw、normalized、irrelevant、retrieval-only 和 adaptive。
 - 嵌套原则：DeepSeek 与 GLM 跑八臂，其中的三臂直接进入跨模型主分析；MiniMax 只跑三臂。不重复生成已在八臂中存在的确认性分支。
 - 主对比：同模型、同题、同重复、同一冻结首轮失败上的 `true_structured - content_free_retry`。
+- 提示源码预算：24,000 字符；离线门禁要求 254 题的 imports 与完整目标声明全部可构造，当前失败数为 0。
 
 科学协议与两个运行时预注册位于：
 
-- `experiments/preregistrations/tracer_acl2027_protocol_v1.json`
-- `experiments/preregistrations/tracer_acl2027_extended_v1.json`
-- `experiments/preregistrations/tracer_acl2027_minimax_confirmatory_v1.json`
+- `experiments/preregistrations/tracer_acl2027_protocol_v2.json`
+- `experiments/preregistrations/tracer_acl2027_extended_v2.json`
+- `experiments/preregistrations/tracer_acl2027_minimax_confirmatory_v2.json`
+
+v1 文件继续留在仓库中用于解释中止批次，不得与 v2 混合。
 
 ## 执行顺序
 
@@ -25,7 +30,7 @@
 python src/acl2027.py audit
 ```
 
-只有在输出中同时出现 `ok: true`、`retrieval_declaration_leaks: 0` 和 `ready_for_benchmark_run: true` 时才可继续。该命令网络调用数为 0。
+只有在输出中同时出现 `ok: true`、`retrieval_declaration_leaks: 0`、`prompt_view_failures: 0`、`prompt_source_characters: 24000` 和 `ready_for_benchmark_run: true` 时才可继续。该命令网络调用数为 0。
 
 ### 2. 三个一方 provider 的合成定理预检
 
@@ -64,12 +69,12 @@ python src/acl2027.py audit
 ```powershell
 .\scripts\run_acl2027_formal.ps1 `
   -Batch All `
-  -RunRoot "results/acl2027-formal-YYYYMMDD-HHMMSS-xxxxxxxx" `
+  -RunRoot "results/acl2027-formal-v2-YYYYMMDD-HHMMSS-xxxxxxxx" `
   -Resume `
   -NoCostLimit
 ```
 
-续跑会先校验会话合同、冻结计划、题库、提示模板、编译环境和预算账本。已完成且审计通过的批次直接跳过；未完成请求只从尚未落盘的任务继续。每次尝试的控制台日志写入 `_runner/attempts/`，非零退出同时产生失败记录；脚本从不删除失败轨迹或已有证明。`-SkipPreflight` 只应用于操作者明确决定跳过本次合成连接检查的情形，不改变正式实验的预注册内容。
+续跑会先校验会话合同、冻结计划、题库、提示模板、编译环境和预算账本。已完成且审计通过的批次直接跳过；未完成请求只从尚未落盘的任务继续。每次尝试的控制台日志写入 `_runner/attempts/`，非零退出同时产生失败记录；脚本从不删除失败轨迹或已有证明。v1 的旧根目录会在读取密钥前被明确拒绝，不能伪装成 v2 续跑。`-SkipPreflight` 只应用于操作者明确决定跳过本次合成连接检查的情形，不改变正式实验的预注册内容。
 
 ### 4. 运行后门禁
 
@@ -77,4 +82,4 @@ python src/acl2027.py audit
 
 ## 当前状态
 
-离线预注册、五项目/254 题门禁、六类错误覆盖、检索声明重合审计和可续跑正式入口已实现。三家 provider 的合成 `True` 定理预检已在操作者会话中通过，但仓库尚未保存正式付费批次，因此仍不得表述为 TRACER-REAL 模型结果。
+v2 离线预注册、五项目/254 题门禁、六类错误覆盖、检索声明重合审计、24,000 字符完整目标门禁和可续跑正式入口已实现。三家 provider 曾在 v1 操作者会话中通过合成 `True` 定理预检；v2 必须由正式脚本重新预检。当前只有 88 次调用的中止 v1 批次，没有可用于结论的正式付费结果。

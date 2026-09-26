@@ -27,6 +27,8 @@ class Acl2027ProtocolTest(unittest.TestCase):
         self.assertEqual(evidence["test_projects"], 5)
         self.assertEqual(evidence["test_tasks"], 254)
         self.assertEqual(evidence["retrieval_declaration_leaks"], 0)
+        self.assertEqual(evidence["prompt_source_characters"], 24000)
+        self.assertEqual(evidence["prompt_view_failures"], 0)
         self.assertEqual(evidence["independent_model_families"], 3)
         self.assertEqual(evidence["independent_api_origins"], 3)
 
@@ -51,6 +53,8 @@ class Acl2027ProtocolTest(unittest.TestCase):
             [("MiniMax-M3", "https://api.minimax.cn/v1/chat/completions")],
         )
         self.assertIs(minimax["models"][0]["reasoning_split"], True)
+        self.assertEqual(extended["prompt_source_characters"], 24000)
+        self.assertEqual(minimax["prompt_source_characters"], 24000)
 
     def test_both_runtime_preregistrations_match_runner_contract(self):
         benchmark = load_benchmark(BENCHMARK_PATH)

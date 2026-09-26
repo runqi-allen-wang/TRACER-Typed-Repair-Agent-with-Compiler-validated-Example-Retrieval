@@ -89,7 +89,7 @@ def validate_config(path: Path) -> dict[str, Any]:
     config = read_json(path)
     allowed = {
         "models", "repeats", "arms", "compile_timeout", "order_seed",
-        "examples_dir", "branch_attempts", "benchmark_splits",
+        "examples_dir", "branch_attempts", "benchmark_splits", "prompt_source_characters",
     }
     if set(config) - allowed:
         raise ValueError("因果反馈配置存在未知字段；不得将密钥写入配置")
@@ -106,6 +106,11 @@ def validate_config(path: Path) -> dict[str, Any]:
         raise ValueError("确认性主对比要求 content_free_retry 与 true_structured")
     if config.get("branch_attempts") != 1:
         raise ValueError("v1 主估计只允许每个分支一次修复生成")
+    if "prompt_source_characters" in config and (
+        type(config["prompt_source_characters"]) is not int
+        or not PROMPT_SOURCE_CHARS <= config["prompt_source_characters"] <= 100000
+    ):
+        raise ValueError("提示源码预算必须是 12000 至 100000 的整数")
     with tempfile.TemporaryDirectory() as directory:
         bridge = Path(directory) / "config.json"
         bridge.write_text(json.dumps({
@@ -122,6 +127,8 @@ def validate_config(path: Path) -> dict[str, Any]:
     checked.pop("arms")
     checked["arms"] = list(configured_arms)
     checked["branch_attempts"] = 1
+    if "prompt_source_characters" in config:
+        checked["prompt_source_characters"] = config["prompt_source_characters"]
     splits = config.get("benchmark_splits")
     if splits is not None:
         allowed_splits = {"development", "validation", "test"}
@@ -295,6 +302,8 @@ def validate_preregistration_record(
         "compile_timeout": config["compile_timeout"],
         "prompt_files": ["prompts/causal_seed.txt", "prompts/causal_branch.txt", "prompts/proof_contract.txt"],
     }
+    if "prompt_source_characters" in config:
+        expected["prompt_source_characters"] = config["prompt_source_characters"]
     if design != expected:
         raise ValueError("预注册设计与运行配置发生漂移")
     if prereg["primary_analysis"].get("contrast") != "true_structured - content_free_retry":
@@ -345,6 +354,10 @@ def _generate(provider: Any, prompt: str) -> tuple[str, Generation, str]:
     return candidate, generation, finish
 
 
+def prompt_source_limit(config: dict[str, Any]) -> int:
+    return int(config.get("prompt_source_characters", PROMPT_SOURCE_CHARS))
+
+
 def _prompt_source(problem: dict[str, Any], limit: int = PROMPT_SOURCE_CHARS) -> str:
     """为长文件保留 imports、目标前局部上下文和完整目标声明。"""
 
@@ -371,10 +384,10 @@ def _prompt_source(problem: dict[str, Any], limit: int = PROMPT_SOURCE_CHARS) ->
     return view
 
 
-def _seed_prompt(problem: dict[str, Any]) -> str:
+def _seed_prompt(problem: dict[str, Any], limit: int = PROMPT_SOURCE_CHARS) -> str:
     template = (ROOT / "prompts/causal_seed.txt").read_text(encoding="utf-8")
     contract = (ROOT / "prompts/proof_contract.txt").read_text(encoding="utf-8")
-    return template.format(theorem=_prompt_source(problem)) + "\n" + contract.format(
+    return template.format(theorem=_prompt_source(problem, limit=limit)) + "\n" + contract.format(
         start_marker="-- PROOF_START", end_marker="-- PROOF_END"
     )
 
@@ -544,13 +557,16 @@ def intervention_for(
     }
 
 
-def branch_prompt(problem: dict[str, Any], seed: dict[str, Any], intervention: dict[str, Any]) -> str:
+def branch_prompt(
+    problem: dict[str, Any], seed: dict[str, Any], intervention: dict[str, Any],
+    limit: int = PROMPT_SOURCE_CHARS,
+) -> str:
     if intervention["target_seed_id"] != seed["seed_id"]:
         raise ValueError("反馈干预与冻结首轮候选不匹配")
     template = (ROOT / "prompts/causal_branch.txt").read_text(encoding="utf-8")
     contract = (ROOT / "prompts/proof_contract.txt").read_text(encoding="utf-8")
     return template.format(
-        theorem=_prompt_source(problem),
+        theorem=_prompt_source(problem, limit=limit),
         first_candidate=seed["candidate"],
         intervention=intervention["payload"],
         examples=json.dumps(intervention["retrieved_examples"], ensure_ascii=False),
@@ -565,7 +581,9 @@ def run_matrix(
 ) -> dict[str, Any]:
     """运行两阶段矩阵；显式续跑只跳过已落盘记录，不重发已有请求。"""
 
-    protocol = validate_protocol()
+    protocol = json.loads(json.dumps(validate_protocol(), ensure_ascii=False))
+    source_limit = prompt_source_limit(config)
+    protocol["prompt_view"]["maximum_source_characters"] = source_limit
     benchmark = load_benchmark(benchmark_path)
     if preregistration is not None:
         validate_preregistration_record(preregistration, config, benchmark)
@@ -654,7 +672,7 @@ def run_matrix(
             if active_project_root is not None else source_file
         )
         provider = providers[task["model_id"]]
-        prompt = _seed_prompt(problem)
+        prompt = _seed_prompt(problem, limit=source_limit)
         started = time.perf_counter()
         try:
             candidate, generation, _ = _generate(provider, prompt)
@@ -723,7 +741,7 @@ def run_matrix(
                       "reason": "同模型、同重复、同错误类别内没有其他供体", "compile_ok": None,
                       "first_candidate": seed["candidate"], "intervention": intervention}
         else:
-            prompt = branch_prompt(problem, seed, intervention)
+            prompt = branch_prompt(problem, seed, intervention, limit=source_limit)
             provider = providers[seed["model_id"]]
             started = time.perf_counter()
             try:

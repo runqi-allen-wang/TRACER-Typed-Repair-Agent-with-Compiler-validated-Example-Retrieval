@@ -1,0 +1,115 @@
+{
+  "version": "tracer-causal-preregistration-v1",
+  "status": "frozen-before-provider-run",
+  "planned_experiment_id": "tracer-acl2027-minimax-confirmatory-v2",
+  "registered_at_utc": "2026-09-26T07:06:06Z",
+  "registration_medium": "版本控制仓库中的 ACL 2027 v2 机器可读预注册；在 v1 因提示预算实现错误中止并保留后、冻结于任何 v2 目标题库 provider 调用之前。",
+  "benchmark": {
+    "version": "tracer-real-v2",
+    "split_policy": "upstream_project_disjoint",
+    "projects": [
+      {
+        "project_id": "mathlib",
+        "split": "development",
+        "tasks": 3
+      },
+      {
+        "project_id": "batteries",
+        "split": "validation",
+        "tasks": 4
+      },
+      {
+        "project_id": "aesop",
+        "split": "validation",
+        "tasks": 4
+      },
+      {
+        "project_id": "equational_theories",
+        "split": "test",
+        "tasks": 53
+      },
+      {
+        "project_id": "flt",
+        "split": "test",
+        "tasks": 47
+      },
+      {
+        "project_id": "leanapap",
+        "split": "test",
+        "tasks": 16
+      },
+      {
+        "project_id": "pfr",
+        "split": "test",
+        "tasks": 44
+      },
+      {
+        "project_id": "physlean",
+        "split": "test",
+        "tasks": 94
+      }
+    ]
+  },
+  "models": [
+    {
+      "id": "minimax_m3",
+      "model": "MiniMax-M3",
+      "api_url": "https://api.minimax.cn/v1/chat/completions",
+      "temperature": 0,
+      "max_tokens": 12000,
+      "provider_kind": "openai_compatible",
+      "wire_api": "chat_completions",
+      "reasoning_split": true
+    }
+  ],
+  "design": {
+    "protocol_version": "tracer-causal-feedback-v1",
+    "arms": [
+      "content_free_retry",
+      "true_structured",
+      "counterfactual"
+    ],
+    "repeats": 3,
+    "branch_attempts": 1,
+    "benchmark_splits": [
+      "test"
+    ],
+    "order_seed": 20260926,
+    "compile_timeout": 180,
+    "prompt_files": [
+      "prompts/causal_seed.txt",
+      "prompts/causal_branch.txt",
+      "prompts/proof_contract.txt"
+    ],
+    "prompt_source_characters": 24000
+  },
+  "primary_analysis": {
+    "population": "eligible_first_failures_on_preregistered_v2_test_projects",
+    "contrast": "true_structured - content_free_retry",
+    "outcome": "one_branch_attempt_kernel_success",
+    "estimand": "测试项目等权的同一冻结首轮失败内平均配对成功率差",
+    "project_weighting": "equal_weight_per_test_project",
+    "missingness": "首轮成功不进入反馈效果人群；任何 provider、策略或编译基础设施异常都会阻止确认性报告。"
+  },
+  "secondary_analyses": [
+    "counterfactual 负对照相对 content_free_retry 的误导率与错误类别转移",
+    "按模型、错误类别、项目、token、墙钟时间和编译次数分层的描述性结果",
+    "完整八臂模型额外报告 raw、normalized、irrelevant、retrieval 与 adaptive 探索性对比"
+  ],
+  "stopping_rule": {
+    "maximum_seed_generations": 762,
+    "maximum_branch_generations": 2286,
+    "maximum_provider_calls": 3048,
+    "adaptive_early_stopping": false,
+    "transport_policy": "停止并人工核对本地记录；只允许严格续跑，不得删除失败记录后重开。"
+  },
+  "claim_gate": {
+    "minimum_test_projects": 5,
+    "minimum_test_tasks": 40,
+    "maximum_test_project_task_share": 0.4,
+    "share_gate_amendment": "experiments/preregistrations/tracer_real_v2_share_gate_amendment2.json",
+    "minimum_eligible_first_failures": 30,
+    "confirmatory_claim_allowed": true,
+    "required_label": "单模型达到样本门槛且通过完整轨迹、基础设施与统计审计后，方可报告该模型的预注册确认性结果。"
+  }
+}

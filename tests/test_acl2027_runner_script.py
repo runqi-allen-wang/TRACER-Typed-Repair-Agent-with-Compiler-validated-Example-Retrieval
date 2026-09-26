@@ -14,12 +14,13 @@ class Acl2027RunnerScriptTest(unittest.TestCase):
     def test_uses_independent_batch_directories_and_frozen_inputs(self):
         self.assertIn('Directory = "extended"', self.script)
         self.assertIn('Directory = "minimax-confirmatory"', self.script)
-        self.assertIn("tracer_acl2027_extended_v1.json", self.script)
-        self.assertIn("tracer_acl2027_minimax_confirmatory_v1.json", self.script)
+        self.assertIn("tracer_acl2027_extended_v2.json", self.script)
+        self.assertIn("tracer_acl2027_minimax_confirmatory_v2.json", self.script)
         self.assertIn("tracer_real_v2/manifest.json", self.script)
 
     def test_resume_is_explicit_and_preserves_completed_batches(self):
         self.assertIn("-Resume requires the exact existing -RunRoot", self.script)
+        self.assertIn("superseded v1 prompt protocol", self.script)
         self.assertIn('Write-Host "ACL 2027 run root: $RunRoot"', self.script)
         self.assertIn('$runArguments += "--resume"', self.script)
         self.assertIn("already complete and passed audit; skipping it", self.script)

@@ -11,7 +11,8 @@ from urllib.parse import urlsplit
 
 from agent import ROOT
 from causal_feedback import (
-    ARMS, PREREGISTRATION_VERSION, PROTOCOL_VERSION, build_plan,
+    ARMS, PREREGISTRATION_VERSION, PROTOCOL_VERSION, _prompt_source, build_plan,
+    prompt_source_limit,
     validate_config, validate_preregistration_record,
 )
 from research import load_benchmark, write_json
@@ -22,15 +23,15 @@ from tracer_real_v2 import (
 )
 
 
-ACL_PROTOCOL_VERSION = "tracer-acl2027-causal-protocol-v1"
+ACL_PROTOCOL_VERSION = "tracer-acl2027-causal-protocol-v2"
 CONFIRMATORY_ARMS = ("content_free_retry", "true_structured", "counterfactual")
-PROTOCOL_PATH = ROOT / "experiments/preregistrations/tracer_acl2027_protocol_v1.json"
+PROTOCOL_PATH = ROOT / "experiments/preregistrations/tracer_acl2027_protocol_v2.json"
 BENCHMARK_PATH = ROOT / "benchmarks/real_repairs/tracer_real_v2/manifest.json"
 CONTRACT_PATH = ROOT / "benchmarks/real_repairs/tracer_real_v2.enrollment.json"
-EXTENDED_CONFIG_PATH = ROOT / "experiments/causal_feedback.tracer_acl2027_extended_v1.json"
-MINIMAX_CONFIG_PATH = ROOT / "experiments/causal_feedback.tracer_acl2027_minimax_confirmatory_v1.json"
-EXTENDED_PREREG_PATH = ROOT / "experiments/preregistrations/tracer_acl2027_extended_v1.json"
-MINIMAX_PREREG_PATH = ROOT / "experiments/preregistrations/tracer_acl2027_minimax_confirmatory_v1.json"
+EXTENDED_CONFIG_PATH = ROOT / "experiments/causal_feedback.tracer_acl2027_extended_v2.json"
+MINIMAX_CONFIG_PATH = ROOT / "experiments/causal_feedback.tracer_acl2027_minimax_confirmatory_v2.json"
+EXTENDED_PREREG_PATH = ROOT / "experiments/preregistrations/tracer_acl2027_extended_v2.json"
+MINIMAX_PREREG_PATH = ROOT / "experiments/preregistrations/tracer_acl2027_minimax_confirmatory_v2.json"
 
 
 def _runtime_model_view(model: dict[str, Any]) -> dict[str, Any]:
@@ -65,8 +66,8 @@ def validate_scientific_protocol(
     }
     if set(protocol) != required or protocol.get("version") != ACL_PROTOCOL_VERSION:
         raise ValueError("ACL 2027 科学协议版本或顶层字段不匹配")
-    if protocol.get("status") != "frozen-before-provider-preflight-and-benchmark-run":
-        raise ValueError("ACL 2027 协议必须在 provider 预检与题库调用前冻结")
+    if protocol.get("status") != "frozen-after-aborted-v1-before-v2-provider-run":
+        raise ValueError("ACL 2027 v2 协议必须在 v2 provider 题库调用前冻结")
 
     base_contract = read_json(CONTRACT_PATH)
     validate_contract(base_contract)
@@ -90,12 +91,16 @@ def validate_scientific_protocol(
         raise ValueError("ACL 2027 扩展八臂发生漂移")
     if extended["arms"] != list(ARMS) or minimax["arms"] != list(CONFIRMATORY_ARMS):
         raise ValueError("ACL 2027 运行配置与嵌套设计不一致")
-    shared_fields = ("repeats", "compile_timeout", "order_seed", "branch_attempts", "benchmark_splits")
+    shared_fields = (
+        "repeats", "compile_timeout", "order_seed", "branch_attempts", "benchmark_splits",
+        "prompt_source_characters",
+    )
     if any(extended.get(field) != minimax.get(field) for field in shared_fields):
         raise ValueError("ACL 2027 两个运行配置的共享实验参数不一致")
     if (
         design.get("repeats") != extended["repeats"]
         or design.get("branch_attempts") != extended["branch_attempts"]
+        or design.get("prompt_source_characters") != prompt_source_limit(extended)
         or design.get("same_first_candidate_required") is not True
         or design.get("performance_based_stopping") is not False
     ):
@@ -126,6 +131,15 @@ def validate_scientific_protocol(
         raise ValueError("ACL 2027 必须冻结两个完整八臂模型")
 
     test_problems = [problem for problem in benchmark["problems"] if problem.get("split") == "test"]
+    source_limit = prompt_source_limit(extended)
+    prompt_failures = []
+    for problem in test_problems:
+        try:
+            _prompt_source(problem, limit=source_limit)
+        except ValueError:
+            prompt_failures.append(problem["id"])
+    if prompt_failures:
+        raise ValueError("ACL 2027 提示预算不能容纳完整目标声明：" + ", ".join(prompt_failures))
     examples = load_examples(ROOT / extended.get("examples_dir", "examples"))
     leaks = find_retrieval_leaks(
         [(problem["id"], problem["source_text"]) for problem in test_problems], examples,
@@ -139,6 +153,8 @@ def validate_scientific_protocol(
         "test_error_categories": categories,
         "retrieval_examples": len(examples),
         "retrieval_declaration_leaks": len(leaks),
+        "prompt_source_characters": source_limit,
+        "prompt_view_failures": len(prompt_failures),
         "independent_model_families": len(families),
         "independent_api_origins": len(origins),
     }
@@ -151,12 +167,18 @@ def runtime_preregistration(
     test_tasks = sum(row["tasks"] for row in benchmark["projects"] if row["split"] == "test")
     seeds = test_tasks * config["repeats"] * len(config["models"])
     branches = seeds * len(config["arms"])
+    registration_medium = (
+        "版本控制仓库中的 ACL 2027 v2 机器可读预注册；在 v1 因提示预算实现错误中止并保留后、"
+        "冻结于任何 v2 目标题库 provider 调用之前。"
+        if protocol["version"] == ACL_PROTOCOL_VERSION else
+        "版本控制仓库中的 ACL 2027 机器可读嵌套设计预注册；冻结于任何目标题库 provider 调用之前。"
+    )
     return {
         "version": PREREGISTRATION_VERSION,
         "status": "frozen-before-provider-run",
         "planned_experiment_id": experiment_id,
         "registered_at_utc": protocol["registered_at_utc"],
-        "registration_medium": "版本控制仓库中的 ACL 2027 机器可读嵌套设计预注册；冻结于任何目标题库 provider 调用之前。",
+        "registration_medium": registration_medium,
         "benchmark": {
             "version": benchmark["version"],
             "split_policy": benchmark["split_policy"],
@@ -177,6 +199,7 @@ def runtime_preregistration(
             "prompt_files": [
                 "prompts/causal_seed.txt", "prompts/causal_branch.txt", "prompts/proof_contract.txt",
             ],
+            "prompt_source_characters": prompt_source_limit(config),
         },
         "primary_analysis": {
             "population": "eligible_first_failures_on_preregistered_v2_test_projects",
@@ -216,13 +239,13 @@ def freeze_runtime_records() -> dict[str, Any]:
     records = (
         (
             EXTENDED_PREREG_PATH,
-            runtime_preregistration(protocol, benchmark, extended, "tracer-acl2027-extended-v1"),
+            runtime_preregistration(protocol, benchmark, extended, "tracer-acl2027-extended-v2"),
             extended,
         ),
         (
             MINIMAX_PREREG_PATH,
             runtime_preregistration(
-                protocol, benchmark, minimax, "tracer-acl2027-minimax-confirmatory-v1",
+                protocol, benchmark, minimax, "tracer-acl2027-minimax-confirmatory-v2",
             ),
             minimax,
         ),

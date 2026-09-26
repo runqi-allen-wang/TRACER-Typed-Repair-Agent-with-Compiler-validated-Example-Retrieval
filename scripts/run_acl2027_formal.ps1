@@ -19,14 +19,14 @@ Set-Location -LiteralPath $repoRoot
 $batchSpecs = @{
     Extended = @{
         Directory = "extended"
-        Config = "experiments/causal_feedback.tracer_acl2027_extended_v1.json"
-        Preregistration = "experiments/preregistrations/tracer_acl2027_extended_v1.json"
+        Config = "experiments/causal_feedback.tracer_acl2027_extended_v2.json"
+        Preregistration = "experiments/preregistrations/tracer_acl2027_extended_v2.json"
         KeyNames = @("TRACER_ACL_DEEPSEEK_KEY", "TRACER_ACL_GLM_KEY")
     }
     MiniMax = @{
         Directory = "minimax-confirmatory"
-        Config = "experiments/causal_feedback.tracer_acl2027_minimax_confirmatory_v1.json"
-        Preregistration = "experiments/preregistrations/tracer_acl2027_minimax_confirmatory_v1.json"
+        Config = "experiments/causal_feedback.tracer_acl2027_minimax_confirmatory_v2.json"
+        Preregistration = "experiments/preregistrations/tracer_acl2027_minimax_confirmatory_v2.json"
         KeyNames = @("TRACER_ACL_MINIMAX_KEY")
     }
 }
@@ -59,7 +59,7 @@ if (-not $NoCostLimit) {
 if ([string]::IsNullOrWhiteSpace($RunRoot)) {
     $stamp = Get-Date -Format "yyyyMMdd-HHmmss"
     $suffix = [Guid]::NewGuid().ToString("N").Substring(0, 8)
-    $RunRoot = Join-Path "results" "acl2027-formal-$stamp-$suffix"
+    $RunRoot = Join-Path "results" "acl2027-formal-v2-$stamp-$suffix"
 }
 if (-not [IO.Path]::IsPathRooted($RunRoot)) {
     $RunRoot = Join-Path $repoRoot $RunRoot
@@ -141,6 +141,9 @@ if ($Resume) {
         throw "Resume root has no run contract: $contractPath"
     }
     $contract = Get-Content -LiteralPath $contractPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($contract.protocol -ne "tracer-acl2027-causal-protocol-v2") {
+        throw "This run root belongs to the superseded v1 prompt protocol. Retain it, but start a new v2 run root."
+    }
     $savedBatches = @($contract.selected_batches)
     if (Compare-Object $savedBatches $selectedBatches) {
         throw "-Batch does not match the existing run contract."
@@ -154,7 +157,7 @@ else {
     Write-JsonFile $contractPath ([ordered]@{
         schema_version = "tracer-acl2027-run-contract-v1"
         created_at = (Get-Date).ToUniversalTime().ToString("o")
-        protocol = "tracer-acl2027-causal-protocol-v1"
+        protocol = "tracer-acl2027-causal-protocol-v2"
         benchmark = "tracer-real-v2"
         selected_batches = $selectedBatches
         batch_directories = @($selectedBatches | ForEach-Object { $batchSpecs[$_].Directory })

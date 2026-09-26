@@ -42,7 +42,7 @@ try {
         Set-HiddenApiKey "Zhipu BigModel GLM API key" "TRACER_ACL_GLM_KEY"
 
         & python src/causal_feedback.py preflight `
-            --config experiments/causal_feedback.tracer_acl2027_extended_v1.json
+            --config experiments/causal_feedback.tracer_acl2027_extended_v2.json
         if ($LASTEXITCODE -ne 0) {
             throw "DeepSeek/GLM synthetic preflight failed; no TRACER-REAL task was sent."
         }
@@ -52,7 +52,7 @@ try {
         Set-HiddenApiKey "MiniMax API key" "TRACER_ACL_MINIMAX_KEY"
 
         & python src/causal_feedback.py preflight `
-            --config experiments/causal_feedback.tracer_acl2027_minimax_confirmatory_v1.json
+            --config experiments/causal_feedback.tracer_acl2027_minimax_confirmatory_v2.json
         if ($LASTEXITCODE -ne 0) {
             throw "MiniMax synthetic preflight failed; no TRACER-REAL task was sent."
         }
