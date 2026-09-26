@@ -733,10 +733,20 @@ def build_final_preregistration(
     counts = validate_v2_benchmark(benchmark, contract, candidate_inventory)
     if not re.fullmatch(r"[A-Za-z0-9_-]+", experiment_id):
         raise ValueError("v2 正式实验 ID 非法")
-    model_fields = ("id", "model", "api_url", "temperature", "max_tokens", "thinking", "reasoning_effort")
-    models = [{field: model.get(field) for field in model_fields} for model in config["models"]]
+    model_fields = ("id", "model", "api_url", "temperature", "max_tokens")
+    optional_model_fields = (
+        "provider_kind", "wire_api", "disable_response_storage", "thinking", "reasoning_effort",
+        "reasoning_split",
+    )
+    models = []
+    for model in config["models"]:
+        row = {field: model.get(field) for field in model_fields}
+        row.update({field: model.get(field) for field in optional_model_fields if field in model})
+        models.append(row)
     seed_generations = counts["test_tasks"] * config["repeats"] * len(models)
-    branch_generations = seed_generations * len(CAUSAL_ARMS)
+    branch_generations = seed_generations * len(config["arms"])
+    design = dict(enrollment["design"])
+    design["arms"] = list(config["arms"])
     return {
         "version": FINAL_PREREGISTRATION_VERSION,
         "status": "frozen-before-provider-run",
@@ -752,7 +762,7 @@ def build_final_preregistration(
             ],
         },
         "models": models,
-        "design": enrollment["design"],
+        "design": design,
         "primary_analysis": enrollment["primary_analysis"],
         "secondary_analyses": enrollment["secondary_analyses"],
         "stopping_rule": {

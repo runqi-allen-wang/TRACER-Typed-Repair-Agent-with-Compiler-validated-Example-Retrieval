@@ -2,6 +2,16 @@
 
 本文件记录影响安全性、实验可复现性、Lean 编译边界和公开发布的补丁。它与 `PROGRESS.md` 的职责不同：`PROGRESS.md` 描述当前状态，本文按提交批次记录变更原因、影响范围和验证证据。
 
+## 2026-09-26 — ACL 2027 嵌套因果实验离线冻结
+
+- 新增 ACL 2027 科学协议与两份精确运行时预注册：DeepSeek 和 GLM 运行完整八臂，MiniMax 运行三条确认臂；八臂中已包含的确认分支不重复付费生成。
+- 因果 runner 现在可审计地执行冻结干预子集，但仍强制 `content_free_retry` 与 `true_structured` 主对比；现有八臂配置与历史结果不改写。
+- 冻结 DeepSeek、智谱 BigModel 与 MiniMax 三个独立一方 Chat Completions 来源，并增加带模型/API 来源标签的隐藏密钥预检入口；跨来源跳转拒绝、无密钥日志和结束清理继续由测试覆盖。
+- 合成预检支持按 `Extended` 或 `MiniMax` 单独重试，避免认证错误后重复调用已经通过的 provider；离线审计仍在任何密钥读取之前执行。
+- 首次合成预检在发送任何题库任务前发现 MiniMax 中国区密钥误配国际区端点；根据中国区官方 OpenAI-compatible 文档，将端点 provider-blind 修订为 `api.minimax.cn`，并撤销不适用的国际区美元价格。
+- 离线审计确认 TRACER-REAL v2 的 5 个测试项目、254 题、6 类错误、3 个独立模型家族/API 来源与 0 条检索声明重合；最坏 provider 调用上限为 16,764，网络调用为 0。
+- 全量 Python 回归 358 项中 356 项通过、2 项 Linux-only 边界检查按预期跳过；`lake build` 通过。真实 provider 合成预检和付费批次尚未运行。
+
 ## 2026-09-24 — 发布 SP 原生 Linux 操作系统隔离证据
 
 - 手动 GitHub Actions 运行 `36004997480` 在提交 `18b477673ace25906557045f919e128cf61e58a7` 上完成 `tracer-sp-isolation-v1` 探针；GitHub-hosted Ubuntu Docker Engine 环境观察到 14/14 项冻结控制为 true。

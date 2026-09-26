@@ -136,6 +136,15 @@ class ProviderTest(unittest.TestCase):
         self.assertIsNone(provider.metadata()["store"])
         self.assertIsNone(provider.metadata()["disable_response_storage"])
 
+    def test_minimax_reasoning_split_is_explicit_and_auditable(self):
+        provider = OpenAICompatibleProvider(
+            "https://api.minimax.io/v1/chat/completions", "secret", "MiniMax-M3", 0.0, 12000,
+            wire_api="chat_completions", reasoning_split=True,
+        )
+        payload = provider._payload("demo prompt")
+        self.assertIs(payload["reasoning_split"], True)
+        self.assertIs(provider.metadata()["reasoning_split"], True)
+
     def test_cross_origin_redirect_is_rejected(self):
         handler = SameOriginRedirectHandler()
         request = urllib.request.Request("https://provider.example/v1/chat/completions")

@@ -132,6 +132,32 @@ end Demo
         self.assertEqual(plan["maximum_branch_tasks"], 576)
         self.assertEqual(plan["maximum_generations"], 648)
 
+    def test_confirmatory_three_arm_subset_uses_exact_configured_budget(self):
+        source = json.loads(
+            (ROOT / "experiments/causal_feedback.example.json").read_text(encoding="utf-8")
+        )
+        source["arms"] = ["content_free_retry", "true_structured", "counterfactual"]
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "config.json"
+            path.write_text(json.dumps(source), encoding="utf-8")
+            config = validate_config(path)
+        benchmark = load_benchmark(ROOT / "benchmarks/repair24/manifest.json")
+        plan = build_plan(config, benchmark)
+        self.assertEqual(config["arms"], source["arms"])
+        self.assertEqual(plan["maximum_branch_tasks"], 216)
+        self.assertEqual(plan["maximum_generations"], 288)
+
+    def test_confirmatory_subset_rejects_missing_primary_baseline(self):
+        source = json.loads(
+            (ROOT / "experiments/causal_feedback.example.json").read_text(encoding="utf-8")
+        )
+        source["arms"] = ["true_structured", "counterfactual"]
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "config.json"
+            path.write_text(json.dumps(source), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "content_free_retry"):
+                validate_config(path)
+
     def test_negative_controls_use_other_same_category_task(self):
         left, right = seed("left", "missingLeft"), seed("right", "missingRight")
         mapping = donor_map([left, right], distinct_signals=True)

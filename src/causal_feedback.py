@@ -14,6 +14,7 @@ import uuid
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 from adaptive_router import route_feedback
 from agent import ROOT, estimate_cost
@@ -25,7 +26,10 @@ from compiler_feedback import ALLOWED_CATEGORIES, build_feedback_record
 from diagnostics import normalize_diagnostics
 from error_state_graph import build_error_state_graph
 from feedback_study import apply_direct_model_config
-from provider import Generation, OpenAICompatibleProvider, clean_candidate, generation_finish_reason, redact_sensitive_text
+from provider import (
+    Generation, OpenAICompatibleProvider, clean_candidate,
+    generation_finish_reason, redact_sensitive_text,
+)
 from research import CallBudget, PricedProvider, load_benchmark, load_config as load_research_config, write_json
 from retriever import load_examples, retrieve
 from leancapsule.privacy import redact_text
@@ -89,8 +93,17 @@ def validate_config(path: Path) -> dict[str, Any]:
     }
     if set(config) - allowed:
         raise ValueError("因果反馈配置存在未知字段；不得将密钥写入配置")
-    if config.get("arms") != list(ARMS):
-        raise ValueError("配置必须按冻结顺序包含全部因果反馈干预")
+    configured_arms = config.get("arms")
+    if (
+        not isinstance(configured_arms, list)
+        or not configured_arms
+        or len(configured_arms) != len(set(configured_arms))
+        or any(arm not in ARMS for arm in configured_arms)
+        or configured_arms != [arm for arm in ARMS if arm in configured_arms]
+    ):
+        raise ValueError("配置必须按冻结顺序包含互不重复的因果反馈干预子集")
+    if not {"content_free_retry", "true_structured"} <= set(configured_arms):
+        raise ValueError("确认性主对比要求 content_free_retry 与 true_structured")
     if config.get("branch_attempts") != 1:
         raise ValueError("v1 主估计只允许每个分支一次修复生成")
     with tempfile.TemporaryDirectory() as directory:
@@ -107,7 +120,7 @@ def validate_config(path: Path) -> dict[str, Any]:
         checked = load_research_config(bridge)
     checked.pop("max_rounds")
     checked.pop("arms")
-    checked["arms"] = list(ARMS)
+    checked["arms"] = list(configured_arms)
     checked["branch_attempts"] = 1
     splits = config.get("benchmark_splits")
     if splits is not None:
@@ -146,8 +159,8 @@ def build_plan(config: dict[str, Any], benchmark: dict[str, Any]) -> dict[str, A
     random.Random(config.get("order_seed", 20260913)).shuffle(seeds)
     return {
         "seed_tasks": seeds,
-        "maximum_branch_tasks": len(seeds) * len(ARMS),
-        "maximum_generations": len(seeds) * (1 + len(ARMS)),
+        "maximum_branch_tasks": len(seeds) * len(config["arms"]),
+        "maximum_generations": len(seeds) * (1 + len(config["arms"])),
         "branch_tasks_depend_on": "eligible_first_failures",
         "selected_splits": config.get("benchmark_splits"),
         "selected_projects": sorted({problem.get("project_id") for problem in selected if problem.get("project_id")}),
@@ -259,16 +272,22 @@ def validate_preregistration_record(
         )
         validate_v2_benchmark(benchmark, contract)
     frozen_models = prereg["models"]
-    model_fields = (
-        "id", "model", "api_url", "temperature", "max_tokens", "thinking", "reasoning_effort",
+    model_fields = ("id", "model", "api_url", "temperature", "max_tokens")
+    optional_model_fields = (
+        "provider_kind", "wire_api", "disable_response_storage", "thinking", "reasoning_effort",
+        "reasoning_split",
     )
-    active_models = [{field: model.get(field) for field in model_fields} for model in config["models"]]
+    active_models = []
+    for model in config["models"]:
+        row = {field: model.get(field) for field in model_fields}
+        row.update({field: model.get(field) for field in optional_model_fields if field in model})
+        active_models.append(row)
     if frozen_models != active_models:
         raise ValueError("预注册模型或生成参数与运行配置发生漂移")
     design = prereg["design"]
     expected = {
         "protocol_version": PROTOCOL_VERSION,
-        "arms": list(ARMS),
+        "arms": list(config["arms"]),
         "repeats": config["repeats"],
         "branch_attempts": config["branch_attempts"],
         "benchmark_splits": config.get("benchmark_splits"),
@@ -302,9 +321,12 @@ def _providers(config: dict[str, Any], api_keys: dict[str, str] | None, budget: 
         if not key:
             raise ValueError("未设置密钥环境变量：" + model["api_key_env"])
         base = OpenAICompatibleProvider(
-            url=model["api_url"], api_key=key, model=model["model"], wire_api="chat_completions",
+            url=model["api_url"], api_key=key, model=model["model"],
+            wire_api=model.get("wire_api", "chat_completions"),
             temperature=model["temperature"], max_tokens=model["max_tokens"],
+            disable_response_storage=model.get("disable_response_storage", False),
             thinking=model.get("thinking"), reasoning_effort=model.get("reasoning_effort"),
+            reasoning_split=model.get("reasoning_split", False),
             max_attempts=1, request_timeout=180,
         )
         providers[model["id"]] = PricedProvider(base, model, budget)
@@ -664,7 +686,7 @@ def run_matrix(
             "seed_id": seed["seed_id"], "arm": arm,
             "project_id": seed.get("project_id"), "split": seed.get("split"),
         }
-        for seed in seeds if seed.get("eligible_first_failure") for arm in ARMS
+        for seed in seeds if seed.get("eligible_first_failure") for arm in config["arms"]
     ]
     random.Random(config.get("order_seed", 20260913) + 1).shuffle(branches)
     results = []
@@ -759,16 +781,19 @@ def run_matrix(
         results.append(result)
         print(f"branch {index}/{len(branches)} {item['arm']} {seed['seed_id']}: {result['status']}", flush=True)
 
-    summary = summarize(seeds, results)
+    summary = summarize(seeds, results, config["arms"])
     write_json(out / "summary.json", summary)
     return summary
 
 
-def summarize(seeds: list[dict[str, Any]], results: list[dict[str, Any]]) -> dict[str, Any]:
+def summarize(
+    seeds: list[dict[str, Any]], results: list[dict[str, Any]],
+    arms: list[str] | tuple[str, ...] = ARMS,
+) -> dict[str, Any]:
     eligible = [seed for seed in seeds if seed.get("eligible_first_failure")]
     complete = [row for row in results if row.get("status") == "complete"]
     by_arm = {}
-    for arm in ARMS:
+    for arm in arms:
         rows = [row for row in complete if row["arm"] == arm]
         by_arm[arm] = {
             "completed": len(rows),
@@ -783,7 +808,7 @@ def summarize(seeds: list[dict[str, Any]], results: list[dict[str, Any]]) -> dic
         )
     by_pair = {(row["seed_id"], row["arm"]): row for row in complete}
     paired = []
-    for arm in ARMS:
+    for arm in arms:
         if arm == "content_free_retry":
             continue
         differences = []
@@ -861,7 +886,10 @@ def _prompt_keys(config: dict[str, Any]) -> dict[str, str]:
     for model in config["models"]:
         name = model["api_key_env"]
         if name not in keys:
-            value = getpass.getpass("API key（不会回显或保存）：").strip()
+            origin = urlsplit(model["api_url"]).netloc
+            value = getpass.getpass(
+                f"{model['id']} @ {origin} API key（不会回显或保存）："
+            ).strip()
             if not value:
                 raise ValueError("API key 不能为空")
             keys[name] = value
@@ -898,7 +926,7 @@ def audit_run(run: Path) -> dict[str, Any]:
     branch_rows = [
         read_json(path) for path in (run / "branches").rglob("result.json")
     ] if (run / "branches").is_dir() else []
-    expected_pairs = {(row["seed_id"], arm) for row in eligible for arm in ARMS}
+    expected_pairs = {(row["seed_id"], arm) for row in eligible for arm in config.get("arms", [])}
     actual_pairs = {(row.get("seed_id"), row.get("arm")) for row in branch_rows}
     if len(branch_rows) != len(expected_pairs) or actual_pairs != expected_pairs:
         errors.append("干预分支记录与合格首轮失败不一致")

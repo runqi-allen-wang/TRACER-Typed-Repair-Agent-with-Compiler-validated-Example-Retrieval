@@ -1,0 +1,104 @@
+{
+  "version": "tracer-acl2027-causal-protocol-v1",
+  "status": "frozen-before-provider-preflight-and-benchmark-run",
+  "registered_at_utc": "2026-09-26T02:25:54Z",
+  "benchmark": {
+    "manifest": "benchmarks/real_repairs/tracer_real_v2/manifest.json",
+    "version": "tracer-real-v2",
+    "split": "test",
+    "split_policy": "upstream_project_disjoint",
+    "projects": 5,
+    "tasks": 254
+  },
+  "scientific_question": "在同一模型、同一题目、同一重复和完全相同的首轮失败候选上，真实结构化 Lean 编译反馈是否比无内容重试更能导致内核验证成功？",
+  "nested_design": {
+    "confirmatory_arms": [
+      "content_free_retry",
+      "true_structured",
+      "counterfactual"
+    ],
+    "extended_arms": [
+      "content_free_retry",
+      "true_raw",
+      "true_normalized",
+      "true_structured",
+      "irrelevant_matched",
+      "counterfactual",
+      "retrieval_only",
+      "adaptive"
+    ],
+    "repeats": 3,
+    "branch_attempts": 1,
+    "same_first_candidate_required": true,
+    "performance_based_stopping": false
+  },
+  "model_roles": [
+    {
+      "family": "DeepSeek",
+      "model_id": "deepseek-v4-pro",
+      "provider": "DeepSeek first-party API",
+      "runtime_config": "experiments/causal_feedback.tracer_acl2027_extended_v1.json",
+      "matrix": "extended"
+    },
+    {
+      "family": "GLM",
+      "model_id": "glm-4.5",
+      "provider": "Zhipu BigModel first-party Chat Completions API",
+      "runtime_config": "experiments/causal_feedback.tracer_acl2027_extended_v1.json",
+      "matrix": "extended"
+    },
+    {
+      "family": "MiniMax",
+      "model_id": "MiniMax-M3",
+      "provider": "MiniMax China first-party OpenAI-compatible Chat Completions API",
+      "runtime_config": "experiments/causal_feedback.tracer_acl2027_minimax_confirmatory_v1.json",
+      "matrix": "confirmatory"
+    }
+  ],
+  "execution_order": [
+    "offline_readiness_audit",
+    "synthetic_provider_preflight",
+    "extended_deepseek_and_glm_run",
+    "confirmatory_minimax_run",
+    "per_run_audit",
+    "blinded_review",
+    "project_equal_confirmatory_analysis",
+    "sanitized_release_and_figures"
+  ],
+  "primary_analysis": {
+    "population": "eligible_first_failures_on_preregistered_v2_test_projects",
+    "contrast": "true_structured - content_free_retry",
+    "outcome": "one_branch_attempt_kernel_success",
+    "unit": "same_model_same_problem_same_repeat_same_first_candidate",
+    "project_weighting": "equal_weight_per_test_project",
+    "model_reporting": "each model separately, followed by a prespecified cross-model consistency summary"
+  },
+  "negative_control": {
+    "arm": "counterfactual",
+    "purpose": "区分真实诊断内容效果与仅因额外文本、再生成或类别暗示导致的效果。"
+  },
+  "runtime_freeze": {
+    "required_before_benchmark_calls": true,
+    "records": [
+      "experiments/preregistrations/tracer_acl2027_extended_v1.json",
+      "experiments/preregistrations/tracer_acl2027_minimax_confirmatory_v1.json"
+    ],
+    "synthetic_preflight_is_not_a_benchmark_call": true,
+    "failed_preflight_does_not_authorize_model_substitution": true
+  },
+  "stopping_rule": {
+    "maximum_extended_provider_calls": 13716,
+    "maximum_minimax_confirmatory_provider_calls": 3048,
+    "maximum_total_provider_calls": 16764,
+    "minimum_eligible_first_failures_per_model": 30,
+    "transport_unknown_policy": "停止并人工核对本地记录；只允许严格续跑，不得删除失败记录后重开。"
+  },
+  "claim_gate": {
+    "minimum_independent_model_families": 3,
+    "minimum_extended_model_families": 2,
+    "all_successful_proofs_independently_recompiled": true,
+    "all_infrastructure_errors_resolved_or_reported": true,
+    "no_significance_claim_before_prespecified_analysis": true,
+    "no_model_family_pooled_sample_inflation": true
+  }
+}
