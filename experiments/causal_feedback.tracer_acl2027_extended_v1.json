@@ -1,0 +1,50 @@
+{
+  "models": [
+    {
+      "id": "deepseek_v4_pro",
+      "model": "deepseek-v4-pro",
+      "api_url": "https://api.deepseek.com/chat/completions",
+      "api_key_env": "TRACER_ACL_DEEPSEEK_KEY",
+      "temperature": 0,
+      "max_tokens": 12000,
+      "provider_kind": "openai_compatible",
+      "wire_api": "chat_completions",
+      "thinking": "enabled",
+      "reasoning_effort": "high",
+      "input_price_per_1k": 0.00132,
+      "output_price_per_1k": 0.00396,
+      "pricing_note": "2026-09-26 官方高峰期公开价；仅作保守预算，不代表账单。"
+    },
+    {
+      "id": "glm_4_5",
+      "model": "glm-4.5",
+      "api_url": "https://open.bigmodel.cn/api/paas/v4/chat/completions",
+      "api_key_env": "TRACER_ACL_GLM_KEY",
+      "temperature": 0,
+      "max_tokens": 12000,
+      "provider_kind": "openai_compatible",
+      "wire_api": "chat_completions",
+      "input_price_per_1k": null,
+      "output_price_per_1k": null,
+      "pricing_note": "智谱官方价格未在本次冻结中录入；成本必须显示为未知，不能记为 0。"
+    }
+  ],
+  "repeats": 3,
+  "arms": [
+    "content_free_retry",
+    "true_raw",
+    "true_normalized",
+    "true_structured",
+    "irrelevant_matched",
+    "counterfactual",
+    "retrieval_only",
+    "adaptive"
+  ],
+  "compile_timeout": 180,
+  "order_seed": 20260926,
+  "examples_dir": "examples",
+  "branch_attempts": 1,
+  "benchmark_splits": [
+    "test"
+  ]
+}

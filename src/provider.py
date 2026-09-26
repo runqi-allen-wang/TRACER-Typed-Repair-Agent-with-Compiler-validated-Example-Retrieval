@@ -122,6 +122,7 @@ class OpenAICompatibleProvider(Provider):
         reasoning_effort: str | None = None,
         disable_response_storage: bool = False,
         thinking: str | None = None,
+        reasoning_split: bool = False,
         max_attempts: int = 3,
         request_timeout: float = 90,
     ) -> None:
@@ -151,6 +152,8 @@ class OpenAICompatibleProvider(Provider):
             raise ValueError("reasoning_effort 与当前接口协议不兼容")
         if thinking not in {None, "enabled", "disabled"} or (thinking is not None and self.wire_api != "chat_completions"):
             raise ValueError("thinking 仅适用于支持该参数的 Chat 接口")
+        if not isinstance(reasoning_split, bool) or (reasoning_split and self.wire_api != "chat_completions"):
+            raise ValueError("reasoning_split 仅适用于支持该参数的 Chat 接口")
         if not 1 <= max_attempts <= 3 or request_timeout <= 0:
             raise ValueError("请求重试次数或超时无效")
         self.url = normalized_url
@@ -161,6 +164,7 @@ class OpenAICompatibleProvider(Provider):
         self.reasoning_effort = reasoning_effort
         self.disable_response_storage = bool(disable_response_storage)
         self.thinking = thinking
+        self.reasoning_split = reasoning_split
         self.max_attempts, self.request_timeout = max_attempts, request_timeout
 
     def _payload(self, prompt: str) -> dict[str, object]:
@@ -189,6 +193,8 @@ class OpenAICompatibleProvider(Provider):
             payload["thinking"] = {"type": self.thinking}
         if self.reasoning_effort is not None:
             payload["reasoning_effort"] = self.reasoning_effort
+        if self.reasoning_split:
+            payload["reasoning_split"] = True
         return payload
 
     def generate(self, prompt: str) -> Generation:
@@ -228,6 +234,7 @@ class OpenAICompatibleProvider(Provider):
             "max_tokens": self.max_tokens,
             "reasoning_effort": self.reasoning_effort,
             **({"thinking": self.thinking} if self.thinking is not None else {}),
+            **({"reasoning_split": True} if self.reasoning_split else {}),
             "max_http_attempts": self.max_attempts,
             "request_timeout": self.request_timeout,
             # Chat Completions 请求不发送 store；不得在日志中把“未发送”记成 true。

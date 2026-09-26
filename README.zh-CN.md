@@ -47,7 +47,7 @@ python demo/serve.py
 ## 当前状态
 
 - **repair24 六臂实验：** 预注册的 864 任务矩阵已经完成；发布包包含 1,066 条脱敏逐轮记录、811 个成功证明、AI 辅助复核账本和可复现审计合同。
-- **TRACER-REAL v2：** 六个上游项目的 1,576 个冻结历史候选已全部筛查：**256 个纳入、1,320 个拒绝**，provider 调用为零。SciLean 的 2/54 项低于每项目五题门槛，最终确认性 test 划分冻结为**五个独立项目、254 道真实修复题**。PhysLean 占 94/254（37.0%）；一份在 provider 调用前公开的修订将探索阶段的 35% 集中度上限调整为 40%，不删题且不改变其他门槛。最终 265 题 manifest（development 3、validation 8、test 254）及精确运行时预注册均已冻结并通过审计。参见[原始纳入合同](benchmarks/real_repairs/tracer_real_v2.enrollment.json)、[v2 协议与修订](docs/TRACER_REAL_V2.md)、[最终 manifest](benchmarks/real_repairs/tracer_real_v2/manifest.json)和[运行时预注册](experiments/preregistrations/tracer_real_causal_v2.json)。
+- **TRACER-REAL v2 与 ACL 2027 因果协议：** 六个项目全部筛查：**1,576 个候选、256 个纳入、1,320 个拒绝**。冻结测试划分包含**五个独立项目、254 道真实修复题**和六类错误；公开的 provider-blind 修订将项目占比门禁从 35% 调整为 40%。首次 ACL 正式尝试在发出 88 次 seed 请求后、第 89 次调用之前停止，因为 12,000 字符提示视图无法容纳 5 个完整目标声明；该批次保留但排除出分析。在发送任何替代请求前，协议 v2 将唯一变更冻结为 24,000 字符，并验证 254 题提示构造失败为 0。DeepSeek 与 GLM 仍运行完整八臂，MiniMax 仍运行三条确认臂。目前尚无有效付费题库结果。正式入口提供独立批次目录、协议感知的严格续跑、显式费用门禁和失败工件保留。参见 [ACL 执行协议](docs/ACL2027_EXPERIMENT_PROTOCOL.md)、[原始纳入合同](benchmarks/real_repairs/tracer_real_v2.enrollment.json)、[v2 协议与修订](docs/TRACER_REAL_V2.md)和[最终 manifest](benchmarks/real_repairs/tracer_real_v2/manifest.json)。
 - **LeanCapsule：** 24 个复核案例覆盖 Std、Mathlib 与 project-local 环境；另有 12-core / 4-challenge 套件验证干净目录回放。
 - **编译反馈与安全：** 三层诊断协议、[反馈采纳审计](docs/FEEDBACK_ADOPTION_V1.md)和 SP-1～SP-12 门禁均已实现。一份 GitHub-hosted Ubuntu Docker Engine 报告实测通过全部 14 项低权限控制；Windows Docker Desktop 与未知攻击评估仍待完成。
 
@@ -134,7 +134,7 @@ Agent 成功表示候选通过 Lean 和未完成证明检查；Capsule 成功表
 | 范围 | 当前有证据支持的内容 | 重要边界 |
 | --- | --- | --- |
 | repair24 六臂实验 | 通过审计的 864 任务发布；811 个证明独立复编译 | AI 辅助复核；仅 24 道独立题且属于同一供应商模型族 |
-| TRACER-REAL v2 | 六个项目全部筛查；最终 manifest 冻结五个独立测试项目、254 道修复题 | 40% 占比门槛是 provider 前对原 35% 的公开修订；尚无 v2 provider 结果 |
+| TRACER-REAL v2 / ACL 2027 | 五个独立项目、254 道测试修复题；v2 冻结 24,000 字符提示视图且 254 题构造失败为 0，保留三模型嵌套设计 | 88 次调用的 v1 尝试已排除；v2 付费批次待运行，尚无因果或跨模型结果 |
 | LeanCapsule | 24/24 gallery 回放、16/16 feasibility 回放 | 复现预期失败不等于修复证明 |
 | 安全 | [SP v2 策略发布包](published/security-study-tracer-sp-v2)：危险候选误放行 0/12、正常对照误拒绝 0/8；[Linux 隔离证据](published/security-isolation-tracer-sp-v1)：14/14 项冻结控制已观察通过 | 单次 Linux 实测不是完整双平台沙箱证据，也不代表零风险；Windows Docker Desktop 仍待完成 |
 
@@ -162,6 +162,7 @@ python -m leancapsule verify capsules
 | Compiler Feedback v1 | [诊断协议](docs/COMPILER_FEEDBACK_V1.md) · [反馈采纳](docs/FEEDBACK_ADOPTION_V1.md) |
 | 因果对照与 R-A～R-F | [因果反馈](docs/CAUSAL_FEEDBACK_V1.md) · [研究协议](docs/RESEARCH_PROTOCOL.md) |
 | 真实历史修复 | [TRACER-REAL 构建器](benchmarks/real_repairs/README.md) · [v2 纳入](docs/TRACER_REAL_V2.md) |
+| ACL 2027 实验 | [因果实验执行协议](docs/ACL2027_EXPERIMENT_PROTOCOL.md) |
 | 失败工件 | [Capsule 格式](docs/CAPSULE_FORMAT.md) · [案例库](capsules/index.md) |
 | 安全 | [SP 策略](docs/security_policy.md) · [隔离协议](docs/SP_ISOLATION_V1.md) |
 | 研究背景 | [相关工作](docs/RELATED_WORK.md) |
@@ -169,10 +170,10 @@ python -m leancapsule verify capsules
 
 ## 下一步证据
 
-1. 按已经冻结的 TRACER-REAL v2 manifest 与运行时预注册执行 provider 实验，不再修改题目、提示、生成参数或项目等权分析。
-2. 发布结果时同时交付完整轨迹、独立复编译证明、复核方式、基础设施错误和 35%→40% 门禁修订。
-3. 为 SP 隔离协议补齐仍缺失的 Windows Docker Desktop 报告；已发布的原生 Linux 运行继续按单平台证据解释。
-4. 在反馈对照和安全边界稳定后，再评估自适应路由策略。
+1. 先运行三个 provider 的合成定理预检，不暴露 TRACER-REAL 题目；看到题库输出后不得为失败模型做事后替换。
+2. 所有预检通过后才运行冻结嵌套矩阵：DeepSeek 与 GLM 提供八臂结果，MiniMax 提供三条确认臂。
+3. 发布结果时同时交付完整轨迹、独立复编译证明、复核方式、基础设施错误和 35%→40% 门禁修订。
+4. 为 SP 隔离协议补齐仍缺失的 Windows Docker Desktop 报告；已发布的原生 Linux 运行继续按单平台证据解释。
 
 以上均为计划，不是已完成结果。
 

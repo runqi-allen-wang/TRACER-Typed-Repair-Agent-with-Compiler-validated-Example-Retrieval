@@ -8,12 +8,14 @@ import json
 import os
 import platform
 import random
+import shutil
 import sys
 import time
 import uuid
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 from adaptive_router import route_feedback
 from agent import ROOT, estimate_cost
@@ -25,7 +27,10 @@ from compiler_feedback import ALLOWED_CATEGORIES, build_feedback_record
 from diagnostics import normalize_diagnostics
 from error_state_graph import build_error_state_graph
 from feedback_study import apply_direct_model_config
-from provider import Generation, OpenAICompatibleProvider, clean_candidate, generation_finish_reason, redact_sensitive_text
+from provider import (
+    Generation, OpenAICompatibleProvider, clean_candidate,
+    generation_finish_reason, redact_sensitive_text,
+)
 from research import CallBudget, PricedProvider, load_benchmark, load_config as load_research_config, write_json
 from retriever import load_examples, retrieve
 from leancapsule.privacy import redact_text
@@ -34,6 +39,7 @@ from leancapsule.privacy import redact_text
 PROTOCOL_VERSION = "tracer-causal-feedback-v1"
 PREREGISTRATION_VERSION = "tracer-causal-preregistration-v1"
 PROMPT_SOURCE_CHARS = 12000
+MAX_CONSECUTIVE_TRANSPORT_ERRORS = 3
 ARMS = (
     "content_free_retry",
     "true_raw",
@@ -45,6 +51,12 @@ ARMS = (
     "adaptive",
 )
 INFRASTRUCTURE = {"timeout", "provider_error", "compiler_unavailable", "patch_error", "candidate_security"}
+TRANSPORT_ERROR_MARKERS = (
+    "urlopen error", "timed out", "timeout", "winerror 10054", "winerror 10060",
+    "winerror 10061", "connection reset", "connection refused", "remote end closed",
+    "network is unreachable", "getaddrinfo failed", "temporary failure in name resolution",
+    "http 408 ", "http 429 ", "http 500 ", "http 502 ", "http 503 ", "http 504 ",
+)
 
 
 class CandidateOutcomeError(ValueError):
@@ -57,6 +69,76 @@ class CandidateOutcomeError(ValueError):
 
 def read_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def retryable_transport_record(record: dict[str, Any]) -> bool:
+    """只重试明确的传输故障；鉴权、策略和候选错误仍是终态。"""
+
+    if record.get("error_category") == "transport_error":
+        return True
+    error = str(record.get("error") or "").lower()
+    return bool(error) and any(marker in error for marker in TRANSPORT_ERROR_MARKERS)
+
+
+def _archive_seed_attempt(out: Path, seed_path: Path) -> Path:
+    relative = seed_path.relative_to(out / "seeds")
+    root = out / "retry_history" / "seeds" / relative.parent / relative.stem
+    attempt = 1
+    while (root / f"attempt-{attempt}.json").exists():
+        attempt += 1
+    archived = root / f"attempt-{attempt}.json"
+    archived.parent.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(seed_path), str(archived))
+    return archived
+
+
+def _archive_branch_attempt(out: Path, destination: Path) -> Path:
+    relative = destination.relative_to(out / "branches")
+    root = out / "retry_history" / "branches" / relative
+    attempt = 1
+    while (root / f"attempt-{attempt}").exists():
+        attempt += 1
+    archived = root / f"attempt-{attempt}"
+    archived.parent.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(destination), str(archived))
+    return archived
+
+
+def _archived_request_attempts(out: Path) -> int:
+    retry_root = out / "retry_history"
+    if not retry_root.is_dir():
+        return 0
+    seed_attempts = len(list((retry_root / "seeds").rglob("attempt-*.json"))) \
+        if (retry_root / "seeds").is_dir() else 0
+    branch_attempts = len(list((retry_root / "branches").rglob("result.json"))) \
+        if (retry_root / "branches").is_dir() else 0
+    return seed_attempts + branch_attempts
+
+
+def _reconcile_reserved_calls(out: Path, attempted_calls: int, recorded_calls: int) -> dict[str, Any]:
+    """显式披露中断时已预留但未能落盘的调用，不猜测其 provider 结果。"""
+
+    path = out / "transport_recovery.json"
+    recovery = read_json(path) if path.is_file() else {
+        "schema_version": "tracer-transport-recovery-v1",
+        "unmatched_reserved_calls": 0,
+        "events": [],
+    }
+    known_unknown = recovery.get("unmatched_reserved_calls")
+    if type(known_unknown) is not int or known_unknown < 0 or not isinstance(recovery.get("events"), list):
+        raise ValueError("传输恢复账本格式无效")
+    delta = attempted_calls - recorded_calls - known_unknown
+    if delta < 0:
+        raise ValueError("预算账本少于已落盘和已归档请求数；拒绝自动续跑")
+    if delta:
+        recovery["unmatched_reserved_calls"] += delta
+        recovery["events"].append({
+            "event": len(recovery["events"]) + 1,
+            "count": delta,
+            "reason": "进程中断发生在调用预算预留之后、结果工件落盘之前；结果未知并排除于分析",
+        })
+        write_json(path, recovery)
+    return recovery
 
 
 def validate_protocol(path: Path = ROOT / "experiments/causal_feedback.protocol.json") -> dict[str, Any]:
@@ -85,14 +167,28 @@ def validate_config(path: Path) -> dict[str, Any]:
     config = read_json(path)
     allowed = {
         "models", "repeats", "arms", "compile_timeout", "order_seed",
-        "examples_dir", "branch_attempts", "benchmark_splits",
+        "examples_dir", "branch_attempts", "benchmark_splits", "prompt_source_characters",
     }
     if set(config) - allowed:
         raise ValueError("因果反馈配置存在未知字段；不得将密钥写入配置")
-    if config.get("arms") != list(ARMS):
-        raise ValueError("配置必须按冻结顺序包含全部因果反馈干预")
+    configured_arms = config.get("arms")
+    if (
+        not isinstance(configured_arms, list)
+        or not configured_arms
+        or len(configured_arms) != len(set(configured_arms))
+        or any(arm not in ARMS for arm in configured_arms)
+        or configured_arms != [arm for arm in ARMS if arm in configured_arms]
+    ):
+        raise ValueError("配置必须按冻结顺序包含互不重复的因果反馈干预子集")
+    if not {"content_free_retry", "true_structured"} <= set(configured_arms):
+        raise ValueError("确认性主对比要求 content_free_retry 与 true_structured")
     if config.get("branch_attempts") != 1:
         raise ValueError("v1 主估计只允许每个分支一次修复生成")
+    if "prompt_source_characters" in config and (
+        type(config["prompt_source_characters"]) is not int
+        or not PROMPT_SOURCE_CHARS <= config["prompt_source_characters"] <= 100000
+    ):
+        raise ValueError("提示源码预算必须是 12000 至 100000 的整数")
     with tempfile.TemporaryDirectory() as directory:
         bridge = Path(directory) / "config.json"
         bridge.write_text(json.dumps({
@@ -107,8 +203,10 @@ def validate_config(path: Path) -> dict[str, Any]:
         checked = load_research_config(bridge)
     checked.pop("max_rounds")
     checked.pop("arms")
-    checked["arms"] = list(ARMS)
+    checked["arms"] = list(configured_arms)
     checked["branch_attempts"] = 1
+    if "prompt_source_characters" in config:
+        checked["prompt_source_characters"] = config["prompt_source_characters"]
     splits = config.get("benchmark_splits")
     if splits is not None:
         allowed_splits = {"development", "validation", "test"}
@@ -146,8 +244,8 @@ def build_plan(config: dict[str, Any], benchmark: dict[str, Any]) -> dict[str, A
     random.Random(config.get("order_seed", 20260913)).shuffle(seeds)
     return {
         "seed_tasks": seeds,
-        "maximum_branch_tasks": len(seeds) * len(ARMS),
-        "maximum_generations": len(seeds) * (1 + len(ARMS)),
+        "maximum_branch_tasks": len(seeds) * len(config["arms"]),
+        "maximum_generations": len(seeds) * (1 + len(config["arms"])),
         "branch_tasks_depend_on": "eligible_first_failures",
         "selected_splits": config.get("benchmark_splits"),
         "selected_projects": sorted({problem.get("project_id") for problem in selected if problem.get("project_id")}),
@@ -259,16 +357,22 @@ def validate_preregistration_record(
         )
         validate_v2_benchmark(benchmark, contract)
     frozen_models = prereg["models"]
-    model_fields = (
-        "id", "model", "api_url", "temperature", "max_tokens", "thinking", "reasoning_effort",
+    model_fields = ("id", "model", "api_url", "temperature", "max_tokens")
+    optional_model_fields = (
+        "provider_kind", "wire_api", "disable_response_storage", "thinking", "reasoning_effort",
+        "reasoning_split",
     )
-    active_models = [{field: model.get(field) for field in model_fields} for model in config["models"]]
+    active_models = []
+    for model in config["models"]:
+        row = {field: model.get(field) for field in model_fields}
+        row.update({field: model.get(field) for field in optional_model_fields if field in model})
+        active_models.append(row)
     if frozen_models != active_models:
         raise ValueError("预注册模型或生成参数与运行配置发生漂移")
     design = prereg["design"]
     expected = {
         "protocol_version": PROTOCOL_VERSION,
-        "arms": list(ARMS),
+        "arms": list(config["arms"]),
         "repeats": config["repeats"],
         "branch_attempts": config["branch_attempts"],
         "benchmark_splits": config.get("benchmark_splits"),
@@ -276,6 +380,8 @@ def validate_preregistration_record(
         "compile_timeout": config["compile_timeout"],
         "prompt_files": ["prompts/causal_seed.txt", "prompts/causal_branch.txt", "prompts/proof_contract.txt"],
     }
+    if "prompt_source_characters" in config:
+        expected["prompt_source_characters"] = config["prompt_source_characters"]
     if design != expected:
         raise ValueError("预注册设计与运行配置发生漂移")
     if prereg["primary_analysis"].get("contrast") != "true_structured - content_free_retry":
@@ -302,9 +408,12 @@ def _providers(config: dict[str, Any], api_keys: dict[str, str] | None, budget: 
         if not key:
             raise ValueError("未设置密钥环境变量：" + model["api_key_env"])
         base = OpenAICompatibleProvider(
-            url=model["api_url"], api_key=key, model=model["model"], wire_api="chat_completions",
+            url=model["api_url"], api_key=key, model=model["model"],
+            wire_api=model.get("wire_api", "chat_completions"),
             temperature=model["temperature"], max_tokens=model["max_tokens"],
+            disable_response_storage=model.get("disable_response_storage", False),
             thinking=model.get("thinking"), reasoning_effort=model.get("reasoning_effort"),
+            reasoning_split=model.get("reasoning_split", False),
             max_attempts=1, request_timeout=180,
         )
         providers[model["id"]] = PricedProvider(base, model, budget)
@@ -321,6 +430,10 @@ def _generate(provider: Any, prompt: str) -> tuple[str, Generation, str]:
     if not candidate or violation:
         raise CandidateOutcomeError("candidate_security" if violation else "empty_candidate", violation or "模型未返回候选证明")
     return candidate, generation, finish
+
+
+def prompt_source_limit(config: dict[str, Any]) -> int:
+    return int(config.get("prompt_source_characters", PROMPT_SOURCE_CHARS))
 
 
 def _prompt_source(problem: dict[str, Any], limit: int = PROMPT_SOURCE_CHARS) -> str:
@@ -349,10 +462,10 @@ def _prompt_source(problem: dict[str, Any], limit: int = PROMPT_SOURCE_CHARS) ->
     return view
 
 
-def _seed_prompt(problem: dict[str, Any]) -> str:
+def _seed_prompt(problem: dict[str, Any], limit: int = PROMPT_SOURCE_CHARS) -> str:
     template = (ROOT / "prompts/causal_seed.txt").read_text(encoding="utf-8")
     contract = (ROOT / "prompts/proof_contract.txt").read_text(encoding="utf-8")
-    return template.format(theorem=_prompt_source(problem)) + "\n" + contract.format(
+    return template.format(theorem=_prompt_source(problem, limit=limit)) + "\n" + contract.format(
         start_marker="-- PROOF_START", end_marker="-- PROOF_END"
     )
 
@@ -522,13 +635,16 @@ def intervention_for(
     }
 
 
-def branch_prompt(problem: dict[str, Any], seed: dict[str, Any], intervention: dict[str, Any]) -> str:
+def branch_prompt(
+    problem: dict[str, Any], seed: dict[str, Any], intervention: dict[str, Any],
+    limit: int = PROMPT_SOURCE_CHARS,
+) -> str:
     if intervention["target_seed_id"] != seed["seed_id"]:
         raise ValueError("反馈干预与冻结首轮候选不匹配")
     template = (ROOT / "prompts/causal_branch.txt").read_text(encoding="utf-8")
     contract = (ROOT / "prompts/proof_contract.txt").read_text(encoding="utf-8")
     return template.format(
-        theorem=_prompt_source(problem),
+        theorem=_prompt_source(problem, limit=limit),
         first_candidate=seed["candidate"],
         intervention=intervention["payload"],
         examples=json.dumps(intervention["retrieved_examples"], ensure_ascii=False),
@@ -543,7 +659,9 @@ def run_matrix(
 ) -> dict[str, Any]:
     """运行两阶段矩阵；显式续跑只跳过已落盘记录，不重发已有请求。"""
 
-    protocol = validate_protocol()
+    protocol = json.loads(json.dumps(validate_protocol(), ensure_ascii=False))
+    source_limit = prompt_source_limit(config)
+    protocol["prompt_view"]["maximum_source_characters"] = source_limit
     benchmark = load_benchmark(benchmark_path)
     if preregistration is not None:
         validate_preregistration_record(preregistration, config, benchmark)
@@ -597,7 +715,9 @@ def run_matrix(
                 for path in (out / "branches").rglob("result.json"):
                     if read_json(path).get("status") != "not_applicable":
                         saved_branch_attempts += 1
-            if budget.calls != saved_seed_attempts + saved_branch_attempts:
+            recorded_attempts = saved_seed_attempts + saved_branch_attempts + _archived_request_attempts(out)
+            recovery = _reconcile_reserved_calls(out, budget.calls, recorded_attempts)
+            if budget.calls != recorded_attempts + recovery["unmatched_reserved_calls"]:
                 raise ValueError(
                     "预算账本与已落盘请求数不一致；可能存在结果未知的已计费请求，拒绝自动续跑"
                 )
@@ -614,6 +734,7 @@ def run_matrix(
     problems = {item["id"]: item for item in benchmark["problems"] if item["id"] in selected_ids}
     models = {item["id"]: item for item in config["models"]}
     seeds: list[dict[str, Any]] = []
+    consecutive_transport_errors = 0
     for index, task in enumerate(plan["seed_tasks"], 1):
         seed_path = out / "seeds" / task["model_id"] / str(task["repeat"]) / f"{task['problem_id']}.json"
         if resume and seed_path.is_file():
@@ -621,9 +742,13 @@ def run_matrix(
             expected = {**task, "experiment_id": experiment_id, "seed_id": seed_key(task)}
             if any(seed.get(key) != value for key, value in expected.items()):
                 raise ValueError("既有首轮记录与冻结计划不一致：" + seed_key(task))
-            seeds.append(seed)
-            print(f"seed {index}/{len(plan['seed_tasks'])} {seed['seed_id']}: SKIP", flush=True)
-            continue
+            if retryable_transport_record(seed):
+                archived = _archive_seed_attempt(out, seed_path)
+                print("已保留传输失败尝试: " + str(archived.relative_to(out)), flush=True)
+            else:
+                seeds.append(seed)
+                print(f"seed {index}/{len(plan['seed_tasks'])} {seed['seed_id']}: SKIP", flush=True)
+                continue
         problem = problems[task["problem_id"]]
         source_file = benchmark_path.parent / problem["file"]
         active_project_root = project_roots.get(problem.get("project_id")) or project_root
@@ -632,7 +757,7 @@ def run_matrix(
             if active_project_root is not None else source_file
         )
         provider = providers[task["model_id"]]
-        prompt = _seed_prompt(problem)
+        prompt = _seed_prompt(problem, limit=source_limit)
         started = time.perf_counter()
         try:
             candidate, generation, _ = _generate(provider, prompt)
@@ -648,13 +773,27 @@ def run_matrix(
                     "eligible_first_failure": False, "ineligibility_reason": exc.category,
                     "diagnostic": {"category": exc.category, "summary": str(exc)}}
         except Exception as exc:
+            error = redact_sensitive_text(exc)
             seed = {**task, "experiment_id": experiment_id, "seed_id": seed_key(task), "candidate": "", "compile_ok": False,
                     "eligible_first_failure": False, "ineligibility_reason": "provider_or_policy_error",
-                    "error": redact_sensitive_text(exc)}
+                    "error_category": (
+                        "transport_error" if retryable_transport_record({"error": error})
+                        else "provider_or_policy_error"
+                    ),
+                    "error": error}
         write_json(seed_path, seed)
         seeds.append(seed)
         seed_status = "ELIGIBLE" if seed.get("eligible_first_failure") else "INELIGIBLE:" + str(seed.get("ineligibility_reason"))
         print(f"seed {index}/{len(plan['seed_tasks'])} {seed['seed_id']}: {seed_status}", flush=True)
+        if seed.get("error_category") == "transport_error":
+            consecutive_transport_errors += 1
+            if consecutive_transport_errors >= MAX_CONSECUTIVE_TRANSPORT_ERRORS:
+                raise RuntimeError(
+                    f"连续 {MAX_CONSECUTIVE_TRANSPORT_ERRORS} 次 provider 传输失败；已保存失败工件并停止，"
+                    "请恢复网络后使用同一目录显式续跑"
+                )
+        else:
+            consecutive_transport_errors = 0
 
     irrelevant_donors = donor_map(seeds)
     counterfactual_donors = donor_map(seeds, distinct_signals=True)
@@ -664,7 +803,7 @@ def run_matrix(
             "seed_id": seed["seed_id"], "arm": arm,
             "project_id": seed.get("project_id"), "split": seed.get("split"),
         }
-        for seed in seeds if seed.get("eligible_first_failure") for arm in ARMS
+        for seed in seeds if seed.get("eligible_first_failure") for arm in config["arms"]
     ]
     random.Random(config.get("order_seed", 20260913) + 1).shuffle(branches)
     results = []
@@ -693,15 +832,19 @@ def run_matrix(
                 or result.get("problem_id") != seed["problem_id"]
             ):
                 raise ValueError("既有分支记录与冻结计划不一致：" + seed["seed_id"] + "/" + item["arm"])
-            results.append(result)
-            print(f"branch {index}/{len(branches)} {item['arm']} {seed['seed_id']}: SKIP", flush=True)
-            continue
+            if result.get("status") == "error" and retryable_transport_record(result):
+                archived = _archive_branch_attempt(out, destination)
+                print("已保留传输失败尝试: " + str(archived.relative_to(out)), flush=True)
+            else:
+                results.append(result)
+                print(f"branch {index}/{len(branches)} {item['arm']} {seed['seed_id']}: SKIP", flush=True)
+                continue
         if not intervention["available"]:
             result = {**item, "experiment_id": experiment_id, "problem_id": seed["problem_id"], "status": "not_applicable",
                       "reason": "同模型、同重复、同错误类别内没有其他供体", "compile_ok": None,
                       "first_candidate": seed["candidate"], "intervention": intervention}
         else:
-            prompt = branch_prompt(problem, seed, intervention)
+            prompt = branch_prompt(problem, seed, intervention, limit=source_limit)
             provider = providers[seed["model_id"]]
             started = time.perf_counter()
             try:
@@ -751,24 +894,46 @@ def run_matrix(
                           "diagnostic": {"category": exc.category, "summary": str(exc)},
                           "usage": {}, "estimated_cost_usd": None}
             except Exception as exc:
+                error = redact_sensitive_text(exc)
                 result = {**item, "experiment_id": experiment_id, "problem_id": seed["problem_id"], "status": "error",
                           "first_candidate": seed["candidate"], "same_first_candidate": True,
                           "intervention": intervention, "compile_ok": False,
-                          "error": redact_sensitive_text(exc)}
+                          "error_category": (
+                              "transport_error" if retryable_transport_record({"error": error})
+                              else "provider_or_policy_error"
+                          ),
+                          "error": error}
         write_json(result_path, result)
         results.append(result)
         print(f"branch {index}/{len(branches)} {item['arm']} {seed['seed_id']}: {result['status']}", flush=True)
+        if result.get("error_category") == "transport_error":
+            consecutive_transport_errors += 1
+            if consecutive_transport_errors >= MAX_CONSECUTIVE_TRANSPORT_ERRORS:
+                raise RuntimeError(
+                    f"连续 {MAX_CONSECUTIVE_TRANSPORT_ERRORS} 次 provider 传输失败；已保存失败工件并停止，"
+                    "请恢复网络后使用同一目录显式续跑"
+                )
+        elif result.get("status") != "not_applicable":
+            consecutive_transport_errors = 0
 
-    summary = summarize(seeds, results)
+    summary = summarize(seeds, results, config["arms"])
+    summary["archived_transport_retry_attempts"] = _archived_request_attempts(out)
+    recovery_path = out / "transport_recovery.json"
+    summary["unmatched_reserved_calls"] = (
+        read_json(recovery_path).get("unmatched_reserved_calls", 0) if recovery_path.is_file() else 0
+    )
     write_json(out / "summary.json", summary)
     return summary
 
 
-def summarize(seeds: list[dict[str, Any]], results: list[dict[str, Any]]) -> dict[str, Any]:
+def summarize(
+    seeds: list[dict[str, Any]], results: list[dict[str, Any]],
+    arms: list[str] | tuple[str, ...] = ARMS,
+) -> dict[str, Any]:
     eligible = [seed for seed in seeds if seed.get("eligible_first_failure")]
     complete = [row for row in results if row.get("status") == "complete"]
     by_arm = {}
-    for arm in ARMS:
+    for arm in arms:
         rows = [row for row in complete if row["arm"] == arm]
         by_arm[arm] = {
             "completed": len(rows),
@@ -783,7 +948,7 @@ def summarize(seeds: list[dict[str, Any]], results: list[dict[str, Any]]) -> dic
         )
     by_pair = {(row["seed_id"], row["arm"]): row for row in complete}
     paired = []
-    for arm in ARMS:
+    for arm in arms:
         if arm == "content_free_retry":
             continue
         differences = []
@@ -861,7 +1026,10 @@ def _prompt_keys(config: dict[str, Any]) -> dict[str, str]:
     for model in config["models"]:
         name = model["api_key_env"]
         if name not in keys:
-            value = getpass.getpass("API key（不会回显或保存）：").strip()
+            origin = urlsplit(model["api_url"]).netloc
+            value = getpass.getpass(
+                f"{model['id']} @ {origin} API key（不会回显或保存）："
+            ).strip()
             if not value:
                 raise ValueError("API key 不能为空")
             keys[name] = value
@@ -898,7 +1066,7 @@ def audit_run(run: Path) -> dict[str, Any]:
     branch_rows = [
         read_json(path) for path in (run / "branches").rglob("result.json")
     ] if (run / "branches").is_dir() else []
-    expected_pairs = {(row["seed_id"], arm) for row in eligible for arm in ARMS}
+    expected_pairs = {(row["seed_id"], arm) for row in eligible for arm in config.get("arms", [])}
     actual_pairs = {(row.get("seed_id"), row.get("arm")) for row in branch_rows}
     if len(branch_rows) != len(expected_pairs) or actual_pairs != expected_pairs:
         errors.append("干预分支记录与合格首轮失败不一致")
@@ -912,6 +1080,19 @@ def audit_run(run: Path) -> dict[str, Any]:
         errors.append("同首轮候选不变量未通过")
     if summary.get("successful_proof_recompile_invariant") is not True:
         errors.append("成功证明独立复编译不变量未通过")
+    archived_attempts = _archived_request_attempts(run)
+    recovery_path = run / "transport_recovery.json"
+    recovery = read_json(recovery_path) if recovery_path.is_file() else {
+        "unmatched_reserved_calls": 0, "events": [],
+    }
+    unmatched = recovery.get("unmatched_reserved_calls")
+    if type(unmatched) is not int or unmatched < 0 or not isinstance(recovery.get("events"), list):
+        errors.append("传输恢复账本无效")
+        unmatched = 0
+    if summary.get("archived_transport_retry_attempts", 0) != archived_attempts:
+        errors.append("汇总中的传输重试归档数与实际工件不一致")
+    if summary.get("unmatched_reserved_calls", 0) != unmatched:
+        errors.append("汇总中的未知预留调用数与恢复账本不一致")
     prereg = plan_record.get("preregistration") or {}
     gate = prereg.get("claim_gate") or {}
     selected_projects = set(plan_record.get("plan", {}).get("selected_projects") or [])
@@ -935,6 +1116,8 @@ def audit_run(run: Path) -> dict[str, Any]:
         "eligible_first_failures": len(eligible),
         "recorded_branches": len(branch_rows),
         "infrastructure_errors": infrastructure_errors,
+        "archived_transport_retry_attempts": archived_attempts,
+        "unmatched_reserved_calls": unmatched,
         "analysis_ready": not errors,
         "confirmatory_claim_allowed": confirmatory_gate,
         "required_label": gate.get("required_label"),

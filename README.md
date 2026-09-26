@@ -47,7 +47,7 @@ Research-arm storage values remain `A/B/C/D/C_dynamic/C_failure` for compatibili
 ## Current state
 
 - **Six-arm repair24 study:** the preregistered 864-task matrix is complete. Its release contains 1,066 sanitized attempts, 811 successful proofs, an AI-assisted review ledger, and a reproducible audit contract.
-- **TRACER-REAL v2:** all 1,576 frozen history candidates from six upstream projects have been screened: **256 admitted, 1,320 rejected**, with no provider calls. SciLean's 2/54 repairs fall below the five-task project minimum, leaving a frozen confirmatory test split of **254 repairs from five independent projects**. PhysLean contributes 94/254 (37.0%); a public pre-provider amendment raised the exploratory 35% concentration cap to 40% while preserving every task and all other gates. The final 265-task manifest (3 development, 8 validation, 254 test) and exact runtime preregistration are now frozen and audited. See the [original enrollment contract](benchmarks/real_repairs/tracer_real_v2.enrollment.json), [protocol and amendment](docs/TRACER_REAL_V2.md), [final manifest](benchmarks/real_repairs/tracer_real_v2/manifest.json), and [runtime preregistration](experiments/preregistrations/tracer_real_causal_v2.json).
+- **TRACER-REAL v2 and the ACL 2027 causal protocol:** Six projects fully screened: **1,576 candidates, 256 admitted, and 1,320 rejected**. The frozen test split contains **254 repairs from five independent projects** and six error categories; the disclosed provider-blind amendment changed the project-share gate from 35% to 40%. The first ACL runtime attempt was stopped after 88 seed calls, before call 89, because the 12,000-character prompt view could not contain five full target declarations; it is retained but excluded from analysis. Before any replacement call, protocol v2 froze the sole change to a 24,000-character view and now verifies 0/254 prompt-view failures. DeepSeek and GLM remain assigned to eight arms and MiniMax to three confirmatory arms. No valid paid benchmark result exists yet. The formal runner uses independent batch directories, strict protocol-aware resume checks, explicit cost gates, and retained failure artifacts. See the [ACL execution protocol](docs/ACL2027_EXPERIMENT_PROTOCOL.md), [original enrollment contract](benchmarks/real_repairs/tracer_real_v2.enrollment.json), [v2 protocol and amendment](docs/TRACER_REAL_V2.md), and [final manifest](benchmarks/real_repairs/tracer_real_v2/manifest.json).
 - **LeanCapsule:** 24 reviewed cases cover Std, Mathlib, and project-local environments; a separate 12-core / 4-challenge suite checks clean-directory replay.
 - **Feedback and security:** the three-layer diagnostic protocol, [feedback-adoption audit](docs/FEEDBACK_ADOPTION_V1.md), and SP-1–SP-12 gates are implemented. A GitHub-hosted Ubuntu Docker Engine run observed all 14 frozen low-privilege controls; Windows Docker Desktop and unknown-attack evaluation remain pending.
 
@@ -134,7 +134,7 @@ The preregistered primary comparison, R-B minus R-A, was **0.0 percentage points
 | Area | What is supported now | Important boundary |
 | --- | --- | --- |
 | Six-arm repair24 study | Audited 864-task release; 811 proofs independently recompiled | AI-assisted review; 24 unique problems and one provider family |
-| TRACER-REAL v2 | Six projects fully screened; final manifest freezes 254 test repairs across five independent projects | 40% share cap is a disclosed pre-provider amendment from the original 35%; no v2 provider result exists yet |
+| TRACER-REAL v2 / ACL 2027 | 254 test repairs across five independent projects; v2 freezes a 24,000-character prompt view with 0/254 construction failures and a three-family nested design | The 88-call v1 attempt is excluded; the v2 paid run is pending, so no causal or cross-model result exists yet |
 | LeanCapsule | 24/24 reviewed gallery replays; 16/16 feasibility replays | Reproducing an expected failure is not proof repair |
 | Security | [SP v2 policy release](published/security-study-tracer-sp-v2): 0/12 dangerous false accepts and 0/8 benign false rejects; [Linux isolation evidence](published/security-isolation-tracer-sp-v1): 14/14 frozen controls observed | One Linux run is not complete dual-platform sandbox evidence or a zero-risk guarantee; Windows Docker Desktop remains pending |
 
@@ -162,6 +162,7 @@ python -m leancapsule verify capsules
 | Compiler Feedback v1 | [diagnostic protocol](docs/COMPILER_FEEDBACK_V1.md) · [feedback adoption](docs/FEEDBACK_ADOPTION_V1.md) |
 | Causal controls and R-A–R-F | [causal feedback](docs/CAUSAL_FEEDBACK_V1.md) · [research protocol](docs/RESEARCH_PROTOCOL.md) |
 | Real historical repairs | [TRACER-REAL builder](benchmarks/real_repairs/README.md) · [v2 enrollment](docs/TRACER_REAL_V2.md) |
+| ACL 2027 experiment | [causal experiment execution protocol](docs/ACL2027_EXPERIMENT_PROTOCOL.md) |
 | Failure artifacts | [Capsule format](docs/CAPSULE_FORMAT.md) · [gallery](capsules/index.md) |
 | Security | [SP policies](docs/security_policy.md) · [isolation protocol](docs/SP_ISOLATION_V1.md) |
 | Research context | [related work](docs/RELATED_WORK.md) |
@@ -169,10 +170,10 @@ python -m leancapsule verify capsules
 
 ## Next evidence priorities
 
-1. Run the frozen TRACER-REAL v2 provider experiment without changing its manifest, runtime preregistration, prompts, or project-equal analysis.
-2. Publish complete trajectories, independently recompiled proofs, review mode, infrastructure failures, and the 35%→40% amendment alongside any result.
-3. Add the still-missing Windows Docker Desktop report to the SP isolation protocol; keep the published native Linux run as single-platform evidence.
-4. Evaluate adaptive routing only after feedback controls and safety boundaries are stable.
+1. Run the synthetic three-provider preflight without exposing TRACER-REAL tasks; do not substitute a failed model after observing benchmark outputs.
+2. Run the frozen nested matrix only after all preflights pass: DeepSeek and GLM supply eight-arm results, while MiniMax supplies the three confirmatory arms.
+3. Publish complete trajectories, independently recompiled proofs, review mode, infrastructure failures, and the 35%→40% amendment alongside any result.
+4. Add the still-missing Windows Docker Desktop report to the SP isolation protocol; keep the published native Linux run as single-platform evidence.
 
 These are plans, not completed results.
 

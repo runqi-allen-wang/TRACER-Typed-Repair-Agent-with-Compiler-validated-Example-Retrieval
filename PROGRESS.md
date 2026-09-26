@@ -1,6 +1,6 @@
 # TRACER 当前进度与证据登记
 
-更新时间：2026-09-24。
+更新时间：2026-09-26。
 
 本文登记 repair24 正式六臂结果、SP v2、LeanCapsule 与 TRACER-REAL v2 筛查证据，是仓库内“完成到哪一步”的唯一当前口径。被取代但仍可复核的发布包、交接材料和报告集中在 [`historical/`](historical/README.md)；历史变更过程见 `CHANGELOG.md`，未来工作见 `docs/FUTURE_WORK_PLAN.md`。当旧报告与本文冲突时，以各批次原始工件和本文的证据分层为准。
 
@@ -47,6 +47,7 @@
 | I-09 | `tracer-causal-feedback-v1`：冻结无反馈首轮候选后分叉到空反馈、三种真实反馈、同类无关反馈、反事实反馈、只检索和 adaptive；负对照禁止自配对，所有分支保留同一首轮候选；TRACER-REAL 试点已冻结机器可读预注册 | provider 批次与结果审计尚待完成；单 test 项目且最多 12 个合格失败，预注册明确禁止正式统计或跨项目因果结论 |
 | I-10 | Error-State Graph、确定性 Adaptive Router 与 TRACER-REAL v1：结构化信号保留原始证据边；Mathlib 3、Batteries 4、Aesop 4 共 11 题按 development/validation/test 上游项目互斥划分，均经旧证明失败与修复证明通过门禁，参考证明单独存放 | 当前 Router 尚未学习；11 题/3 项目仍是试点，确认性结论门禁要求至少 5 个 test 项目与 30 个合格首轮失败 |
 | I-11 | [TRACER-REAL v2](docs/TRACER_REAL_V2.md) 的六个候选上游、端点和 120 提交窗口在扫描前冻结；1,576 个候选全部筛查，公开 256 个通过、1,320 个拒绝的完整决定账本。SciLean 2/54 低于项目门槛，最终 test 划分为五个独立项目、254 题。原 35% 占比门禁被 PhysLean 94/254≈37.0% 触发；provider 前公开修订为 40%，其他门槛与全部合格题保持不变。最终 265 题 manifest 与运行时预注册已生成并通过审计，`ready_for_provider_run` 为 true | 尚未运行 v2 provider，因此没有 v2 成功率、反馈因果效应、成本或统计结论；40% 是公开修订后的工程门槛，报告必须同时披露原 35% 阈值与修订理由 |
+| I-12 | [ACL 2027 因果实验](docs/ACL2027_EXPERIMENT_PROTOCOL.md)：冻结 DeepSeek/GLM 八臂与 MiniMax 三臂；v1 在 88 次 seed 调用后、调用 89 前因 12,000 字符提示预算不足中止并保留。v2 在任何替代调用前只把预算改为 24,000，离线确认 5 个 test 项目、254 题、6 类错误、检索声明重合 0、提示构造失败 0，最大调用上限仍为 16,764；正式脚本拒绝把 v1 根目录续作 v2 | v1 不能进入分析；v2 provider 预检、付费批次和发布证据尚不存在，不得把实现或中止轨迹表述为模型结果 |
 
 repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译→保存→独立复编译→报告校验”，但 mock 或参考候选不得计作模型实验结果。
 
@@ -70,7 +71,7 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 
 当前文档基线的本地 Windows 全量复审记录：
 
-- Python：共发现 348 项测试，346 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。在既有 Compiler Feedback、TRACER-REAL、Feedback Study、Capsule 与 SP 门禁上，新增覆盖隔离发布包的 14 项控制、单平台证据边界、Windows pending 状态和 CI 发布审计；同时继续覆盖六臂预注册、AI 辅助复核、脱敏发布合同、当前正式配置一致性、合成 provider 预检、PowerShell 密钥清理、失败工件保留式续跑、README 结果图与正式 `summary.json` 的逐柱一致性、v2 公开筛查账本、双语 README 计数一致性、公开 40% 项目占比门禁的 fail-closed 行为，以及交互 Demo 的 24 组公开验证修复、静态依赖与 Pages 发布范围。
+- Python：共发现 367 项测试，365 项通过，2 项因仅在 Linux 验证符号链接边界而跳过。在既有 Compiler Feedback、TRACER-REAL、Feedback Study、Capsule 与 SP 门禁上，新增 ACL 2027 v2 的 24,000 字符提示预算、254 题全量提示构造门禁、v1/v2 续跑隔离、DeepSeek/GLM/MiniMax 嵌套协议、三臂/八臂预注册、三一方来源审计、检索泄漏门禁、隐藏密钥合成预检，以及正式入口的独立输出、显式费用选择、未知价格前置拒绝、严格续跑、传输失败归档重试、连续三次传输故障熔断、未知预留调用披露、完成批次跳过和失败工件保留合同；同时继续覆盖隔离发布包、AI 辅助复核、脱敏发布合同、README 结果图与正式 `summary.json` 的逐柱一致性、v2 公开筛查账本、双语 README 计数一致性和交互 Demo 的 24 组公开验证修复。
 - `python demo/serve.py`：零依赖静态网页在本机完成桌面端视觉与交互验收；两轮真实脱敏轨迹、中英文切换和本地真实编译命令均可用。网页不调用 provider，不能把回放视为一次新的模型生成。
 - `lake build`：通过；冻结 Evaluation18 输入中的 18 个 `sorry` 是预期占位警告，不代表题目已在原文件中修复。
 - `python -m leancapsule audit capsules`：24/24 通过。
@@ -84,6 +85,7 @@ repair24 的不联网测试可以证明 runner 会执行“候选→Lean 编译�
 - `python scripts/audit_research_release.py published/research-six-arm-313f437f --compile-solutions`：六臂发布包的 864 任务、1,066 条有效轮次、864 行复核和 811 个公开证明一一对应；811/811 独立复编译通过。
 - `python src/tracer_real_v2.py audit --benchmark benchmarks/real_repairs/tracer_real_v2/manifest.json`：六个项目的 1,576 个候选、256 个纳入与 1,320 个拒绝均与公开决定账本一致；最终 8 项目/265 题 manifest 与运行时预注册一致，provider 门禁可开启但尚未发生 v2 调用。
 - `python src/tracer_real_v2_assembly.py status`：五个合格 test 项目共 254 题，全部公开子集均已构建并验证；PhysLean 94/254≈37.0% 低于公开修订后的 40% 有效上限，最终 spec 已冻结。
+- `python src/acl2027.py audit`：ACL 嵌套协议的 5 个 test 项目、254 题、6 类错误、3 个独立模型家族/API 来源、两份运行时预注册与 0 条检索声明重合通过纯离线审计；网络调用为 0。
 
 这些结果是软件与工件验收，不自动转化为反馈增益、安全完备性或通用证明能力结论。
 

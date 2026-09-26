@@ -84,7 +84,11 @@ def load_config(path):
     ids = set()
     for model in config["models"]:
         required = {"id", "model", "api_url", "api_key_env", "temperature", "max_tokens"}
-        optional = {"input_price_per_1k", "output_price_per_1k", "pricing_note", "thinking", "reasoning_effort"}
+        optional = {
+            "input_price_per_1k", "output_price_per_1k", "pricing_note", "thinking",
+            "reasoning_effort", "provider_kind", "wire_api", "disable_response_storage",
+            "reasoning_split",
+        }
         if not required <= model.keys() or set(model) - required - optional:
             raise ValueError("模型配置字段缺失或含不允许字段")
         if not re.fullmatch(r"[a-zA-Z0-9_-]+", model["id"]) or model["id"] in ids:
@@ -95,13 +99,28 @@ def load_config(path):
             raise ValueError("研究 API 地址必须为不含凭据或查询参数的 HTTPS URL")
         if not re.fullmatch(r"[A-Z][A-Z0-9_]+", model["api_key_env"]):
             raise ValueError("仅允许配置密钥环境变量的名称")
-        if not model["model"].strip() or model["max_tokens"] < 1 or not 0 <= model["temperature"] <= 2:
+        if not model["model"].strip() or model["max_tokens"] < 1:
             raise ValueError("模型名称或生成预算无效")
         for key in ("input_price_per_1k", "output_price_per_1k"):
             price = model.get(key)
             if price is not None and (not isinstance(price, (float, int)) or not math.isfinite(price) or price < 0):
                 raise ValueError("价格必须非负或 null")
-        if model.get("thinking") not in {None, "enabled", "disabled"} or model.get("reasoning_effort") not in {None, "low", "high", "max"}:
+        provider_kind = model.get("provider_kind", "openai_compatible")
+        wire_api = model.get("wire_api", "chat_completions")
+        if provider_kind != "openai_compatible":
+            raise ValueError("模型 provider_kind 不受支持")
+        if wire_api not in {"chat_completions", "responses"}:
+            raise ValueError("模型 wire_api 不受支持")
+        temperature = model.get("temperature")
+        if not isinstance(temperature, (float, int)) or not 0 <= temperature <= 2:
+            raise ValueError("模型温度无效")
+        if not isinstance(model.get("disable_response_storage", False), bool):
+            raise ValueError("disable_response_storage 必须为布尔值")
+        if not isinstance(model.get("reasoning_split", False), bool):
+            raise ValueError("reasoning_split 必须为布尔值")
+        if model.get("reasoning_split") and wire_api != "chat_completions":
+            raise ValueError("reasoning_split 只允许用于 Chat Completions")
+        if model.get("thinking") not in {None, "enabled", "disabled"} or model.get("reasoning_effort") not in {None, "minimal", "low", "medium", "high", "max"}:
             raise ValueError("模型思考参数无效")
     # 一个输入框对应一个服务来源，避免同名环境变量把凭据送往另一个服务。
     key_origins = {}
