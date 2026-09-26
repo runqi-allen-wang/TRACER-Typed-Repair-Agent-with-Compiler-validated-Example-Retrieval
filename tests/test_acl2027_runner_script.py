@@ -39,6 +39,12 @@ class Acl2027RunnerScriptTest(unittest.TestCase):
         ):
             self.assertIn(f"Remove-Item Env:{name}", self.script)
 
+    def test_all_pending_preflights_finish_before_any_formal_batch(self):
+        preflight_loop = self.script.index("foreach ($preflightBatchName in $pending)")
+        formal_loop = self.script.index("foreach ($batchName in $pending)", preflight_loop)
+        self.assertLess(preflight_loop, formal_loop)
+        self.assertLess(formal_loop, self.script.index('$runArguments = @(', formal_loop))
+
     def test_cost_limit_requires_explicit_choice(self):
         self.assertIn("Provide -ExtendedBudgetUsd or explicitly use -NoCostLimit", self.script)
         self.assertIn("Provide -MiniMaxBudgetUsd or explicitly use -NoCostLimit", self.script)

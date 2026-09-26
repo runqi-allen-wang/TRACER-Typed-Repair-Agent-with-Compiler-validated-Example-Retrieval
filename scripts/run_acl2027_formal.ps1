@@ -199,18 +199,21 @@ try {
         Set-HiddenApiKey "MiniMax API key" "TRACER_ACL_MINIMAX_KEY"
     }
 
+    if (-not $SkipPreflight) {
+        foreach ($preflightBatchName in $pending) {
+            $preflightSpec = $batchSpecs[$preflightBatchName]
+            Invoke-LoggedPython `
+                -Arguments @("src/causal_feedback.py", "preflight", "--config", $preflightSpec.Config) `
+                -LogPath (Join-Path $attemptDirectory ("{0}-preflight.log" -f $preflightBatchName.ToLowerInvariant())) `
+                -Phase "preflight" `
+                -BatchName $preflightBatchName
+        }
+    }
+
     foreach ($batchName in $pending) {
         $spec = $batchSpecs[$batchName]
         $batchOut = Join-Path $RunRoot $spec.Directory
         $batchExists = Test-Path -LiteralPath $batchOut -PathType Container
-
-        if (-not $SkipPreflight) {
-            Invoke-LoggedPython `
-                -Arguments @("src/causal_feedback.py", "preflight", "--config", $spec.Config) `
-                -LogPath (Join-Path $attemptDirectory ("{0}-preflight.log" -f $batchName.ToLowerInvariant())) `
-                -Phase "preflight" `
-                -BatchName $batchName
-        }
 
         $runArguments = @(
             "src/causal_feedback.py", "run",
