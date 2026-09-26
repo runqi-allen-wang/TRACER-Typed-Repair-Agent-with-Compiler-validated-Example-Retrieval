@@ -48,6 +48,8 @@ class Acl2027RunnerScriptTest(unittest.TestCase):
     def test_cost_limit_requires_explicit_choice(self):
         self.assertIn("Provide -ExtendedBudgetUsd or explicitly use -NoCostLimit", self.script)
         self.assertIn("Provide -MiniMaxBudgetUsd or explicitly use -NoCostLimit", self.script)
+        self.assertIn("has frozen unknown prices", self.script)
+        self.assertIn("the preregistered call-count limit still applies", self.script)
         self.assertIn('"--max-reserved-usd"', self.script)
         self.assertIn('"--no-cost-limit"', self.script)
 

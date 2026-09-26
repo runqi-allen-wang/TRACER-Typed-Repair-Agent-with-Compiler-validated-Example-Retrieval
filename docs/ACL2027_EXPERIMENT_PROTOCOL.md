@@ -49,16 +49,15 @@ python src/acl2027.py audit
 
 正式运行统一通过 `scripts/run_acl2027_formal.ps1`。脚本为每次实验创建独立会话根目录，并把扩展批次与 MiniMax 确认批次分别写入 `extended/` 和 `minimax-confirmatory/`；密钥只在当前 PowerShell 进程中存在。
 
-首次运行必须明确给出两个批次的预算上限，或显式确认不设置脚本级费用上限：
+当前冻结配置没有写入 GLM 与 MiniMax 中国区价格，因此不能伪造美元估值，也不能启用依赖完整价格的本地美元预留。首次正式运行必须显式确认不设置脚本级美元上限，并在三个供应商后台另设账户级预算：
 
 ```powershell
 .\scripts\run_acl2027_formal.ps1 `
   -Batch All `
-  -ExtendedBudgetUsd 100 `
-  -MiniMaxBudgetUsd 30
+  -NoCostLimit
 ```
 
-如果使用 `-NoCostLimit`，其含义只是关闭 TRACER 的本地保守预留门禁，并不代表供应商账户没有计费或硬限额。正式大批次不应只为追求全通过而重开。
+`-NoCostLimit` 只关闭 TRACER 的本地美元预留门禁，并不代表免费或无限调用；冻结计划仍把最大 provider 调用数限制为 16,764。脚本会在读取密钥前拒绝对含未知价格的批次使用 `-ExtendedBudgetUsd` 或 `-MiniMaxBudgetUsd`。正式大批次不应只为追求全通过而重开。
 
 脚本启动后会打印唯一 `RunRoot`。若终端、网络或机器中断，必须使用同一个根目录续跑：
 
@@ -67,8 +66,7 @@ python src/acl2027.py audit
   -Batch All `
   -RunRoot "results/acl2027-formal-YYYYMMDD-HHMMSS-xxxxxxxx" `
   -Resume `
-  -ExtendedBudgetUsd 100 `
-  -MiniMaxBudgetUsd 30
+  -NoCostLimit
 ```
 
 续跑会先校验会话合同、冻结计划、题库、提示模板、编译环境和预算账本。已完成且审计通过的批次直接跳过；未完成请求只从尚未落盘的任务继续。每次尝试的控制台日志写入 `_runner/attempts/`，非零退出同时产生失败记录；脚本从不删除失败轨迹或已有证明。`-SkipPreflight` 只应用于操作者明确决定跳过本次合成连接检查的情形，不改变正式实验的预注册内容。

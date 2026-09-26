@@ -45,6 +45,15 @@ if (-not $NoCostLimit) {
     if ($selectedBatches -contains "MiniMax" -and $MiniMaxBudgetUsd -le 0) {
         throw "Provide -MiniMaxBudgetUsd or explicitly use -NoCostLimit."
     }
+    foreach ($batchName in $selectedBatches) {
+        $priceConfig = Get-Content -LiteralPath $batchSpecs[$batchName].Config -Raw -Encoding UTF8 | ConvertFrom-Json
+        $unknownPrices = @($priceConfig.models | Where-Object {
+            $null -eq $_.input_price_per_1k -or $null -eq $_.output_price_per_1k
+        })
+        if ($unknownPrices.Count -gt 0) {
+            throw "$batchName has frozen unknown prices. Use -NoCostLimit and enforce an account-level provider budget; the preregistered call-count limit still applies."
+        }
+    }
 }
 
 if ([string]::IsNullOrWhiteSpace($RunRoot)) {
